@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-canvas text-ink antialiased;
+  }
+  ::selection {
+    background: rgba(91, 108, 229, 0.2);
+  }
+  :focus-visible {
+    outline: 2px solid #5b6ce5;
+    outline-offset: 2px;
+  }
+  /* Numbers stay Latin everywhere — blueprint §2.1 */
+  html[lang="ar"] body {
+    font-feature-settings: "lnum" 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-white px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
+  }
+  .card {
+    @apply rounded-2xl border border-line bg-white p-6 shadow-card transition-all duration-300;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:shadow-card-hover;
+  }
+  .text-gradient {
+    @apply bg-brand-gradient bg-clip-text text-transparent;
+  }
+  .eyebrow {
+    @apply text-body-sm font-medium uppercase tracking-wide text-brand-blue;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

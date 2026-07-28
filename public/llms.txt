@@ -1,0 +1,21 @@
+# Saut Najdi (صوت نجدي)
+
+> Saut Najdi is a Saudi AI voice agent that answers your customers in the dialect they understand — Najdi, Hijazi, Khaleeji, in Arabic or English — with your human employee able to take over any call with full context.
+
+Saut Najdi is built for Saudi businesses (clinics, restaurants, hotels, real estate, retail) that lose customer calls after hours or pay heavily for reply teams. The AI answers inbound calls naturally — callers can interrupt it, it books appointments, answers from the business's own Arabic knowledge base, remembers returning callers — and escalates to a human employee with the full transcript, an Arabic summary, and the customer's history. Staff can watch live calls and listen, whisper, or take over from the dashboard.
+
+Data governance: designed to comply with Saudi Arabia's Personal Data Protection Law (PDPL) — data stored in the Gulf region, with full disclosure of where processing happens. Call recordings auto-delete after 90 days. The audit log is append-only.
+
+There is no self-signup and no public pricing: the team onboards every client, and pricing is tailored after an intro demo booked at /demo.
+
+## Key pages
+
+- [Home](https://sautnajdi.com/en): what Saut Najdi is
+- [How it works](https://sautnajdi.com/en/how-it-works): one call's journey, step by step
+- [Human handoff](https://sautnajdi.com/en/product/human-handoff): escalation rules, live supervision, inherited context
+- [Security & data](https://sautnajdi.com/en/security): PDPL alignment, storage and processing disclosure
+- [FAQ](https://sautnajdi.com/en/faq): direct answers to common questions
+- [Book a demo](https://sautnajdi.com/en/demo): 30-minute intro demo
+- [Contact](https://sautnajdi.com/en/contact)
+
+Arabic (primary) versions live at the same paths without /en, e.g. https://sautnajdi.com/ and https://sautnajdi.com/faq — see also /llms-ar.txt.

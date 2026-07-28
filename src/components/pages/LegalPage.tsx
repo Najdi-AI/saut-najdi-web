@@ -5,7 +5,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
     <section className="container py-14">
       <div className="mx-auto max-w-2xl">
         <h1 className="text-h1">{doc.title}</h1>
-        <p className="mt-2 text-body text-ink/50">{doc.updated}</p>
+        <p className="mt-2 text-body text-ink/60">{doc.updated}</p>
         <p className="mt-6 text-body-lg leading-relaxed text-ink/80">{doc.intro}</p>
         <div className="mt-8 space-y-8">
           {doc.sections.map((s) => (

@@ -15,7 +15,7 @@ import { CalButton } from "@/components/CalButton";
 const t = {
   ar: {
     h1: "كلمنا",
-    lead: "راسلنا وبنرد عليك — أو إذا تبغى جواباً أسرع، احجز مكالمة سريعة مع الفريق.",
+    lead: "راسلنا وبنرد عليك — أو إذا تبغى جواب أسرع، احجز مكالمة سريعة مع الفريق.",
     onboardNote: "ما في تسجيل ذاتي — فريقنا يجهز لك كل شي، من الوكيل إلى قاعدة المعرفة.",
     name: "الاسم",
     email: "الإيميل",
@@ -55,14 +55,14 @@ export function ContactPage({ locale }: { locale: Locale }) {
   };
 
   const field =
-    "w-full rounded-xl border border-line bg-white px-4 py-3 text-body-lg text-ink placeholder:text-ink/40 focus:border-brand-blue focus:outline-none";
+    "w-full rounded-xl border border-line bg-white px-4 py-3 text-body-lg text-ink placeholder:text-ink/55 focus:border-brand-blue focus:outline-none";
 
   return (
     <section className="container py-14">
       <div className="text-center">
         <h1 className="text-h1">{s.h1}</h1>
         <p className="mx-auto mt-4 max-w-xl text-body-lg leading-relaxed text-ink/70">{s.lead}</p>
-        <p className="mx-auto mt-2 max-w-xl text-body text-ink/50">{s.onboardNote}</p>
+        <p className="mx-auto mt-2 max-w-xl text-body text-ink/60">{s.onboardNote}</p>
       </div>
 
       <div className="mx-auto mt-10 grid max-w-4xl gap-8 md:grid-cols-[1.4fr_1fr]">
@@ -92,7 +92,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
             <textarea required rows={5} className={field} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
           </label>
           <button type="submit" className="btn-primary w-full">{s.send}</button>
-          <p className="text-center text-body-sm text-ink/45">{s.formNote}</p>
+          <p className="text-center text-body-sm text-ink/60">{s.formNote}</p>
         </form>
 
         <div className="space-y-4">

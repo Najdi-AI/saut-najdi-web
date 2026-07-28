@@ -110,7 +110,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
           );
         })}
       </div>
-      <p className="mt-4 text-center text-body-sm text-ink/45">{s.note}</p>
+      <p className="mt-4 text-center text-body-sm text-ink/60">{s.note}</p>
     </div>
   );
 }

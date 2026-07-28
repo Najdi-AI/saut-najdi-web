@@ -30,10 +30,16 @@ export function pageMetadata({
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    alternates: {
-      canonical,
-      languages: { ar, en, "x-default": ar },
-    },
+    // noindex pages get no canonical/hreflang — pointing crawlers at a
+    // page they must not index is contradictory (review finding).
+    ...(noindex
+      ? {}
+      : {
+          alternates: {
+            canonical,
+            languages: { ar, en, "x-default": ar },
+          },
+        }),
     openGraph: {
       title,
       description,

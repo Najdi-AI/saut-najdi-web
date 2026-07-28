@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { TAGLINE_EN } from "@/lib/site";
+import { TAGLINE_AR, TAGLINE_EN } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { Waveform } from "@/components/Waveform";
@@ -15,12 +15,13 @@ const t = {
   ar: {
     h1: "ليه سوّينا صوت نجدي؟",
     paras: [
-      "لأن العميل السعودي يبغى أحد يفهمه من أول كلمة. يتصل يقول «أبغى أحجز بكره» — ما يبغى قائمة «اضغط 1»، ولا روبوتاً يرد عليه بفصحى متكلفة أو بعربية مكسرة مترجمة.",
-      "صوت نجدي فريق سعودي في الرياض، بنى المنصة من أساسها على اللهجات السعودية: كيف نحجي فعلاً، ووش نقصد لما نقول «الحين» و«بكره» و«يمديك». ما أخذنا منتجاً أجنبياً وعرّبناه — بنينا للسوق السعودي من أول سطر.",
-      "وليه هجين — ذكاء وبشر — مو ذكاء بس؟ لأن في مكالمات ما يصلح لها إلا إنسان: الشكوى، والسؤال الحساس، والعميل اللي يبغى يسمع صوتاً بشرياً. عشان كذا موظفك دايم موجود في الصورة، ويستلم المكالمة بكامل سياقها بأي لحظة. الذكاء يخدم فريقك — ما يستبدله.",
+      "لأن العميل السعودي يبغى أحد يفهمه من أول كلمة. يتصل يقول «أبغى أحجز بكرة» — ما يبغى قائمة «اضغط 1»، ولا روبوت يرد عليه بفصحى متكلفة أو بعربية مكسرة مترجمة.",
+      "صوت نجدي فريق سعودي في الرياض، بنى المنصة من أساسها على اللهجات السعودية: كيف نتكلم فعلاً، ووش نقصد لما نقول «الحين» و«بكرة» و«يمديك». ما أخذنا منتجاً أجنبياً وعرّبناه — بنينا للسوق السعودي من أول سطر.",
+      "وليه هجين — ذكاء وبشر — مو ذكاء بس؟ لأن في مكالمات ما يصلح لها إلا إنسان: الشكوى، والسؤال الحساس، والعميل اللي يبغى يسمع صوت بشري. عشان كذا موظفك دايم موجود في الصورة، ويستلم المكالمة بكامل سياقها بأي لحظة. الذكاء يخدم فريقك — ما يستبدله.",
       "نتعامل مع كل عميل بنفس المبدأ اللي نكتب فيه هالموقع: ما نقول شي ما نقدر نوريك إياه في العرض.",
     ],
-    tagline: TAGLINE_EN,
+    tagline: TAGLINE_AR,
+    taglineSub: TAGLINE_EN,
     reach: "تبغى توصل لنا؟",
     contact: "تواصل معنا",
     security: "الأمان والبيانات",
@@ -34,6 +35,7 @@ const t = {
       "We hold ourselves to the same principle this website is written by: we don't say anything we can't show you in the demo.",
     ],
     tagline: TAGLINE_EN,
+    taglineSub: "نحجي. نفهم. ننجز",
     reach: "Want to reach us?",
     contact: "Contact us",
     security: "Security & data",
@@ -58,7 +60,8 @@ export function AboutPage({ locale }: { locale: Locale }) {
             </Reveal>
           ))}
           <Reveal>
-            <p className="pt-2 text-center text-h5 text-gradient">{s.tagline}</p>
+            <p className="pt-2 text-center text-h4 text-gradient">{s.tagline}</p>
+            <p className="mt-1 text-center text-body-lg text-ink/60">{s.taglineSub}</p>
           </Reveal>
           <Reveal className="pt-4 text-center">
             <p className="text-body-lg text-ink/70">{s.reach}</p>

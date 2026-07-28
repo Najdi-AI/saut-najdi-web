@@ -67,13 +67,13 @@ const t = {
         { sector: "عيادات ومستشفيات", quote: "«أبغى أحجز موعد»" },
         { sector: "مطاعم", quote: "«أبغى أطلب»" },
         { sector: "فنادق", quote: "«عندكم غرفة فاضية؟»" },
-        { sector: "عقارات", quote: "«الشقة لا زالت متاحة؟»" },
+        { sector: "عقارات", quote: "«الشقة للحين متاحة؟»" },
         { sector: "تجزئة", quote: "«وصل طلبي؟»" },
       ],
       note: "قوالب جاهزة لهذه القطاعات — وصفحة مخصصة لكل قطاع قريباً.",
     },
     governance: {
-      heading: "بياناتك محكومة، مو بس محفوظة",
+      heading: "بياناتك تحكمها قواعد وصلاحيات — مو بس محفوظة",
       bullets: [
         "مصمّم بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL)",
         "التخزين في منطقة الخليج (الدوحة)",
@@ -229,7 +229,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               href={localePath(locale, "how-it-works")}
               className="font-medium text-brand-blue underline-offset-4 hover:underline"
             >
-              {s.how.link} ←
+              {s.how.link} {locale === "ar" ? "←" : "→"}
             </Link>
           </div>
         </div>
@@ -288,7 +288,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               );
             })}
           </div>
-          <p className="mt-5 text-center text-body text-ink/45">{s.capabilities.soon}</p>
+          <p className="mt-5 text-center text-body text-ink/60">{s.capabilities.soon}</p>
         </div>
       </section>
 
@@ -307,7 +307,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             </Reveal>
           ))}
         </div>
-        <p className="mt-5 text-center text-body text-ink/45">{s.sectors.note}</p>
+        <p className="mt-5 text-center text-body text-ink/60">{s.sectors.note}</p>
       </section>
 
       {/* 8 · Data & governance (7 · screenshot pending demo-tenant assets) */}
@@ -329,7 +329,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               href={localePath(locale, "security")}
               className="font-medium text-brand-cyan underline-offset-4 hover:underline"
             >
-              {s.governance.link} ←
+              {s.governance.link} {locale === "ar" ? "←" : "→"}
             </Link>
           </div>
         </div>
@@ -347,7 +347,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               href={localePath(locale, "faq")}
               className="font-medium text-brand-blue underline-offset-4 hover:underline"
             >
-              {s.faqLink} ←
+              {s.faqLink} {locale === "ar" ? "←" : "→"}
             </Link>
           </div>
         </div>

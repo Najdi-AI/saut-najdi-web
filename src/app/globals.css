@@ -39,7 +39,11 @@
     @apply bg-brand-gradient bg-clip-text text-transparent;
   }
   .eyebrow {
-    @apply text-body-sm font-medium uppercase tracking-wide text-brand-blue;
+    @apply text-body-sm font-bold uppercase tracking-wide text-brand-purple;
+  }
+  /* Letter-spacing must never apply to connected Arabic script */
+  html[lang="ar"] .eyebrow {
+    letter-spacing: 0;
   }
 }
 

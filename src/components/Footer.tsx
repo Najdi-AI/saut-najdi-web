@@ -44,7 +44,7 @@ export function Footer({ locale }: { locale: Locale }) {
 
         <div className="mt-10 border-t border-line pt-6">
           <Waveform bars={36} maxHeight={20} animate={false} className="opacity-50" />
-          <div className="mt-4 flex flex-col items-center justify-between gap-3 text-body text-ink/55 sm:flex-row">
+          <div className="mt-4 flex flex-col items-center justify-between gap-3 text-body text-ink/65 sm:flex-row">
             <span>{t.madeIn} 🇸🇦</span>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}

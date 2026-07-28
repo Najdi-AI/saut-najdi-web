@@ -27,7 +27,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "1. ما نجمعه ولماذا",
           ps: [
             "لزوّار الموقع: لا يجمع هذا الموقع بيانات تعريفية عن زواره. تُستخدم أداة قياس بلا ملفات تعريف ارتباط (Vercel Analytics) لإحصاءات مجمّعة عن الصفحات — دون معرّفات شخصية، ولذلك لا يعرض الموقع لافتة موافقة على ملفات تعريف الارتباط.",
-            "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر خدمة Cal.com — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، لغرض وحيد هو التواصل معك وتجهيز العرض.",
+            "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر خدمة Cal.com — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، ورسالتك إن أضفتها، لغرض وحيد هو التواصل معك وتجهيز العرض.",
             "للمنشآت المشتركة وعملائها: تعالج المنصة محتوى المكالمات والمحادثات النصية (الصوت، والنص، والملخصات)، وبيانات العملاء التي تُدخلها المنشأة (الأسماء، أرقام التواصل، التفضيلات، الحجوزات)، وسجلات الاستخدام — لغرض تشغيل خدمة الرد الآلي والتصعيد البشري التي تعاقدت عليها المنشأة.",
           ],
         },
@@ -74,7 +74,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. الخدمة",
           ps: [
-            "صوت نجدي منصة رد آلي هجينة: وكيل صوتي بالذكاء الاصطناعي يرد على مكالمات عملاء المنشآت المشتركة ومحادثاتها النصية، مع تصعيد المكالمة إلى موظف بشري وفق قواعد تحددها المنشأة. تُقدَّم الخدمة للمنشآت بموجب اتفاقية اشتراك مستقلة، ولا يوجد تسجيل ذاتي عام.",
+            "صوت نجدي منصة رد آلي هجينة: وكيل صوتي بالذكاء الاصطناعي يرد على مكالمات عملاء المنشآت المشتركة، مع صندوق موحد لمحادثاتها النصية (واتساب، تيليجرام، دردشة الموقع) وتصعيد المكالمة إلى موظف بشري وفق قواعد تحددها المنشأة. تُقدَّم الخدمة للمنشآت بموجب اتفاقية اشتراك مستقلة، ولا يوجد تسجيل ذاتي عام.",
           ],
         },
         {
@@ -128,7 +128,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
             "• التخزين الدائم في منطقة الخليج (الدوحة)، مع الإفصاح الكامل عن المعالجين الفرعيين وأماكنهم (انظر سياسة الخصوصية) وإشعار المنشأة قبل أي تغيير فيهم.",
             "• تدابير تقنية وتنظيمية: عزل بيانات كل منشأة على مستوى قاعدة البيانات، وأدوار وصلاحيات، وسجل تدقيق غير قابل للتعديل، وروابط وصول موقعة قصيرة الصلاحية.",
             "• حذف تسجيلات المكالمات تلقائياً بعد 90 يوماً، وتنفيذ تعليمات المنشأة في بياناتها عند انتهاء الاشتراك.",
-            "• الإشعار عن أي حادثة تمس البيانات الشخصية وفق المدد النظامية.",
+            "• الإشعار بأي حادثة تمس البيانات الشخصية وفق المدد النظامية.",
             "• إعانة المنشأة على تلبية طلبات أصحاب البيانات (الاطلاع، التصحيح، الإتلاف).",
           ],
         },
@@ -146,7 +146,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "1. What we collect and why",
           ps: [
             "Website visitors: this site does not collect identifying data about its visitors. A cookieless measurement tool (Vercel Analytics) provides aggregate page statistics without personal identifiers — which is why this site shows no cookie banner.",
-            "Demo bookings: when you book a demo we collect — through Cal.com — your name, email, mobile number, business name, sector, and approximate call volume, for the sole purpose of contacting you and preparing the demo.",
+            "Demo bookings: when you book a demo we collect — through Cal.com — your name, email, mobile number, business name, sector, approximate call volume, and any message you include, for the sole purpose of contacting you and preparing the demo.",
             "Subscribed businesses and their customers: the platform processes call and text-conversation content (audio, transcripts, summaries), the customer records a business enters (names, contact numbers, preferences, bookings), and usage logs — to operate the AI answering and human-handoff service the business contracted for.",
           ],
         },
@@ -193,7 +193,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. The service",
           ps: [
-            "Saut Najdi is a hybrid AI answering platform: an AI voice agent that answers a subscribed business's customer calls and text conversations, with escalation to a human employee under rules the business defines. The service is provided to businesses under a separate subscription agreement; there is no public self-signup.",
+            "Saut Najdi is a hybrid AI answering platform: an AI voice agent that answers a subscribed business's customer calls, with text conversations (WhatsApp, Telegram, website chat) landing in a unified team inbox, and escalation to a human employee under rules the business defines. The service is provided to businesses under a separate subscription agreement; there is no public self-signup.",
           ],
         },
         {

@@ -12,7 +12,7 @@ export const meta: Record<
     home: {
       title: "صوت نجدي — وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك",
       description:
-        "وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي، حجازي، خليجي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاج. احجز عرضاً.",
+        "وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي، حجازي، خليجي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاج الموضوع. احجز عرضاً.",
     },
     "how-it-works": {
       title: "كيف يشتغل صوت نجدي؟ رحلة المكالمة خطوة بخطوة",
@@ -72,27 +72,27 @@ export const meta: Record<
     home: {
       title: "Saut Najdi — an AI voice agent in your customers' dialect",
       description:
-        "A Saudi AI voice agent that answers your customers in their dialect — Najdi, Hijazi, Khaleeji — books and acts, with your employee taking over any call with full context. Book a demo.",
+        "A Saudi AI voice agent that answers customers in their dialect — Najdi, Hijazi, Khaleeji — with your team taking over any call with full context. Book a demo.",
     },
     "how-it-works": {
       title: "How Saut Najdi works — one call, step by step",
       description:
-        "From the first ring to the last line in the log: how the voice agent answers in your customer's dialect, understands, acts, and when it hands the call to your employee with full context.",
+        "From first ring to final log: how the agent answers in your customer's dialect, understands, acts, and hands calls to your team with full context.",
     },
     "product/human-handoff": {
       title: "Human handoff — Saut Najdi",
       description:
-        "When does a call go to a human? What does your employee inherit? Live listen, whisper and take-over on live calls, with full context transferring on every escalation.",
+        "When calls go to a human, what your employee inherits, and live listen, whisper and take-over on live calls — full context on every escalation.",
     },
     security: {
       title: "Security & data — PDPL alignment | Saut Najdi",
       description:
-        "Where your data is stored and processed: Gulf-region storage, full disclosure of processing locations, an append-only audit log, and automatic 90-day recording deletion.",
+        "Where your data is stored and processed: Gulf-region storage, full processing disclosure, an append-only audit log, 90-day recording deletion.",
     },
     demo: {
       title: "Book an intro demo — Saut Najdi",
       description:
-        "A 30-minute demo: see the platform live, hear the agent in your dialect, and get your needs assessed with a clear tailored offer. Pick your slot straight from the calendar.",
+        "A 30-minute live demo: hear the agent in your dialect and get a clear tailored offer. Pick your slot straight from the calendar.",
     },
     "demo/thank-you": {
       title: "Booked — Saut Najdi",
@@ -106,7 +106,7 @@ export const meta: Record<
     about: {
       title: "About us — why we built Saut Najdi",
       description:
-        "A Saudi team in Riyadh building a voice agent that understands Saudi customers from the first word — hybrid by design: AI answers the routine, your employee is always there.",
+        "A Saudi team in Riyadh building a voice agent that understands Saudi customers from the first word — AI answers, your employee is always there.",
     },
     faq: {
       title: "FAQ — Saut Najdi",

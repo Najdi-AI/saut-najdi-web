@@ -3,6 +3,7 @@ import { CAL_LINK_DEMO, CAL_LINK_QUICK } from "@/lib/site";
 import { CalInline } from "@/components/CalInline";
 import { CalButton } from "@/components/CalButton";
 import { Waveform } from "@/components/Waveform";
+import { AnimatedIcon } from "@/components/icons";
 
 /**
  * /demo (blueprint §2.4): server-rendered copy on top, the inline
@@ -64,11 +65,11 @@ export function DemoPage({ locale }: { locale: Locale }) {
           <aside className="card">
             <h2 className="text-h4">{s.expect.heading}</h2>
             <ul className="mt-4 space-y-3">
-              {s.expect.items.map((item) => (
+              {s.expect.items.map((item, i) => (
                 <li key={item} className="flex items-start gap-3 text-body-lg leading-relaxed text-ink/75">
-                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden className="mt-1 shrink-0 text-brand-blue">
-                    <path d="M3 9.5l4 4 8-9" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <span className="mt-0.5 shrink-0 text-brand-blue">
+                    <AnimatedIcon name="check" size={18} delay={i * 0.18} strokeWidth={2.2} />
+                  </span>
                   {item}
                 </li>
               ))}

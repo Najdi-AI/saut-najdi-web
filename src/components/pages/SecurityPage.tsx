@@ -5,7 +5,10 @@ import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
+import { IconChip, type IconName } from "@/components/icons";
 import type { FaqItem } from "@/lib/schema";
+
+const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", "badge"];
 
 /**
  * /security (blueprint §6.4) — PDPL-led, precise فصحى (the §3 tone
@@ -136,9 +139,14 @@ export function SecurityPage({ locale }: { locale: Locale }) {
         <div className="mx-auto max-w-3xl space-y-6">
           {s.sections.map((sec, i) => (
             <Reveal key={sec.title} delay={i * 0.04}>
-              <article className="card">
-                <h2 className="text-h4">{sec.title}</h2>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.body}</p>
+              <article className="card group">
+                <div className="flex items-start gap-4">
+                  <IconChip name={sectionIcons[i]} className="shrink-0" />
+                  <div>
+                    <h2 className="text-h4">{sec.title}</h2>
+                    <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.body}</p>
+                  </div>
+                </div>
               </article>
             </Reveal>
           ))}

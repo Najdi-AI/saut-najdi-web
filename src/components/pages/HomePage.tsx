@@ -6,6 +6,9 @@ import { Waveform } from "@/components/Waveform";
 import { DialectChips } from "@/components/DialectChips";
 import { CalButton } from "@/components/CalButton";
 import { Reveal } from "@/components/Reveal";
+import { HeroVisual } from "@/components/HeroVisual";
+import { ProcessSteps } from "@/components/ProcessSteps";
+import { AnimatedIcon, IconChip, type IconName } from "@/components/icons";
 import { TrustStrip } from "@/components/TrustStrip";
 import { SampleConversation } from "@/components/SampleConversation";
 import { FaqAccordion } from "@/components/FaqAccordion";
@@ -158,29 +161,32 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* 1 · Hero */}
+      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-canvas">
-        <div className="container flex flex-col items-center pb-16 pt-14 text-center">
-          <h1 className="max-w-3xl text-h2 sm:text-h1">
-            {s.h1a}
-            <span className="text-gradient">{s.h1b}</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">
-            {s.positioning}
-          </p>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <CalButton calLink={CAL_LINK_DEMO} locale={locale}>
-              {s.ctaPrimary}
-            </CalButton>
-            <Link href={localePath(locale, "how-it-works")} className="btn-secondary">
-              {s.ctaSecondary}
-            </Link>
+        <div className="container grid items-center gap-10 pb-6 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:pb-2">
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
+            <h1 className="max-w-3xl text-h2 sm:text-h1">
+              {s.h1a}
+              <span className="text-gradient">{s.h1b}</span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">
+              {s.positioning}
+            </p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+              <CalButton calLink={CAL_LINK_DEMO} locale={locale}>
+                {s.ctaPrimary}
+              </CalButton>
+              <Link href={localePath(locale, "how-it-works")} className="btn-secondary">
+                {s.ctaSecondary}
+              </Link>
+            </div>
+            <div className="mt-8">
+              <DialectChips locale={locale} className="justify-center lg:justify-start" />
+            </div>
           </div>
-          <div className="mt-8">
-            <DialectChips locale={locale} />
-          </div>
-          <Waveform bars={64} maxHeight={72} className="mt-10 w-full" />
+          <HeroVisual locale={locale} />
         </div>
+        <Waveform bars={64} maxHeight={44} className="container pb-8" />
       </section>
 
       <TrustStrip locale={locale} />
@@ -193,8 +199,9 @@ export function HomePage({ locale }: { locale: Locale }) {
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {s.problem.cards.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.08}>
-              <div className="card card-hover h-full">
-                <h3 className="text-h4">{c.title}</h3>
+              <div className="card card-hover group h-full">
+                <IconChip name={(["clock", "cost", "repeat"] as IconName[])[i]} delay={i * 0.15} />
+                <h3 className="mt-3 text-h4">{c.title}</h3>
                 <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{c.body}</p>
               </div>
             </Reveal>
@@ -208,22 +215,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <Reveal>
             <h2 className="text-center text-h2">{s.how.heading}</h2>
           </Reveal>
-          <ol className="relative mt-10 grid gap-6 md:grid-cols-4">
-            {s.how.steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 0.1}>
-                <li className="relative h-full rounded-2xl border border-line bg-canvas p-5">
-                  <span
-                    aria-hidden
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-gradient text-body-lg font-bold text-white"
-                  >
-                    {i + 1}
-                  </span>
-                  <h3 className="mt-3 text-h5">{step.title}</h3>
-                  <p className="mt-1.5 text-body leading-relaxed text-ink/70">{step.body}</p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
+          <ProcessSteps steps={s.how.steps} locale={locale} />
           <div className="mt-8 text-center">
             <Link
               href={localePath(locale, "how-it-works")}
@@ -269,8 +261,11 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {s.capabilities.cards.map((c, i) => {
               const inner = (
-                <div className={`card h-full ${c.path ? "card-hover border-brand-blue/25" : ""}`}>
-                  <Waveform bars={9} maxHeight={18} animate={false} className="!justify-start" />
+                <div className={`card group h-full ${c.path ? "card-hover border-brand-blue/25" : ""}`}>
+                  <IconChip
+                    name={(["mic", "people", "doc", "sliders", "chart"] as IconName[])[i]}
+                    delay={i * 0.1}
+                  />
                   <h3 className="mt-3 text-h4">{c.title}</h3>
                   <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{c.body}</p>
                 </div>
@@ -317,9 +312,15 @@ export function HomePage({ locale }: { locale: Locale }) {
             <h2 className="text-center text-h2">{s.governance.heading}</h2>
           </Reveal>
           <ul className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
-            {s.governance.bullets.map((b) => (
+            {s.governance.bullets.map((b, i) => (
               <li key={b} className="flex items-start gap-3 rounded-xl bg-white/5 p-4 text-body-lg text-white/85">
-                <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brand-cyan" aria-hidden />
+                <span className="mt-0.5 shrink-0 text-brand-cyan">
+                  <AnimatedIcon
+                    name={(["shield", "database", "lock", "badge"] as IconName[])[i]}
+                    size={20}
+                    delay={i * 0.12}
+                  />
+                </span>
                 {b}
               </li>
             ))}

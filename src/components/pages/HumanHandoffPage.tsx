@@ -6,7 +6,10 @@ import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { SampleConversation } from "@/components/SampleConversation";
+import { IconChip, type IconName } from "@/components/icons";
 import type { FaqItem } from "@/lib/schema";
+
+const pillarIcons: IconName[] = ["sliders", "headset", "doc", "clock"];
 
 /**
  * /product/human-handoff — the moat page (blueprint §6.2 ★). Told as a
@@ -162,8 +165,9 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
             {s.pillars.items.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.08}>
-                <article className="card card-hover h-full border-s-4 border-s-brand-blue">
-                  <h3 className="text-h4">{p.title}</h3>
+                <article className="card card-hover group h-full border-s-4 border-s-brand-blue">
+                  <IconChip name={pillarIcons[i]} delay={i * 0.1} />
+                  <h3 className="mt-3 text-h4">{p.title}</h3>
                   <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{p.body}</p>
                 </article>
               </Reveal>

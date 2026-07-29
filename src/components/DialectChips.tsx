@@ -10,9 +10,15 @@ const chips = {
   en: ["Najdi", "Hijazi", "Khaleeji", "Arabic", "English", "+ any dialect your customers need"],
 } as const;
 
-export function DialectChips({ locale }: { locale: Locale }) {
+export function DialectChips({
+  locale,
+  className = "justify-center",
+}: {
+  locale: Locale;
+  className?: string;
+}) {
   return (
-    <ul className="flex flex-wrap items-center justify-center gap-2">
+    <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
       {chips[locale].map((chip, i) => (
         <li
           key={chip}

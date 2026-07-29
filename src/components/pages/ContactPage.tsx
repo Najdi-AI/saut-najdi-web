@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { SUPPORT_EMAIL, CAL_LINK_QUICK } from "@/lib/site";
 import { CalButton } from "@/components/CalButton";
+import { IconChip } from "@/components/icons";
 
 /**
  * /contact (blueprint §6.8) — «كلمنا». No phone number (telecom gate).
@@ -96,14 +97,18 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </form>
 
         <div className="space-y-4">
-          <div className="card">
-            <h2 className="text-h5">{s.emailHeading}</h2>
+          <div className="card group">
+            <IconChip name="mail" />
+            <h2 className="mt-3 text-h5">{s.emailHeading}</h2>
             <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className="mt-2 block text-body-lg text-brand-blue hover:underline">
               {SUPPORT_EMAIL}
             </a>
           </div>
-          <div className="card text-center">
-            <p className="text-body-lg text-ink/70">{s.or}</p>
+          <div className="card group text-center">
+            <div className="flex justify-center">
+              <IconChip name="phone" delay={0.15} />
+            </div>
+            <p className="mt-3 text-body-lg text-ink/70">{s.or}</p>
             <div className="mt-3">
               <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="secondary" className="w-full">
                 {s.quick}

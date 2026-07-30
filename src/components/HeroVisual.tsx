@@ -51,13 +51,13 @@ export function HeroVisual({ locale }: { locale: Locale }) {
   return (
     <div className="relative mx-auto w-full max-w-[440px] lg:max-w-[520px]">
       <Image
-        src="/brand/hero-person.jpg"
+        src="/brand/hero-man.webp"
         alt={s.alt}
-        width={1161}
-        height={1160}
+        width={1100}
+        height={900}
         priority
         sizes="(min-width: 1024px) 40vw, 90vw"
-        className="w-full [mask-image:linear-gradient(to_bottom,black_88%,transparent_100%)]"
+        className="w-full"
       />
 
       {/* Agent voice-note bubble */}
@@ -67,8 +67,8 @@ export function HeroVisual({ locale }: { locale: Locale }) {
           dir="rtl"
           className="flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-white/95 px-4 py-2.5 shadow-card-hover backdrop-blur"
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-gradient-soft text-brand-blue">
-            <AnimatedIcon name="wave" size={18} delay={0.5} />
+          <span className="ring-spectrum flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-brand-purple">
+            <AnimatedIcon name="wave" size={16} delay={0.5} />
           </span>
           <span className="text-body font-medium text-ink" dir="auto">
             {s.agent}
@@ -92,21 +92,22 @@ export function HeroVisual({ locale }: { locale: Locale }) {
         </motion.div>
       </motion.div>
 
-      {/* Pulsing mic button */}
-      <motion.div {...enter(0.8)} className="absolute left-[4%] top-[56%]">
+      {/* Pulsing mic — outline style: spectrum ring, stroke icon (no
+          gradient fill — owner rule) */}
+      <motion.div {...enter(0.8)} className="absolute left-[4%] top-[54%]">
         <motion.div {...float(1.8, 5.4)} className="relative">
           {!reduced && (
             <>
-              <span aria-hidden className="absolute inset-0 animate-pulse-ring rounded-full bg-brand-blue/25" />
+              <span aria-hidden className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40" />
               <span
                 aria-hidden
-                className="absolute inset-0 animate-pulse-ring rounded-full bg-brand-magenta/20"
+                className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-magenta/30"
                 style={{ animationDelay: "0.9s" }}
               />
             </>
           )}
-          <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-brand-gradient text-white shadow-card-hover">
-            <AnimatedIcon name="mic" size={26} delay={1} strokeWidth={2} />
+          <span className="ring-spectrum relative flex h-16 w-16 items-center justify-center rounded-full text-brand-purple shadow-card-hover">
+            <AnimatedIcon name="mic" size={26} delay={1} strokeWidth={1.8} />
           </span>
         </motion.div>
       </motion.div>

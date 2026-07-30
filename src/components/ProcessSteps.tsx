@@ -63,7 +63,7 @@ export function ProcessSteps({
 
           {/* Icon node */}
           <motion.span
-            className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-transparent bg-white text-brand-purple shadow-card [background:linear-gradient(white,white)_padding-box,linear-gradient(90deg,#2EC4E6,#5B6CE5,#6F3FA4,#E20C3A,#EC1B3A)_border-box]"
+            className="ring-spectrum relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl text-brand-purple shadow-card"
             variants={{
               hidden: { scale: 0.6, opacity: 0 },
               show: {

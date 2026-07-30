@@ -12,7 +12,7 @@ export function CalButton({
 }: {
   calLink: string;
   locale: Locale;
-  variant?: "primary" | "secondary" | "link";
+  variant?: "primary" | "secondary" | "spectrum" | "link";
   children: React.ReactNode;
   className?: string;
 }) {
@@ -22,7 +22,9 @@ export function CalButton({
       ? "btn-primary"
       : variant === "secondary"
         ? "btn-secondary"
-        : "font-medium text-brand-blue underline-offset-4 hover:underline";
+        : variant === "spectrum"
+          ? "btn-spectrum"
+          : "font-medium text-brand-blue underline-offset-4 hover:underline";
   return (
     <button
       type="button"

@@ -185,7 +185,11 @@ export function AnimatedIcon({
   );
 }
 
-/** Gradient-ringed icon chip used across cards and lists. */
+/**
+ * Outline icon chip — white ground, spectrum BORDER, stroke icon.
+ * Gradient fills on icons are banned site-wide (owner rule); the
+ * spectrum only ever appears as an outline ring.
+ */
 export function IconChip({
   name,
   className = "",
@@ -197,7 +201,7 @@ export function IconChip({
 }) {
   return (
     <span
-      className={`inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-gradient-soft text-brand-purple transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 ${className}`}
+      className={`ring-spectrum inline-flex h-11 w-11 items-center justify-center rounded-xl text-brand-purple shadow-card transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 ${className}`}
     >
       <AnimatedIcon name={name} size={22} delay={delay} />
     </span>

@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { thmanyah } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ChatLauncher } from "@/components/ChatLauncher";
 
 /**
  * Arabic root layout — Arabic is the default language and lives at the
@@ -19,6 +20,7 @@ export default function ArabicRootLayout({
         <Header locale="ar" />
         <main id="main">{children}</main>
         <Footer locale="ar" />
+        <ChatLauncher locale="ar" />
         <Analytics />
       </body>
     </html>

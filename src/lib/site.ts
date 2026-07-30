@@ -16,6 +16,16 @@ export const CAL_LINK_DEMO = "saut-najdi/demo";
 export const CAL_LINK_QUICK = "saut-najdi/quick-call";
 
 /**
+ * The platform's embeddable web-chat widget key (dashboard → Integrations
+ * → Web chat). Set NEXT_PUBLIC_WEBCHAT_KEY in Vercel to activate the AI
+ * chat launcher; empty = launcher shows the contact fallback panel.
+ * The widget's frame-ancestors CSP must allow sautnajdi.com.
+ */
+export const WEBCHAT_KEY = process.env.NEXT_PUBLIC_WEBCHAT_KEY ?? "";
+export const WEBCHAT_FRAME_URL = (key: string) =>
+  `${APP_URL}/widget/frame?k=${encodeURIComponent(key)}`;
+
+/**
  * The canonical PDPL trust line (blueprint §2.5) — identical every time it
  * appears. Never escalate the wording.
  */

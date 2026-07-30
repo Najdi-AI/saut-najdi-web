@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { Waveform } from "@/components/Waveform";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
+import { JourneySteps } from "@/components/JourneySteps";
 
 /**
  * /how-it-works (blueprint §6.6): the long-form explainer told as one
@@ -109,26 +110,7 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
       <TrustStrip locale={locale} />
 
       <section className="container py-16">
-        <ol className="relative mx-auto max-w-2xl space-y-6">
-          {s.steps.map((step, i) => (
-            <Reveal key={step.title} delay={0.05}>
-              <li className="card relative">
-                <div className="flex items-start gap-4">
-                  <span
-                    aria-hidden
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gradient text-body-lg font-bold text-white"
-                  >
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h2 className="text-h4">{step.title}</h2>
-                    <p className="mt-2 text-body-lg leading-relaxed text-ink/75">{step.body}</p>
-                  </div>
-                </div>
-              </li>
-            </Reveal>
-          ))}
-        </ol>
+        <JourneySteps steps={s.steps} locale={locale} />
         <Reveal className="mx-auto mt-10 max-w-2xl text-center">
           <Waveform bars={40} maxHeight={32} className="mb-6 opacity-70" />
           <p className="text-body-lg leading-relaxed text-ink/75">{s.outro}</p>

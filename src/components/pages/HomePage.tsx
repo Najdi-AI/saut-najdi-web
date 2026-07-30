@@ -295,8 +295,14 @@ export function HomePage({ locale }: { locale: Locale }) {
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           {s.sectors.tiles.map((tile, i) => (
             <Reveal key={tile.sector} delay={i * 0.06}>
-              <div className="card card-hover w-52 text-center">
-                <p className="text-body-lg font-bold">{tile.sector}</p>
+              <div className="card card-hover group w-52 text-center">
+                <div className="flex justify-center">
+                  <IconChip
+                    name={(["clinic", "restaurant", "hotel", "estate", "retail"] as IconName[])[i]}
+                    delay={i * 0.1}
+                  />
+                </div>
+                <p className="mt-3 text-body-lg font-bold">{tile.sector}</p>
                 <p className="mt-2 text-body text-brand-purple">{tile.quote}</p>
               </div>
             </Reveal>

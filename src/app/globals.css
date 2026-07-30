@@ -230,10 +230,8 @@
   align-items: center;
   flex-wrap: nowrap;
   gap: 2px;
-  /* RTL fix (owner feedback): the nav sits WITH the logo on the start
-     side (right in Arabic) instead of floating mid-bar; only the actions
-     push to the far end. */
-  margin-inline-start: 6px;
+  /* Centered between the logo and the actions (owner preference). */
+  margin-inline: auto;
 }
 @media (min-width: 1060px) {
   .hdr-nav {
@@ -257,11 +255,12 @@
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
+  /* On mobile the nav is hidden, so the actions carry the auto margin. */
   margin-inline-start: auto;
 }
 @media (min-width: 1060px) {
   .hdr-actions {
-    margin-inline-start: 10px;
+    margin-inline-start: 0;
   }
 }
 .hdr-cta {

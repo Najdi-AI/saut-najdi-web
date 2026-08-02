@@ -88,10 +88,14 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             </div>
 
             {WEBCHAT_KEY ? (
+              // colorScheme:light forces prefers-color-scheme inside the
+              // cross-origin frame — the widget follows the visitor's OS
+              // theme otherwise, going dark on dark-mode devices.
               <iframe
                 src={WEBCHAT_FRAME_URL(WEBCHAT_KEY)}
                 title={s.frameTitle}
-                className="min-h-0 w-full flex-1 border-0"
+                className="min-h-0 w-full flex-1 border-0 bg-white"
+                style={{ colorScheme: "light" }}
                 allow="clipboard-write"
               />
             ) : (

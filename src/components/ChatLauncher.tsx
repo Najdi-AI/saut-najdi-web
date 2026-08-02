@@ -59,7 +59,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
   }, [open]);
 
   return (
-    <div className="fixed bottom-5 end-5 z-[90]">
+    <div className="fixed bottom-5 start-5 z-[90]">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -68,7 +68,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? undefined : { opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="absolute bottom-[4.5rem] end-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card-hover"
+            className="absolute bottom-[4.5rem] start-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card-hover"
           >
             <div className="flex items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-3">
               <div>

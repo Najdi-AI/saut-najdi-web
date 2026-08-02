@@ -96,7 +96,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                 title={s.frameTitle}
                 className="min-h-0 w-full flex-1 border-0 bg-white"
                 style={{ colorScheme: "light" }}
-                allow="clipboard-write"
+                allow="clipboard-write; microphone"
               />
             ) : (
               <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-5">

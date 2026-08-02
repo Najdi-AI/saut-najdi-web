@@ -133,7 +133,7 @@ export function NavMenu({
 
             <Link href={localePath(locale, menu.featured.path)} className="mega-feat">
               <span className="mega-feat-art" aria-hidden="true">
-                <Waveform bars={18} maxHeight={34} animate={false} />
+                <Waveform bars={18} maxHeight={34} />
               </span>
               <span className="mega-heading mega-heading--accent">{menu.featured.eyebrow}</span>
               <b>{menu.featured.title}</b>

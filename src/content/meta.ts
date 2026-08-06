@@ -1,8 +1,19 @@
 import type { Locale } from "@/lib/i18n";
 
 /**
- * Hand-written per-page titles (≤60 chars) and descriptions (≤155) —
- * blueprint §8.2: never auto-generated, never identical, per language.
+ * Hand-written per-page titles (≤60 chars **including the template suffix**)
+ * and descriptions (≤155) — blueprint §8.2: never auto-generated, never
+ * identical, per language.
+ *
+ * Titles here are RAW: the root layout appends « — صوت نجدي» (11) / " — Saut
+ * Najdi" (13), so the brand is never repeated by hand. `home` is the one
+ * absolute title (the template is suppressed for it) and therefore carries the
+ * brand itself.
+ *
+ * Register (blueprint §3): natural spoken Saudi everywhere — يشتغل، وش، وين،
+ * تنحفظ — because that is how the query is actually typed. The four legal /
+ * security pages (security, privacy, terms, dpa) are the deliberate exception
+ * and stay precise فصحى.
  */
 export const meta: Record<
   Locale,
@@ -10,122 +21,124 @@ export const meta: Record<
 > = {
   ar: {
     home: {
-      title: "صوت نجدي — وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك",
+      title: "وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك — صوت نجدي",
       description:
-        "وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي، حجازي، خليجي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاج الموضوع. احجز عرضاً.",
+        "صوت نجدي وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي وحجازي وخليجي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاجت إنسان.",
     },
     "how-it-works": {
-      title: "كيف يشتغل صوت نجدي؟ رحلة المكالمة خطوة بخطوة",
+      title: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
       description:
-        "من أول رنة إلى آخر سطر في السجل: كيف يرد الوكيل الصوتي بلهجة عميلك ويفهم قصده وينفذ طلبه، ومتى يحوّل المكالمة لموظفك بكامل سياقها.",
+        "من أول رنة إلى آخر سطر في السجل: كيف يرد وكيل صوت نجدي بلهجة عميلك، ويفهم قصده، وينفذ طلبه، ومتى يحوّل المكالمة لموظفك بكامل سياقها.",
     },
     "product/human-handoff": {
-      title: "التصعيد للموظف البشري — صوت نجدي",
+      title: "متى تتحول المكالمة لموظف بشري؟ التصعيد بالسياق",
       description:
-        "متى تتحول المكالمة لإنسان؟ ووش يشوف موظفك لما يستلم؟ استماع وهمس واستلام مباشر للمكالمات الحية، وسياق كامل ينتقل مع كل تصعيد.",
+        "التصعيد في صوت نجدي: متى تروح المكالمة لموظفك، ووش يستلم معها — النص الكامل والملخص وتاريخ العميل — وكيف يسمع فريقك المكالمات الحية ويستلمها.",
     },
     security: {
-      title: "الأمان والبيانات — التوافق مع PDPL | صوت نجدي",
+      title: "الأمان والبيانات والتوافق مع نظام PDPL السعودي",
       description:
-        "أين تُخزَّن بياناتك وأين تُعالَج: تخزين في منطقة الخليج، إفصاح كامل عن أماكن المعالجة، سجل تدقيق غير قابل للتعديل، وحذف تلقائي للتسجيلات بعد 90 يوماً.",
+        "أين تُخزَّن بيانات مكالماتك وأين تُعالَج بالضبط: تخزين في منطقة الخليج (الدوحة)، إفصاح كامل عن أماكن المعالجة، وحذف تلقائي للتسجيلات بعد 90 يوماً.",
     },
     demo: {
-      title: "احجز عرضاً تعريفياً — صوت نجدي",
+      title: "احجز عرضاً تعريفياً مدته 30 دقيقة وعرض سعر",
       description:
-        "عرض 30 دقيقة تشوف فيه المنصة حية وتسمع الوكيل بلهجتك، ونقيّم فيه احتياجك ونعطيك عرض سعر يناسب نشاطك. احجز وقتك مباشرة من التقويم.",
+        "احجز عرض صوت نجدي التعريفي — 30 دقيقة تشوف فيها المنصة حية وتسمع الوكيل بلهجتك، ونقيّم حجم مكالماتك ونعطيك عرض سعر واضح يناسب نشاطك.",
     },
     "demo/thank-you": {
-      title: "تم الحجز — صوت نجدي",
+      title: "تم حجز عرضك",
       description: "تأكيد حجز العرض التعريفي مع صوت نجدي.",
     },
     contact: {
-      title: "تواصل معنا — صوت نجدي",
+      title: "تواصل معنا أو احجز مكالمة سريعة 15 دقيقة",
       description:
-        "راسلنا على الإيميل أو احجز مكالمة سريعة 15 دقيقة مع الفريق. ما في تسجيل ذاتي — فريقنا يجهز لك كل شي من الوكيل إلى قاعدة المعرفة.",
+        "كلّم فريق صوت نجدي: راسلنا على الإيميل أو احجز مكالمة 15 دقيقة. ما في تسجيل ذاتي — فريقنا يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد.",
     },
     about: {
-      title: "من نحن — ليه سوّينا صوت نجدي؟",
+      title: "من نحن — فريق سعودي بنى وكيلاً يفهم عميلك",
       description:
-        "فريق سعودي في الرياض بنى وكيلاً صوتياً يفهم العميل السعودي من أول كلمة — هجين: الذكاء يرد على الروتيني، وموظفك دايم موجود للحظات المهمة.",
+        "صوت نجدي منتج من Najdi AI — فريق سعودي في الرياض بنى وكيلاً صوتياً على اللهجات السعودية، وهجيناً بالتصميم: الذكاء يرد، وموظفك موجود دايماً.",
     },
     faq: {
-      title: "الأسئلة الشائعة — صوت نجدي",
+      title: "أسئلة شائعة عن الوكيل الصوتي بالذكاء الاصطناعي",
       description:
-        "إجابات واضحة وصريحة: وش هو صوت نجدي، كيف يفهم اللهجة، متى يحوّل المكالمة لموظف، وين تنحفظ البيانات، وكم الأسعار، وكيف تبدأ.",
+        "إجابات صريحة: وش هو صوت نجدي، كيف يفهم اللهجة السعودية، متى يحوّل المكالمة لموظف، وين تنحفظ البيانات، PDPL، كم الأسعار، وكيف تبدأ.",
     },
     privacy: {
-      title: "سياسة الخصوصية — صوت نجدي",
+      title: "سياسة الخصوصية",
       description:
         "كيف نجمع البيانات ونعالجها ونخزنها بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL) — بإفصاح كامل عن المعالجين ومدد الاحتفاظ.",
     },
     terms: {
-      title: "شروط الخدمة — صوت نجدي",
-      description: "الشروط التي تحكم استخدام موقع صوت نجدي وخدماته وحجوزات العروض.",
+      title: "شروط الخدمة",
+      description:
+        "الشروط التي تحكم استخدام موقع صوت نجدي وخدماته وحجوزات العروض التعريفية: نطاق الخدمة، ومسؤوليات الطرفين، والملكية الفكرية، وحدود المسؤولية.",
     },
     dpa: {
-      title: "اتفاقية معالجة البيانات — صوت نجدي",
+      title: "اتفاقية معالجة البيانات (DPA)",
       description:
-        "ملخص اتفاقية معالجة البيانات: الأدوار، والتزامات المعالجة، والتدابير التقنية والتنظيمية — والنسخة الكاملة تُوقَّع ضمن التعاقد.",
+        "ملخص اتفاقية معالجة البيانات بين صوت نجدي والمنشأة: الأدوار، والتزامات المعالجة، والمعالجون من الباطن، والتدابير التقنية والتنظيمية.",
     },
   },
   en: {
     home: {
-      title: "Saut Najdi — an AI voice agent in your customers' dialect",
+      title: "Arabic AI voice agent for Saudi businesses — Saut Najdi",
       description:
-        "A Saudi AI voice agent that answers customers in their dialect — Najdi, Hijazi, Khaleeji — with your team taking over any call with full context. Book a demo.",
+        "A Saudi AI voice agent answering calls in Najdi, Hijazi and Khaleeji Arabic or English — with your employee able to take over any call in full context.",
     },
     "how-it-works": {
-      title: "How Saut Najdi works — one call, step by step",
+      title: "How AI call answering works, step by step",
       description:
-        "From first ring to final log: how the agent answers in your customer's dialect, understands, acts, and hands calls to your team with full context.",
+        "From first ring to final log entry: how the Saut Najdi agent answers in your customer's dialect, understands, acts, and hands the call to your team.",
     },
     "product/human-handoff": {
-      title: "Human handoff — Saut Najdi",
+      title: "When does an AI call go to a human agent?",
       description:
-        "When calls go to a human, what your employee inherits, and live listen, whisper and take-over on live calls — full context on every escalation.",
+        "Saut Najdi escalation: when a call reaches your employee, what they inherit — transcript, summary, customer history — plus live listen, whisper, take-over.",
     },
     security: {
-      title: "Security & data — PDPL alignment | Saut Najdi",
+      title: "Security, data residency and PDPL alignment",
       description:
-        "Where your data is stored and processed: Gulf-region storage, full processing disclosure, an append-only audit log, 90-day recording deletion.",
+        "Where Saut Najdi stores and processes your data: Gulf-region storage (Doha), full processing disclosure, an append-only audit log, 90-day recording deletion.",
     },
     demo: {
-      title: "Book an intro demo — Saut Najdi",
+      title: "Book a 30-minute intro demo and get a quote",
       description:
-        "A 30-minute live demo: hear the agent in your dialect and get a clear tailored offer. Pick your slot straight from the calendar.",
+        "Book the Saut Najdi intro demo: 30 minutes, the platform live, the agent in your dialect, your PDPL questions answered, and a clear tailored offer.",
     },
     "demo/thank-you": {
-      title: "Booked — Saut Najdi",
+      title: "Demo booked",
       description: "Your Saut Najdi intro demo is confirmed.",
     },
     contact: {
-      title: "Contact us — Saut Najdi",
+      title: "Contact us or book a 15-minute call",
       description:
-        "Email us or book a quick 15-minute call with the team. There's no self-signup — our team sets everything up for you, from the agent to the knowledge base.",
+        "Reach the Saut Najdi team by email or book a 15-minute call. There's no self-signup — we set up the agent, knowledge base and escalation rules for you.",
     },
     about: {
-      title: "About us — why we built Saut Najdi",
+      title: "About us — the Saudi team behind the agent",
       description:
-        "A Saudi team in Riyadh building a voice agent that understands Saudi customers from the first word — AI answers, your employee is always there.",
+        "Saut Najdi is a product of Najdi AI — a Saudi team in Riyadh that built a voice agent on Saudi dialects, hybrid by design: AI answers, your employee is there.",
     },
     faq: {
-      title: "FAQ — Saut Najdi",
+      title: "AI voice agent FAQ for Saudi businesses",
       description:
-        "Clear, straight answers: what Saut Najdi is, how it understands dialects, when calls go to a human, where data lives, pricing, and how to start.",
+        "Straight answers: what Saut Najdi is, how it handles Saudi dialects, when calls go to a human, where data is stored, PDPL, pricing, and how to start.",
     },
     privacy: {
-      title: "Privacy policy — Saut Najdi",
+      title: "Privacy policy",
       description:
         "How we collect, process and store data in line with Saudi Arabia's PDPL — with full disclosure of processors and retention periods.",
     },
     terms: {
-      title: "Terms of service — Saut Najdi",
-      description: "The terms governing use of the Saut Najdi website, services and demo bookings.",
+      title: "Terms of service",
+      description:
+        "The terms governing use of the Saut Najdi website, its services and demo bookings: scope, responsibilities of both parties, IP, and limits of liability.",
     },
     dpa: {
-      title: "Data processing agreement — Saut Najdi",
+      title: "Data processing agreement (DPA)",
       description:
-        "A summary of the DPA: roles, processing commitments, and technical and organisational measures — the full version is signed during contracting.",
+        "A summary of the DPA between Saut Najdi and your organisation: roles, processing commitments, sub-processors, and technical and organisational measures.",
     },
   },
 };

@@ -30,7 +30,13 @@ const t = {
       body: "عميل يتصل على عيادة، يحجز موعد أسنان مع الوكيل، وبعدها يسأل عن ألم بعد حشوة. هنا الوكيل ما يجتهد بجواب طبي — يحوّل فوراً. شوف وش يصير:",
     },
     pillars: {
-      heading: "أربع ركائز — كلها شغالة اليوم",
+      // The old statement heading survives as the eyebrow: the H2 slot now
+      // carries the question a buyer actually types, which a statement can
+      // never match.
+      eyebrow: "أربع ركائز — كلها شغالة اليوم",
+      heading: "متى تتحول المكالمة من الذكاء الاصطناعي لموظف بشري؟",
+      capsule:
+        "المكالمة في صوت نجدي تروح لموظفك في أربع حالات: إذا طلب العميل إنسان — وهذا تحويل فوري ما يتفاوض فيه الوكيل، أو إذا بان انزعاجه، أو إذا تكرر سؤال ما انحل، أو إذا صار الموضوع أعقد من الصلاحيات اللي أعطيتها للوكيل. والقواعد أنت اللي تحددها. تحت أربع ركائز — كلها شغالة اليوم.",
       items: [
         {
           title: "1 · قواعد تصعيد واضحة — مو مزاج",
@@ -38,7 +44,7 @@ const t = {
         },
         {
           title: "2 · فريقك يشوف المكالمات الحية — ويقدر يتدخل",
-          body: "من لوحة التحكم، فريقك يتابع المكالمات لحظة بلحظة: يسمع مباشرة، يوجّه الوكيل بهمسة ما يسمعها العميل، أو يستلم المكالمة بنفسه بأي لحظة. المدير يقدر يوقف الوكيل ويكمل المكالمة بنفسه. هذي مو ميزة شائعة — أغلب المنصات ما تعطيك إياها أصلاً.",
+          body: "من لوحة التحكم، فريقك يتابع المكالمات لحظة بلحظة: يسمع مباشرة، يوجّه الوكيل بهمسة ما يسمعها العميل، أو يستلم المكالمة بنفسه بأي لحظة. المدير يقدر يوقف الوكيل ويكمل المكالمة بنفسه.",
         },
         {
           title: "3 · الموظف يستلم ومعه كل شي",
@@ -49,6 +55,11 @@ const t = {
           body: "الوكيل يعرف أوقات دوامك. إذا اتصل العميل برا الدوام والموضوع يحتاج إنسان، ما يقول له «حاول بكرة» — يسجل طلب اتصال بتفاصيله ووقته المفضل، ويوعده إن أحد من فريقك يرجع له. الطلب يظهر لفريقك في اللوحة ثاني يوم.",
         },
       ],
+    },
+    live: {
+      heading: "أقدر أسمع مكالمة وهي شغالة وأستلمها؟",
+      capsule:
+        "إي — من لوحة صوت نجدي فريقك يتابع المكالمات وهي شغالة: يسمع أي مكالمة مباشرة، يوجّه الوكيل بهمسة ما يسمعها العميل، أو يستلم المكالمة بنفسه ويكمل مع العميل. والمدير يقدر يوقف الوكيل ويكمل هو.",
     },
     after: {
       heading: "وبعد ما تخلص المكالمة؟",
@@ -64,12 +75,12 @@ const t = {
         a: "موظفك يشوف سبب التصعيد، والنص الكامل للمحادثة، وملخص عربي واضح، وتاريخ العميل معكم — كل هذا قدامه لحظة الاستلام، فما يحتاج يسأل العميل «ممكن تعيد؟».",
       },
       {
-        q: "أقدر أراقب مكالمات الوكيل وأنا مرتاح؟",
+        q: "أقدر أراقب مكالمات الوكيل؟",
         a: "تقدر — من لوحة صوت نجدي تتابع المكالمات الحية، تسمع أي مكالمة، توجّه الوكيل بهمسة، أو تستلم المكالمة بنفسك بضغطة وحدة.",
       },
       {
         q: "وإذا كان الاتصال برا الدوام؟",
-        a: "الوكيل يعرف أوقات دوامك: يخدم العميل في اللي يقدر عليه، وإذا احتاج الموضوع إنسان يسجل طلب اتصال ويوعد العميل برجعة من فريقك — وما يضيع عليك ولا عميل.",
+        a: "الوكيل يعرف أوقات دوامك: يخدم العميل في اللي يقدر عليه، وإذا احتاج الموضوع إنسان يسجل طلب اتصال ويوعد العميل إن أحد من فريقك يرجع له — وما يضيع عليك ولا عميل.",
       },
     ] as FaqItem[],
     faqHeading: "أسئلة عن التصعيد",
@@ -84,7 +95,10 @@ const t = {
       body: "A customer calls a clinic, books a dental appointment with the agent, then asks about pain after a filling. The agent doesn't improvise a medical answer — it hands over immediately. Watch what happens:",
     },
     pillars: {
-      heading: "Four pillars — all working today",
+      eyebrow: "Four pillars — all working today",
+      heading: "When does an AI call get handed to a human agent?",
+      capsule:
+        "A Saut Najdi call reaches your employee in four cases: the customer asks for a human — an immediate transfer the agent never negotiates; the customer sounds upset; a question keeps going unresolved; or the matter goes beyond what you've allowed the agent to handle. You set the rules. Below, four pillars — all working today.",
       items: [
         {
           title: "1 · Explicit escalation rules — not vibes",
@@ -92,7 +106,7 @@ const t = {
         },
         {
           title: "2 · Your team watches live calls — and can step in",
-          body: "From the dashboard, your team follows calls as they happen: listen in live, coach the agent with a whisper the customer never hears, or take the call over at any moment. A manager can pause the AI and continue the call personally. Most platforms simply don't offer this.",
+          body: "From the dashboard, your team follows calls as they happen: listen in live, coach the agent with a whisper the customer never hears, or take the call over at any moment. A manager can pause the AI and continue the call personally.",
         },
         {
           title: "3 · The employee inherits everything",
@@ -103,6 +117,11 @@ const t = {
           body: "The agent knows your working hours. If a customer calls while you're closed and the matter needs a human, it doesn't say “try tomorrow” — it logs a callback request with the details and the customer's preferred time, and promises someone from your team will call back. The request is waiting in your team's dashboard the next morning.",
         },
       ],
+    },
+    live: {
+      heading: "Can I listen to a live call and take it over?",
+      capsule:
+        "Yes — from the Saut Najdi dashboard your team follows calls as they happen: listen in on any call, coach the agent with a whisper the caller never hears, or take the call over and carry on with the customer yourself. A manager can pause the AI and continue the conversation.",
     },
     after: {
       heading: "And after the call ends?",
@@ -159,8 +178,10 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
 
       <section className="bg-white py-16">
         <div className="container">
-          <Reveal>
-            <h2 className="text-center text-h2">{s.pillars.heading}</h2>
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <p className="eyebrow">{s.pillars.eyebrow}</p>
+            <h2 className="mt-2 text-h2">{s.pillars.heading}</h2>
+            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.pillars.capsule}</p>
           </Reveal>
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
             {s.pillars.items.map((p, i) => (
@@ -177,7 +198,14 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
       </section>
 
       <section className="container py-16">
-        <Reveal className="mx-auto max-w-2xl text-center">
+        {/* Live listen/whisper/take-over is the page's strongest claim but it
+            was buried inside pillar 2 — it gets its own question heading so
+            the query «أقدر أسمع مكالمة وهي شغالة» lands on an answer. */}
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <h2 className="text-h2">{s.live.heading}</h2>
+          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.live.capsule}</p>
+        </Reveal>
+        <Reveal className="mx-auto mt-14 max-w-2xl text-center">
           <h2 className="text-h3">{s.after.heading}</h2>
           <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.after.body}</p>
         </Reveal>

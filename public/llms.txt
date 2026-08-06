@@ -2,20 +2,124 @@
 
 > Saut Najdi is a Saudi AI voice agent that answers your customers in the dialect they understand — Najdi, Hijazi, Khaleeji, in Arabic or English — with your human employee able to take over any call with full context.
 
-Saut Najdi is built for Saudi businesses (clinics, restaurants, hotels, real estate, retail) that lose customer calls after hours or pay heavily for reply teams. The AI answers inbound calls naturally — callers can interrupt it, it books appointments, answers from the business's own Arabic knowledge base, remembers returning callers — and escalates to a human employee with the full transcript, an Arabic summary, and the customer's history. Staff can watch live calls and listen, whisper, or take over from the dashboard.
+Saut Najdi is a hybrid AI + human platform for inbound customer conversations in Saudi Arabia. It answers inbound phone calls and website-chat messages, acts on what the caller wants, and escalates to a named human employee — carrying the full transcript, an Arabic summary and the caller's history — the moment a person should handle it. It is vertical-agnostic, with ready-made agent templates for clinics and hospitals, restaurants, hotels, real estate and retail.
 
-Data governance: designed to comply with Saudi Arabia's Personal Data Protection Law (PDPL) — data stored in the Gulf region, with full disclosure of where processing happens. Call recordings auto-delete after 90 days. The audit log is append-only.
+- Product: Saut Najdi / صوت نجدي
+- Made by: Najdi AI, Riyadh, Saudi Arabia. Saut Najdi is one of Najdi AI's products; najdiai.com is the parent company's own site, not a mirror of this one.
+- Website: https://sautnajdi.com — Arabic is the primary language and lives at the root; English lives under /en.
+- Existing-customer dashboard: https://app.najdiai.com
+- Contact: info@sautnajdi.com
+- Arabic edition of this file: https://sautnajdi.com/llms-ar.txt
+- Last reviewed: 2026-08-06
 
-There is no self-signup and no public pricing: the team onboards every client, and pricing is tailored after an intro demo booked at /demo.
+## What Saut Najdi does
 
-## Key pages
+- **Answers inbound calls in Saudi dialect.** A realtime speech to AI to speech pipeline built on Saudi Arabic from the ground up — not a foreign product translated afterwards.
+- **Lets the caller interrupt.** If a caller talks over the agent mid-sentence the agent stops instantly and listens, the way a human receptionist does. Booking codes and numbers are read back digit by digit in Arabic so they can actually be written down.
+- **Acts, not just talks.** Checks availability and books appointments, records order and enquiry details, saves caller preferences, and logs after-hours callback requests with the caller's preferred time.
+- **Remembers returning callers.** Cross-call memory per business: regulars are greeted by name, and their previous bookings and preferences are in front of the agent and of whichever employee takes the call over.
+- **Hands over to a human with the whole conversation attached.** Escalation is rule-driven, not improvised: an explicit request for a human transfers immediately, and frustration or a question that keeps going unresolved escalates too. The employee receives the escalation reason, the full transcript, a clear Arabic summary, and the customer's history.
+- **Live supervision.** Staff watch calls as they happen from the dashboard and can listen in, whisper a correction the caller never hears, or take the call over outright.
+- **Text channels in one team inbox.** WhatsApp Business, Telegram and an embeddable website chat widget land in the same inbox as calls, so one employee sees a customer's whole history in one place.
+- **An Arabic knowledge base built from your own documents.** PDF and Word files including scans, through true Arabic OCR with correct letter shaping, plus question-and-answer pairs, links, snippets and working hours — indexed by meaning rather than keyword.
+- **An agent builder with no code.** Sector templates, personality controls, AI-generated Najdi-Arabic persona prompts, a test chat, saved scenario tests, and deliberate draft-to-publish with version history and a diff of what changes.
+- **Visual workflow automation** and a **dashboard** with the call log, transcripts, recordings, AI summaries, sentiment, star ratings and tags, a customer timeline, and a reservations calendar the team actually manages.
+- **A public read-only API** with scoped keys.
 
-- [Home](https://sautnajdi.com/en): what Saut Najdi is
-- [How it works](https://sautnajdi.com/en/how-it-works): one call's journey, step by step
-- [Human handoff](https://sautnajdi.com/en/product/human-handoff): escalation rules, live supervision, inherited context
-- [Security & data](https://sautnajdi.com/en/security): PDPL alignment, storage and processing disclosure
-- [FAQ](https://sautnajdi.com/en/faq): direct answers to common questions
-- [Book a demo](https://sautnajdi.com/en/demo): 30-minute intro demo
-- [Contact](https://sautnajdi.com/en/contact)
+## Dialects and languages
 
-Arabic (primary) versions live at the same paths without /en, e.g. https://sautnajdi.com/ and https://sautnajdi.com/faq — see also /llms-ar.txt.
+Shipped voices: male and female, in **Najdi, Hijazi and Khaleeji** Saudi dialects, plus **standard Arabic and English**. Any further dialect or language is a configuration the team prepares on request — Saut Najdi does not advertise a catalogue of dialects it has not shipped. Brand-voice cloning from a short sample is available, with a consent attestation from the voice owner, revocation, and verified deletion.
+
+## Data, storage and PDPL
+
+Designed to comply with Saudi Arabia's Personal Data Protection Law (PDPL) — data stored in the Gulf region, with full disclosure of where processing happens.
+
+Stated precisely, because the precision is the compliance posture:
+
+- Permanent storage: Cloud SQL PostgreSQL in the **Gulf region (Doha, me-central1)** on Google Cloud, reachable over private networking only, with backups and point-in-time restore.
+- Call recordings: same region, **automatically deleted after 90 days**, openable only through short-lived signed links.
+- Processing disclosure: realtime speech and AI processing — speech to text, language understanding, voice generation — **transits global providers**, and knowledge-base document OCR runs on a **European endpoint**. Saut Najdi does **not** claim that all data and all processing stay inside Saudi Arabia; disclosing cross-border transfer is what the law asks for.
+- An **append-only audit log** enforced by the database itself: no row can be edited or deleted, not even by an administrator.
+- Roles and permissions per employee, tenant isolation enforced at the database level, and audited platform-support access.
+- Full detail: https://sautnajdi.com/en/security. Processing locations and processor categories are disclosed in https://sautnajdi.com/en/privacy.
+
+## What Saut Najdi does not do
+
+Stated plainly so nobody has to guess, and so nothing here is inferred from silence:
+
+- No outbound calling, auto-dialling or calling campaigns. Saut Najdi is inbound-only today.
+- No Saudi phone number you can ring to try it. Number activation runs through Saudi telecom regulatory steps, so the live trial happens inside a booked demo instead.
+- No SMS and no email channels.
+- No public pricing and no self-signup. The team onboards every customer, and pricing is quoted after the intro demo.
+- No published accuracy, satisfaction, response-time or cost-saving statistics, and no customer names, logos, testimonials or case studies — none have been measured in a defensible way or consented to.
+- Saut Najdi does not discharge any legal Saudization obligation for customer-service roles. The authority on those requirements is Saudi Arabia's Ministry of Human Resources and Social Development. What the product does is absorb repetitive routine calls so a business's own employees are free for the conversations that need a person.
+
+## How to buy
+
+Book a 30-minute intro demo at https://sautnajdi.com/en/demo — the platform is shown live, you hear the agent in your dialect, security and PDPL questions are answered in the same session, and the team returns a written offer sized to your call volume and channels. A 15-minute quick call is available first for questions. Bookings run through Cal.com.
+
+## Answers to common questions
+
+**What is Saut Najdi?** Saut Najdi is a Saudi AI voice agent that answers your customers' calls in the dialect they understand, acts on what they need — books, answers, records — and hands the call to your human employee with full context whenever a human should take it.
+
+**Does it really understand Saudi dialects?** Saut Najdi is built on Saudi dialects from the ground up: it hears everyday Saudi phrasing correctly and answers in male and female voices across Najdi, Hijazi and Khaleeji — plus standard Arabic and English.
+
+**What is the difference between an IVR and an AI voice agent?** Saut Najdi is a voice agent that talks to your customer in ordinary language rather than a "press 1" menu: the caller simply says what they want, the agent works out the intent and books it there and then, and the caller can interrupt mid-sentence the way they would with a person — where a traditional IVR gives fixed options the caller has to navigate.
+
+**When does a call go to a human?** A Saut Najdi call goes to your employee immediately when the customer asks for a human, sounds upset, or repeats a question that isn't getting resolved — and you set the escalation rules. Your employee takes over with the full transcript, a summary, and the customer's history.
+
+**Can I listen to a live call and take it over?** In the Saut Najdi dashboard your team can watch calls as they happen, listen to any of them, coach the agent with a whisper the caller never hears, or take the call over in one click.
+
+**Can the caller interrupt the agent?** The Saut Najdi agent stops instantly and listens when a caller talks over it mid-sentence, exactly as a person would. And when it reads out a booking code it reads it digit by digit so the caller can write it down without asking for a repeat.
+
+**Does it remember a caller who rings again?** Saut Najdi keeps cross-call memory per business: a returning caller is greeted by name, and their previous bookings and preferences are in front of the agent — and in front of your employee if the call is handed over.
+
+**Can I bring calls, WhatsApp and Telegram into one place?** Saut Najdi brings calls, WhatsApp, Telegram and your website chat into a single team inbox, so an employee sees all of a customer's conversations in one place instead of switching between four apps — and can step into any of them at any moment.
+
+**Where is my call data stored?** Saut Najdi stores your data in the Gulf region (Doha) on Google Cloud, call recordings are automatically deleted after 90 days, and the privacy policy fully discloses where speech and AI processing happen.
+
+**Is Saut Najdi PDPL compliant?** Saut Najdi is designed to comply with Saudi Arabia's Personal Data Protection Law — your data stored in the Gulf region with full disclosure of where processing happens, an append-only audit log, and defined roles for every employee. It is not certified, and it does not claim that all processing happens inside Saudi Arabia.
+
+**Does an AI voice agent satisfy Saudization requirements for customer-service roles?** Saut Najdi does not replace any legal Saudization obligation for customer-service occupations — the authority on those requirements is the Ministry of Human Resources and Social Development, not us. What Saut Najdi does is absorb the repetitive routine calls so your own team is free for the conversations that need a person; the employee who takes over is your employee, under your rules.
+
+**Do you do outbound calls or calling campaigns?** Saut Najdi is inbound-only today — there is no outbound dialling and no automated calling campaigns. What happens outside your hours is that the agent logs a callback request with the details and the caller's preferred time, and your team calls back.
+
+**Is there a Saudi number I can call to try it?** Saut Najdi doesn't publish a Saudi trial number today, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. The trial happens in the intro demo instead: the agent runs live, you hear it in your dialect, and you ask it whatever you want.
+
+**How much does an AI voice agent cost in Saudi Arabia?** Saut Najdi pricing scales with your call volume and channels — there is no single public price list because it cannot fairly fit everyone; after the intro demo the team assesses your business and sends a written, itemised offer.
+
+**Does it fit my business?** Saut Najdi ships ready-made templates for clinics and hospitals, restaurants, hotels, real estate and retail — and if your business is something else, the team configures your agent around how you work.
+
+**How do I start?** You start with Saut Najdi by booking an intro demo — the team sets everything up for you: the agent, the knowledge base, and the escalation rules. There is no self-signup.
+
+## Key pages — English
+
+- [Home](https://sautnajdi.com/en): what Saut Najdi is, the problem it solves, and the hybrid model
+- [How it works](https://sautnajdi.com/en/how-it-works): one call's journey in seven steps, from first ring to the dashboard log
+- [Human handoff](https://sautnajdi.com/en/product/human-handoff): escalation rules, live listen/whisper/take-over, inherited context, after-hours callbacks
+- [Security & data](https://sautnajdi.com/en/security): PDPL alignment, storage region, the processing disclosure, audit log, access control
+- [FAQ](https://sautnajdi.com/en/faq): the full question set, grouped
+- [Book a demo](https://sautnajdi.com/en/demo): 30-minute intro demo, and how pricing is quoted
+- [Contact](https://sautnajdi.com/en/contact): email and a 15-minute quick call
+- [About](https://sautnajdi.com/en/about): who builds it, why hybrid, and what we refuse to claim
+- [Privacy policy](https://sautnajdi.com/en/privacy): collection, storage, processors, retention, data-subject rights
+- [Terms of service](https://sautnajdi.com/en/terms)
+- [Data processing agreement](https://sautnajdi.com/en/dpa): the summary DPA procurement teams ask for by name
+
+## Key pages — Arabic (primary)
+
+- [الرئيسية](https://sautnajdi.com/)
+- [كيف يشتغل](https://sautnajdi.com/how-it-works)
+- [التصعيد للموظف البشري](https://sautnajdi.com/product/human-handoff)
+- [الأمان والبيانات](https://sautnajdi.com/security)
+- [الأسئلة الشائعة](https://sautnajdi.com/faq)
+- [احجز عرضاً](https://sautnajdi.com/demo)
+- [تواصل معنا](https://sautnajdi.com/contact)
+- [من نحن](https://sautnajdi.com/about)
+- [سياسة الخصوصية](https://sautnajdi.com/privacy)
+- [شروط الخدمة](https://sautnajdi.com/terms)
+- [اتفاقية معالجة البيانات](https://sautnajdi.com/dpa)
+
+## Terminology
+
+The Arabic terms this product is searched and written about with, so an assistant answering an Arabic query can match them: وكيل صوتي (voice agent) · الرد الآلي على المكالمات (automated call answering) · مركز اتصال / كول سنتر (call centre) · موظف استقبال بالذكاء الاصطناعي (AI receptionist) · التصعيد للموظف البشري (human handoff/escalation) · صندوق وارد موحد (unified inbox) · قاعدة معرفة عربية (Arabic knowledge base) · اللهجة النجدية / الحجازية / الخليجية (Najdi / Hijazi / Khaleeji dialect) · نظام حماية البيانات الشخصية (PDPL) · سجل تدقيق (audit log).

@@ -53,6 +53,25 @@ const t = {
       body: "الذكاء الاصطناعي يرد على الروتيني، وموظفك موجود للحظات اللي تحتاج إنسان — شكوى، سؤال حساس، عميل يبغى يسمع صوت بشري. والأهم: لما يستلم موظفك، يستلم وهو فاهم كل شي.",
       link: "شوف صفحة التصعيد للموظف البشري",
     },
+    vsIvr: {
+      heading: "وش الفرق بين الوكيل الصوتي الذكي والرد الآلي القديم (IVR)؟",
+      answer: "الفرق باختصار: نظام IVR يعطي عميلك قائمة خيارات ولازم يمشي عليها، وصوت نجدي يتكلم معه. العميل يقول اللي يبغاه بلهجته، والوكيل يفهم قصده وينفذه على طول — يحجز، يجاوب، يسجل — وإذا احتاج الموضوع إنسان، موظفك يستلم ومعه النص الكامل والملخص. وهذا الجدول يوضح الفرق موقف بموقف.",
+      cols: ["الموقف", "الرد الآلي التقليدي (IVR)", "صوت نجدي"],
+      rows: [
+        ["العميل يبدأ المكالمة", "يسمع قائمة: اضغط 1، اضغط 2", "يتكلم عادي بلهجته ويقول اللي يبغاه"],
+        ["إذا قاطع العميل", "القائمة تكمل وما تنتبه له", "الوكيل يسكت على طول ويسمع"],
+        ["إذا طلبه مو موجود في القائمة", "يعلق أو ينتظر موظف", "الوكيل يفهم ويتصرف، وإذا ما قدر يصعّد"],
+        ["حجز موعد", "يحوّلك لموظف يحجز لك", "الوكيل يتحقق من الفاضي ويحجز داخل نفس المكالمة"],
+        ["برا الدوام", "رسالة: اتصل في أوقات الدوام", "يخدمك في اللي يقدر عليه ويسجل طلب اتصال بوقتك المفضل"],
+        ["لما تحتاج إنسان", "الموظف يبدأ معك من الصفر", "الموظف يستلم ومعه النص والملخص وتاريخك"],
+        ["بعد ما تخلص المكالمة", "تسجيل بدون سياق — إن وجد", "تسجيل ونص وملخص عربي في لوحتك"],
+      ],
+    },
+    inbox: {
+      heading: "أقدر أجمع المكالمات والواتساب والتيليجرام في صندوق واحد؟",
+      answer: "إي. صوت نجدي مو مكالمات بس: واتساب وتيليجرام ودردشة موقعك كلها تنزل في نفس صندوق الوارد اللي فيه مكالماتك. يعني موظفك يشوف تاريخ العميل كامل في مكان واحد — كلّمكم أمس على الواتساب ودق اليوم؟ الكلام قدامه — ويقدر يدخل على أي محادثة بأي لحظة.",
+      channels: ["المكالمات", "واتساب للأعمال", "تيليجرام", "دردشة موقعك"],
+    },
     capabilities: {
       heading: "وش يقدم لك؟",
       cards: [
@@ -117,6 +136,25 @@ const t = {
       heading: "Not just AI. People behind it.",
       body: "The AI handles the routine; your employee is there for the moments that need a human — a complaint, a sensitive question, a customer who wants a human voice. And when your employee takes over, they take over already knowing everything.",
       link: "See the human handoff page",
+    },
+    vsIvr: {
+      heading: "What's the difference between an AI voice agent and a traditional IVR?",
+      answer: "The short version: an IVR hands your customer a menu they have to navigate, and Saut Najdi talks to them. The caller says what they want in their own dialect, the agent works out the intent and acts on it — books, answers, records — and when the matter needs a person, your employee takes over with the full transcript and summary. The table below shows the difference situation by situation.",
+      cols: ["Situation", "Traditional IVR", "Saut Najdi"],
+      rows: [
+        ["The caller starts", "Hears a menu: press 1, press 2", "Just says what they want, in their dialect"],
+        ["The caller interrupts", "The menu carries on regardless", "The agent stops instantly and listens"],
+        ["Their request isn't on the menu", "They're stuck, or they wait for a person", "The agent understands and acts — or escalates"],
+        ["Booking an appointment", "Transfers to a person who books it", "Checks availability and books inside the same call"],
+        ["Outside working hours", "“Please call during business hours”", "Helps where it can, then logs a callback at the caller's preferred time"],
+        ["When a human is needed", "Your employee starts from zero", "Your employee inherits the transcript, summary and history"],
+        ["After the call", "A recording with no context, if any", "Recording, transcript and an Arabic summary in your dashboard"],
+      ],
+    },
+    inbox: {
+      heading: "Can I bring calls, WhatsApp and Telegram into one inbox?",
+      answer: "Yes. Saut Najdi isn't calls-only: WhatsApp, Telegram and your website chat land in the same team inbox as your phone conversations. Your employee sees a customer's whole history in one place — messaged on WhatsApp yesterday, called today? It's all there — and can step into any conversation at any moment.",
+      channels: ["Phone calls", "WhatsApp Business", "Telegram", "Website chat"],
     },
     capabilities: {
       heading: "What do you get?",
@@ -250,6 +288,75 @@ export function HomePage({ locale }: { locale: Locale }) {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/*
+        4b · IVR comparison — the first question-shaped H2 on the page. Real
+        <table> markup, not a div grid: row/column structure is what answer
+        engines extract, and a grid of divs extracts as prose soup. The
+        overflow wrapper keeps the min-width table scrolling inside itself so
+        the RTL page body never gains a horizontal scrollbar.
+      */}
+      <section className="container py-16">
+        <Reveal>
+          <h2 className="text-center text-h2">{s.vsIvr.heading}</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-body-lg leading-relaxed text-ink/75">
+            {s.vsIvr.answer}
+          </p>
+        </Reveal>
+        <div className="mx-auto mt-8 max-w-4xl overflow-x-auto rounded-2xl border border-line bg-white shadow-card">
+          <table className="w-full min-w-[640px] border-collapse text-body-lg">
+            <thead>
+              <tr className="border-b border-line">
+                {s.vsIvr.cols.map((c, i) => (
+                  <th
+                    key={c}
+                    scope="col"
+                    className={`p-4 text-start font-bold ${i === 2 ? "text-brand-blue" : "text-ink/70"}`}
+                  >
+                    {c}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {s.vsIvr.rows.map((r) => (
+                <tr key={r[0]} className="border-b border-line last:border-0">
+                  <th scope="row" className="p-4 text-start font-bold text-ink">
+                    {r[0]}
+                  </th>
+                  <td className="p-4 text-ink/60">{r[1]}</td>
+                  <td className="p-4 text-ink/85">{r[2]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/*
+        4c · Unified inbox — answer-first capsule under a question-shaped H2.
+        The chips list channels only; it deliberately stops short of claiming
+        the agent auto-replies on them (messaging auto-reply is off by
+        default), so the promise stays "one inbox a human steps into".
+      */}
+      <section className="container pb-16">
+        <Reveal>
+          <h2 className="text-center text-h2">{s.inbox.heading}</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-body-lg leading-relaxed text-ink/75">
+            {s.inbox.answer}
+          </p>
+        </Reveal>
+        <ul className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          {s.inbox.channels.map((channel) => (
+            <li
+              key={channel}
+              className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
+            >
+              {channel}
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* 5 · Capabilities — five cards at launch (Wave-2 pages activate links) */}

@@ -28,7 +28,10 @@ export function JourneySteps({
       {steps.map((step, i) => (
         <motion.li
           key={step.title}
-          className="relative flex gap-5"
+          /* The HowTo JSON-LD points each step at #step-N, so the anchor has
+             to exist; scroll-mt clears the sticky header when it lands. */
+          id={`step-${i + 1}`}
+          className="relative flex scroll-mt-28 gap-5"
           initial={reduced ? undefined : "hidden"}
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}

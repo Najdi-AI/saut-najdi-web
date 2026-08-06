@@ -3,30 +3,119 @@ import {
   SITE_NAME_AR,
   SITE_NAME_EN,
   SUPPORT_EMAIL,
+  POSITIONING_AR,
+  POSITIONING_EN,
+  TAGLINE_AR,
+  TAGLINE_EN,
 } from "./site";
 import { localePath, type Locale } from "./i18n";
 
 /**
  * JSON-LD builders (blueprint §8.7 + schema map). No `Review`, no
- * `AggregateRating`, no `telephone` — those are forbidden until real.
+ * `AggregateRating`, no `telephone` — those are forbidden until real, and
+ * there is no phone number to put in one anyway (blueprint §2.2).
+ *
+ * Every node carries a stable `@id` and references its neighbours by `@id`
+ * rather than repeating them: that is what turns 22 pages of loose nodes into
+ * one entity graph a knowledge engine can actually resolve.
  */
 
 type JsonLd = Record<string, unknown>;
+
+/**
+ * TODO(owner): populate ONLY with profiles that actually exist. `sameAs` is
+ * the single biggest knowledge-graph signal, and an invented URL is a
+ * fabricated claim. Create the LinkedIn company page and X account first,
+ * then add them here.
+ */
+export const SAME_AS: string[] = [];
+
+/**
+ * Topical scope for the Organization. These are claims about what we work on,
+ * not about what we have shipped — every one traces to a live capability or a
+ * page on this site.
+ */
+const KNOWS_ABOUT = {
+  ar: [
+    "الوكيل الصوتي بالذكاء الاصطناعي",
+    "الرد الآلي على المكالمات",
+    "مراكز الاتصال",
+    "خدمة العملاء",
+    "اللهجة النجدية",
+    "اللهجة الحجازية",
+    "اللهجة الخليجية",
+    "التعرف على الكلام العربي",
+    "قواعد المعرفة العربية",
+    "واتساب للأعمال",
+    "تيليجرام",
+    "نظام حماية البيانات الشخصية السعودي (PDPL)",
+  ],
+  en: [
+    "AI voice agents",
+    "Automated call answering",
+    "Contact centres",
+    "Customer service automation",
+    "Najdi Arabic dialect",
+    "Hijazi Arabic dialect",
+    "Khaleeji Arabic dialect",
+    "Arabic speech recognition",
+    "Arabic knowledge bases",
+    "WhatsApp Business",
+    "Telegram",
+    "Saudi Personal Data Protection Law (PDPL)",
+  ],
+} as const;
 
 export function organization(locale: Locale): JsonLd {
   return {
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: locale === "ar" ? SITE_NAME_AR : SITE_NAME_EN,
-    alternateName: locale === "ar" ? SITE_NAME_EN : SITE_NAME_AR,
+    // Both names in both locales: the brand is searched transliterated as
+    // often as it is searched in Arabic.
+    alternateName: [SITE_NAME_EN, SITE_NAME_AR],
     url: SITE_URL,
-    logo: `${SITE_URL}/brand/symbol-fill.svg`,
+    description: locale === "ar" ? POSITIONING_AR : POSITIONING_EN,
+    slogan: locale === "ar" ? TAGLINE_AR : TAGLINE_EN,
+    // An ImageObject with real dimensions, not a bare URL string: Google's
+    // logo handling effectively ignores SVG, which is why the previous
+    // symbol-fill.svg value was doing nothing.
+    logo: {
+      "@type": "ImageObject",
+      "@id": `${SITE_URL}/#logo`,
+      url: `${SITE_URL}/brand/logo-512.png`,
+      contentUrl: `${SITE_URL}/brand/logo-512.png`,
+      width: 512,
+      height: 512,
+      caption: locale === "ar" ? "شعار صوت نجدي" : "Saut Najdi logo",
+    },
+    image: { "@id": `${SITE_URL}/#logo` },
     email: SUPPORT_EMAIL,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Riyadh",
       addressCountry: "SA",
     },
+    areaServed: { "@type": "Country", name: "Saudi Arabia" },
+    // najdiai.com is the PARENT company's own site — referenced as an entity
+    // relationship only. Never redirected, never treated as a mirror.
+    parentOrganization: {
+      "@type": "Organization",
+      name: "Najdi AI",
+      url: "https://najdiai.com",
+    },
+    // Email only. `telephone` stays out until a real number exists.
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: SUPPORT_EMAIL,
+        availableLanguage: ["ar", "en"],
+        areaServed: "SA",
+      },
+    ],
+    knowsAbout: KNOWS_ABOUT[locale],
+    ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
   };
 }
 
@@ -36,8 +125,42 @@ export function webSite(locale: Locale): JsonLd {
     "@id": `${SITE_URL}/#website`,
     url: SITE_URL,
     name: locale === "ar" ? SITE_NAME_AR : SITE_NAME_EN,
-    inLanguage: locale === "ar" ? "ar" : "en",
+    alternateName: locale === "ar" ? SITE_NAME_EN : SITE_NAME_AR,
+    description: locale === "ar" ? POSITIONING_AR : POSITIONING_EN,
+    inLanguage: locale === "ar" ? "ar-SA" : "en",
     publisher: { "@id": `${SITE_URL}/#organization` },
+    // Deliberately NO potentialAction/SearchAction: there is no site search
+    // endpoint, and declaring one that 404s is a broken signal, not a win.
+  };
+}
+
+/**
+ * The per-page node every branch of the graph hangs off. Without it the
+ * Organization node on an inner page is an orphan with nothing to say about
+ * the page it sits on.
+ */
+export function webPage(
+  locale: Locale,
+  path: string,
+  name: string,
+  description: string,
+  dateModified: string,
+): JsonLd {
+  const url = `${SITE_URL}${localePath(locale, path)}`;
+  return {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description,
+    dateModified,
+    inLanguage: locale === "ar" ? "ar-SA" : "en",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#organization` },
+    primaryImageOfPage: { "@id": `${SITE_URL}/#logo` },
+    // The root emits no BreadcrumbList, so it must not reference one — a
+    // dangling @id is worse than an absent property.
+    ...(path ? { breadcrumb: { "@id": `${url}#breadcrumb` } } : {}),
   };
 }
 
@@ -64,15 +187,23 @@ export function softwareApplication(locale: Locale): JsonLd {
           "Dashboard with call logs, transcripts, recordings and summaries",
           "Append-only audit log and automatic 90-day recording deletion",
         ];
+  // This node cannot earn a rich result: Google requires `offers` or
+  // `aggregateRating` for that, and we have neither honestly (no public
+  // pricing — blueprint §6.5 — and no consented reviews). It exists purely
+  // as an entity signal, which is reason enough to keep it accurate.
   return {
     "@type": "SoftwareApplication",
     "@id": `${SITE_URL}/#software`,
     name: locale === "ar" ? SITE_NAME_AR : SITE_NAME_EN,
+    description: locale === "ar" ? POSITIONING_AR : POSITIONING_EN,
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Contact center software",
     operatingSystem: "Web",
+    inLanguage: ["ar", "en"],
     url: SITE_URL,
     featureList,
     publisher: { "@id": `${SITE_URL}/#organization` },
+    provider: { "@id": `${SITE_URL}/#organization` },
   };
 }
 
@@ -93,12 +224,18 @@ export function faqPage(locale: Locale, path: string, items: FaqItem[]): JsonLd 
   };
 }
 
+/**
+ * `leafPath` is the page the trail ends on — it is what the `@id` is built
+ * from, so `webPage().breadcrumb` resolves to this node instead of dangling.
+ */
 export function breadcrumbs(
   locale: Locale,
+  leafPath: string,
   crumbs: { name: string; path: string }[],
 ): JsonLd {
   return {
     "@type": "BreadcrumbList",
+    "@id": `${SITE_URL}${localePath(locale, leafPath)}#breadcrumb`,
     itemListElement: crumbs.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -108,13 +245,62 @@ export function breadcrumbs(
   };
 }
 
-export function service(locale: Locale, name: string, description: string): JsonLd {
+/**
+ * One Service entity for the whole product, referenced from several pages by
+ * `@id` so the mentions consolidate instead of minting a duplicate per page.
+ *
+ * The name/description are FIXED — an `@id` is an identity assertion, so the
+ * same `#service` node must carry the same payload on every page that emits
+ * it. Per-page nuance belongs in that page's WebPage node, not here.
+ */
+export function service(locale: Locale): JsonLd {
   return {
     "@type": "Service",
-    name,
-    description,
+    "@id": `${SITE_URL}/#service`,
+    name: locale === "ar" ? SITE_NAME_AR : SITE_NAME_EN,
+    description: locale === "ar" ? POSITIONING_AR : POSITIONING_EN,
+    serviceType:
+      locale === "ar"
+        ? "وكيل صوتي بالذكاء الاصطناعي لخدمة العملاء"
+        : "AI voice agent for customer service",
     provider: { "@id": `${SITE_URL}/#organization` },
     areaServed: { "@type": "Country", name: "Saudi Arabia" },
+    availableLanguage: ["ar", "en"],
+    // The demo booking is the only real intake channel — never `servicePhone`.
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: `${SITE_URL}${localePath(locale, "demo")}`,
+      name: locale === "ar" ? "احجز عرضاً تعريفياً" : "Book an intro demo",
+    },
+  };
+}
+
+/**
+ * Google retired HowTo rich results, so this earns no SERP feature. It is
+ * here because Bing, Perplexity and the AI crawlers still parse it, and the
+ * step data already exists in the page source — the transform is free.
+ */
+export function howTo(
+  locale: Locale,
+  path: string,
+  name: string,
+  description: string,
+  steps: readonly { title: string; body: string }[],
+): JsonLd {
+  const url = `${SITE_URL}${localePath(locale, path)}`;
+  return {
+    "@type": "HowTo",
+    "@id": `${url}#howto`,
+    name,
+    description,
+    inLanguage: locale === "ar" ? "ar-SA" : "en",
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+      url: `${url}#step-${i + 1}`,
+    })),
   };
 }
 

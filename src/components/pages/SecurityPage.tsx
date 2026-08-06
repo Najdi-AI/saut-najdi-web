@@ -8,7 +8,9 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { IconChip, type IconName } from "@/components/icons";
 import type { FaqItem } from "@/lib/schema";
 
-const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", "badge"];
+// One icon per section, positional — keep this array the same length as
+// `sections` or a new card renders with an undefined icon name.
+const sectionIcons: IconName[] = ["shield", "database", "mic", "lock", "globe", "database", "lock", "badge"];
 
 /**
  * /security (blueprint §6.4) — PDPL-led, precise فصحى (the §3 tone
@@ -36,8 +38,18 @@ const t = {
         body: "تُخزَّن تسجيلات المكالمات في المنطقة نفسها، وتُحذَف تلقائياً بعد 90 يوماً — وهذا سلوك مقصود يجسّد مبدأ حدود الاحتفاظ في النظام. الوصول إلى أي تسجيل يتم حصراً عبر روابط موقعة مؤقتة قصيرة الصلاحية.",
       },
       {
+        // Question-shaped headings: a compliance buyer types the question, not
+        // our label for it. Placed next to the fact each one answers.
+        title: "هل تسجيل مكالمات العملاء متوافق مع نظام حماية البيانات الشخصية (PDPL)؟",
+        body: "تسجيل المكالمات في صوت نجدي مصمَّم بما يتوافق مع مبادئ نظام حماية البيانات الشخصية السعودي: تُخزَّن التسجيلات في منطقة الخليج (الدوحة — me-central1)، وتُحذَف تلقائياً بعد 90 يوماً تطبيقاً لمبدأ حدود الاحتفاظ، ولا يُفتح أي تسجيل إلا عبر رابط موقَّع قصير الصلاحية، ويُدوَّن كل اطلاع في سجل تدقيق غير قابل للتعديل. ويبقى إشعار المتصل والاستناد إلى أساس نظامي للتسجيل من مسؤولية المنشأة المشغِّلة — ويمكن ضبط جملة الافتتاح في الوكيل لتتضمن إشعاراً بالتسجيل في بداية المكالمة.",
+      },
+      {
         title: "الإفصاح عن أماكن المعالجة",
         body: "نقولها بوضوح: التخزين الدائم في منطقة الخليج، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي — تحويل الكلام إلى نص، وفهم اللغة، وتوليد الصوت — عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. هذا الإفصاح بحد ذاته هو الموقف الامتثالي الذي يتطلبه النظام في نقل البيانات عبر الحدود — ولا نقول أبداً إن كل شيء داخل السعودية.",
+      },
+      {
+        title: "هل تُخزَّن بيانات العملاء داخل السعودية؟",
+        body: "لا نقول إن كل شيء داخل السعودية، لأن ذلك غير دقيق اليوم. التخزين الدائم لبيانات صوت نجدي في منطقة الخليج (الدوحة — me-central1) على Google Cloud، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. والإفصاح عن النقل عبر الحدود هو ما يتطلبه النظام — والإفصاح نفسه هو الموقف الامتثالي، لا التستر عليه.",
       },
       {
         title: "سجل تدقيق غير قابل للتعديل",
@@ -88,8 +100,16 @@ const t = {
         body: "Call recordings are stored in the same region and automatically deleted after 90 days — a deliberate behaviour that embodies the law's retention-limit principle. Access to any recording happens exclusively through short-lived signed links.",
       },
       {
+        title: "Is recording customer calls PDPL compliant?",
+        body: "Call recording in Saut Najdi is designed to comply with the principles of Saudi Arabia's Personal Data Protection Law: recordings are stored in the Gulf region (Doha — me-central1), automatically deleted after 90 days in line with the retention-limit principle, opened only through short-lived signed links, and every access is written to an append-only audit log. Notifying the caller and establishing a lawful basis for recording remain the operating organisation's responsibility — and the agent's opening line can be configured to include a recording notice at the start of the call.",
+      },
+      {
         title: "The processing disclosure",
         body: "We say it plainly: permanent storage is in the Gulf region, while realtime speech and AI processing — speech-to-text, language understanding, voice generation — transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. This disclosure is itself the compliance posture the law requires for cross-border transfers — and we never claim everything sits inside Saudi Arabia.",
+      },
+      {
+        title: "Is customer data stored inside Saudi Arabia?",
+        body: "We do not claim everything sits inside Saudi Arabia, because that is not accurate today. Permanent storage for Saut Najdi data is in the Gulf region (Doha — me-central1) on Google Cloud, while realtime speech and AI processing transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. Disclosing cross-border transfer is what the law requires — and the disclosure itself is the compliance posture, not a gap in it.",
       },
       {
         title: "An append-only audit log",

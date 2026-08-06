@@ -20,6 +20,9 @@ const t = {
     intro:
       "أسهل طريقة تفهم فيها المنصة إنك تمشي مع مكالمة وحدة من البداية للنهاية. هذا اللي يصير بالضبط من لحظة ما يدق عميلك، إلى أن تلقى كل شي مسجل ومكتوب وملخص في لوحتك.",
     cta: "احجز عرضاً",
+    answerH2: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
+    capsule:
+      "باختصار: مكالمة عميلك تتحول إلى نص لحظياً، والذكاء الاصطناعي يفهم قصده من كلامه ومن قواعد نشاطك وأسعارك وأوقاتك، ويرد عليه بصوت طبيعي بنفس لهجته، وينفذ الطلب — يحجز أو يسجل أو يجاوب — ويحوّل المكالمة لموظفك بكامل سياقها إذا احتاج الموضوع إنسان. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك. وتحت، الخطوات السبع بالتفصيل.",
     steps: [
       {
         title: "الرنة الأولى — الوكيل يرد",
@@ -58,6 +61,9 @@ const t = {
     intro:
       "The easiest way to understand the platform is to walk through a single call from start to finish. This is exactly what happens from the moment your customer dials, to the moment everything sits recorded, transcribed and summarised in your dashboard.",
     cta: "Book a demo",
+    answerH2: "How does AI call answering actually work?",
+    capsule:
+      "The short version: your customer's speech becomes text in real time, the AI works out what they want from their words and from your business's rules, prices and hours, replies in a natural voice in the same dialect, and acts on the request — booking, recording or answering — then hands the call to your employee in full context if the matter needs a person. Everything ends up recorded, transcribed and summarised in your dashboard. Below, the seven steps in detail.",
     steps: [
       {
         title: "The first ring — the agent answers",
@@ -110,7 +116,16 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
       <TrustStrip locale={locale} />
 
       <section className="container py-16">
-        <JourneySteps steps={s.steps} locale={locale} />
+        {/* The seven steps only answer the query if you read all seven. This
+            capsule answers it in one liftable paragraph under the question as
+            it is actually typed — the steps below stay the proof. */}
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <h2 className="text-h2">{s.answerH2}</h2>
+          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.capsule}</p>
+        </Reveal>
+        <div className="mt-12">
+          <JourneySteps steps={s.steps} locale={locale} />
+        </div>
         <Reveal className="mx-auto mt-10 max-w-2xl text-center">
           <Waveform bars={40} maxHeight={32} className="mb-6 opacity-70" />
           <p className="text-body-lg leading-relaxed text-ink/75">{s.outro}</p>
@@ -129,3 +144,7 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
     </>
   );
 }
+
+// Source of truth for the HowTo graph in pageFactory — the steps stay written
+// once, here, where the page renders them.
+export const journeySteps = { ar: t.ar.steps, en: t.en.steps };

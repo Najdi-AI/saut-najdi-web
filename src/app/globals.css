@@ -557,14 +557,16 @@ a.mega-item:hover .mega-ico {
   max-block-size: 78vh;
   overflow-y: auto;
 }
-.mobile-nav h3 {
+/* Group labels in the sheet are <p>, not <h3> — they are chrome, and a
+   heading here would enter every page's outline ahead of the real content. */
+.mobile-nav > p {
   font-size: 0.74rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);
   margin: 20px 0 8px;
 }
-[dir="rtl"] .mobile-nav h3 {
+[dir="rtl"] .mobile-nav > p {
   letter-spacing: 0;
   text-transform: none;
   font-size: 0.82rem;

@@ -7,11 +7,34 @@ import { localePath, type Locale } from "@/lib/i18n";
 import type { MegaIcon, MegaMenu } from "@/content/nav";
 import { Waveform } from "@/components/Waveform";
 
+/* Open/closed state of the always-mounted panel. These mirror (and outrank)
+   the .mega-panel[data-open] rules in globals.css, so the panel stays hidden
+   even if that stylesheet rule is missing. Only logical/axis-neutral
+   properties — no left/right anywhere. */
+const PANEL_OPEN: React.CSSProperties = {
+  visibility: "visible",
+  opacity: 1,
+  pointerEvents: "auto",
+};
+/* `animation: none` while closed cancels mega-in, so dropping it on open lets
+   the entrance animation replay exactly as it did when the panel remounted. */
+const PANEL_CLOSED: React.CSSProperties = {
+  visibility: "hidden",
+  opacity: 0,
+  pointerEvents: "none",
+  animation: "none",
+};
+
 /**
  * Mega menu (ported from the haroon911 reference): hover for pointers,
  * click/Enter for keyboard and touch, Escape closes with focus return,
  * forgiving close delay. Items with path=null render as non-links with
  * a badge — the no-dead-links rule.
+ *
+ * The panel is never conditionally mounted: its descriptively-anchored links
+ * must exist in the server-rendered HTML so search engines and AI agents can
+ * discover the deep pages without a click. Open/closed is a matter of
+ * data-open + inert + the styles above, never of mounting.
  */
 export function NavMenu({
   locale,
@@ -91,71 +114,87 @@ export function NavMenu({
         </svg>
       </button>
 
-      {open && (
-        <div className="mega-panel glass" id={panelId} data-open="true" role="group">
-          <div className="mega-cols">
-            {menu.columns.map((col) => (
-              <div className="mega-col" key={col.heading}>
-                <p className="mega-heading">{col.heading}</p>
-                <ul>
-                  {col.items.map((item) => {
-                    const body = (
-                      <>
-                        <span className="mega-ico" aria-hidden="true">
-                          <NavIcon name={item.icon} />
+      {/* The panel is ALWAYS mounted so every destination ships a real <a href>
+          in the server-rendered HTML (SEO/GEO: crawlers and AI agents never
+          click). Visibility is a style/attribute concern, never a mount
+          concern. `inert` + `aria-hidden` keep the closed panel out of the tab
+          order and off the a11y tree, and the inline closed-state style also
+          kills the mega-in animation so it replays on each open. */}
+      <div
+        className="mega-panel glass"
+        id={panelId}
+        data-open={open ? "true" : "false"}
+        role="group"
+        aria-hidden={!open}
+        inert={!open}
+        style={open ? PANEL_OPEN : PANEL_CLOSED}
+      >
+        <div className="mega-cols">
+          {menu.columns.map((col) => (
+            <div className="mega-col" key={col.heading}>
+              <p className="mega-heading">{col.heading}</p>
+              <ul>
+                {col.items.map((item) => {
+                  const body = (
+                    <>
+                      <span className="mega-ico" aria-hidden="true">
+                        <NavIcon name={item.icon} />
+                      </span>
+                      <span className="mega-txt">
+                        <b>
+                          {item.label}
+                          {item.badge && <em className="mega-badge">{item.badge}</em>}
+                        </b>
+                        <small>{item.blurb}</small>
+                      </span>
+                    </>
+                  );
+                  return (
+                    <li key={item.label}>
+                      {/* Wave-2 items have no destination yet — they stay
+                          unlinked spans with a badge. Never invent a URL. */}
+                      {item.path ? (
+                        <Link href={localePath(locale, item.path)} className="mega-item">
+                          {body}
+                        </Link>
+                      ) : (
+                        <span className="mega-item" data-soon="true">
+                          {body}
                         </span>
-                        <span className="mega-txt">
-                          <b>
-                            {item.label}
-                            {item.badge && <em className="mega-badge">{item.badge}</em>}
-                          </b>
-                          <small>{item.blurb}</small>
-                        </span>
-                      </>
-                    );
-                    return (
-                      <li key={item.label}>
-                        {item.path ? (
-                          <Link href={localePath(locale, item.path)} className="mega-item">
-                            {body}
-                          </Link>
-                        ) : (
-                          <span className="mega-item" data-soon="true">
-                            {body}
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
 
-            <Link href={localePath(locale, menu.featured.path)} className="mega-feat">
-              <span className="mega-feat-art" aria-hidden="true">
-                <Waveform bars={18} maxHeight={34} />
-              </span>
-              <span className="mega-heading mega-heading--accent">{menu.featured.eyebrow}</span>
-              <b>{menu.featured.title}</b>
-              <small>{menu.featured.body}</small>
-              <span className="mega-feat-cta">{menu.featured.cta}</span>
-            </Link>
-          </div>
-
-          <div className="mega-rail">
-            <span className="mega-rail-links">
-              {menu.rail.map((r) => (
-                <Link key={r.path} href={localePath(locale, r.path)}>
-                  {r.label}
-                </Link>
-              ))}
+          <Link href={localePath(locale, menu.featured.path)} className="mega-feat">
+            <span className="mega-feat-art" aria-hidden="true">
+              {/* Now that the panel is always mounted, only animate the
+                  decorative bars while it is actually on screen. */}
+              <Waveform bars={18} maxHeight={34} animate={open} />
             </span>
-            <Link href={localePath(locale, menu.railCta.path)} className="mega-rail-cta">
-              {menu.railCta.label}
-            </Link>
-          </div>
+            <span className="mega-heading mega-heading--accent">{menu.featured.eyebrow}</span>
+            <b>{menu.featured.title}</b>
+            <small>{menu.featured.body}</small>
+            <span className="mega-feat-cta">{menu.featured.cta}</span>
+          </Link>
         </div>
-      )}
+
+        <div className="mega-rail">
+          <span className="mega-rail-links">
+            {menu.rail.map((r) => (
+              <Link key={r.path} href={localePath(locale, r.path)}>
+                {r.label}
+              </Link>
+            ))}
+          </span>
+          <Link href={localePath(locale, menu.railCta.path)} className="mega-rail-cta">
+            {menu.railCta.label}
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -22,7 +22,7 @@ const t = {
     cta: "احجز عرضاً",
     answerH2: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
     capsule:
-      "باختصار: مكالمة عميلك تتحول إلى نص لحظياً، والذكاء الاصطناعي يفهم قصده من كلامه ومن قواعد نشاطك وأسعارك وأوقاتك، ويرد عليه بصوت طبيعي بنفس لهجته، وينفذ الطلب — يحجز أو يسجل أو يجاوب — ويحوّل المكالمة لموظفك بكامل سياقها إذا احتاج الموضوع إنسان. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك. وتحت، الخطوات السبع بالتفصيل.",
+      "باختصار: مكالمة عميلك تتحول إلى نص لحظياً، والذكاء الاصطناعي يفهم قصده من كلامه ومن معلومات نشاطك وملفاتك، ويرد عليه بصوت طبيعي بنفس لهجته، وينفذ الطلب — يحجز أو يسجل أو يجاوب — ويحوّل المكالمة لموظفك بكامل سياقها إذا احتاج الموضوع إنسان. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك. وتحت، الخطوات السبع بالتفصيل.",
     steps: [
       {
         title: "الرنة الأولى — الوكيل يرد",
@@ -63,7 +63,7 @@ const t = {
     cta: "Book a demo",
     answerH2: "How does AI call answering actually work?",
     capsule:
-      "The short version: your customer's speech becomes text in real time, the AI works out what they want from their words and from your business's rules, prices and hours, replies in a natural voice in the same dialect, and acts on the request — booking, recording or answering — then hands the call to your employee in full context if the matter needs a person. Everything ends up recorded, transcribed and summarised in your dashboard. Below, the seven steps in detail.",
+      "The short version: your customer's speech becomes text in real time, the AI works out what they want from their words and from your business's own documents and information, replies in a natural voice in the same dialect, and acts on the request — booking, recording or answering — then hands the call to your employee in full context if the matter needs a person. Everything ends up recorded, transcribed and summarised in your dashboard. Below, the seven steps in detail.",
     steps: [
       {
         title: "The first ring — the agent answers",

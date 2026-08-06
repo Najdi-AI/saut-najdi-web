@@ -7,6 +7,24 @@ import { APP_URL, CAL_LINK_DEMO } from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { CalButton } from "@/components/CalButton";
 
+/* Logical inset only — insetInline covers both RTL and LTR, and
+   insetBlockStart is the block-axis equivalent of `top`. */
+const SHEET_BASE: React.CSSProperties = {
+  position: "absolute",
+  insetInline: 0,
+  insetBlockStart: "100%",
+};
+const SHEET_OPEN: React.CSSProperties = {
+  visibility: "visible",
+  opacity: 1,
+  pointerEvents: "auto",
+};
+const SHEET_CLOSED: React.CSSProperties = {
+  visibility: "hidden",
+  opacity: 0,
+  pointerEvents: "none",
+};
+
 /** Mobile sheet (ported): burger chip + full-width sheet under the bar. */
 export function MobileNav({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -45,33 +63,39 @@ export function MobileNav({ locale }: { locale: Locale }) {
         </svg>
       </button>
 
-      {open && (
-        <div
-          id="mobile-nav"
-          className="mobile-nav"
-          style={{ position: "absolute", insetInline: 0, top: "100%" }}
-        >
-          <h3>{sections.pages}</h3>
-          {t.nav.map((item) => (
-            <Link key={item.path} href={localePath(locale, item.path)} onClick={() => setOpen(false)}>
-              {item.label}
-            </Link>
-          ))}
-          <h3>{sections.more}</h3>
-          <Link href={localePath(locale, "about")} onClick={() => setOpen(false)}>
-            {locale === "ar" ? "من نحن" : "About us"}
+      {/* Always mounted, like the desktop mega panel: the sheet's links have to
+          be in the server HTML, not behind a tap. Closed state is styling +
+          inert, never unmounting. */}
+      <div
+        id="mobile-nav"
+        className="mobile-nav"
+        data-open={open ? "true" : "false"}
+        aria-hidden={!open}
+        inert={!open}
+        style={{ ...SHEET_BASE, ...(open ? SHEET_OPEN : SHEET_CLOSED) }}
+      >
+        {/* Group labels, not document headings — the sheet is chrome, and an
+            <h3> here lands in the outline of every page before any <h2>. */}
+        <p>{sections.pages}</p>
+        {t.nav.map((item) => (
+          <Link key={item.path} href={localePath(locale, item.path)} onClick={() => setOpen(false)}>
+            {item.label}
           </Link>
-          <Link href={localePath(locale, "contact")} onClick={() => setOpen(false)}>
-            {locale === "ar" ? "تواصل معنا" : "Contact us"}
-          </Link>
-          <a href={APP_URL}>{t.login}</a>
-          <div className="pt-4">
-            <CalButton calLink={CAL_LINK_DEMO} locale={locale} variant="spectrum" className="w-full">
-              {t.cta}
-            </CalButton>
-          </div>
+        ))}
+        <p>{sections.more}</p>
+        <Link href={localePath(locale, "about")} onClick={() => setOpen(false)}>
+          {locale === "ar" ? "من نحن" : "About us"}
+        </Link>
+        <Link href={localePath(locale, "contact")} onClick={() => setOpen(false)}>
+          {locale === "ar" ? "تواصل معنا" : "Contact us"}
+        </Link>
+        <a href={APP_URL}>{t.login}</a>
+        <div className="pt-4">
+          <CalButton calLink={CAL_LINK_DEMO} locale={locale} variant="spectrum" className="w-full">
+            {t.cta}
+          </CalButton>
         </div>
-      )}
+      </div>
     </>
   );
 }

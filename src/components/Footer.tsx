@@ -25,7 +25,10 @@ export function Footer({ locale }: { locale: Locale }) {
           </div>
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h2 className="text-h5 text-ink">{col.title}</h2>
+              {/* A column LABEL, not a section heading: as an <h2> it injected
+                  three site-wide siblings into every page's outline, competing
+                  with the real content headings crawlers rank on. */}
+              <p className="text-h5 text-ink">{col.title}</p>
               <ul className="mt-3 space-y-2">
                 {col.links.map((l) => (
                   <li key={l.path}>

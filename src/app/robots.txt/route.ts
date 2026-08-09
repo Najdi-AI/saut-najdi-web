@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 // emit comments, and the "# llms.txt:" pointer is the whole reason to bother.
 export const dynamic = "force-static";
 
-const BODY = `# robots.txt — sautnajdi.com
+const BODY = `# robots.txt — sautnajdi.ai
 # Saut Najdi — a Saudi AI voice agent. A product of Najdi AI, Riyadh.
 # Plain-language brief for AI assistants:
 #   English: ${SITE_URL}/llms.txt

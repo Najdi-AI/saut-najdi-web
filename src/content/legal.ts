@@ -60,7 +60,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "5. حقوقك",
           ps: [
             "لك — وفق نظام حماية البيانات الشخصية — حق العلم بمعالجة بياناتك، وطلب الاطلاع عليها، وتصحيحها، وطلب إتلافها ضمن الحدود النظامية. إذا كنت عميلاً لمنشأة مشتركة، تُوجَّه الطلبات إلى المنشأة بصفتها المتحكم بالبيانات، وتعينها المنصة على تنفيذها.",
-            "للتواصل بشأن أي طلب: info@sautnajdi.com.",
+            "للتواصل بشأن أي طلب: info@sautnajdi.ai.",
           ],
         },
       ],
@@ -113,7 +113,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
       title: "اتفاقية معالجة البيانات — ملخص",
       updated: "آخر تحديث: يوليو 2026",
       intro:
-        "هذا ملخص عام لاتفاقية معالجة البيانات (DPA) التي توقعها المنشآت المشتركة ضمن التعاقد. النسخة الكاملة الموقعة هي المرجع الملزم — اطلبها عبر info@sautnajdi.com.",
+        "هذا ملخص عام لاتفاقية معالجة البيانات (DPA) التي توقعها المنشآت المشتركة ضمن التعاقد. النسخة الكاملة الموقعة هي المرجع الملزم — اطلبها عبر info@sautnajdi.ai.",
       sections: [
         {
           h: "الأدوار",
@@ -179,7 +179,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "5. Your rights",
           ps: [
             "Under the PDPL you have the right to know your data is processed, to access it, to correct it, and to request its destruction within the law's limits. If you are a customer of a subscribed business, requests go to that business as the data controller, and the platform assists in fulfilling them.",
-            "For any request: info@sautnajdi.com.",
+            "For any request: info@sautnajdi.ai.",
           ],
         },
       ],
@@ -232,7 +232,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
       title: "Data Processing Agreement — Summary",
       updated: "Last updated: July 2026",
       intro:
-        "This is a public summary of the Data Processing Agreement (DPA) subscribed businesses sign as part of contracting. The signed full version is the binding reference — request it at info@sautnajdi.com.",
+        "This is a public summary of the Data Processing Agreement (DPA) subscribed businesses sign as part of contracting. The signed full version is the binding reference — request it at info@sautnajdi.ai.",
       sections: [
         {
           h: "Roles",

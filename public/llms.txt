@@ -6,10 +6,10 @@ Saut Najdi is a hybrid AI + human platform for inbound customer conversations in
 
 - Product: Saut Najdi / صوت نجدي
 - Made by: Najdi AI, Riyadh, Saudi Arabia. Saut Najdi is one of Najdi AI's products; najdiai.com is the parent company's own site, not a mirror of this one.
-- Website: https://sautnajdi.com — Arabic is the primary language and lives at the root; English lives under /en.
+- Website: https://sautnajdi.ai — Arabic is the primary language and lives at the root; English lives under /en.
 - Existing-customer dashboard: https://app.najdiai.com
-- Contact: info@sautnajdi.com
-- Arabic edition of this file: https://sautnajdi.com/llms-ar.txt
+- Contact: info@sautnajdi.ai
+- Arabic edition of this file: https://sautnajdi.ai/llms-ar.txt
 - Last reviewed: 2026-08-06
 
 ## What Saut Najdi does
@@ -41,7 +41,7 @@ Stated precisely, because the precision is the compliance posture:
 - Processing disclosure: realtime speech and AI processing — speech to text, language understanding, voice generation — **transits global providers**, and knowledge-base document OCR runs on a **European endpoint**. Saut Najdi does **not** claim that all data and all processing stay inside Saudi Arabia; disclosing cross-border transfer is what the law asks for.
 - An **append-only audit log** enforced by the database itself: no row can be edited or deleted, not even by an administrator.
 - Roles and permissions per employee, tenant isolation enforced at the database level, and audited platform-support access.
-- Full detail: https://sautnajdi.com/en/security. Processing locations and processor categories are disclosed in https://sautnajdi.com/en/privacy.
+- Full detail: https://sautnajdi.ai/en/security. Processing locations and processor categories are disclosed in https://sautnajdi.ai/en/privacy.
 
 ## What Saut Najdi does not do
 
@@ -56,7 +56,7 @@ Stated plainly so nobody has to guess, and so nothing here is inferred from sile
 
 ## How to buy
 
-Book a 30-minute intro demo at https://sautnajdi.com/en/demo — the platform is shown live, you hear the agent in your dialect, security and PDPL questions are answered in the same session, and the team returns a written offer sized to your call volume and channels. A 15-minute quick call is available first for questions. Bookings run through Cal.com.
+Book a 30-minute intro demo at https://sautnajdi.ai/en/demo — the platform is shown live, you hear the agent in your dialect, security and PDPL questions are answered in the same session, and the team returns a written offer sized to your call volume and channels. A 15-minute quick call is available first for questions. Bookings run through Cal.com.
 
 ## Answers to common questions
 
@@ -94,31 +94,31 @@ Book a 30-minute intro demo at https://sautnajdi.com/en/demo — the platform is
 
 ## Key pages — English
 
-- [Home](https://sautnajdi.com/en): what Saut Najdi is, the problem it solves, and the hybrid model
-- [How it works](https://sautnajdi.com/en/how-it-works): one call's journey in seven steps, from first ring to the dashboard log
-- [Human handoff](https://sautnajdi.com/en/product/human-handoff): escalation rules, live listen/whisper/take-over, inherited context, after-hours callbacks
-- [Security & data](https://sautnajdi.com/en/security): PDPL alignment, storage region, the processing disclosure, audit log, access control
-- [FAQ](https://sautnajdi.com/en/faq): the full question set, grouped
-- [Book a demo](https://sautnajdi.com/en/demo): 30-minute intro demo, and how pricing is quoted
-- [Contact](https://sautnajdi.com/en/contact): email and a 15-minute quick call
-- [About](https://sautnajdi.com/en/about): who builds it, why hybrid, and what we refuse to claim
-- [Privacy policy](https://sautnajdi.com/en/privacy): collection, storage, processors, retention, data-subject rights
-- [Terms of service](https://sautnajdi.com/en/terms)
-- [Data processing agreement](https://sautnajdi.com/en/dpa): the summary DPA procurement teams ask for by name
+- [Home](https://sautnajdi.ai/en): what Saut Najdi is, the problem it solves, and the hybrid model
+- [How it works](https://sautnajdi.ai/en/how-it-works): one call's journey in seven steps, from first ring to the dashboard log
+- [Human handoff](https://sautnajdi.ai/en/product/human-handoff): escalation rules, live listen/whisper/take-over, inherited context, after-hours callbacks
+- [Security & data](https://sautnajdi.ai/en/security): PDPL alignment, storage region, the processing disclosure, audit log, access control
+- [FAQ](https://sautnajdi.ai/en/faq): the full question set, grouped
+- [Book a demo](https://sautnajdi.ai/en/demo): 30-minute intro demo, and how pricing is quoted
+- [Contact](https://sautnajdi.ai/en/contact): email and a 15-minute quick call
+- [About](https://sautnajdi.ai/en/about): who builds it, why hybrid, and what we refuse to claim
+- [Privacy policy](https://sautnajdi.ai/en/privacy): collection, storage, processors, retention, data-subject rights
+- [Terms of service](https://sautnajdi.ai/en/terms)
+- [Data processing agreement](https://sautnajdi.ai/en/dpa): the summary DPA procurement teams ask for by name
 
 ## Key pages — Arabic (primary)
 
-- [الرئيسية](https://sautnajdi.com/)
-- [كيف يشتغل](https://sautnajdi.com/how-it-works)
-- [التصعيد للموظف البشري](https://sautnajdi.com/product/human-handoff)
-- [الأمان والبيانات](https://sautnajdi.com/security)
-- [الأسئلة الشائعة](https://sautnajdi.com/faq)
-- [احجز عرضاً](https://sautnajdi.com/demo)
-- [تواصل معنا](https://sautnajdi.com/contact)
-- [من نحن](https://sautnajdi.com/about)
-- [سياسة الخصوصية](https://sautnajdi.com/privacy)
-- [شروط الخدمة](https://sautnajdi.com/terms)
-- [اتفاقية معالجة البيانات](https://sautnajdi.com/dpa)
+- [الرئيسية](https://sautnajdi.ai/)
+- [كيف يشتغل](https://sautnajdi.ai/how-it-works)
+- [التصعيد للموظف البشري](https://sautnajdi.ai/product/human-handoff)
+- [الأمان والبيانات](https://sautnajdi.ai/security)
+- [الأسئلة الشائعة](https://sautnajdi.ai/faq)
+- [احجز عرضاً](https://sautnajdi.ai/demo)
+- [تواصل معنا](https://sautnajdi.ai/contact)
+- [من نحن](https://sautnajdi.ai/about)
+- [سياسة الخصوصية](https://sautnajdi.ai/privacy)
+- [شروط الخدمة](https://sautnajdi.ai/terms)
+- [اتفاقية معالجة البيانات](https://sautnajdi.ai/dpa)
 
 ## Terminology
 

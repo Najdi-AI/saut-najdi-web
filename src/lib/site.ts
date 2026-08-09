@@ -25,9 +25,15 @@ export const APP_URL = "https://app.najdiai.com";
  */
 export const SUPPORT_EMAIL = "ai@sautnajdi.ai";
 
-// Cal.com — all demo booking runs through these (blueprint §2.4)
-export const CAL_LINK_DEMO = "saut-najdi/demo";
-export const CAL_LINK_QUICK = "saut-najdi/quick-call";
+// Cal.com — all demo booking runs through these (blueprint §2.4).
+// The handle is `sautnajdi`, NO hyphen: the account was renamed and the old
+// `saut-najdi/*` links 404, which silently kills every booking CTA on the
+// site. Verify with the public API before changing these — a 200 on
+// cal.com/<user>/<slug> proves nothing, Cal soft-404s unknown slugs:
+//   curl 'https://cal.com/api/trpc/public/event?input={"json":{"username":"sautnajdi","eventSlug":"demo","isTeamEvent":false,"org":null}}'
+// A missing event returns {"json":null}.
+export const CAL_LINK_DEMO = "sautnajdi/demo";
+export const CAL_LINK_QUICK = "sautnajdi/quick-call";
 
 /**
  * The platform's embeddable web-chat widget key (dashboard → Integrations

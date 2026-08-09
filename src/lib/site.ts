@@ -17,9 +17,13 @@ export const SITE_NAME_AR = "صوت نجدي";
 export const SITE_NAME_EN = "Saut Najdi";
 export const APP_URL = "https://app.najdiai.com";
 
-// TODO(owner): confirm this mailbox exists before launch (stationery shows
-// info@sautnajdi.ai — domain decision moved the site to .com).
-export const SUPPORT_EMAIL = "info@sautnajdi.com";
+/**
+ * The public support mailbox, confirmed by the owner (2026-08-09) alongside
+ * the .ai domain cutover. Every rendered address derives from here — footer,
+ * contact page, chat fallback, and the Organization/ContactPoint schema — so
+ * there is one string to change if it ever moves.
+ */
+export const SUPPORT_EMAIL = "ai@sautnajdi.ai";
 
 // Cal.com — all demo booking runs through these (blueprint §2.4)
 export const CAL_LINK_DEMO = "saut-najdi/demo";

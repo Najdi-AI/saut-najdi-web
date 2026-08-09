@@ -8,7 +8,7 @@ Saut Najdi is a hybrid AI + human platform for inbound customer conversations in
 - Made by: Najdi AI, Riyadh, Saudi Arabia. Saut Najdi is one of Najdi AI's products; najdiai.com is the parent company's own site, not a mirror of this one.
 - Website: https://sautnajdi.ai — Arabic is the primary language and lives at the root; English lives under /en.
 - Existing-customer dashboard: https://app.najdiai.com
-- Contact: info@sautnajdi.ai
+- Contact: ai@sautnajdi.ai
 - Arabic edition of this file: https://sautnajdi.ai/llms-ar.txt
 - Last reviewed: 2026-08-06
 

@@ -35,6 +35,61 @@ export const meta: Record<
       description:
         "التصعيد في صوت نجدي: متى تروح المكالمة لموظفك، ووش يستلم معها — النص الكامل والملخص وتاريخ العميل — وكيف يسمع فريقك المكالمات الحية ويستلمها.",
     },
+    // Wave 2 — product deep dives (spec P2-22, titles from its table).
+    // Re-angled toward the mechanism: the AR home page owns «يرد بلهجة عملائك»
+    // in its title, H1 and description (and sitemap priority 1.0), so this page
+    // targets «كيف يفهم … اللهجة السعودية» instead of competing for it.
+    "product/voice-agent": {
+      title: "كيف يفهم الوكيل الصوتي اللهجة السعودية؟",
+      description:
+        "كيف يفهم الوكيل الصوتي اللهجة السعودية ويتعامل معها: نجدي وحجازي وخليجي، يسكت إذا قاطعته، يقرأ رقم الحجز رقم رقم، وينفذ الطلب. مكالمات داخلة فقط.",
+    },
+    // Blueprint §10.8: knowledge-base grounding is NOT shipped on live phone
+    // calls (production inbound voice runs through the orchestrator, which has
+    // no KB). Describe the KB only as: built from your files, feeds your agent,
+    // verified by you in the test chat. Never assert the call case.
+    "product/knowledge-base": {
+      title: "قاعدة المعرفة العربية من ملفاتك",
+      description:
+        "ارفع ملفاتك — PDF و Word حتى الممسوحة ضوئياً بتعرّف عربي صحيح — تصير قاعدة معرفة تغذّي وكيلك، وتتأكد من إجاباته بنفسك في الشات التجريبي قبل النشر.",
+    },
+    "product/dashboard": {
+      title: "لوحة التحكم — سجل المكالمات والملخصات",
+      description:
+        "كل مكالمة قدامك: تسجيل ونص وملخص عربي ومزاج المكالمة وتقييم، وتاريخ العميل، وتقويم الحجوزات، ومتابعة حية تستلم فيها المكالمة، وسجل تدقيق.",
+    },
+    "product/agent-builder": {
+      title: "بناء الوكيل بدون كود",
+      description:
+        "سوّ وكيلك بنفسك: قالب جاهز لقطاعك، تحكم بالشخصية والصوت، وصف باللهجة النجدية يكتبه لك، شات تجريبي وسيناريوهات، ونشر مع سجل نسخ ومقارنة.",
+    },
+    // Wave 2 — sector pages. These carry the long-tail: the query is typed by
+    // sector («رد آلي مطاعم»), never by product name.
+    "solutions/clinics": {
+      title: "الرد الآلي على مكالمات العيادات والمستشفيات",
+      description:
+        "وكيل صوتي يرد على مكالمات عيادتك بلهجة مريضك: يحجز المواعيد ويأجلها، ويجاوب عن الأسعار والدوام وجدول الأطباء — وأي سؤال طبي يروح لموظفك على طول.",
+    },
+    "solutions/restaurants": {
+      title: "رد آلي على مكالمات المطاعم والحجوزات",
+      description:
+        "وكيل صوتي يرد على مكالمات مطعمك حتى وقت الذروة: يحجز الطاولات ويعدل الحجوزات، ويجاوب عن القائمة والدوام والمواقف — والشكاوى تروح لموظفك فوراً.",
+    },
+    "solutions/hotels": {
+      title: "رد آلي على مكالمات الفنادق والحجوزات",
+      description:
+        "وكيل صوتي يرد على مكالمات فندقك 24 ساعة بلهجة نزيلك: يشوف الغرف المتاحة ويثبت الحجز، ويجاوب على الأسعار وسياسة الإلغاء وأوقات الدخول والخروج.",
+    },
+    "solutions/real-estate": {
+      title: "رد آلي على مكالمات المكاتب العقارية",
+      description:
+        "وكيل صوتي يرد على مستفسري إعلاناتك: الوحدة متاحة ولا لا، السعر والشروط، ويحجز معاينة — مكالمات داخلة فقط، بدون أي اتصال صادر.",
+    },
+    "solutions/retail": {
+      title: "رد آلي على استفسارات متجرك",
+      description:
+        "وكيل صوتي يرد على مكالمات متجرك بلهجة عميلك: سياسة الإرجاع والشحن وأوقات الفروع والعروض، ويسجل استفسار حالة الطلب كامل لفريقك.",
+    },
     security: {
       title: "الأمان والبيانات والتوافق مع نظام PDPL السعودي",
       description:
@@ -95,6 +150,55 @@ export const meta: Record<
       title: "When does an AI call go to a human agent?",
       description:
         "Saut Najdi escalation: when a call reaches your employee, what they inherit — transcript, summary, customer history — plus live listen, whisper, take-over.",
+    },
+    // Wave 2 — product deep dives (spec P2-22, titles from its table).
+    "product/voice-agent": {
+      title: "The voice agent — your customers' dialect",
+      description:
+        "How the Saut Najdi voice agent works on a real call: Saudi dialect understanding, instant barge-in, digit-by-digit codes, voices, cloning with consent.",
+    },
+    // See the AR note above: no live-call KB claim (blueprint §10.8 gate).
+    "product/knowledge-base": {
+      title: "Arabic knowledge base from your files",
+      description:
+        "Upload PDFs and Word files, including scans read by true Arabic OCR. They become the knowledge base behind your agent — verify answers in the test chat.",
+    },
+    "product/dashboard": {
+      title: "Dashboard — call log, transcripts, summaries",
+      description:
+        "Every call in one place: recording, transcript, Arabic summary, sentiment, tags, customer timeline, bookings calendar, live take-over, audit log.",
+    },
+    "product/agent-builder": {
+      title: "Build your agent, no code",
+      description:
+        "Sector templates, personality controls, an AI-drafted Najdi persona, a test chat with saved scenario tests, and draft-to-publish versioning with a diff.",
+    },
+    // Wave 2 — sector pages. English here is its own writing, not a
+    // translation of the Arabic: the EN buyer searches the sector in English.
+    "solutions/clinics": {
+      title: "AI call answering for clinics",
+      description:
+        "An AI voice agent answering clinic calls in your patient's dialect: bookings, reschedules, fees, hours and the rota — medical questions go to your staff.",
+    },
+    "solutions/restaurants": {
+      title: "AI phone answering for restaurants",
+      description:
+        "An AI voice agent answering every restaurant call, even at peak: tables booked and amended, menu, hours and branches — complaints escalated to your staff.",
+    },
+    "solutions/hotels": {
+      title: "AI answering for hotels",
+      description:
+        "An AI voice agent answering your hotel's calls 24/7: checks availability, confirms bookings, and answers rates, cancellation policy and check-in times.",
+    },
+    "solutions/real-estate": {
+      title: "AI call answering for real estate",
+      description:
+        "An AI voice agent answering enquiries on your listings — availability, price, terms — and booking viewings. Inbound calls only: it never cold-calls.",
+    },
+    "solutions/retail": {
+      title: "AI answering for retail",
+      description:
+        "An AI voice agent answering your store's calls: returns, shipping, branch hours and offers — with every order enquiry captured in full for your team.",
     },
     security: {
       title: "Security, data residency and PDPL alignment",

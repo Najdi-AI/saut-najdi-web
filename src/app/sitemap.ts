@@ -8,6 +8,15 @@ const paths = [
   "",
   "how-it-works",
   "product/human-handoff",
+  "product/voice-agent",
+  "product/knowledge-base",
+  "product/dashboard",
+  "product/agent-builder",
+  "solutions/clinics",
+  "solutions/restaurants",
+  "solutions/hotels",
+  "solutions/real-estate",
+  "solutions/retail",
   "security",
   "demo",
   "contact",
@@ -29,6 +38,19 @@ function freq(p: string): "weekly" | "monthly" | "yearly" {
 }
 
 /**
+ * Priority is a within-site hint only — it says nothing to Google about this
+ * site versus any other, and a sitemap where everything is 1.0 says nothing at
+ * all. Home first, the hybrid-handoff differentiator second, then the Wave-2
+ * deep dives and sector pages that carry the long tail, then the rest.
+ */
+function prio(p: string): number {
+  if (p === "") return 1;
+  if (p === "product/human-handoff") return 0.9;
+  if (p.startsWith("solutions/") || p.startsWith("product/")) return 0.8;
+  return 0.7;
+}
+
+/**
  * lastModified reads the hand-maintained dates in src/content/updated.ts, not
  * build time: a lastmod that always equals the fetch date teaches crawlers to
  * ignore the field, forfeiting the one crawl-scheduling signal a small site
@@ -40,7 +62,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}${localePath(locale, path)}`,
       lastModified: new Date(updated[keyOf(path)]),
       changeFrequency: freq(path),
-      priority: path === "" ? 1 : path === "product/human-handoff" ? 0.9 : 0.7,
+      priority: prio(path),
       alternates: {
         languages: {
           ar: `${SITE_URL}${localePath("ar", path)}`,

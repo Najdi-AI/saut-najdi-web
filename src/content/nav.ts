@@ -2,8 +2,12 @@ import type { Locale } from "@/lib/i18n";
 
 /**
  * Mega-menu content (navbar ported from the haroon911 reference).
- * Items with `path: null` are not yet built (Wave 2) — they render as
- * non-links with a «قريباً» badge, honoring the no-dead-links rule.
+ *
+ * `path: null` is the escape hatch for an item whose page is not built yet —
+ * it renders as a non-link with a «قريباً»/"Soon" badge, honoring the
+ * no-dead-links rule. Wave 2 shipped all nine promised pages, so nothing is
+ * null today; keep the shape for the next unbuilt item, and never flip an
+ * item to a real path before its route file exists.
  */
 
 export type MegaIcon =
@@ -49,12 +53,12 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
             ],
           },
           {
-            heading: "قريباً — صفحات تفصيلية",
+            heading: "القدرات بالتفصيل",
             items: [
-              { label: "الوكيل الصوتي", blurb: "يرد بلهجة عملائك", icon: "wave", path: null, badge: "قريباً" },
-              { label: "قاعدة المعرفة العربية", blurb: "وكيلك يتعلم من ملفاتك", icon: "book", path: null, badge: "قريباً" },
-              { label: "بناء الوكيل", blurb: "سوّه بنفسك بدون كود", icon: "builder", path: null, badge: "قريباً" },
-              { label: "لوحة التحكم", blurb: "كل مكالمة قدامك", icon: "chart", path: null, badge: "قريباً" },
+              { label: "الوكيل الصوتي", blurb: "يرد بلهجة عملائك", icon: "wave", path: "product/voice-agent" },
+              { label: "قاعدة المعرفة العربية", blurb: "وكيلك يجاوب من ملفاتك", icon: "book", path: "product/knowledge-base" },
+              { label: "بناء الوكيل", blurb: "سوّه بنفسك بدون كود", icon: "builder", path: "product/agent-builder" },
+              { label: "لوحة التحكم", blurb: "كل مكالمة قدامك", icon: "chart", path: "product/dashboard" },
             ],
           },
         ],
@@ -77,16 +81,16 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
           {
             heading: "قوالب جاهزة لقطاعك",
             items: [
-              { label: "عيادات ومستشفيات", blurb: "«أبغى أحجز موعد»", icon: "clinic", path: null, badge: "قريباً" },
-              { label: "مطاعم", blurb: "«أبغى أطلب»", icon: "restaurant", path: null, badge: "قريباً" },
-              { label: "فنادق", blurb: "«عندكم غرفة فاضية؟»", icon: "hotel", path: null, badge: "قريباً" },
+              { label: "عيادات ومستشفيات", blurb: "«أبغى أحجز موعد»", icon: "clinic", path: "solutions/clinics" },
+              { label: "مطاعم", blurb: "«أبغى أحجز طاولة»", icon: "restaurant", path: "solutions/restaurants" },
+              { label: "فنادق", blurb: "«عندكم غرفة فاضية؟»", icon: "hotel", path: "solutions/hotels" },
             ],
           },
           {
             heading: " ",
             items: [
-              { label: "عقارات", blurb: "«الشقة للحين متاحة؟»", icon: "estate", path: null, badge: "قريباً" },
-              { label: "تجزئة", blurb: "«وصل طلبي؟»", icon: "retail", path: null, badge: "قريباً" },
+              { label: "عقارات", blurb: "«الشقة للحين متاحة؟»", icon: "estate", path: "solutions/real-estate" },
+              { label: "تجزئة", blurb: "«وصل طلبي؟»", icon: "retail", path: "solutions/retail" },
               { label: "نشاط ثاني؟", blurb: "نجهز وكيلك على مقاس شغلك", icon: "chat", path: "demo" },
             ],
           },
@@ -94,7 +98,7 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
         featured: {
           eyebrow: "جاهز اليوم",
           title: "القوالب موجودة في المنصة الآن",
-          body: "صفحات القطاعات التفصيلية قادمة قريباً — والقوالب نفسها جاهزة، نوريك إياها في العرض.",
+          body: "لكل قطاع صفحة تشرح وش يتكفل فيه الوكيل ووش يروح لموظفك — والقالب نفسه جاهز، نوريك إياه في العرض.",
           cta: "احجز عرضاً ←",
           path: "demo",
         },
@@ -118,12 +122,12 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
           ],
         },
         {
-          heading: "Coming soon — deep dives",
+          heading: "The capabilities in depth",
           items: [
-            { label: "Voice agent", blurb: "Answers in your customers' dialect", icon: "wave", path: null, badge: "Soon" },
-            { label: "Arabic knowledge base", blurb: "Your agent learns from your files", icon: "book", path: null, badge: "Soon" },
-            { label: "Agent builder", blurb: "Build it yourself, no code", icon: "builder", path: null, badge: "Soon" },
-            { label: "Dashboard", blurb: "Every call in front of you", icon: "chart", path: null, badge: "Soon" },
+            { label: "Voice agent", blurb: "Answers in your customers' dialect", icon: "wave", path: "product/voice-agent" },
+            { label: "Arabic knowledge base", blurb: "Your agent answers from your files", icon: "book", path: "product/knowledge-base" },
+            { label: "Agent builder", blurb: "Build it yourself, no code", icon: "builder", path: "product/agent-builder" },
+            { label: "Dashboard", blurb: "Every call in front of you", icon: "chart", path: "product/dashboard" },
           ],
         },
       ],
@@ -146,16 +150,16 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
         {
           heading: "Sector-ready templates",
           items: [
-            { label: "Clinics & hospitals", blurb: "“I'd like to book an appointment”", icon: "clinic", path: null, badge: "Soon" },
-            { label: "Restaurants", blurb: "“I'd like to order”", icon: "restaurant", path: null, badge: "Soon" },
-            { label: "Hotels", blurb: "“Do you have a room free?”", icon: "hotel", path: null, badge: "Soon" },
+            { label: "Clinics & hospitals", blurb: "“I'd like to book an appointment”", icon: "clinic", path: "solutions/clinics" },
+            { label: "Restaurants", blurb: "“Do you have a table tonight?”", icon: "restaurant", path: "solutions/restaurants" },
+            { label: "Hotels", blurb: "“Do you have a room free?”", icon: "hotel", path: "solutions/hotels" },
           ],
         },
         {
           heading: " ",
           items: [
-            { label: "Real estate", blurb: "“Is the apartment still available?”", icon: "estate", path: null, badge: "Soon" },
-            { label: "Retail", blurb: "“Has my order arrived?”", icon: "retail", path: null, badge: "Soon" },
+            { label: "Real estate", blurb: "“Is the apartment still available?”", icon: "estate", path: "solutions/real-estate" },
+            { label: "Retail", blurb: "“Has my order arrived?”", icon: "retail", path: "solutions/retail" },
             { label: "Something else?", blurb: "We configure your agent around your work", icon: "chat", path: "demo" },
           ],
         },
@@ -163,7 +167,7 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
       featured: {
         eyebrow: "Ready today",
         title: "The templates already live in the platform",
-        body: "Detailed sector pages are coming soon — the templates themselves are ready, and we'll show you them in the demo.",
+        body: "Each sector has its own page — what the agent handles, what reaches your staff — and the template behind it is live. We'll show you yours in the demo.",
         cta: "Book a demo →",
         path: "demo",
       },

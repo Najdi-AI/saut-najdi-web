@@ -8,6 +8,15 @@ import { handoffFaq } from "@/components/pages/HumanHandoffPage";
 import { securityFaq } from "@/components/pages/SecurityPage";
 import { journeySteps } from "@/components/pages/HowItWorksPage";
 import { demoFaq } from "@/components/pages/DemoPage";
+import { voiceAgentFaq } from "@/components/pages/VoiceAgentPage";
+import { knowledgeBaseFaq } from "@/components/pages/KnowledgeBasePage";
+import { dashboardFaq } from "@/components/pages/DashboardPage";
+import { agentBuilderFaq } from "@/components/pages/AgentBuilderPage";
+import { clinicsFaq } from "@/components/pages/ClinicsPage";
+import { restaurantsFaq } from "@/components/pages/RestaurantsPage";
+import { hotelsFaq } from "@/components/pages/HotelsPage";
+import { realEstateFaq } from "@/components/pages/RealEstatePage";
+import { retailFaq } from "@/components/pages/RetailPage";
 import {
   graph,
   organization,
@@ -21,7 +30,7 @@ import {
   siteNavigation,
 } from "./schema";
 import { SITE_URL, SUPPORT_EMAIL } from "./site";
-import { type Locale } from "./i18n";
+import { localePath, type Locale } from "./i18n";
 import { JsonLd } from "@/components/JsonLd";
 
 /** Path for a meta key: "home" lives at the root. */
@@ -51,6 +60,15 @@ const crumbNames = {
     home: "الرئيسية",
     "how-it-works": "كيف يشتغل",
     "product/human-handoff": "التصعيد للموظف البشري",
+    "product/voice-agent": "الوكيل الصوتي",
+    "product/knowledge-base": "قاعدة المعرفة",
+    "product/dashboard": "لوحة التحكم",
+    "product/agent-builder": "بناء الوكيل",
+    "solutions/clinics": "العيادات",
+    "solutions/restaurants": "المطاعم",
+    "solutions/hotels": "الفنادق",
+    "solutions/real-estate": "العقارات",
+    "solutions/retail": "التجزئة",
     security: "الأمان والبيانات",
     faq: "الأسئلة الشائعة",
     about: "من نحن",
@@ -61,12 +79,39 @@ const crumbNames = {
     home: "Home",
     "how-it-works": "How it works",
     "product/human-handoff": "Human handoff",
+    "product/voice-agent": "Voice agent",
+    "product/knowledge-base": "Knowledge base",
+    "product/dashboard": "Dashboard",
+    "product/agent-builder": "Agent builder",
+    "solutions/clinics": "Clinics",
+    "solutions/restaurants": "Restaurants",
+    "solutions/hotels": "Hotels",
+    "solutions/real-estate": "Real estate",
+    "solutions/retail": "Retail",
     security: "Security & data",
     faq: "FAQ",
     about: "About us",
     contact: "Contact",
     demo: "Book a demo",
   },
+} as const;
+
+/**
+ * The nine Wave-2 pages (spec P2-22) differ in exactly one thing — which FAQ
+ * they carry — so they share two switch branches instead of nine
+ * copy-pasted ones. Adding a tenth page is: page component with an exported
+ * faq, an entry here, a crumb label above, and its `kind` in the right branch.
+ */
+const wave2Faq = {
+  "product/voice-agent": voiceAgentFaq,
+  "product/knowledge-base": knowledgeBaseFaq,
+  "product/dashboard": dashboardFaq,
+  "product/agent-builder": agentBuilderFaq,
+  "solutions/clinics": clinicsFaq,
+  "solutions/restaurants": restaurantsFaq,
+  "solutions/hotels": hotelsFaq,
+  "solutions/real-estate": realEstateFaq,
+  "solutions/retail": retailFaq,
 } as const;
 
 /** Per-page-type JSON-LD @graph (blueprint §8 schema map). */
@@ -83,12 +128,34 @@ export function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
       updatedFor(key),
     );
 
-  /** Home → leaf. There is no /product index page, so no trail is ever 3 deep. */
+  /**
+   * Home → leaf. There is no /product or /solutions index page, so no trail is
+   * ever 3 deep — the middle segment would have to point at a 404.
+   */
   const trail = (key: keyof typeof c) =>
     breadcrumbs(locale, key, [
       { name: c.home, path: "" },
       { name: c[key], path: key },
     ]);
+
+  /**
+   * A sector page's own Service node, under a PAGE-scoped @id.
+   *
+   * `/#service` is a single identity whose payload must read the same on every
+   * page that emits it (schema.ts), so a sector name can never be written onto
+   * it — that would make five pages assert five different names for one
+   * entity. This mints a separate, honestly narrower offering instead, named
+   * and described from the page's own hand-written meta, and links it back to
+   * the product with `isRelatedTo`. Both nodes ship in the sector graph so
+   * that reference resolves inside the document rather than dangling.
+   */
+  const sectorService = (key: string) => ({
+    ...service(locale),
+    "@id": `${SITE_URL}${localePath(locale, key)}#service`,
+    name: meta[locale][key].title,
+    description: meta[locale][key].description,
+    isRelatedTo: { "@id": `${SITE_URL}/#service` },
+  });
 
   // webSite() rides on EVERY page: webPage().isPartOf points at
   // `/#website`, and each URL is parsed in isolation — without the node in
@@ -133,6 +200,37 @@ export function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
         service(locale),
         faqPage(locale, "product/human-handoff", handoffFaq[locale]),
         trail("product/human-handoff"),
+      );
+      break;
+    case "product/voice-agent":
+    case "product/knowledge-base":
+    case "product/dashboard":
+    case "product/agent-builder":
+      // Four framings of ONE product, exactly like product/human-handoff:
+      // they reference the canonical /#service rather than each minting a
+      // near-duplicate Service entity that would compete with it.
+      data = graph(
+        organization(locale),
+        webSite(locale),
+        wp(kind),
+        service(locale),
+        faqPage(locale, kind, wave2Faq[kind][locale]),
+        trail(kind),
+      );
+      break;
+    case "solutions/clinics":
+    case "solutions/restaurants":
+    case "solutions/hotels":
+    case "solutions/real-estate":
+    case "solutions/retail":
+      data = graph(
+        organization(locale),
+        webSite(locale),
+        wp(kind),
+        service(locale),
+        sectorService(kind),
+        faqPage(locale, kind, wave2Faq[kind][locale]),
+        trail(kind),
       );
       break;
     case "security":

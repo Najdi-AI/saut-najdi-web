@@ -16,10 +16,13 @@ import { DemoCta } from "@/components/DemoCta";
 import { homeFaq } from "@/content/faq";
 
 /**
- * Homepage per blueprint §6.1. Wave-1 notes: capability cards other than
- * human-handoff render unlinked until their pages ship; sector tiles are
- * unlinked; the product-screenshot section is omitted until demo-tenant
- * screenshots exist (never fabricate one — §2.2).
+ * Homepage per blueprint §6.1. Wave 2 gave every capability card and every
+ * sector tile a real destination, so both grids are fully linked and the two
+ * "coming soon" lines under them are gone — the activation rule in spec P2-22
+ * is that the link and the page ship together, in both directions.
+ *
+ * Still deliberately absent: the product-screenshot section, until demo-tenant
+ * screenshots actually exist (never fabricate one — §2.2).
  */
 
 const t = {
@@ -75,24 +78,23 @@ const t = {
     capabilities: {
       heading: "وش يقدم لك؟",
       cards: [
-        { title: "الوكيل الصوتي", body: "يرد بلهجة عملائك ويقدر يقاطعونه ويكمل معهم طبيعي.", path: null },
+        { title: "الوكيل الصوتي", body: "يرد بلهجة عملائك ويقدر يقاطعونه ويكمل معهم طبيعي.", path: "product/voice-agent" },
         { title: "التصعيد للموظف البشري", body: "المكالمة تروح لموظفك بكامل سياقها — والفريق يقدر يسمع ويستلم مباشرة.", path: "product/human-handoff" },
-        { title: "قاعدة المعرفة العربية", body: "حط ملفاتك PDF وWord — حتى الممسوحة ضوئياً — ووكيلك يتعلم منها.", path: null },
-        { title: "بناء الوكيل", body: "سوّ وكيلك بنفسك بقوالب جاهزة لقطاعك — بدون سطر كود.", path: null },
-        { title: "لوحة التحكم", body: "كل مكالمة قدامك: مين اتصل، وش قال، ووش صار — نص وتسجيل وملخص.", path: null },
+        { title: "قاعدة المعرفة العربية", body: "حط ملفاتك PDF وWord — حتى الممسوحة ضوئياً — ووكيلك يجاوب منها.", path: "product/knowledge-base" },
+        { title: "بناء الوكيل", body: "سوّ وكيلك بنفسك بقوالب جاهزة لقطاعك — بدون سطر كود.", path: "product/agent-builder" },
+        { title: "لوحة التحكم", body: "كل مكالمة قدامك: مين اتصل، وش قال، ووش صار — نص وتسجيل وملخص.", path: "product/dashboard" },
       ],
-      soon: "صفحات تفصيلية لكل قدرة — قريباً",
     },
     sectors: {
       heading: "لأي نشاط؟",
       tiles: [
-        { sector: "عيادات ومستشفيات", quote: "«أبغى أحجز موعد»" },
-        { sector: "مطاعم", quote: "«أبغى أطلب»" },
-        { sector: "فنادق", quote: "«عندكم غرفة فاضية؟»" },
-        { sector: "عقارات", quote: "«الشقة للحين متاحة؟»" },
-        { sector: "تجزئة", quote: "«وصل طلبي؟»" },
+        { sector: "عيادات ومستشفيات", quote: "«أبغى أحجز موعد»", path: "solutions/clinics" },
+        { sector: "مطاعم", quote: "«أبغى أحجز طاولة»", path: "solutions/restaurants" },
+        { sector: "فنادق", quote: "«عندكم غرفة فاضية؟»", path: "solutions/hotels" },
+        { sector: "عقارات", quote: "«الشقة للحين متاحة؟»", path: "solutions/real-estate" },
+        { sector: "تجزئة", quote: "«وصل طلبي؟»", path: "solutions/retail" },
       ],
-      note: "قوالب جاهزة لهذه القطاعات — وصفحة مخصصة لكل قطاع قريباً.",
+      note: "قوالب جاهزة لهذه القطاعات — اضغط على قطاعك وشوف بالضبط وش يتكفل فيه الوكيل ووش يروح لموظفك.",
     },
     governance: {
       heading: "بياناتك تحكمها قواعد وصلاحيات — مو بس محفوظة",
@@ -159,24 +161,23 @@ const t = {
     capabilities: {
       heading: "What do you get?",
       cards: [
-        { title: "The voice agent", body: "Answers in your customers' dialect; callers can interrupt and it keeps up naturally.", path: null },
+        { title: "The voice agent", body: "Answers in your customers' dialect; callers can interrupt and it keeps up naturally.", path: "product/voice-agent" },
         { title: "Human handoff", body: "The call reaches your employee with full context — and your team can listen in and take over live.", path: "product/human-handoff" },
-        { title: "Arabic knowledge base", body: "Upload your PDF and Word files — even scans — and your agent learns from them.", path: null },
-        { title: "Agent builder", body: "Build your agent yourself with sector-ready templates — no code.", path: null },
-        { title: "The dashboard", body: "Every call in front of you: who called, what they said, what happened — transcript, recording, summary.", path: null },
+        { title: "Arabic knowledge base", body: "Upload your PDF and Word files — even scans — and your agent answers from them.", path: "product/knowledge-base" },
+        { title: "Agent builder", body: "Build your agent yourself with sector-ready templates — no code.", path: "product/agent-builder" },
+        { title: "The dashboard", body: "Every call in front of you: who called, what they said, what happened — transcript, recording, summary.", path: "product/dashboard" },
       ],
-      soon: "Detailed pages for each capability — coming soon",
     },
     sectors: {
       heading: "Built for which businesses?",
       tiles: [
-        { sector: "Clinics & hospitals", quote: "“I'd like to book an appointment”" },
-        { sector: "Restaurants", quote: "“I'd like to order”" },
-        { sector: "Hotels", quote: "“Do you have a room free?”" },
-        { sector: "Real estate", quote: "“Is the apartment still available?”" },
-        { sector: "Retail", quote: "“Has my order arrived?”" },
+        { sector: "Clinics & hospitals", quote: "“I'd like to book an appointment”", path: "solutions/clinics" },
+        { sector: "Restaurants", quote: "“Do you have a table tonight?”", path: "solutions/restaurants" },
+        { sector: "Hotels", quote: "“Do you have a room free?”", path: "solutions/hotels" },
+        { sector: "Real estate", quote: "“Is the apartment still available?”", path: "solutions/real-estate" },
+        { sector: "Retail", quote: "“Has my order arrived?”", path: "solutions/retail" },
       ],
-      note: "Ready-made templates for these sectors — with a dedicated page for each coming soon.",
+      note: "Ready-made templates for these sectors — open yours to see exactly what the agent handles and what reaches your staff.",
     },
     governance: {
       heading: "Your data is governed, not just stored",
@@ -359,42 +360,32 @@ export function HomePage({ locale }: { locale: Locale }) {
         </ul>
       </section>
 
-      {/* 5 · Capabilities — five cards at launch (Wave-2 pages activate links) */}
+      {/* 5 · Capabilities — five cards, each now a real page (Wave 2) */}
       <section className="bg-white py-16">
         <div className="container">
           <Reveal>
             <h2 className="text-center text-h2">{s.capabilities.heading}</h2>
           </Reveal>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {s.capabilities.cards.map((c, i) => {
-              const inner = (
-                <div className={`card group h-full ${c.path ? "card-hover border-brand-blue/25" : ""}`}>
-                  <IconChip
-                    name={(["mic", "people", "doc", "sliders", "chart"] as IconName[])[i]}
-                    delay={i * 0.1}
-                  />
-                  <h3 className="mt-3 text-h4">{c.title}</h3>
-                  <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{c.body}</p>
-                </div>
-              );
-              return (
-                <Reveal key={c.title} delay={i * 0.06}>
-                  {c.path ? (
-                    <Link href={localePath(locale, c.path)} className="block h-full">
-                      {inner}
-                    </Link>
-                  ) : (
-                    inner
-                  )}
-                </Reveal>
-              );
-            })}
+            {s.capabilities.cards.map((c, i) => (
+              <Reveal key={c.title} delay={i * 0.06}>
+                <Link href={localePath(locale, c.path)} className="block h-full">
+                  <div className="card card-hover group h-full border-brand-blue/25">
+                    <IconChip
+                      name={(["mic", "people", "doc", "sliders", "chart"] as IconName[])[i]}
+                      delay={i * 0.1}
+                    />
+                    <h3 className="mt-3 text-h4">{c.title}</h3>
+                    <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{c.body}</p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
           </div>
-          <p className="mt-5 text-center text-body text-ink/60">{s.capabilities.soon}</p>
         </div>
       </section>
 
-      {/* 6 · Sectors — five tiles, unlinked in Wave 1 */}
+      {/* 6 · Sectors — five tiles, each linking to its own sector page (Wave 2) */}
       <section className="container py-16">
         <Reveal>
           <h2 className="text-center text-h2">{s.sectors.heading}</h2>
@@ -402,16 +393,18 @@ export function HomePage({ locale }: { locale: Locale }) {
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           {s.sectors.tiles.map((tile, i) => (
             <Reveal key={tile.sector} delay={i * 0.06}>
-              <div className="card card-hover group w-52 text-center">
-                <div className="flex justify-center">
-                  <IconChip
-                    name={(["clinic", "restaurant", "hotel", "estate", "retail"] as IconName[])[i]}
-                    delay={i * 0.1}
-                  />
+              <Link href={localePath(locale, tile.path)} className="block h-full">
+                <div className="card card-hover group h-full w-52 text-center">
+                  <div className="flex justify-center">
+                    <IconChip
+                      name={(["clinic", "restaurant", "hotel", "estate", "retail"] as IconName[])[i]}
+                      delay={i * 0.1}
+                    />
+                  </div>
+                  <p className="mt-3 text-body-lg font-bold">{tile.sector}</p>
+                  <p className="mt-2 text-body text-brand-purple">{tile.quote}</p>
                 </div>
-                <p className="mt-3 text-body-lg font-bold">{tile.sector}</p>
-                <p className="mt-2 text-body text-brand-purple">{tile.quote}</p>
-              </div>
+              </Link>
             </Reveal>
           ))}
         </div>

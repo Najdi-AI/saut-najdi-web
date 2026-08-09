@@ -1,8 +1,18 @@
 /**
  * Single source of truth for site-wide constants.
- * Domain decision (2026-07-28): sautnajdi.com is the ONLY site domain.
+ *
+ * Domain (2026-08-09): sautnajdi.ai is becoming the primary domain and
+ * sautnajdi.com will 301 to it. Every canonical, hreflang, sitemap URL,
+ * OG url and schema @id derives from SITE_URL, so the cutover is one env
+ * change — NOT a code edit — and it is instantly reversible if anything
+ * goes wrong mid-migration.
+ *
+ * Set NEXT_PUBLIC_SITE_URL=https://sautnajdi.ai in Vercel ONLY once .ai
+ * actually resolves to this deployment: pointing canonicals at a domain
+ * that serves someone else's placeholder is worse than not migrating.
  */
-export const SITE_URL = "https://sautnajdi.com";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sautnajdi.com";
 export const SITE_NAME_AR = "صوت نجدي";
 export const SITE_NAME_EN = "Saut Najdi";
 export const APP_URL = "https://app.najdiai.com";

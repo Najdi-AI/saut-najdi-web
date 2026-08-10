@@ -237,7 +237,7 @@ const t = {
       },
       {
         q: "وين تنحفظ بيانات مستفسرينا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) على Google Cloud، والتسجيلات تنحذف بعد 90 يوماً. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة)، والتسجيلات تنحذف بعد 90 يوماً. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
       },
     ] as FaqItem[],
   },
@@ -442,7 +442,7 @@ const t = {
       },
       {
         q: "Where is our enquirers' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha) on Google Cloud, and recordings are deleted automatically after 90 days. Realtime speech processing transits global providers — detailed on our security page.",
+        a: "Permanent storage is in the Gulf region (Doha), and recordings are deleted automatically after 90 days. Realtime speech processing transits global providers — detailed on our security page.",
       },
     ] as FaqItem[],
   },

@@ -189,7 +189,7 @@ const t = {
       },
       {
         q: "وين تنحفظ بيانات مرضانا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) على Google Cloud، والتسجيلات تنحذف بعد 90 يوماً، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة)، والتسجيلات تنحذف بعد 90 يوماً، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
       },
     ] as FaqItem[],
   },
@@ -351,7 +351,7 @@ const t = {
       },
       {
         q: "Where is our patients' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha) on Google Cloud, recordings are deleted after 90 days, and every access is written to an audit log. Processing is set out on the security page.",
+        a: "Permanent storage is in the Gulf region (Doha), recordings are deleted after 90 days, and every access is written to an audit log. Processing is set out on the security page.",
       },
     ] as FaqItem[],
   },

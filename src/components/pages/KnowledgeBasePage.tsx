@@ -96,7 +96,7 @@ const t = {
     disclosure: {
       heading: "وين تُعالَج ملفاتي؟",
       body:
-        "التخزين الدائم لبياناتك في منطقة الخليج (الدوحة) على Google Cloud، بينما تمر معالجة التعرّف الضوئي على مستندات قاعدة المعرفة عبر نقطة معالجة أوروبية. ما نقول لك إن كل شي داخل السعودية، لأن هذا غير دقيق اليوم — والإفصاح عن النقل عبر الحدود هو الموقف الصحيح أمام نظام حماية البيانات الشخصية.",
+        "التخزين الدائم لبياناتك في منطقة الخليج (الدوحة)، بينما تمر معالجة التعرّف الضوئي على مستندات قاعدة المعرفة عبر نقطة معالجة أوروبية. ما نقول لك إن كل شي داخل السعودية، لأن هذا غير دقيق اليوم — والإفصاح عن النقل عبر الحدود هو الموقف الصحيح أمام نظام حماية البيانات الشخصية.",
       link: { lead: "التفاصيل الكاملة في ", text: "صفحة الأمان والبيانات", path: "security" },
     },
     faqHeading: "أسئلة عن قاعدة المعرفة",
@@ -188,7 +188,7 @@ const t = {
     disclosure: {
       heading: "Where are my documents processed?",
       body:
-        "Permanent storage of your data is in the Gulf region (Doha) on Google Cloud, while OCR processing of knowledge-base documents runs through a European processing endpoint. We do not claim everything sits inside Saudi Arabia, because that isn't accurate today — and disclosing cross-border transfer is itself the correct posture under the PDPL.",
+        "Permanent storage of your data is in the Gulf region (Doha), while OCR processing of knowledge-base documents runs through a European processing endpoint. We do not claim everything sits inside Saudi Arabia, because that isn't accurate today — and disclosing cross-border transfer is itself the correct posture under the PDPL.",
       link: { lead: "The full detail is on ", text: "the security and data page", path: "security" },
     },
     faqHeading: "Knowledge base questions",

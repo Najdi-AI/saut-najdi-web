@@ -225,7 +225,7 @@ const t = {
       },
       {
         q: "وين تنحفظ تسجيلات مكالمات نزلائنا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) على Google Cloud، والتسجيلات تنحذف بعد 90 يوماً. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة)، والتسجيلات تنحذف بعد 90 يوماً. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
       },
       {
         q: "إذا انزعج النزيل، وش يسوي الوكيل؟",
@@ -423,7 +423,7 @@ const t = {
       },
       {
         q: "Where are recordings of our guests' calls stored?",
-        a: "Permanent storage is in the Gulf region (Doha) on Google Cloud, and recordings are deleted automatically after 90 days. Realtime speech processing transits global providers — detailed on our security page.",
+        a: "Permanent storage is in the Gulf region (Doha), and recordings are deleted automatically after 90 days. Realtime speech processing transits global providers — detailed on our security page.",
       },
       {
         q: "What does the agent do with an upset guest?",

@@ -114,7 +114,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "وين تنحفظ بيانات مكالماتي؟",
-          a: "بياناتك في صوت نجدي تنحفظ في منطقة الخليج (الدوحة) على Google Cloud، والتسجيلات تنحذف تلقائياً بعد 90 يوماً، مع إفصاح كامل عن أماكن معالجة الصوت والذكاء الاصطناعي في سياسة الخصوصية.",
+          a: "بياناتك في صوت نجدي تنحفظ في منطقة الخليج (الدوحة)، والتسجيلات تنحذف تلقائياً بعد 90 يوماً، مع إفصاح كامل عن أماكن معالجة الصوت والذكاء الاصطناعي في سياسة الخصوصية.",
         },
         {
           q: "متوافقين مع نظام حماية البيانات الشخصية (PDPL)؟",
@@ -232,7 +232,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "Where is my call data stored?",
-          a: "Saut Najdi stores your data in the Gulf region (Doha) on Google Cloud, call recordings are automatically deleted after 90 days, and the privacy policy fully discloses where speech and AI processing happen.",
+          a: "Saut Najdi stores your data in the Gulf region (Doha), call recordings are automatically deleted after 90 days, and the privacy policy fully discloses where speech and AI processing happen.",
         },
         {
           q: "Are you compliant with the Saudi PDPL?",

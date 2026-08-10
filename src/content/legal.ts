@@ -26,27 +26,27 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. ما نجمعه ولماذا",
           ps: [
-            "لزوّار الموقع: تُستخدم أداة قياس بلا ملفات تعريف ارتباط (Vercel Analytics) لإحصاءات مجمّعة عن الصفحات دون معرّفات شخصية، ويُستخدم Google Tag Manager لإدارة وسوم القياس. الوسوم المفعّلة حالياً لا تنشئ ملف تعريف شخصي عنك؛ وإذا فُعّلت وسوم تتبّع تستخدم ملفات تعريف الارتباط، سنطلب موافقتك أولاً ونحدّث هذه السياسة.",
-            "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر خدمة Cal.com — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، ورسالتك إن أضفتها، لغرض وحيد هو التواصل معك وتجهيز العرض.",
+            "لزوّار الموقع: تُستخدم أداة قياس بلا ملفات تعريف ارتباط لإحصاءات مجمّعة عن الصفحات دون معرّفات شخصية، وأداة لإدارة وسوم القياس. الوسوم المفعّلة حالياً لا تنشئ ملف تعريف شخصي عنك؛ وإذا فُعّلت وسوم تتبّع تستخدم ملفات تعريف الارتباط، سنطلب موافقتك أولاً ونحدّث هذه السياسة.",
+            "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر مزوّد خدمة الحجوزات — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، ورسالتك إن أضفتها، لغرض وحيد هو التواصل معك وتجهيز العرض.",
             "للمنشآت المشتركة وعملائها: تعالج المنصة محتوى المكالمات والمحادثات النصية (الصوت، والنص، والملخصات)، وبيانات العملاء التي تُدخلها المنشأة (الأسماء، أرقام التواصل، التفضيلات، الحجوزات)، وسجلات الاستخدام — لغرض تشغيل خدمة الرد الآلي والتصعيد البشري التي تعاقدت عليها المنشأة.",
           ],
         },
         {
           h: "2. أين تُخزَّن البيانات",
           ps: [
-            "التخزين الدائم لبيانات المنصة يتم في منطقة الخليج (الدوحة — me-central1) على Google Cloud عبر شبكة خاصة، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
+            "التخزين الدائم لبيانات المنصة يتم في منطقة الخليج (الدوحة) لدى مزوّد سحابي عالمي، عبر شبكة خاصة، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
           ],
         },
         {
           h: "3. المعالجون ونقل البيانات عبر الحدود",
           ps: [
-            "التزاماً بمتطلبات الإفصاح عن نقل البيانات عبر الحدود في النظام، نُبيّن الجهات التي تمر بياناتك عبرها:",
+            "التزاماً بمتطلبات الإفصاح عن نقل البيانات عبر الحدود في النظام، نُبيّن فئات المعالجين وأماكن معالجتهم:",
             "• مزوّدو المعالجة اللحظية للصوت والذكاء الاصطناعي (تحويل الكلام إلى نص، وفهم اللغة، وتوليد الصوت) — عبر نقاط معالجة عالمية.",
             "• خدمة التعرّف الضوئي على مستندات قاعدة المعرفة — عبر نقطة معالجة أوروبية.",
-            "• Cal.com لحجوزات العرض التعريفي — معالج خارج المملكة.",
-            "• Vercel لاستضافة هذا الموقع وقياس زياراته (بلا ملفات تعريف ارتباط).",
-            "• Google Tag Manager لإدارة وسوم القياس في هذا الموقع — معالج خارج المملكة.",
-            "• نظام إدارة العلاقات الذي تصل إليه بيانات الحجوزات — يُسمّى في هذه السياسة فور اعتماده.",
+            "• مزوّد استضافة هذا الموقع وقياس زياراته (بلا ملفات تعريف ارتباط) — معالج خارج المملكة.",
+            "• مزوّد خدمة حجز العرض التعريفي — معالج خارج المملكة.",
+            "• نظام إدارة العلاقات الذي تصل إليه بيانات الحجوزات — يُدرَج ضمن القائمة فور اعتماده.",
+            "قائمة المعالجين الفرعيين بأسمائهم وأماكن معالجتهم متاحة عند الطلب، وتُلحق باتفاقية معالجة البيانات عند التعاقد. ونُشعر المنشآت المشتركة قبل أي تغيير عليها. للطلب: ai@sautnajdi.ai.",
           ],
         },
         {
@@ -87,7 +87,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "3. حجز العروض",
           ps: [
-            "حجوزات العرض التعريفي تتم عبر خدمة Cal.com وتخضع أيضاً لشروطها. المعلومات التي تقدمها في الحجز تُستخدم وفق سياسة الخصوصية.",
+            "حجوزات العرض التعريفي تتم عبر مزوّد خدمة حجوزات خارجي وتخضع أيضاً لشروطه. المعلومات التي تقدمها في الحجز تُستخدم وفق سياسة الخصوصية.",
           ],
         },
         {
@@ -126,7 +126,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "التزامات المعالجة",
           ps: [
             "• المعالجة لأغراض تشغيل الخدمة حصراً، ووفق تعليمات المنشأة.",
-            "• التخزين الدائم في منطقة الخليج (الدوحة)، مع الإفصاح الكامل عن المعالجين الفرعيين وأماكنهم (انظر سياسة الخصوصية) وإشعار المنشأة قبل أي تغيير فيهم.",
+            "• التخزين الدائم في منطقة الخليج (الدوحة)، مع الإفصاح الكامل عن المعالجين الفرعيين وأماكنهم في قائمة تُسلَّم عند الطلب وتُلحق بالاتفاقية، وإشعار المنشأة قبل أي تغيير فيهم.",
             "• تدابير تقنية وتنظيمية: عزل بيانات كل منشأة على مستوى قاعدة البيانات، وأدوار وصلاحيات، وسجل تدقيق غير قابل للتعديل، وروابط وصول موقعة قصيرة الصلاحية.",
             "• حذف تسجيلات المكالمات تلقائياً بعد 90 يوماً، وتنفيذ تعليمات المنشأة في بياناتها عند انتهاء الاشتراك.",
             "• الإشعار بأي حادثة تمس البيانات الشخصية وفق المدد النظامية.",
@@ -146,27 +146,27 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. What we collect and why",
           ps: [
-            "Website visitors: a cookieless measurement tool (Vercel Analytics) provides aggregate page statistics without personal identifiers, and Google Tag Manager is used to manage measurement tags. The tags active today do not build a personal profile of you; if tracking tags that rely on cookies are enabled, we will ask for your consent first and update this policy.",
-            "Demo bookings: when you book a demo we collect — through Cal.com — your name, email, mobile number, business name, sector, approximate call volume, and any message you include, for the sole purpose of contacting you and preparing the demo.",
+            "Website visitors: a cookieless measurement tool provides aggregate page statistics without personal identifiers, and a tag manager is used to manage measurement tags. The tags active today do not build a personal profile of you; if tracking tags that rely on cookies are enabled, we will ask for your consent first and update this policy.",
+            "Demo bookings: when you book a demo we collect — through our scheduling provider — your name, email, mobile number, business name, sector, approximate call volume, and any message you include, for the sole purpose of contacting you and preparing the demo.",
             "Subscribed businesses and their customers: the platform processes call and text-conversation content (audio, transcripts, summaries), the customer records a business enters (names, contact numbers, preferences, bookings), and usage logs — to operate the AI answering and human-handoff service the business contracted for.",
           ],
         },
         {
           h: "2. Where data is stored",
           ps: [
-            "Permanent platform storage is in the Gulf region (Doha — me-central1) on Google Cloud over private networking, with backups and point-in-time restore.",
+            "Permanent platform storage is in the Gulf region (Doha) with a major global cloud provider, over private networking, with backups and point-in-time restore.",
           ],
         },
         {
           h: "3. Processors and cross-border transfers",
           ps: [
-            "In line with the PDPL's cross-border transfer disclosure requirements, your data transits the following processors:",
+            "In line with the PDPL's cross-border transfer disclosure requirements, these are the categories of processor your data transits and where they process it:",
             "• Realtime speech and AI providers (speech-to-text, language understanding, voice generation) — via global processing endpoints.",
             "• The OCR service for knowledge-base documents — via a European processing endpoint.",
-            "• Cal.com for demo bookings — a processor outside Saudi Arabia.",
-            "• Vercel for hosting this website and its cookieless analytics.",
-            "• Google Tag Manager for managing this site's measurement tags — a processor outside Saudi Arabia.",
-            "• The CRM system receiving booking data — to be named in this policy once selected.",
+            "• Our website hosting and cookieless analytics provider — a processor outside Saudi Arabia.",
+            "• Our demo scheduling provider — a processor outside Saudi Arabia.",
+            "• The CRM system receiving booking data — added to the list once selected.",
+            "The sub-processor list, with names and processing locations, is available on request and is attached to the data processing agreement on contracting. Subscribing businesses are notified before any change to it. To request it: ai@sautnajdi.ai.",
           ],
         },
         {
@@ -207,7 +207,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "3. Demo bookings",
           ps: [
-            "Demo bookings run through Cal.com and are additionally subject to its terms. Information you provide in a booking is used per the privacy policy.",
+            "Demo bookings run through a third-party scheduling provider and are additionally subject to its terms. Information you provide in a booking is used per the privacy policy.",
           ],
         },
         {
@@ -246,7 +246,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "Processing commitments",
           ps: [
             "• Processing strictly to operate the service, per the business's instructions.",
-            "• Permanent storage in the Gulf region (Doha), with full disclosure of sub-processors and their locations (see the privacy policy) and notice before any change to them.",
+            "• Permanent storage in the Gulf region (Doha), with full disclosure of sub-processors and their locations in a list provided on request and attached to this agreement, and notice before any change to them.",
             "• Technical and organisational measures: tenant isolation enforced at the database level, roles and permissions, an append-only audit log, and short-lived signed access links.",
             "• Automatic deletion of call recordings after 90 days, and execution of the business's instructions for its data at termination.",
             "• Notification of any personal-data incident within statutory timelines.",

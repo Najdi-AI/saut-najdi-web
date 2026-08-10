@@ -39,7 +39,7 @@ const t = {
       },
       {
         title: "أين تُخزَّن بياناتك؟",
-        body: "التخزين الدائم على Cloud SQL PostgreSQL في منطقة الخليج (الدوحة — me-central1) على Google Cloud، عبر شبكة خاصة فقط، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
+        body: "التخزين الدائم على قاعدة بيانات PostgreSQL مُدارة في منطقة الخليج (الدوحة)، عبر شبكة خاصة فقط، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
         link: null,
       },
       {
@@ -49,7 +49,7 @@ const t = {
       },
       {
         title: "هل تُخزَّن بيانات العملاء وتُعالَج داخل السعودية؟",
-        body: "لا نقول إن كل شيء داخل السعودية، لأن ذلك غير دقيق اليوم. التخزين الدائم في منطقة الخليج (الدوحة — me-central1)، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. والإفصاح عن النقل عبر الحدود هو ما يتطلبه النظام.",
+        body: "لا نقول إن كل شيء داخل السعودية، لأن ذلك غير دقيق اليوم. التخزين الدائم في منطقة الخليج (الدوحة)، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. والإفصاح عن النقل عبر الحدود هو ما يتطلبه النظام.",
         link: null,
       },
       {
@@ -71,7 +71,7 @@ const t = {
     faq: [
       {
         q: "أين تُخزَّن بيانات مكالماتي تحديداً؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة — me-central1) على Google Cloud عبر شبكة خاصة، والتسجيلات تُحذَف تلقائياً بعد 90 يوماً.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة) عبر شبكة خاصة، والتسجيلات تُحذَف تلقائياً بعد 90 يوماً.",
       },
       {
         q: "هل تُعالَج البيانات داخل السعودية؟",
@@ -104,7 +104,7 @@ const t = {
       },
       {
         title: "Where is your data stored?",
-        body: "Permanent storage runs on Cloud SQL PostgreSQL in the Gulf region (Doha — me-central1) on Google Cloud, reachable over private IP only, with backups and point-in-time restore.",
+        body: "Permanent storage runs on managed PostgreSQL in the Gulf region (Doha), reachable over private IP only, with backups and point-in-time restore.",
         link: null,
       },
       {
@@ -114,7 +114,7 @@ const t = {
       },
       {
         title: "Is customer data stored and processed inside Saudi Arabia?",
-        body: "We do not claim everything sits inside Saudi Arabia, because that is not accurate today. Permanent storage is in the Gulf region (Doha — me-central1), while realtime speech and AI processing transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. Disclosing cross-border transfer is what the law requires.",
+        body: "We do not claim everything sits inside Saudi Arabia, because that is not accurate today. Permanent storage is in the Gulf region (Doha), while realtime speech and AI processing transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. Disclosing cross-border transfer is what the law requires.",
         link: null,
       },
       {
@@ -136,7 +136,7 @@ const t = {
     faq: [
       {
         q: "Where exactly is my call data stored?",
-        a: "Permanent storage is in the Gulf region (Doha — me-central1) on Google Cloud over private networking, and recordings are deleted automatically after 90 days.",
+        a: "Permanent storage is in the Gulf region (Doha) over private networking, and recordings are deleted automatically after 90 days.",
       },
       {
         q: "Is data processed inside Saudi Arabia?",

@@ -2,10 +2,17 @@ import type { Config } from "tailwindcss";
 
 /**
  * Saut Najdi design tokens — from the official brand guideline
- * (see ../website-research.md §1). Light theme only.
+ * (see ../website-research.md §1).
+ *
+ * The dark theme is opted into per-subtree, not per-visitor: `dark:` applies
+ * to anything inside an element carrying `data-theme="dark"`. That is what
+ * lets the homepage hero be dark while the rest of the page stays light
+ * during the evaluation — and, once the rollout lands, moving the attribute
+ * up to <html> turns the same utilities on site-wide with no rewrite.
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
+  darkMode: ["selector", '[data-theme="dark"]'],
   theme: {
     container: {
       center: true,
@@ -25,6 +32,19 @@ const config: Config = {
         navy: "#112046", // Soft Navy — deep emphasis
         canvas: "#F7F8FA", // Off-White — page background
         line: "#E5E7EB", // Silver Gray — borders, dividers
+
+        /**
+         * Dark-theme ground. Navy-leaning rather than neutral black, so the
+         * brand gradient still reads as the warm thing in the frame.
+         * `night-surface` is deliberately the same value the Cal booker card
+         * already uses (lib/bookerTheme.ts) — the two must not drift.
+         */
+        night: {
+          DEFAULT: "#080D1C", // page ground, the recessive layer
+          surface: "#0F1730", // raised: cards, chips, bubbles
+          hi: "#16203C", // hover / second raise
+          line: "#232C49", // hairline on dark
+        },
       },
       fontFamily: {
         sans: ["var(--font-thmanyah)", "system-ui", "sans-serif"],
@@ -62,9 +82,11 @@ const config: Config = {
         "fade-rise": "fade-rise 0.5s ease-out both",
       },
       boxShadow: {
-        card: "0 1px 2px rgba(13,19,38,0.04), 0 8px 24px -12px rgba(13,19,38,0.10)",
+        // Driven by --shadow-rgb so shadows go black on night instead of
+        // staying navy, where they read as a smudge. Light values unchanged.
+        card: "0 1px 2px rgb(var(--shadow-rgb) / 0.04), 0 8px 24px -12px rgb(var(--shadow-rgb) / 0.10)",
         "card-hover":
-          "0 2px 4px rgba(13,19,38,0.06), 0 16px 40px -12px rgba(13,19,38,0.16)",
+          "0 2px 4px rgb(var(--shadow-rgb) / 0.06), 0 16px 40px -12px rgb(var(--shadow-rgb) / 0.16)",
       },
     },
   },

@@ -48,12 +48,26 @@ export function Header({ locale }: { locale: Locale }) {
           className="hdr-logo"
           aria-label={locale === "ar" ? "صوت نجدي — الرئيسية" : "Saut Najdi — home"}
         >
+          {/* Two cuts, CSS-swapped on [data-over-dark]. The wordmark inside
+              the SVG is live <text> with a baked dark fill, so it cannot
+              follow currentColor and a filter would wreck the gradient mark.
+              Only one is ever displayed; the second carries no alt text so
+              screen readers hear the logo once. */}
           <Image
             src="/brand/logo-full.svg"
             alt={locale === "ar" ? "شعار صوت نجدي" : "Saut Najdi logo"}
             width={120}
             height={40}
             priority
+            className="logo-default"
+          />
+          <Image
+            src="/brand/logo-full-inverse.svg"
+            alt=""
+            aria-hidden
+            width={120}
+            height={40}
+            className="logo-inverse"
           />
         </Link>
 

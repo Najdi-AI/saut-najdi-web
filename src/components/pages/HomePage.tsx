@@ -207,15 +207,34 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-canvas">
-        <div className="container grid items-center gap-10 pb-6 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:pb-2">
+      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles
+          DARK THEME EVALUATION: `data-theme="dark"` scopes the night palette to
+          this section only, so the rest of the page stays light for comparison.
+          Every light class below is still here — delete the attribute and the
+          hero returns to exactly what it was. Rolling the theme out means
+          moving the attribute to <html> and giving the other sections the same
+          `dark:` treatment. */}
+      <section
+        data-theme="dark"
+        className="relative overflow-hidden bg-gradient-to-b from-white to-canvas text-ink dark:from-[#0C1326] dark:to-night dark:text-white"
+      >
+        {/* Brand aurora — a soft spectrum wash so the ground is not flat
+            black. Dark only; it would muddy the white hero. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden opacity-[0.30] dark:block"
+          style={{
+            background:
+              "radial-gradient(70% 55% at 18% 8%, rgba(46,196,230,0.22) 0%, transparent 60%), radial-gradient(60% 50% at 88% 22%, rgba(226,12,58,0.16) 0%, transparent 62%), radial-gradient(80% 60% at 55% 100%, rgba(111,63,164,0.20) 0%, transparent 65%)",
+          }}
+        />
+        <div className="container relative grid items-center gap-10 pb-6 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:pb-2">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
             <h1 className="max-w-3xl text-h2 sm:text-h1">
               {s.h1a}
               <span className="text-gradient">{s.h1b}</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">
+            <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70 dark:text-white/70">
               {s.positioning}
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">

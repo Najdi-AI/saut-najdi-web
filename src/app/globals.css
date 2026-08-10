@@ -87,12 +87,93 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Outline chip ring — the site's ONLY icon-container treatment: white
+/* ============================================================
+   DARK THEME
+   Opt-in per subtree via data-theme="dark" (see tailwind.config.ts).
+   The navbar block above is already driven entirely by these variables,
+   so redefining them is all it takes to flip the whole chrome — no
+   navbar rules are duplicated below, deliberately.
+   ============================================================ */
+[data-theme="dark"] {
+  --ink: #eef1f8;
+  --ink-2: #aab3c7;
+  --ink-3: #838da3;
+  --cyan-ink: #5fd8f2; /* the light-background cyan is unreadable on night */
+  --line-rgb: 255 255 255;
+  --scrim-rgb: 15 23 48; /* glass capsule ground */
+  --shadow-rgb: 0 0 0;
+  --surface: #0f1730;
+  --surface-hi: #16203c;
+  --e2: 0 4px 10px -2px rgb(0 0 0 / 0.5), 0 12px 28px -8px rgb(0 0 0 / 0.6);
+}
+
+/* Shared components, inverted. Kept here rather than as `dark:` utilities at
+   each call site so the rollout does not have to revisit every button. */
+[data-theme="dark"] .btn-primary {
+  @apply bg-white text-ink hover:bg-canvas;
+}
+[data-theme="dark"] .btn-secondary {
+  @apply border-white/20 bg-white/[0.06] text-white hover:border-brand-cyan hover:text-brand-cyan;
+}
+[data-theme="dark"] .card {
+  @apply border-night-line bg-night-surface;
+}
+
+/* The resting header sits ON the hero, so while that hero is dark the header
+   has to invert with it and then return to ink as it scrolls onto light
+   content. HeaderScroll flags exactly that window; the variables below are
+   the same ones the navbar block already reads, so nothing is duplicated. */
+.hdr[data-over-dark="true"] {
+  --ink: #ffffff;
+  --ink-2: #d3d9e7;
+  --ink-3: #9aa3b8;
+  --cyan-ink: #5fd8f2;
+  --line-rgb: 255 255 255;
+  --scrim-rgb: 15 23 48;
+  --shadow-rgb: 0 0 0;
+  --surface: #0f1730;
+  --surface-hi: #16203c;
+}
+
+/* The hero cut-out is transparent around the subject's head but fully opaque
+   across the desk, and the desk runs off the frame — on white those cuts are
+   invisible, on night they are two hard light edges (the desk's front lip at
+   ~88% height, and the left frame boundary).
+
+   Two gradients composited to an intersection: the vertical one sinks the
+   desk and the laptop BASE into the ground while stopping short of the lid,
+   which carries the logo and must stay crisp; the horizontal one softens both
+   side boundaries. Prefixed for Safari < 16.4 and its legacy composite
+   keyword. */
+[data-theme="dark"] .hero-photo {
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
+    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
+    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* The wordmark is live <text> with a fixed dark fill, so it cannot follow
+   currentColor — ship both cuts and swap. */
+.logo-inverse {
+  display: none;
+}
+.hdr[data-over-dark="true"] .logo-default {
+  display: none;
+}
+.hdr[data-over-dark="true"] .logo-inverse {
+  display: block;
+}
+
+/* Outline chip ring — the site's ONLY icon-container treatment: solid
    ground, spectrum border, stroke icon. Gradient FILLS on icons are
-   banned (owner rule, 2026-07-30). */
+   banned (owner rule, 2026-07-30). The ground follows the theme so the
+   chip reads as a hole punched in the surface, not a white sticker. */
 .ring-spectrum {
   border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box, var(--spectrum) border-box;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--spectrum) border-box;
 }
 
 .btn-spectrum {
@@ -543,6 +624,9 @@ a.mega-item:hover .mega-ico {
   border-radius: 999px;
   border: 1px solid var(--line-hi);
   background: transparent;
+  /* The bars are currentColor. Without this they inherit the body's ink and
+     stay dark when the header inverts over a dark hero. */
+  color: var(--ink);
   cursor: pointer;
 }
 @media (min-width: 1060px) {
@@ -556,6 +640,11 @@ a.mega-item:hover .mega-ico {
   padding: 14px var(--gutter) 26px;
   max-block-size: 78vh;
   overflow-y: auto;
+}
+/* Everything else in the sheet is already variable-driven; only the ground
+   was a literal. */
+.hdr[data-over-dark="true"] .mobile-nav {
+  background: var(--surface);
 }
 /* Group labels in the sheet are <p>, not <h3> — they are chrome, and a
    heading here would enter every page's outline ahead of the real content. */

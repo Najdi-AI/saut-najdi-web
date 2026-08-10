@@ -16,9 +16,15 @@ import { LangSwitch } from "./nav/LangSwitch";
  * that contracts into a floating glass capsule on scroll, with a reading
  * progress bar, two mega menus, and the mobile sheet.
  */
+/**
+ * The four top-row slots. «القطاعات»/"Industries" rather than
+ * «الحلول»/"Solutions": that menu holds industry pages and only industry
+ * pages, so the label should say so. "Security & data" matches the page's
+ * own h1 and the footer link, which previously disagreed with each other.
+ */
 const labels = {
-  ar: { product: "المنتج", solutions: "الحلول", how: "كيف يشتغل", security: "الأمان والبيانات" },
-  en: { product: "Product", solutions: "Solutions", how: "How it works", security: "Security" },
+  ar: { product: "المنتج", solutions: "القطاعات", how: "كيف يشتغل", security: "الأمان والبيانات" },
+  en: { product: "Product", solutions: "Industries", how: "How it works", security: "Security & data" },
 } as const;
 
 export function Header({ locale }: { locale: Locale }) {

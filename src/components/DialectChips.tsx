@@ -1,15 +1,16 @@
 import type { Locale } from "@/lib/i18n";
 
 /**
- * Hero dialect chips (blueprint §6.1): the shipped catalog and nothing
- * else (§1 honesty rule). No open «+ أي لهجة» promise — /product/voice-agent
- * explicitly retracts it — and no «العربية» chip beside نجدي/حجازي/شامي,
- * which are themselves Arabic. Every chip is a shipped voice, so they all
- * carry the same style; there is no odd-one-out chip to accent.
+ * Hero language chips (owner decision 2026-08-10): three broad labels
+ * rather than a dialect list. Naming individual dialects in the hero
+ * invited both an overclaim («خليجي», which is not in the catalog) and a
+ * category error (listing «العربية» beside dialects that are themselves
+ * Arabic). The specific shipped voices are enumerated where a buyer can
+ * read them in context, on /product/voice-agent.
  */
 const chips = {
-  ar: ["نجدي", "حجازي", "شامي", "English"],
-  en: ["Najdi", "Hijazi", "Levantine", "English"],
+  ar: ["سعودي", "عربي", "إنجليزي"],
+  en: ["Saudi", "Arabic", "English"],
 } as const;
 
 export function DialectChips({

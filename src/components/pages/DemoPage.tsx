@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { CAL_LINK_DEMO, CAL_LINK_QUICK } from "@/lib/site";
+import { BOOKER_SURFACE } from "@/lib/bookerTheme";
 import { CalInline } from "@/components/CalInline";
 import { CalButton } from "@/components/CalButton";
 import { Waveform } from "@/components/Waveform";
@@ -11,30 +12,50 @@ import { AnimatedIcon } from "@/components/icons";
 import type { FaqItem } from "@/lib/schema";
 
 /**
- * /demo (blueprint §2.4): server-rendered copy on top, the inline
- * Cal.com embed below. Pricing is sized here — no pricing page (§6.5).
+ * /demo (blueprint §2.4): server-rendered copy on top, the booking desk
+ * below. Pricing is sized here — no pricing page (§6.5).
  *
- * Everything under the embed exists because CalInline renders only a
- * loading <p> on the server: without it this — the site's only conversion
- * page — would ship ~80 indexable words. The four question-shaped H2s
- * answer what a visitor hesitates over before booking (price, who to
- * bring, why they can't just call in), and the FAQ below feeds the
- * page's FAQPage node via the `demoFaq` export.
+ * THE BOOKING DESK is one dark card holding three columns: our panel, then
+ * Cal's calendar and slot columns. Cal's own event panel is switched off
+ * (`hideEventTypeDetails`, see lib/cal.ts) and ours takes its place, because
+ * the upstream event is titled "demo" with an empty description and a single
+ * Cal description cannot serve both locales. Ours is bilingual, RTL-correct,
+ * and — unlike anything inside the iframe — server-rendered.
+ *
+ * Everything under the desk exists for the same reason: CalInline renders
+ * only a loading <p> on the server, so without it this — the site's only
+ * conversion page — would ship ~80 indexable words. The four question-shaped
+ * H2s answer what a visitor hesitates over before booking (price, who to
+ * bring, why they can't just call in), and the FAQ below feeds the page's
+ * FAQPage node via the `demoFaq` export.
  */
 
 const t = {
   ar: {
-    h1: "احجز عرضاً تعريفياً",
+    h1: "احجز",
+    h1Tail: "عرضاً تعريفياً",
     lead: "عرض 30 دقيقة: نوريك المنصة حية، تسمع الوكيل بلهجتك، ونجاوب أسئلتك.",
     pricingNote: "وفي نفس الجلسة نعطيك عرض سعر يناسب حجم مكالماتك.",
-    expect: {
-      heading: "وش تتوقع في العرض؟",
+    panel: {
+      org: "صوت نجدي",
+      title: "عرض تعريفي",
+      // One line each at the panel's 320px. Longer bullets push the card
+      // taller than the calendar beside it and leave dead space under it.
       items: [
-        "تسمع الوكيل يرد بلهجة عملائك — حي، مو تسجيل",
-        "تشوف موظفك يستلم المكالمة بكامل سياقها",
+        "تسمع الوكيل بلهجة عملائك — حي",
+        "تشوف موظفك يستلم المكالمة بسياقها",
         "نختار القالب اللي يناسب نشاطك",
-        "نجاوب أسئلة الأمان والبيانات وPDPL",
+        "نجاوب أسئلة البيانات وPDPL",
         "تطلع بخطة تجهيز واضحة",
+      ],
+      // Mirrors Cal's own meta rows, which hideEventTypeDetails removes.
+      // «بتوقيتك المحلي» rather than a named zone: the booker reads the
+      // visitor's browser timezone, so naming Riyadh would be wrong for
+      // anyone outside it — and without Cal's picker they cannot correct us.
+      meta: [
+        { icon: "clock", label: "30 دقيقة" },
+        { icon: "people", label: "اجتماع فيديو — الرابط يوصلك بالإيميل" },
+        { icon: "globe", label: "الأوقات معروضة بتوقيتك المحلي" },
       ],
     },
     quick: "ما عندك 30 دقيقة؟ احجز مكالمة سريعة — 15 دقيقة",
@@ -83,17 +104,24 @@ const t = {
     ] as FaqItem[],
   },
   en: {
-    h1: "Book an intro demo",
+    h1: "Book",
+    h1Tail: "an intro demo",
     lead: "30 minutes: the platform live, the agent speaking your customers' dialect, and your questions answered.",
     pricingNote: "You leave the same session with a price fitted to your call volume.",
-    expect: {
-      heading: "What to expect in the demo",
+    panel: {
+      org: "Saut Najdi",
+      title: "Intro demo",
       items: [
-        "Hear the agent answer in your customers' dialect — live, not a recording",
-        "Watch an employee take over a call with full context",
-        "Pick the ready-made template that fits your business",
-        "Get your security, data and PDPL questions answered",
-        "Leave with a step-by-step setup plan",
+        "Hear the agent in your customers' dialect — live",
+        "Watch an employee take over mid-call",
+        "Pick the template that fits your business",
+        "Get your data and PDPL questions answered",
+        "Leave with a setup plan",
+      ],
+      meta: [
+        { icon: "clock", label: "30 minutes" },
+        { icon: "people", label: "Video call — link sent by email" },
+        { icon: "globe", label: "Times shown in your local timezone" },
       ],
     },
     quick: "Short on time? Book a quick 15-minute call",
@@ -149,34 +177,73 @@ export function DemoPage({ locale }: { locale: Locale }) {
     <>
       <section className="bg-gradient-to-b from-white to-canvas">
         <div className="container py-12 text-center">
-          <h1 className="text-h1">{s.h1}</h1>
+          <h1 className="text-h1">
+            {s.h1} <span className="text-ink/40">{s.h1Tail}</span>
+          </h1>
           <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.lead}</p>
           <p className="mx-auto mt-2 max-w-2xl text-body-lg leading-relaxed text-brand-purple">{s.pricingNote}</p>
           <Waveform bars={36} maxHeight={30} className="mt-6 opacity-70" />
         </div>
       </section>
 
-      <section className="container pb-16">
-        <div className="mx-auto grid max-w-5xl items-start gap-8 lg:grid-cols-[1fr_1.4fr]">
-          <aside className="card">
-            <h2 className="text-h4">{s.expect.heading}</h2>
-            <ul className="mt-4 space-y-3">
-              {s.expect.items.map((item, i) => (
-                <li key={item} className="flex items-start gap-3 text-body-lg leading-relaxed text-ink/75">
-                  <span className="mt-0.5 shrink-0 text-brand-blue">
-                    <AnimatedIcon name="check" size={18} delay={i * 0.18} strokeWidth={2.2} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 border-t border-line pt-5">
-              <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="link">
-                {s.quick}
-              </CalButton>
-            </div>
-          </aside>
-          <CalInline calLink={CAL_LINK_DEMO} locale={locale} loadingLabel={s.loading} />
+      {/* The booking desk. `BOOKER_SURFACE` also paints the booker inside the
+          iframe (lib/bookerTheme.ts) — pinned to one token so the seam
+          between our panel and Cal's columns disappears. */}
+      <section className="bg-ink py-12 sm:py-14">
+        <div className="container">
+          <div
+            className="mx-auto grid max-w-[1120px] overflow-hidden rounded-3xl border border-white/10 shadow-[0_30px_90px_-40px_rgba(0,0,0,0.9)] lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
+            style={{ backgroundColor: BOOKER_SURFACE }}
+          >
+            <aside className="border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-e">
+              <div className="flex items-center gap-3">
+                <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-purple">
+                  <AnimatedIcon name="wave" size={22} />
+                </span>
+                <span className="text-body font-medium text-white/55">{s.panel.org}</span>
+              </div>
+
+              <h2 className="mt-5 text-h3 text-white">{s.panel.title}</h2>
+
+              <ul className="mt-5 space-y-3">
+                {s.panel.items.map((item, i) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-body leading-relaxed text-white/70"
+                  >
+                    <span className="mt-0.5 shrink-0 text-brand-cyan">
+                      <AnimatedIcon name="check" size={16} delay={i * 0.18} strokeWidth={2.4} />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="mt-6 space-y-3 border-t border-white/10 pt-5">
+                {s.panel.meta.map((m) => (
+                  <li key={m.label} className="flex items-center gap-3 text-body text-white/55">
+                    <span className="shrink-0 text-white/35">
+                      <AnimatedIcon name={m.icon} size={16} />
+                    </span>
+                    {m.label}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 border-t border-white/10 pt-5">
+                <CalButton
+                  calLink={CAL_LINK_QUICK}
+                  locale={locale}
+                  variant="link"
+                  className="!text-body !text-brand-cyan"
+                >
+                  {s.quick}
+                </CalButton>
+              </div>
+            </aside>
+
+            <CalInline calLink={CAL_LINK_DEMO} locale={locale} loadingLabel={s.loading} />
+          </div>
         </div>
       </section>
 

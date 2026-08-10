@@ -56,9 +56,16 @@ export const PDPL_LINE_EN =
 
 /** The §1 canonical positioning sentence — identical every time it appears. */
 export const POSITIONING_AR =
-  "صوت نجدي وكيل صوتي سعودي بالذكاء الاصطناعي يرد على عملائك باللهجة اللي يفهمونها — نجدي، حجازي، خليجي، بالعربية أو الإنجليزية — وموظفك البشري يستلم المكالمة بكامل سياقها في أي لحظة.";
+  "صوت نجدي وكيل صوتي سعودي بالذكاء الاصطناعي يرد على عملائك باللهجة اللي يفهمونها — نجدي، حجازي، شامي، بالعربية أو الإنجليزية — وموظفك البشري يستلم المكالمة بكامل سياقها في أي لحظة.";
 export const POSITIONING_EN =
-  "Saut Najdi is a Saudi AI voice agent that answers your customers in the dialect they understand — Najdi, Hijazi, Khaleeji, in Arabic or English — with your human employee able to take over any call with full context.";
+  "Saut Najdi is a Saudi AI voice agent that answers your customers in the dialect they understand — Najdi, Hijazi, Levantine, in Arabic or English — with your human employee able to take over any call with full context.";
+
+/**
+ * Google Tag Manager container. Lives here so both root layouts read one
+ * value; set NEXT_PUBLIC_GTM_ID to override (or to "" to switch GTM off
+ * entirely, which the component treats as "render nothing").
+ */
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-KCWP33MC";
 
 export const TAGLINE_EN = "AI Voice. Human Care. Najdi by Heart.";
 export const TAGLINE_AR = "نحجي. نفهم. ننجز";

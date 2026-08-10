@@ -26,7 +26,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. ما نجمعه ولماذا",
           ps: [
-            "لزوّار الموقع: لا يجمع هذا الموقع بيانات تعريفية عن زواره. تُستخدم أداة قياس بلا ملفات تعريف ارتباط (Vercel Analytics) لإحصاءات مجمّعة عن الصفحات — دون معرّفات شخصية، ولذلك لا يعرض الموقع لافتة موافقة على ملفات تعريف الارتباط.",
+            "لزوّار الموقع: تُستخدم أداة قياس بلا ملفات تعريف ارتباط (Vercel Analytics) لإحصاءات مجمّعة عن الصفحات دون معرّفات شخصية، ويُستخدم Google Tag Manager لإدارة وسوم القياس. الوسوم المفعّلة حالياً لا تنشئ ملف تعريف شخصي عنك؛ وإذا فُعّلت وسوم تتبّع تستخدم ملفات تعريف الارتباط، سنطلب موافقتك أولاً ونحدّث هذه السياسة.",
             "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر خدمة Cal.com — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، ورسالتك إن أضفتها، لغرض وحيد هو التواصل معك وتجهيز العرض.",
             "للمنشآت المشتركة وعملائها: تعالج المنصة محتوى المكالمات والمحادثات النصية (الصوت، والنص، والملخصات)، وبيانات العملاء التي تُدخلها المنشأة (الأسماء، أرقام التواصل، التفضيلات، الحجوزات)، وسجلات الاستخدام — لغرض تشغيل خدمة الرد الآلي والتصعيد البشري التي تعاقدت عليها المنشأة.",
           ],
@@ -45,6 +45,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
             "• خدمة التعرّف الضوئي على مستندات قاعدة المعرفة — عبر نقطة معالجة أوروبية.",
             "• Cal.com لحجوزات العرض التعريفي — معالج خارج المملكة.",
             "• Vercel لاستضافة هذا الموقع وقياس زياراته (بلا ملفات تعريف ارتباط).",
+            "• Google Tag Manager لإدارة وسوم القياس في هذا الموقع — معالج خارج المملكة.",
             "• نظام إدارة العلاقات الذي تصل إليه بيانات الحجوزات — يُسمّى في هذه السياسة فور اعتماده.",
           ],
         },
@@ -145,7 +146,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "1. What we collect and why",
           ps: [
-            "Website visitors: this site does not collect identifying data about its visitors. A cookieless measurement tool (Vercel Analytics) provides aggregate page statistics without personal identifiers — which is why this site shows no cookie banner.",
+            "Website visitors: a cookieless measurement tool (Vercel Analytics) provides aggregate page statistics without personal identifiers, and Google Tag Manager is used to manage measurement tags. The tags active today do not build a personal profile of you; if tracking tags that rely on cookies are enabled, we will ask for your consent first and update this policy.",
             "Demo bookings: when you book a demo we collect — through Cal.com — your name, email, mobile number, business name, sector, approximate call volume, and any message you include, for the sole purpose of contacting you and preparing the demo.",
             "Subscribed businesses and their customers: the platform processes call and text-conversation content (audio, transcripts, summaries), the customer records a business enters (names, contact numbers, preferences, bookings), and usage logs — to operate the AI answering and human-handoff service the business contracted for.",
           ],
@@ -164,6 +165,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
             "• The OCR service for knowledge-base documents — via a European processing endpoint.",
             "• Cal.com for demo bookings — a processor outside Saudi Arabia.",
             "• Vercel for hosting this website and its cookieless analytics.",
+            "• Google Tag Manager for managing this site's measurement tags — a processor outside Saudi Arabia.",
             "• The CRM system receiving booking data — to be named in this policy once selected.",
           ],
         },

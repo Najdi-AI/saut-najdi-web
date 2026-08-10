@@ -151,17 +151,15 @@ export async function mountCalInline(
 ): Promise<boolean> {
   try {
     /**
-     * Await the script BEFORE touching the namespace. The official snippet
-     * queues `init`/`ui`/`inline` on the stub and lets embed.js adopt the
-     * queue on arrival, and that path proved racy here: on a cold load the
-     * booker came up blank at a stuck height and only a reload fixed it.
-     * Running against the loaded API instead — which is what the previous
-     * light embed did, reliably — makes every call execute immediately and
-     * in order. `window.Cal` stays our stub function even after embed.js
-     * loads (it adopts the queues in place rather than replacing the
-     * global), so the namespace branch below still works.
+     * Queue `init`/`ui`/`inline` on the stub and await the script after, as
+     * the official snippet does — embed.js adopts the queues in place rather
+     * than replacing `window.Cal`, so these calls run in order once it
+     * lands. Awaiting the script FIRST and calling against the loaded API
+     * was tried and reverted: it made no difference to the intermittent
+     * cold-load stall it was meant to fix, and it delays the iframe by a
+     * round trip.
      */
-    await bootCal();
+    const booted = bootCal();
     const Cal = window.Cal!;
     Cal("init", BOOKER_NS, { origin: CAL_ORIGIN });
     const ns = Cal.ns?.[BOOKER_NS];
@@ -200,6 +198,7 @@ export async function mountCalInline(
       ns("on", { action: "bookingSuccessful", callback: onBooked(thankYouPath) });
     }
     activeCalLink = calLink;
+    await booted;
     return true;
   } catch {
     return false;

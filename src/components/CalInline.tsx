@@ -43,9 +43,13 @@ export function CalInline({
    * Retire the loading line the moment Cal inserts its <cal-inline> element.
    * Cal APPENDS to the host rather than replacing its children, so without
    * this the label sits above the finished calendar forever — which it has
-   * been doing in production. Watching for the element (rather than
-   * resolving off the script promise) means the label survives exactly as
-   * long as there is nothing else in the box.
+   * been doing in production.
+   *
+   * The trigger is the element landing, deliberately. Cal's own readiness
+   * signals are not trustworthy here: the booker renders and takes bookings
+   * on loads where `<cal-inline loading>` never reaches "done" and the iframe
+   * keeps its placeholder `height:100%`. Gating on those would hide a working
+   * calendar behind an error line.
    */
   useEffect(() => {
     const host = document.getElementById(id);
@@ -56,37 +60,41 @@ export function CalInline({
     }
     const observer = new MutationObserver(() => {
       if (host.querySelector("cal-inline")) {
-        setMounted(true);
         observer.disconnect();
+        setMounted(true);
       }
     });
     observer.observe(host, { childList: true });
     return () => observer.disconnect();
   }, []);
 
-  // The min-height only holds the card open until Cal reports its own size.
-  // Set it above the booker's settled height and the card keeps a strip of
-  // dead space under the calendar forever.
+  // `relative` + an absolutely-placed label: it shares the box with Cal's own
+  // skeleton rather than pushing it down, so retiring it shifts nothing. The
+  // min-height only holds the card open until Cal reports its own size — set
+  // it above the booker's settled height and the card keeps a strip of dead
+  // space under the calendar forever.
   return (
-    <div id={id} dir="ltr" className="min-h-[540px] w-full overflow-hidden">
-      {mounted ? null : failed ? (
+    <div id={id} dir="ltr" className="relative min-h-[540px] w-full overflow-hidden">
+      {mounted ? null : (
         <p
-          className="p-8 text-center text-body-lg"
+          className="absolute inset-x-0 top-0 z-10 p-8 text-center text-body"
           dir={locale === "ar" ? "rtl" : "ltr"}
         >
-          <a
-            href={`https://cal.com/${calLink}`}
-            target="_blank"
-            rel="noopener"
-            className="font-medium text-brand-cyan underline-offset-4 hover:underline"
-          >
-            {locale === "ar"
-              ? "التقويم ما قدر يحمّل هنا — افتح صفحة الحجز مباشرة"
-              : "The calendar couldn't load here — open the booking page directly"}
-          </a>
+          {failed ? (
+            <a
+              href={`https://cal.com/${calLink}`}
+              target="_blank"
+              rel="noopener"
+              className="font-medium text-brand-cyan underline-offset-4 hover:underline"
+            >
+              {locale === "ar"
+                ? "التقويم ما قدر يحمّل هنا — افتح صفحة الحجز مباشرة"
+                : "The calendar couldn't load here — open the booking page directly"}
+            </a>
+          ) : (
+            <span className="text-white/45">{loadingLabel}</span>
+          )}
         </p>
-      ) : (
-        <p className="p-8 text-center text-body text-white/45">{loadingLabel}</p>
       )}
     </div>
   );

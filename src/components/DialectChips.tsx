@@ -13,6 +13,18 @@ const chips = {
   en: ["Saudi", "Arabic", "English"],
 } as const;
 
+/**
+ * The clone line. «دقيقة وحدة» rather than a seconds figure: the platform's
+ * upload gate is MIN_SAMPLE_DURATION_SEC = 60 (voices-clone.ts), enforced
+ * both server-side and in the wizard, and its own comment records that the
+ * floor was RAISED from 30 for abuse defence. Promising 30 seconds here
+ * would send customers into a rejection they cannot argue with.
+ */
+const cloneLine = {
+  ar: "وتبي صوتك أنت؟ نستنسخه من عيّنة دقيقة وحدة — بموافقة صاحب الصوت.",
+  en: "Want your own voice? We clone it from a one-minute sample, with the owner's consent.",
+} as const;
+
 export function DialectChips({
   locale,
   className = "justify-center",
@@ -21,15 +33,20 @@ export function DialectChips({
   className?: string;
 }) {
   return (
-    <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
-      {chips[locale].map((chip) => (
-        <li
-          key={chip}
-          className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
-        >
-          {chip}
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col gap-2">
+      <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
+        {chips[locale].map((chip) => (
+          <li
+            key={chip}
+            className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
+          >
+            {chip}
+          </li>
+        ))}
+      </ul>
+      <p className={`text-body-sm text-ink/60 ${className.includes("center") ? "text-center" : ""}`}>
+        {cloneLine[locale]}
+      </p>
+    </div>
   );
 }

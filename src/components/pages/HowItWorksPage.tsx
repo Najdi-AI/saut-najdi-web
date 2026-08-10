@@ -10,92 +10,96 @@ import { TrustStrip } from "@/components/TrustStrip";
 import { JourneySteps } from "@/components/JourneySteps";
 
 /**
- * /how-it-works (blueprint §6.6): the long-form explainer told as one
- * call's journey, in dialect — «من أول رنة… إلى آخر سطر في السجل».
+ * /how-it-works (blueprint §6.6): one call's journey told in dialect —
+ * «من أول رنة… إلى آخر سطر في السجل».
+ *
+ * Copy pass: a brief per stage, not an explanation of it. Each step is one
+ * or two short sentences; the seven-step shape is fixed by JourneySteps'
+ * icon list and by the HowTo graph that consumes `journeySteps` below.
  */
 
 const t = {
   ar: {
     h1: "كيف يشتغل صوت نجدي؟ رحلة مكالمة وحدة — من أول رنة إلى آخر سطر في السجل",
     intro:
-      "أسهل طريقة تفهم فيها المنصة إنك تمشي مع مكالمة وحدة من البداية للنهاية. هذا اللي يصير بالضبط من لحظة ما يدق عميلك، إلى أن تلقى كل شي مسجل ومكتوب وملخص في لوحتك.",
+      "امشِ مع مكالمة وحدة من أولها لآخرها — هذا اللي يصير بالضبط.",
     cta: "احجز عرضاً",
     answerH2: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
     capsule:
-      "باختصار: مكالمة عميلك تتحول إلى نص لحظياً، والذكاء الاصطناعي يفهم قصده من كلامه ومن قواعد نشاطك وأسعارك وأوقاتك، ويرد عليه بصوت طبيعي بنفس لهجته، وينفذ الطلب — يحجز أو يسجل أو يجاوب — ويحوّل المكالمة لموظفك بكامل سياقها إذا احتاج الموضوع إنسان. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك. وتحت، الخطوات السبع بالتفصيل.",
+      "كلام عميلك يصير نص لحظياً، والوكيل يفهم قصده ويرد بصوت طبيعي بلهجته وينفذ الطلب. وإذا احتاج الموضوع إنسان، موظفك يستلم بكامل السياق. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك.",
     steps: [
       {
         title: "الرنة الأولى — الوكيل يرد",
-        body: "عميلك يتصل على رقمك المخصص، بأي وقت — بعد الدوام، يوم الجمعة، وقت الذروة. ما في انتظار وما في «اتصل بنا لاحقاً». الوكيل يرد من أول رنة بصوت طبيعي وباللهجة اللي اخترتها لنشاطك.",
+        body: "بأي وقت: بعد الدوام، يوم الجمعة، وقت الذروة. ما في انتظار.",
       },
       {
-        title: "الكلام يصير نص — لحظياً",
-        body: "وهو يتكلم، كلام عميلك يتحول إلى نص لحظة بلحظة. والنظام مبني على اللهجات السعودية من أساسه: يفهم «أبغى أحجز بكرة» و«وش أسعاركم» زي ما تنقال فعلاً — مو عربية الكتب المدرسية.",
+        title: "الكلام يصير نص لحظياً",
+        body: "مبني على اللهجات السعودية — «أبغى أحجز بكرة» يفهمها زي ما تنقال.",
       },
       {
         title: "الوكيل يفهم القصد",
-        body: "الذكاء الاصطناعي يفهم وش يبغى العميل من كلامه: حجز؟ سؤال عن سعر؟ تعديل موعد؟ ويستخدم معلومات نشاطك — أسعارك، أوقاتك، سياساتك — وتاريخ العميل معك إذا اتصل قبل، عشان يرد رد صحيح مو رد عام.",
+        body: "حجز؟ سعر؟ تعديل موعد؟ يرد من أسعارك وأوقاتك وتاريخ العميل معك.",
       },
       {
         title: "يرد بلهجة عميلك",
-        body: "الرد يطلع صوت طبيعي وبنفس اللهجة. وإذا قاطعه العميل بنص الجملة — زي ما نسوي كلنا — الوكيل يسكت على طول ويسمع. وإذا قال له رقم حجز، يقرأه رقم رقم عشان يقدر يكتبه.",
+        body: "صوت طبيعي. وإذا قاطعه العميل يسكت ويسمع، ويقرأ رقم الحجز رقم رقم.",
       },
       {
         title: "ينفذ — مو بس يتكلم",
-        body: "الوكيل يقدر يسوي أشياء حقيقية أثناء المكالمة: يتأكد من المواعيد الفاضية ويحجز، يسجل تفاصيل الطلب، يحفظ تفضيلات العميل عشان المرة الجاية، وإذا كان الاتصال برا الدوام يسجل طلب اتصال ويوعد العميل إن أحد يرجع له.",
+        body: "يتحقق من الفاضي ويحجز، يسجل تفاصيل الطلب، ويسجل طلب اتصال برا الدوام.",
       },
       {
         title: "وإذا احتاج الموضوع إنسان؟ موظفك يستلم",
-        body: "شكوى، سؤال حساس، عميل يبغى يكلم إنسان — المكالمة تروح لموظفك فوراً، ومعها كل شي: النص الكامل، الملخص، وتاريخ العميل. والعميل ما يعيد كلمة وحدة. فريقك بعد يقدر يتابع المكالمات الحية من اللوحة ويستلم أي مكالمة بنفسه.",
+        body: "المكالمة تروح لموظفك ومعها النص والملخص وتاريخ العميل، والعميل ما يعيد كلمة. وفريقك يتابع المكالمات الحية ويستلمها من اللوحة.",
       },
       {
         title: "كل شي في لوحتك",
-        body: "بعد ما تسكر المكالمة، تلقاها كاملة في لوحة التحكم: التسجيل، النص، ملخص عربي واضح — ليش اتصل، وش صار، ووش باقي. وكل مكالمة تنضاف لتاريخ العميل، عشان المرة الجاية يكون السياق جاهز.",
+        body: "التسجيل والنص وملخص عربي: ليش اتصل ووش صار. مع أرقام نشاطك محسوبة من مكالماتك.",
       },
     ],
     outro:
-      "هذي الرحلة كلها تصير في مكالمة وحدة عادية. والأهم: أنت اللي تحدد القواعد — متى يحجز الوكيل بنفسه، ومتى يحوّل، ومين من موظفينك يستلم.",
+      "الرحلة كلها في مكالمة وحدة، وأنت اللي تحدد القواعد: متى يحجز الوكيل، ومتى يحوّل، ومين يستلم. ومن نفس اللوحة يبدأ فريقك مكالمة صادرة — يختار العميل والوكيل، والوكيل يمسك الحوار.",
   },
   en: {
     h1: "How Saut Najdi works: one call's journey — from the first ring to the last line in the log",
     intro:
-      "The easiest way to understand the platform is to walk through a single call from start to finish. This is exactly what happens from the moment your customer dials, to the moment everything sits recorded, transcribed and summarised in your dashboard.",
+      "Walk through a single call end to end — this is exactly what happens.",
     cta: "Book a demo",
     answerH2: "How does AI call answering actually work?",
     capsule:
-      "The short version: your customer's speech becomes text in real time, the AI works out what they want from their words and from your business rules, prices and hours, replies in a natural voice in the same dialect, and acts on the request — booking, recording or answering — then hands the call to your employee in full context if the matter needs a person. Everything ends up recorded, transcribed and summarised in your dashboard. Below, the seven steps in detail.",
+      "Your customer's speech becomes text in real time, the agent works out the intent, replies in a natural voice in the same dialect, and acts on the request. If the matter needs a person, your employee takes over in full context. Everything ends up recorded, transcribed and summarised in your dashboard.",
     steps: [
       {
         title: "The first ring — the agent answers",
-        body: "Your customer calls your dedicated number, any time — after hours, on Friday, at peak time. No hold queue, no “call back later.” The agent answers on the first ring with a natural voice, in the dialect you chose for your business.",
+        body: "Any hour: after close, on a Friday, at peak. No hold queue.",
       },
       {
-        title: "Speech becomes text — in real time",
-        body: "As they speak, your customer's words turn into text moment by moment. The system is built on Saudi dialects from the ground up: it understands how people actually talk — not textbook Arabic.",
+        title: "Speech becomes text, in real time",
+        body: "Built on Saudi dialects — it understands how people actually talk, not textbook Arabic.",
       },
       {
-        title: "The agent understands the intent",
-        body: "The AI works out what the customer wants: a booking? a price question? a rescheduled appointment? It uses your business's information — prices, hours, policies — and the caller's history with you if they've called before, so the answer is specific, not generic.",
+        title: "The agent works out the intent",
+        body: "A booking? A price? A reschedule? It answers from your prices, hours and the caller's history with you.",
       },
       {
         title: "It replies in your customer's dialect",
-        body: "The reply comes out as natural speech in the same dialect. If the customer interrupts mid-sentence — the way we all do — the agent stops instantly and listens. And when it gives a booking code, it reads it digit by digit so it can actually be written down.",
+        body: "Natural speech. Interrupt it and it stops and listens, and it reads booking codes digit by digit.",
       },
       {
         title: "It acts — not just talks",
-        body: "The agent does real things during the call: checks available slots and books them, records order details, remembers the customer's preferences for next time, and if you're closed, it logs a callback request and promises the customer someone will get back to them.",
+        body: "Checks availability and books, records order details, and logs a callback request when you're closed.",
       },
       {
         title: "And when it needs a human? Your employee takes over",
-        body: "A complaint, a sensitive question, a customer who wants a person — the call goes to your employee immediately, carrying everything: the full transcript, the summary, and the customer's history. The customer never repeats a word. Your team can also watch live calls from the dashboard and take any call over themselves.",
+        body: "The call arrives with the transcript, summary and customer history, so the caller never repeats a word. Your team can also watch live calls and take one over.",
       },
       {
         title: "Everything lands in your dashboard",
-        body: "After the call ends, you'll find it complete in the dashboard: the recording, the transcript, a clear summary — why they called, what happened, what's still open. Every call joins the customer's history, so next time the context is already there.",
+        body: "Recording, transcript and a clear summary of what happened — plus your own activity numbers, worked out from your calls.",
       },
     ],
     outro:
-      "That whole journey happens inside one ordinary call. And most importantly: you set the rules — when the agent books on its own, when it hands over, and which of your employees takes the call.",
+      "That whole journey happens inside one call, and you set the rules: when the agent books on its own, when it hands over, and who takes it. From the same dashboard your team can also place an outbound call — pick the customer and the agent, and the agent holds the conversation.",
   },
 } as const;
 

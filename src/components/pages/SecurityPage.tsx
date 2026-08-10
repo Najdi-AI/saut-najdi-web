@@ -10,62 +10,51 @@ import type { FaqItem } from "@/lib/schema";
 
 // One icon per section, positional — keep this array the same length as
 // `sections` or a new card renders with an undefined icon name.
-const sectionIcons: IconName[] = ["shield", "database", "mic", "lock", "globe", "database", "lock", "badge"];
+const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", "badge"];
 
 /**
  * /security (blueprint §6.4) — PDPL-led, precise فصحى (the §3 tone
  * exception). Precision is the pitch: exact facts, no vague claims,
- * never "everything inside Saudi Arabia" (§2.2).
+ * never "everything inside Saudi Arabia" (§2.2). Every section heading is a
+ * question with its answer directly underneath, kept short — the disclosure
+ * stays complete, the prose around it does not.
  */
 
 const t = {
   ar: {
     h1: "الأمان والبيانات",
     lead: PDPL_LINE_AR,
-    intro:
-      "نكتب هذه الصفحة بدقة متعمدة، لأن الدقة في الإفصاح هي جوهر الامتثال. هنا تجد أين تُخزَّن بياناتك، وأين تُعالَج، وكيف يُتحكَّم في الوصول إليها — بالتفصيل الذي يطلبه مسؤول الامتثال قبل التوقيع.",
+    intro: "بدقة متعمدة: أين تُخزَّن بياناتك، وأين تُعالَج، ومن يصل إليها.",
     sections: [
       {
-        title: "التوافق مع نظام حماية البيانات الشخصية (PDPL)",
-        body: "صُمِّمت المنصة بما يتوافق مع مبادئ النظام السعودي لحماية البيانات الشخصية: مشروعية الغرض وتحديده، وتقليل البيانات إلى ما تحتاجه الخدمة فعلاً، وحدود واضحة للاحتفاظ، وحقوق أصحاب البيانات في الاطلاع والتصحيح والحذف، والشفافية الكاملة في الإفصاح عن أماكن المعالجة — وهو ما تقرؤه في هذه الصفحة وفي سياسة الخصوصية.",
+        title: "هل المنصة متوافقة مع نظام حماية البيانات الشخصية (PDPL)؟",
+        body: "صُمِّمت وفق مبادئه: غرض محدد، وتقليل للبيانات، وحدود للاحتفاظ، وحقوق الاطلاع والتصحيح والحذف، وإفصاح كامل عن أماكن المعالجة.",
         // P1-15(d): the page's only upward links — from the fact each one
         // answers, in prose, not as a "related links" block.
         link: {
-          lead: "وتجد ما يسأل عنه أصحاب الأنشطة عادةً في ",
+          lead: "والتفاصيل التي يسأل عنها أصحاب الأنشطة في ",
           text: "الأسئلة الشائعة عن البيانات والامتثال",
           path: "faq",
         },
       },
       {
-        title: "أين تُخزَّن بياناتك",
-        body: "التخزين الدائم لبيانات المنصة يتم على قواعد بيانات Cloud SQL PostgreSQL في منطقة الخليج (الدوحة — me-central1) على Google Cloud، عبر شبكة خاصة (Private IP) فقط، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
+        title: "أين تُخزَّن بياناتك؟",
+        body: "التخزين الدائم على Cloud SQL PostgreSQL في منطقة الخليج (الدوحة — me-central1) على Google Cloud، عبر شبكة خاصة فقط، مع نسخ احتياطية واستعادة لنقطة زمنية محددة.",
         link: null,
       },
       {
-        title: "تسجيلات المكالمات",
-        body: "تُخزَّن تسجيلات المكالمات في المنطقة نفسها، وتُحذَف تلقائياً بعد 90 يوماً — وهذا سلوك مقصود يجسّد مبدأ حدود الاحتفاظ في النظام. الوصول إلى أي تسجيل يتم حصراً عبر روابط موقعة مؤقتة قصيرة الصلاحية.",
+        title: "هل تسجيل المكالمات متوافق مع نظام حماية البيانات الشخصية؟",
+        body: "التسجيلات في المنطقة نفسها، وتُحذَف تلقائياً بعد 90 يوماً تطبيقاً لحدود الاحتفاظ، ولا تُفتح إلا عبر روابط موقَّعة قصيرة الصلاحية، ويُدوَّن كل اطلاع في سجل التدقيق. ويبقى إشعار المتصل والأساس النظامي مسؤولية المنشأة المشغِّلة، ويمكن ضبط جملة الافتتاح لتتضمن إشعاراً بالتسجيل.",
         link: null,
       },
       {
-        // Question-shaped headings: a compliance buyer types the question, not
-        // our label for it. Placed next to the fact each one answers.
-        title: "هل تسجيل مكالمات العملاء متوافق مع نظام حماية البيانات الشخصية (PDPL)؟",
-        body: "تسجيل المكالمات في صوت نجدي مصمَّم بما يتوافق مع مبادئ نظام حماية البيانات الشخصية السعودي: تُخزَّن التسجيلات في منطقة الخليج (الدوحة — me-central1)، وتُحذَف تلقائياً بعد 90 يوماً تطبيقاً لمبدأ حدود الاحتفاظ، ولا يُفتح أي تسجيل إلا عبر رابط موقَّع قصير الصلاحية، ويُدوَّن كل اطلاع في سجل تدقيق غير قابل للتعديل. ويبقى إشعار المتصل والاستناد إلى أساس نظامي للتسجيل من مسؤولية المنشأة المشغِّلة — ويمكن ضبط جملة الافتتاح في الوكيل لتتضمن إشعاراً بالتسجيل في بداية المكالمة.",
+        title: "هل تُخزَّن بيانات العملاء وتُعالَج داخل السعودية؟",
+        body: "لا نقول إن كل شيء داخل السعودية، لأن ذلك غير دقيق اليوم. التخزين الدائم في منطقة الخليج (الدوحة — me-central1)، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. والإفصاح عن النقل عبر الحدود هو ما يتطلبه النظام.",
         link: null,
       },
       {
-        title: "الإفصاح عن أماكن المعالجة",
-        body: "نقولها بوضوح: التخزين الدائم في منطقة الخليج، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي — تحويل الكلام إلى نص، وفهم اللغة، وتوليد الصوت — عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. هذا الإفصاح بحد ذاته هو الموقف الامتثالي الذي يتطلبه النظام في نقل البيانات عبر الحدود — ولا نقول أبداً إن كل شيء داخل السعودية.",
-        link: null,
-      },
-      {
-        title: "هل تُخزَّن بيانات العملاء داخل السعودية؟",
-        body: "لا نقول إن كل شيء داخل السعودية، لأن ذلك غير دقيق اليوم. التخزين الدائم لبيانات صوت نجدي في منطقة الخليج (الدوحة — me-central1) على Google Cloud، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين، وتمر معالجة مستندات قاعدة المعرفة (التعرّف الضوئي) عبر نقطة معالجة أوروبية. والإفصاح عن النقل عبر الحدود هو ما يتطلبه النظام — والإفصاح نفسه هو الموقف الامتثالي، لا التستر عليه.",
-        link: null,
-      },
-      {
-        title: "سجل تدقيق غير قابل للتعديل",
-        body: "كل إجراء حساس في المنصة يُسجَّل في سجل تدقيق ملحق فقط (append-only) تفرضه قاعدة البيانات نفسها: لا يمكن تعديل أي سطر أو حذفه — حتى من مسؤول النظام. ولعملاء المنشآت، يمكن تصدير السجل للمراجعة.",
+        title: "هل يمكن تعديل سجل التدقيق أو حذفه؟",
+        body: "لا. كل إجراء حساس يُكتَب في سجل ملحق فقط (append-only) تفرضه قاعدة البيانات: لا يُعدَّل سطر ولا يُحذَف، ولا حتى من مسؤول النظام. ولعملاء المنشآت تصدير السجل للمراجعة.",
         link: {
           lead: "وكل تصعيد إلى موظف بشري يُدوَّن فيه — ",
           text: "اقرأ كيف يستلم الموظف المكالمة بكامل سياقها",
@@ -73,8 +62,8 @@ const t = {
         },
       },
       {
-        title: "التحكم في الوصول",
-        body: "أدوار وصلاحيات محددة لكل موظف في منشأتك، وعزل تام لبيانات كل عميل يُفرَض على مستوى قاعدة البيانات ذاتها، وقواعد صارمة لوصول فريق المنصة: أي اطلاع من فريق الدعم على مكالمة يُسجَّل تلقائياً في سجل التدقيق، وأي دخول مؤقت لحسابك يكون مسجلاً وظاهراً وقابلاً للإنهاء.",
+        title: "من يستطيع الوصول إلى بياناتك؟",
+        body: "موظفوك بأدوار وصلاحيات تحددها أنت، وعزل تام لبيانات كل عميل على مستوى قاعدة البيانات. واطلاع فريق الدعم يُسجَّل تلقائياً، وأي دخول مؤقت إلى حسابك مسجَّل وظاهر وقابل للإنهاء.",
         link: null,
       },
     ],
@@ -82,19 +71,19 @@ const t = {
     faq: [
       {
         q: "أين تُخزَّن بيانات مكالماتي تحديداً؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة — me-central1) على Google Cloud عبر شبكة خاصة، والتسجيلات تُحذف تلقائياً بعد 90 يوماً.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة — me-central1) على Google Cloud عبر شبكة خاصة، والتسجيلات تُحذَف تلقائياً بعد 90 يوماً.",
       },
       {
         q: "هل تُعالَج البيانات داخل السعودية؟",
-        a: "التخزين الدائم في منطقة الخليج، بينما تمر المعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين — ونفصح عن ذلك بالكامل لأن الإفصاح عن النقل عبر الحدود هو ما يتطلبه نظام حماية البيانات الشخصية.",
+        a: "التخزين الدائم في منطقة الخليج، والمعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين — ونفصح عن ذلك لأن النظام يتطلب الإفصاح عن النقل عبر الحدود.",
       },
       {
         q: "من يستطيع الاطلاع على مكالمات منشأتي؟",
-        a: "موظفوك حسب الأدوار والصلاحيات التي تحددها، وفريق دعم المنصة عند الحاجة فقط — وكل اطلاع من فريق الدعم يُسجَّل تلقائياً في سجل تدقيق غير قابل للتعديل.",
+        a: "موظفوك حسب الصلاحيات التي تحددها، وفريق الدعم عند الحاجة فقط — وكل اطلاع يُسجَّل في سجل تدقيق غير قابل للتعديل.",
       },
       {
         q: "هل توجد اتفاقية معالجة بيانات؟",
-        a: "نعم — تجد ملخص اتفاقية معالجة البيانات في صفحة مستقلة، وتُوقَّع النسخة الكاملة ضمن التعاقد.",
+        a: "نعم. الملخص منشور في صفحة مستقلة، وتُوقَّع النسخة الكاملة ضمن التعاقد.",
       },
     ] as FaqItem[],
     legalLinks: "اقرأ أيضاً: ",
@@ -102,55 +91,44 @@ const t = {
   en: {
     h1: "Security & data",
     lead: PDPL_LINE_EN,
-    intro:
-      "This page is deliberately precise, because precision of disclosure is the substance of compliance. Here you'll find where your data is stored, where it is processed, and how access is controlled — at the level of detail a compliance officer wants before signing.",
+    intro: "Deliberately precise: where your data is stored, where it is processed, and who can reach it.",
     sections: [
       {
-        title: "Alignment with the Saudi PDPL",
-        body: "The platform is designed to comply with the principles of Saudi Arabia's Personal Data Protection Law: lawful, defined purposes; minimising data to what the service actually needs; clear retention limits; data-subject rights to access, correction and deletion; and full transparency about where processing happens — which is exactly what you read on this page and in the privacy policy.",
+        title: "Is the platform aligned with the Saudi PDPL?",
+        body: "It is built on the law's principles: defined lawful purposes, data minimisation, clear retention limits, rights of access, correction and deletion, and full disclosure of where processing happens.",
         link: {
-          lead: "What business owners ask most often is answered in ",
+          lead: "The detail buyers ask for is in ",
           text: "the data and compliance FAQ",
           path: "faq",
         },
       },
       {
-        title: "Where your data lives",
-        body: "Permanent platform storage runs on Cloud SQL PostgreSQL in the Gulf region (Doha — me-central1) on Google Cloud, reachable over private IP only, with backups and point-in-time restore.",
-        link: null,
-      },
-      {
-        title: "Call recordings",
-        body: "Call recordings are stored in the same region and automatically deleted after 90 days — a deliberate behaviour that embodies the law's retention-limit principle. Access to any recording happens exclusively through short-lived signed links.",
+        title: "Where is your data stored?",
+        body: "Permanent storage runs on Cloud SQL PostgreSQL in the Gulf region (Doha — me-central1) on Google Cloud, reachable over private IP only, with backups and point-in-time restore.",
         link: null,
       },
       {
         title: "Is recording customer calls PDPL compliant?",
-        body: "Call recording in Saut Najdi is designed to comply with the principles of Saudi Arabia's Personal Data Protection Law: recordings are stored in the Gulf region (Doha — me-central1), automatically deleted after 90 days in line with the retention-limit principle, opened only through short-lived signed links, and every access is written to an append-only audit log. Notifying the caller and establishing a lawful basis for recording remain the operating organisation's responsibility — and the agent's opening line can be configured to include a recording notice at the start of the call.",
+        body: "Recordings sit in the same region, are deleted automatically after 90 days under the retention-limit principle, open only through short-lived signed links, and every access is written to the audit log. Notifying the caller and establishing a lawful basis remain the operating organisation's responsibility — and the agent's opening line can carry a recording notice.",
         link: null,
       },
       {
-        title: "The processing disclosure",
-        body: "We say it plainly: permanent storage is in the Gulf region, while realtime speech and AI processing — speech-to-text, language understanding, voice generation — transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. This disclosure is itself the compliance posture the law requires for cross-border transfers — and we never claim everything sits inside Saudi Arabia.",
+        title: "Is customer data stored and processed inside Saudi Arabia?",
+        body: "We do not claim everything sits inside Saudi Arabia, because that is not accurate today. Permanent storage is in the Gulf region (Doha — me-central1), while realtime speech and AI processing transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. Disclosing cross-border transfer is what the law requires.",
         link: null,
       },
       {
-        title: "Is customer data stored inside Saudi Arabia?",
-        body: "We do not claim everything sits inside Saudi Arabia, because that is not accurate today. Permanent storage for Saut Najdi data is in the Gulf region (Doha — me-central1) on Google Cloud, while realtime speech and AI processing transits global providers, and knowledge-base document processing (OCR) runs on a European endpoint. Disclosing cross-border transfer is what the law requires — and the disclosure itself is the compliance posture, not a gap in it.",
-        link: null,
-      },
-      {
-        title: "An append-only audit log",
-        body: "Every sensitive action on the platform is written to an append-only audit log enforced by the database itself: no row can be edited or deleted — not even by an administrator. Enterprise customers can export the log for review.",
+        title: "Can the audit log be edited or deleted?",
+        body: "No. Every sensitive action is written to an append-only log enforced by the database itself: no row can be edited or deleted, not even by an administrator. Enterprise customers can export it for review.",
         link: {
-          lead: "Every escalation to a human employee is written to it too — ",
+          lead: "Every escalation to a human employee lands in it too — ",
           text: "read how your employee inherits the call with its full context",
           path: "product/human-handoff",
         },
       },
       {
-        title: "Access control",
-        body: "Defined roles and permissions for every employee in your organisation; hard tenant isolation enforced at the database level; and strict rules for platform-staff access: any support view of a call is automatically audit-logged, and any temporary access to your account is recorded, visible, and revocable.",
+        title: "Who can reach your data?",
+        body: "Your employees, under roles and permissions you define, with hard tenant isolation enforced at the database level. Support access is automatically audit-logged, and any temporary access to your account is recorded, visible and revocable.",
         link: null,
       },
     ],
@@ -158,19 +136,19 @@ const t = {
     faq: [
       {
         q: "Where exactly is my call data stored?",
-        a: "Permanent storage is in the Gulf region (Doha — me-central1) on Google Cloud over private networking, and recordings are automatically deleted after 90 days.",
+        a: "Permanent storage is in the Gulf region (Doha — me-central1) on Google Cloud over private networking, and recordings are deleted automatically after 90 days.",
       },
       {
         q: "Is data processed inside Saudi Arabia?",
-        a: "Permanent storage is in the Gulf region, while realtime speech and AI processing transits global providers — and we disclose that fully, because disclosing cross-border transfer is what the PDPL requires.",
+        a: "Permanent storage is in the Gulf region, while realtime speech and AI processing transits global providers. We disclose that fully, because disclosing cross-border transfer is what the PDPL requires.",
       },
       {
         q: "Who can see my organisation's calls?",
-        a: "Your employees according to the roles and permissions you define, and platform support staff only when needed — and every support view is automatically written to an append-only audit log.",
+        a: "Your employees under the permissions you define, and platform support only when needed — every support view is written to an append-only audit log.",
       },
       {
         q: "Is there a data processing agreement?",
-        a: "Yes — a summary DPA is published on its own page, and the full version is signed as part of contracting.",
+        a: "Yes. A summary DPA is published on its own page, and the full version is signed as part of contracting.",
       },
     ] as FaqItem[],
     legalLinks: "Also read: ",

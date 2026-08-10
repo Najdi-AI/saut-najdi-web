@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { POSITIONING_AR, POSITIONING_EN, CAL_LINK_DEMO } from "@/lib/site";
+import { CAL_LINK_DEMO } from "@/lib/site";
 import { Waveform } from "@/components/Waveform";
 import { DialectChips } from "@/components/DialectChips";
 import { CalButton } from "@/components/CalButton";
@@ -21,6 +21,15 @@ import { homeFaq } from "@/content/faq";
  * "coming soon" lines under them are gone — the activation rule in spec P2-22
  * is that the link and the page ship together, in both directions.
  *
+ * Copy pass: the page is a scan, not a read. One idea per block, a bold title
+ * plus one or two short sentences, outcome before mechanism. Every H2 stays
+ * question-shaped with its answer immediately under it.
+ *
+ * The hero sub-line is written here rather than pulled from POSITIONING_AR/EN:
+ * the shared constant is a long positioning sentence and still names a Gulf
+ * voice that is not in the shipped catalog. The hero wants a shorter line
+ * anyway, and it must not repeat a voice we do not have.
+ *
  * Still deliberately absent: the product-screenshot section, until demo-tenant
  * screenshots actually exist (never fabricate one — §2.2).
  */
@@ -29,60 +38,59 @@ const t = {
   ar: {
     h1a: "وكيل صوتي بالذكاء الاصطناعي يرد على عملائك — ",
     h1b: "باللهجة اللي يفهمونها",
-    positioning: POSITIONING_AR,
+    positioning:
+      "يرد على مكالماتك على مدار الساعة بلهجة سعودية طبيعية، وموظفك يستلم بكامل السياق متى ما لزم.",
     ctaPrimary: "احجز عرضاً",
     ctaSecondary: "شوف كيف يشتغل",
     problem: {
       heading: "كم مكالمة راحت عليك هالأسبوع؟",
       cards: [
-        { title: "يتصلون بعد الدوام", body: "العميل ما يعرف دوامك. يتصل، ما أحد يرد عليه، يدق على اللي بعدك." },
-        { title: "فريق الرد يكلفك", body: "رواتب وورديات، وأغلب المكالمات نفس الأسئلة تنعاد." },
-        { title: "كل مرة يعيد قصته", body: "يتنقل بين ثلاثة موظفين ويكرر كلامه ثلاث مرات." },
+        { title: "يتصلون بعد الدوام", body: "ما أحد يرد، فيدقون على اللي بعدك." },
+        { title: "فريق الرد يكلفك", body: "رواتب وورديات، ونفس الأسئلة تتكرر." },
+        { title: "كل مرة يعيد قصته", body: "ثلاثة موظفين، ونفس القصة ثلاث مرات." },
       ],
     },
     how: {
       heading: "كيف يشتغل؟",
       steps: [
-        { title: "يتصل العميل", body: "على رقمك المخصص، بأي وقت — الوكيل جاهز." },
-        { title: "يرد الوكيل بلهجته ويفهم وش يبغى", body: "يسمع، يفهم القصد، ويرد طبيعي — والعميل يقدر يقاطعه مثل ما يقاطع أي موظف." },
-        { title: "ينفذ", body: "يحجز، يجاوب من معلومات نشاطك، يسجل التفاصيل — مو بس كلام." },
-        { title: "وإذا احتاج الموضوع إنسان؟", body: "موظفك يستلم وكل التفاصيل قدامه — النص والملخص وتاريخ العميل." },
+        { title: "يتصل العميل", body: "على رقمك، بأي وقت." },
+        { title: "يرد ويفهم", body: "بلهجة عميلك، ويقدر يقاطعه." },
+        { title: "ينفذ", body: "يحجز، يجاوب، يسجل." },
+        { title: "يصعّد إذا لزم", body: "موظفك يستلم بكامل السياق." },
       ],
       link: "اقرأ رحلة المكالمة كاملة",
     },
     hybrid: {
       eyebrow: "الفرق الهجين",
       heading: "مو بس ذكاء… وراه ناس",
-      body: "الذكاء الاصطناعي يرد على الروتيني، وموظفك موجود للحظات اللي تحتاج إنسان — شكوى، سؤال حساس، عميل يبغى يسمع صوت بشري. والأهم: لما يستلم موظفك، يستلم وهو فاهم كل شي.",
+      body: "الذكاء الاصطناعي ياخذ الروتيني، وموظفك للحظات اللي تحتاج إنسان — ويستلم وهو فاهم كل شي.",
       link: "شوف صفحة التصعيد للموظف البشري",
     },
     vsIvr: {
       heading: "وش الفرق بين الوكيل الصوتي الذكي والرد الآلي القديم (IVR)؟",
-      answer: "الفرق باختصار: نظام IVR يعطي عميلك قائمة خيارات ولازم يمشي عليها، وصوت نجدي يتكلم معه. العميل يقول اللي يبغاه بلهجته، والوكيل يفهم قصده وينفذه على طول — يحجز، يجاوب، يسجل — وإذا احتاج الموضوع إنسان، موظفك يستلم ومعه النص الكامل والملخص. وهذا الجدول يوضح الفرق موقف بموقف.",
-      cols: ["الموقف", "الرد الآلي التقليدي (IVR)", "صوت نجدي"],
+      answer: "الـ IVR قائمة يمشي عليها العميل. صوت نجدي يتكلم معه، يفهم قصده، وينفذه.",
+      cols: ["الموقف", "الرد الآلي (IVR)", "صوت نجدي"],
       rows: [
-        ["العميل يبدأ المكالمة", "يسمع قائمة: اضغط 1، اضغط 2", "يتكلم عادي بلهجته ويقول اللي يبغاه"],
-        ["إذا قاطع العميل", "القائمة تكمل وما تنتبه له", "الوكيل يسكت على طول ويسمع"],
-        ["إذا طلبه مو موجود في القائمة", "يعلق أو ينتظر موظف", "الوكيل يفهم ويتصرف، وإذا ما قدر يصعّد"],
-        ["حجز موعد", "يحوّلك لموظف يحجز لك", "الوكيل يتحقق من الفاضي ويحجز داخل نفس المكالمة"],
-        ["برا الدوام", "رسالة: اتصل في أوقات الدوام", "يخدمك في اللي يقدر عليه ويسجل طلب اتصال بوقتك المفضل"],
-        ["لما تحتاج إنسان", "الموظف يبدأ معك من الصفر", "الموظف يستلم ومعه النص والملخص وتاريخك"],
-        ["بعد ما تخلص المكالمة", "تسجيل بدون سياق — إن وجد", "تسجيل ونص وملخص عربي في لوحتك"],
+        ["العميل يبدأ", "قائمة: اضغط 1، اضغط 2", "يقول اللي يبغاه بلهجته"],
+        ["إذا قاطع", "القائمة تكمل", "يسكت ويسمع"],
+        ["طلب مو في القائمة", "يعلق أو ينتظر موظف", "يتصرف، وإلا يصعّد"],
+        ["حجز موعد", "يحوّلك لموظف", "يحجز داخل نفس المكالمة"],
+        ["يحتاج إنسان", "يبدأ من الصفر", "يستلم ومعه النص والملخص"],
       ],
     },
     inbox: {
       heading: "أقدر أجمع المكالمات والواتساب والتيليجرام في صندوق واحد؟",
-      answer: "إي. صوت نجدي مو مكالمات بس: واتساب وتيليجرام ودردشة موقعك كلها تنزل في نفس صندوق الوارد اللي فيه مكالماتك. يعني موظفك يشوف تاريخ العميل كامل في مكان واحد — كلّمكم أمس على الواتساب ودق اليوم؟ الكلام قدامه — ويقدر يدخل على أي محادثة بأي لحظة.",
+      answer: "إي — المكالمات وواتساب وتيليجرام ودردشة موقعك في صندوق واحد، وموظفك يدخل على أي محادثة.",
       channels: ["المكالمات", "واتساب للأعمال", "تيليجرام", "دردشة موقعك"],
     },
     capabilities: {
       heading: "وش يقدم لك؟",
       cards: [
-        { title: "الوكيل الصوتي", body: "يرد بلهجة عملائك ويقدر يقاطعونه ويكمل معهم طبيعي.", path: "product/voice-agent" },
-        { title: "التصعيد للموظف البشري", body: "المكالمة تروح لموظفك بكامل سياقها — والفريق يقدر يسمع ويستلم مباشرة.", path: "product/human-handoff" },
-        { title: "قاعدة المعرفة العربية", body: "حط ملفاتك PDF وWord — حتى الممسوحة ضوئياً — ووكيلك يجاوب منها.", path: "product/knowledge-base" },
-        { title: "بناء الوكيل", body: "سوّ وكيلك بنفسك بقوالب جاهزة لقطاعك — بدون سطر كود.", path: "product/agent-builder" },
-        { title: "لوحة التحكم", body: "كل مكالمة قدامك: مين اتصل، وش قال، ووش صار — نص وتسجيل وملخص.", path: "product/dashboard" },
+        { title: "الوكيل الصوتي", body: "يرد بلهجة عملائك، ويقاطعونه ويكمل معهم طبيعي.", path: "product/voice-agent" },
+        { title: "التصعيد للموظف البشري", body: "موظفك يستلم بكامل السياق، ويسمع المكالمة وهي شغالة.", path: "product/human-handoff" },
+        { title: "قاعدة المعرفة العربية", body: "ملفاتك PDF وWord، حتى الممسوحة ضوئياً — ووكيلك يجاوب منها.", path: "product/knowledge-base" },
+        { title: "بناء الوكيل", body: "سوّ وكيلك بقوالب جاهزة لقطاعك، بدون كود.", path: "product/agent-builder" },
+        { title: "لوحة التحكم", body: "كل مكالمة: نص وتسجيل وملخص، وأرقامك محسوبة من مكالماتك. ومنها فريقك يبدأ مكالمة صادرة والوكيل يمسك الحوار.", path: "product/dashboard" },
       ],
     },
     sectors: {
@@ -94,10 +102,10 @@ const t = {
         { sector: "عقارات", quote: "«الشقة للحين متاحة؟»", path: "solutions/real-estate" },
         { sector: "تجزئة", quote: "«وصل طلبي؟»", path: "solutions/retail" },
       ],
-      note: "قوالب جاهزة لهذه القطاعات — اضغط على قطاعك وشوف بالضبط وش يتكفل فيه الوكيل ووش يروح لموظفك.",
+      note: "اضغط على قطاعك وشوف وش يتكفل فيه الوكيل ووش يروح لموظفك.",
     },
     governance: {
-      heading: "بياناتك تحكمها قواعد وصلاحيات — مو بس محفوظة",
+      heading: "بياناتك تحكمها قواعد وصلاحيات، مو بس محفوظة",
       bullets: [
         "مصمّم بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL)",
         "التخزين في منطقة الخليج (الدوحة)",
@@ -112,60 +120,59 @@ const t = {
   en: {
     h1a: "An AI voice agent that answers your customers — ",
     h1b: "in the dialect they understand",
-    positioning: POSITIONING_EN,
+    positioning:
+      "Answer every customer call around the clock in natural Saudi Arabic — with your team able to take over, in full context, whenever a person should.",
     ctaPrimary: "Book a demo",
     ctaSecondary: "See how it works",
     problem: {
       heading: "How many calls did you miss this week?",
       cards: [
-        { title: "They call after hours", body: "Customers don't know your working hours. They call, nobody answers, they call your competitor." },
-        { title: "A reply team is expensive", body: "Salaries and shifts — and most calls are the same questions on repeat." },
-        { title: "They repeat their story every time", body: "Bounced between three employees, telling the same story three times." },
+        { title: "They call after hours", body: "Nobody picks up, so they call your competitor." },
+        { title: "A reply desk is expensive", body: "Salaries and shifts — for the same questions on repeat." },
+        { title: "They repeat themselves", body: "Three employees, three retellings of one story." },
       ],
     },
     how: {
       heading: "How does it work?",
       steps: [
-        { title: "The customer calls", body: "On your dedicated line, any time — the agent is ready." },
-        { title: "The agent answers in their dialect and understands", body: "It listens, gets the intent, replies naturally — and callers can interrupt it like any human." },
-        { title: "It acts", body: "Books, answers from your business's information, records the details — not just talk." },
-        { title: "And when it needs a human?", body: "Your employee takes over with everything in front of them — transcript, summary, customer history." },
+        { title: "The customer calls", body: "Your dedicated line, any hour." },
+        { title: "It answers and understands", body: "In their dialect — and they can interrupt it." },
+        { title: "It acts", body: "Books, answers, logs the details." },
+        { title: "It escalates when needed", body: "Your employee takes over in full context." },
       ],
       link: "Read the full journey of a call",
     },
     hybrid: {
       eyebrow: "The hybrid difference",
       heading: "Not just AI. People behind it.",
-      body: "The AI handles the routine; your employee is there for the moments that need a human — a complaint, a sensitive question, a customer who wants a human voice. And when your employee takes over, they take over already knowing everything.",
+      body: "AI takes the routine. Your team takes the moments that need a person — arriving already knowing the whole conversation.",
       link: "See the human handoff page",
     },
     vsIvr: {
       heading: "What's the difference between an AI voice agent and a traditional IVR?",
-      answer: "The short version: an IVR hands your customer a menu they have to navigate, and Saut Najdi talks to them. The caller says what they want in their own dialect, the agent works out the intent and acts on it — books, answers, records — and when the matter needs a person, your employee takes over with the full transcript and summary. The table below shows the difference situation by situation.",
+      answer: "An IVR is a menu the caller has to navigate. Saut Najdi talks to them, works out the intent, and acts on it.",
       cols: ["Situation", "Traditional IVR", "Saut Najdi"],
       rows: [
-        ["The caller starts", "Hears a menu: press 1, press 2", "Just says what they want, in their dialect"],
-        ["The caller interrupts", "The menu carries on regardless", "The agent stops instantly and listens"],
-        ["Their request isn't on the menu", "They're stuck, or they wait for a person", "The agent understands and acts — or escalates"],
-        ["Booking an appointment", "Transfers to a person who books it", "Checks availability and books inside the same call"],
-        ["Outside working hours", "“Please call during business hours”", "Helps where it can, then logs a callback at the caller's preferred time"],
-        ["When a human is needed", "Your employee starts from zero", "Your employee inherits the transcript, summary and history"],
-        ["After the call", "A recording with no context, if any", "Recording, transcript and an Arabic summary in your dashboard"],
+        ["The caller starts", "A menu: press 1, press 2", "They say what they want"],
+        ["The caller interrupts", "The menu carries on", "It stops and listens"],
+        ["The request isn't on the menu", "Stuck, or waiting for a person", "It acts, or escalates"],
+        ["Booking an appointment", "Transferred to a person", "Booked inside the call"],
+        ["A human is needed", "Your employee starts from zero", "They inherit transcript and summary"],
       ],
     },
     inbox: {
       heading: "Can I bring calls, WhatsApp and Telegram into one inbox?",
-      answer: "Yes. Saut Najdi isn't calls-only: WhatsApp, Telegram and your website chat land in the same team inbox as your phone conversations. Your employee sees a customer's whole history in one place — messaged on WhatsApp yesterday, called today? It's all there — and can step into any conversation at any moment.",
+      answer: "Yes — all of them land in one team inbox, where your staff see a customer's whole history and can step into any conversation.",
       channels: ["Phone calls", "WhatsApp Business", "Telegram", "Website chat"],
     },
     capabilities: {
       heading: "What do you get?",
       cards: [
-        { title: "The voice agent", body: "Answers in your customers' dialect; callers can interrupt and it keeps up naturally.", path: "product/voice-agent" },
-        { title: "Human handoff", body: "The call reaches your employee with full context — and your team can listen in and take over live.", path: "product/human-handoff" },
-        { title: "Arabic knowledge base", body: "Upload your PDF and Word files — even scans — and your agent answers from them.", path: "product/knowledge-base" },
-        { title: "Agent builder", body: "Build your agent yourself with sector-ready templates — no code.", path: "product/agent-builder" },
-        { title: "The dashboard", body: "Every call in front of you: who called, what they said, what happened — transcript, recording, summary.", path: "product/dashboard" },
+        { title: "The voice agent", body: "Answers in your customers' dialect; they can interrupt and it keeps up.", path: "product/voice-agent" },
+        { title: "Human handoff", body: "Your employee inherits full context, and can listen in live.", path: "product/human-handoff" },
+        { title: "Arabic knowledge base", body: "Upload PDF and Word files, even scans — the agent answers from them.", path: "product/knowledge-base" },
+        { title: "Agent builder", body: "Build your agent on sector-ready templates. No code.", path: "product/agent-builder" },
+        { title: "The dashboard", body: "Every call with transcript, recording, summary and your own numbers. Your team places outbound calls from here too, with the agent talking.", path: "product/dashboard" },
       ],
     },
     sectors: {
@@ -177,7 +184,7 @@ const t = {
         { sector: "Real estate", quote: "“Is the apartment still available?”", path: "solutions/real-estate" },
         { sector: "Retail", quote: "“Has my order arrived?”", path: "solutions/retail" },
       ],
-      note: "Ready-made templates for these sectors — open yours to see exactly what the agent handles and what reaches your staff.",
+      note: "Open your sector to see exactly what the agent handles and what reaches your staff.",
     },
     governance: {
       heading: "Your data is governed, not just stored",

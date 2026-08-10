@@ -52,11 +52,11 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "يفهم اللهجة السعودية فعلاً؟",
-          a: "صوت نجدي مبني من أساسه على اللهجات السعودية: يسمع «أبغى» و«وش» و«بكرة» ويفهمها صح، ويرد بأصوات رجالية ونسائية بلهجات نجدية وحجازية وخليجية — وبالعربية الفصحى والإنجليزية بعد.",
+          a: "صوت نجدي مبني من أساسه على اللهجات السعودية: يسمع «أبغى» و«وش» و«بكرة» ويفهمها صح، ويرد بأصوات رجالية ونسائية: نجدي، وحجازي، وشامي، وإنجليزي.",
         },
         {
           q: "الأصوات رجالية ولا نسائية؟ وأقدر أستخدم صوت علامتي؟",
-          a: "صوت نجدي عنده أصوات رجالية ونسائية بثلاث لهجات سعودية — نجدية وحجازية وخليجية — وبالعربية الفصحى والإنجليزية. وتقدر تستنسخ صوت علامتك من عيّنة صوتية قصيرة، بإقرار موافقة من صاحب الصوت، مع إمكانية السحب والحذف المؤكد.",
+          a: "صوت نجدي عنده أصوات رجالية ونسائية: نجدي وحجازي وشامي وإنجليزي. وتقدر تستنسخ صوت علامتك من عيّنة 60 ثانية على الأقل، بإقرار موافقة مسجّل من صاحب الصوت، مع إمكانية السحب والحذف خلال 30 يوماً.",
         },
         {
           q: "الوكيل يسكت إذا قاطعه العميل؟",
@@ -77,8 +77,8 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
           a: "المكالمة في صوت نجدي تروح لموظفك فوراً إذا طلب العميل إنسان، أو إذا كان منزعج، أو إذا تكرر سؤال ما انحل — وقواعد التصعيد أنت اللي تحددها. وموظفك يستلم ومعه النص الكامل والملخص وتاريخ العميل.",
         },
         {
-          q: "أقدر أسمع المكالمات وأقرا نصوصها؟",
-          a: "في لوحة تحكم صوت نجدي تلقى كل مكالمة: تسمع التسجيل، وتقرا النص كاملاً، وتشوف الملخص وتاريخ العميل — وتقدر تتابع المكالمات الحية وتستلمها بنفسك.",
+          q: "أقدر أسمع المكالمات وأقرأ نصوصها؟",
+          a: "في لوحة تحكم صوت نجدي تلقى كل مكالمة: تسمع التسجيل، وتقرأ النص كاملاً، وتشوف الملخص وتاريخ العميل — وتقدر تتابع المكالمات الحية وتستلمها بنفسك.",
         },
         {
           q: "هل الوكيل الصوتي يعوّض عن توطين مهن خدمة العملاء؟",
@@ -103,8 +103,8 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
           a: "وكيل صوت نجدي يجيب إجاباته من قاعدة معرفة تبنيها أنت من ملفات نشاطك — PDF وWord حتى الممسوح ضوئياً — ومن أسعارك وأوقاتك وسياساتك، فيطلع نفس الجواب الصحيح لكل عميل.",
         },
         {
-          q: "تسوون مكالمات صادرة أو حملات اتصال؟",
-          a: "صوت نجدي اليوم للمكالمات الواردة فقط — ما فيه اتصال صادر ولا حملات اتصال آلية، ونقولها بصراحة بدل ما نلمّح لها. اللي يصير برا الدوام إن الوكيل يسجل طلب اتصال بتفاصيله ووقت العميل المفضل، ويرجع له فريقك أنت.",
+          q: "تسوون مكالمات صادرة؟",
+          a: "إي. فريقك يقدر يطلع مكالمة صادرة من اللوحة — يختار العميل أو يكتب الرقم، ويختار الوكيل، والوكيل يمسك الحوار. وتنسجل وتتكتب ويطلع لها ملخص مثل أي مكالمة. المكالمة يبدأها موظف من عندك، ما فيه اتصال آلي على قائمة أرقام.",
         },
       ],
     },
@@ -170,11 +170,11 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "Does it really understand Saudi dialects?",
-          a: "Saut Najdi is built on Saudi dialects from the ground up: it hears everyday Saudi phrasing correctly and answers in male and female voices across Najdi, Hijazi and Khaleeji — plus standard Arabic and English.",
+          a: "Saut Najdi is built on Saudi dialects from the ground up: it hears everyday Saudi phrasing correctly and answers in male and female voices: Najdi, Hijazi, Levantine and English.",
         },
         {
           q: "Are the voices male or female — and can I use my brand's voice?",
-          a: "Saut Najdi ships male and female voices across three Saudi dialects — Najdi, Hijazi and Khaleeji — plus standard Arabic and English. You can also clone your brand's voice from a short sample, with a consent attestation from the voice owner, revocation, and verified deletion.",
+          a: "Saut Najdi ships male and female voices: Najdi, Hijazi, Levantine and English. You can also clone your brand's voice from a sample of at least 60 seconds, with a recorded consent attestation from the voice owner, and revocation and deletion within 30 days.",
         },
         {
           q: "Can the caller interrupt the agent?",
@@ -221,8 +221,8 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
           a: "The Saut Najdi agent answers from a knowledge base you build out of your own files — PDF and Word, even scans — plus your prices, hours and policies, so every customer gets the same correct answer.",
         },
         {
-          q: "Do you do outbound calls or calling campaigns?",
-          a: "Saut Najdi is inbound-only today — there is no outbound dialling and no automated calling campaigns, and we'd rather say so plainly than imply otherwise. What happens outside your hours is that the agent logs a callback request with the details and the caller's preferred time, and your team calls back.",
+          q: "Do you do outbound calls?",
+          a: "Yes. Your team places an outbound call from the dashboard — pick a customer or type a number, choose an agent, and the agent handles the conversation. It's recorded, transcribed and summarised like any other call. A person starts the call; there's no auto-dialling through a list.",
         },
       ],
     },

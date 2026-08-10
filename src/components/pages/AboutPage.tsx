@@ -22,21 +22,21 @@ const t = {
     blocks: [
       {
         h: "ليش ما يكفي رد آلي عادي؟",
-        p: "لأن العميل السعودي يبغى أحد يفهمه من أول كلمة. يتصل يقول «أبغى أحجز بكرة» — ما يبغى قائمة «اضغط 1»، ولا روبوت يرد عليه بفصحى متكلفة أو بعربية مكسرة مترجمة. اللحظة اللي يحس فيها إنه يكلم آلة ما تفهمه، يسكر ويدق على غيرك.",
+        p: "العميل السعودي يبغى أحد يفهمه من أول كلمة — مو قائمة «اضغط 1» ولا روبوت يرد بفصحى متكلفة. أول ما يحس إنه يكلم آلة ما تفهمه، يسكر ويدق على غيرك.",
       },
       {
         h: "مين وراء صوت نجدي؟",
-        p: "صوت نجدي منتج من نجدي AI (Najdi AI)، فريق سعودي مقره الرياض. بنينا المنصة من أساسها على اللهجات السعودية: كيف نتكلم فعلاً، ووش نقصد لما نقول «الحين» و«بكرة» و«يمديك». ما أخذنا منتجاً أجنبياً وعرّبناه — بنينا للسوق السعودي من أول سطر كود، والتعامل مع كل عميل يمر بفريقنا مباشرة.",
+        p: "صوت نجدي من إنتاج نجدي AI (Najdi AI)، فريق سعودي مقره الرياض. بنيناه للسوق السعودي من أول سطر كود — مو منتج أجنبي عرّبناه.",
       },
       {
         h: "ليش هجين — ذكاء وبشر — مو ذكاء بس؟",
-        p: "لأن في مكالمات ما يصلح لها إلا إنسان: الشكوى، والسؤال الحساس، والعميل اللي يبغى يسمع صوت بشري. عشان كذا موظفك دايم موجود في الصورة، ويستلم المكالمة بكامل سياقها بأي لحظة — النص والملخص وتاريخ العميل قدامه. الذكاء يخدم فريقك ما يستبدله، وهذي مو جملة تسويق: هي طريقة بناء المنتج نفسه.",
-        link: { path: "product/human-handoff", text: "شوف بالضبط وش يستلم موظفك لحظة التصعيد ←" },
+        p: "في مكالمات ما يصلح لها إلا إنسان: الشكوى والسؤال الحساس. عشان كذا موظفك يستلم أي مكالمة بكامل سياقها — النص والملخص وتاريخ العميل قدامه.",
+        link: { path: "product/human-handoff", text: "شوف وش يستلم موظفك لحظة التصعيد ←" },
       },
       {
-        h: "قاعدتنا في الكلام: ما نقول شي ما نقدر نوريك إياه",
-        p: "تلاحظ إن ما في أرقام في هذا الموقع: لا نسبة دقة، ولا نسبة رضا، ولا «وفّر 40%». وما في شعارات عملاء ولا قصص نجاح. السبب بسيط: ما قسناها بشكل نقدر ندافع عنه، وما أخذنا موافقة أحد ننشر اسمه. ونفس الشي على الميزات — نكتب اللي شغال اليوم، وإذا شي لسه ما وصل نقولها بصراحة: ما فيه مكالمات صادرة، وما فيه رقم سعودي تجربه اليوم. الأرقام تجي لما نقيسها صح، وأسماء العملاء تجي لما يوافقون.",
-        link: { path: "security", text: "ونفس القاعدة في صفحة الأمان: وين تنحفظ بياناتك ووين تتعالج بالضبط ←" },
+        h: "قاعدتنا: ما نقول شي ما نقدر نوريك إياه",
+        p: "ما في أرقام عن نفسنا هنا: لا نسبة دقة، ولا «وفّر 40%»، ولا شعارات عملاء. الأرقام اللي تهمك هي أرقامك أنت، محسوبة من مكالماتك، وتشوفها في لوحتك أول بأول. ونفس الصراحة في الحدود: ما فيه رقم سعودي تجربه اليوم، والاتصال الصادر يبدأه فريقك من اللوحة — ما فيه اتصال آلي على قائمة أرقام.",
+        link: { path: "security", text: "وين تنحفظ بياناتك ووين تتعالج بالضبط ←" },
       },
     ] as AboutBlock[],
     tagline: TAGLINE_AR,
@@ -50,21 +50,21 @@ const t = {
     blocks: [
       {
         h: "Why isn't a normal automated answering system enough?",
-        p: "Because Saudi customers want to be understood from the first word. They call saying exactly what they need — not to hear a “press 1” menu, or a robot answering in stilted formal Arabic or awkward translated phrasing. The moment a caller feels they're talking to a machine that doesn't follow them, they hang up and call someone else.",
+        p: "Saudi callers want to be understood from the first word — not routed through a “press 1” menu or answered by a robot in stilted formal Arabic. The moment they feel the machine isn't following them, they hang up and call a competitor.",
       },
       {
         h: "Who is behind Saut Najdi?",
-        p: "Saut Najdi is a product of Najdi AI, a Saudi team based in Riyadh. We built the platform on Saudi dialects from the ground up: how people actually talk, and what they actually mean. We didn't take a foreign product and localise it — we built for the Saudi market from the first line of code, and every customer relationship runs through our own team.",
+        p: "Saut Najdi is a product of Najdi AI, a Saudi team based in Riyadh. We built it for the Saudi market from the first line of code — not a foreign product with an Arabic layer bolted on.",
       },
       {
         h: "Why hybrid — AI plus humans — rather than AI alone?",
-        p: "Because some calls only a person should take: the complaint, the sensitive question, the customer who wants a human voice. That's why your employee is always in the picture, able to take over any call with its full context at any moment — transcript, summary and customer history in front of them. The AI serves your team rather than replacing it, and that isn't a marketing line: it's how the product is built.",
-        link: { path: "product/human-handoff", text: "See exactly what your employee inherits at the moment of handoff →" },
+        p: "Some calls only a person should take: the complaint, the sensitive question. So your employee can take over any call with its full context — transcript, summary and customer history already in front of them.",
+        link: { path: "product/human-handoff", text: "See what your employee inherits at handoff →" },
       },
       {
-        h: "Our rule: we don't say anything we can't show you",
-        p: "You'll notice there are no numbers on this website: no accuracy rate, no satisfaction score, no “save 40%.” No customer logos and no success stories either. The reason is simple — we haven't measured them in a way we could defend, and nobody has consented to be named. The same applies to features: we write what works today, and when something isn't there yet we say so plainly — there is no outbound calling, and there is no Saudi number you can try today. The numbers will come when we can measure them properly, and the customer names when customers agree.",
-        link: { path: "security", text: "The same rule on our security page: exactly where your data is stored and where it's processed →" },
+        h: "Our rule: we don't claim what we can't show you",
+        p: "There are no numbers about us on this site: no accuracy rate, no “save 40%,” no customer logos. The numbers that matter are your own — call volume, the share the AI handled end to end, duration, sentiment — and you see them in your dashboard. Limits stay just as plain: no Saudi number to try today, and outbound calls are placed by your team from the dashboard, not auto-dialled from a list.",
+        link: { path: "security", text: "Where your data is stored and where it's processed →" },
       },
     ] as AboutBlock[],
     tagline: TAGLINE_EN,

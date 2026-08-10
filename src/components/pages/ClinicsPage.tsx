@@ -25,374 +25,333 @@ const kbIcons: IconName[] = ["clinic", "cost", "badge", "doc", "clock", "chat"];
  * interpreting a report, or handling clinical patient data — that boundary
  * is stated out loud in the escalation section, because saying it is a
  * stronger trust signal than staying quiet about it.
+ *
+ * Short-brief copy: one idea per block, outcome first, no mechanism essays —
+ * the density of the hotels and retail pages.
  */
 
 const t = {
   ar: {
     h1: "الرد الآلي على مكالمات العيادات — مواعيد محجوزة بدون موظف مشغول",
     intro:
-      "موظف الاستقبال عندك ما يقدر يسوي شيئين في نفس اللحظة: يستقبل المريض اللي واقف قدامه، ويرد على جوال ما يهدأ. وأغلب المكالمات اللي تفوتك مو حالات معقدة — حجز موعد، تأجيل، سؤال عن سعر الكشف أو الدوام. وكيل صوت نجدي يرد على هذي المكالمات بلهجة مريضك، ويحجز فعلاً في تقويم عيادتك، ويسلّم لموظفك أي شي يحتاج إنسان.",
+      "موظف الاستقبال ما يقدر يستقبل المريض اللي قدامه ويرد على الجوال في نفس اللحظة. وكيلك يرد على كل مكالمة، ويحجز في تقويمك فعلاً، ويحوّل أي شي يحتاج إنسان.",
     cta: "احجز عرضاً",
     calls: {
       eyebrow: "قالب جاهز للعيادات والمستشفيات",
       heading: "المكالمات اللي تفوتك كل يوم",
-      body:
-        "هذي مو أمثلة نظرية — هذي شكل المكالمات اللي تجي أي عيادة في السعودية. اقرأها وشوف كم وحدة منها راحت عليك أمس لأن الخط كان مشغول، أو لأن الاتصال جا بعد ما خلص الدوام. كل حوار تحت مربوط بنقطة في القسم اللي بعده.",
-      note: "حوارات توضيحية — هذا شكل المكالمة، مو تسجيل حقيقي.",
+      body: "هذي شكل المكالمات اللي تجي أي عيادة. كم وحدة منها راحت عليك أمس؟",
+      note: "حوارات توضيحية — مو تسجيلات حقيقية.",
       items: [
         {
           tag: "حجز موعد جديد",
-          caller: "السلام عليكم، أبغى أحجز موعد مع الدكتور.",
-          agent: "هلا وغلا. أي قسم تبي — أسنان ولا جلدية؟ … تمام، عندنا فاضي بكرة 4:30 العصر، أثبته لك؟",
+          caller: "أبغى موعد مع الدكتور.",
+          agent: "هلا وغلا. أسنان ولا جلدية؟ فاضي بكرة 4:30 العصر — أثبته لك؟",
         },
         {
           tag: "تأجيل موعد",
-          caller: "عندي موعد الخميس الصبح وما أقدر أجي، أبغى أأجله.",
-          agent: "أبشر. موعدك الخميس 10:15 مع الدكتورة سارة — أقرب بديل عندها الأحد 11:00، يمشي؟",
+          caller: "عندي موعد الخميس وما أقدر أجي.",
+          agent: "موعدك 10:15 مع الدكتورة سارة — أقرب بديل الأحد 11:00، يمشي؟",
         },
         {
           tag: "سعر الكشف والتأمين",
-          caller: "كم الكشف عند الجلدية؟ وتقبلون تأمين شركتي؟",
-          agent: "الكشف عند الجلدية 250 ريال، وتأمين شركتك مقبول عندنا — بس جيب معك البطاقة والهوية يوم الموعد.",
+          caller: "كم الكشف عند الجلدية؟ وتقبلون تأميني؟",
+          agent: "الكشف 250 ريال، وتأمينك مقبول — جيب البطاقة والهوية.",
         },
         {
           tag: "الدوام والموقع",
-          caller: "دوامكم لين كم اليوم؟ ووينكم بالضبط؟",
-          agent: "اليوم دوامنا لين 10 بالليل، وإحنا في فرع الملقا على طريق أنس بن مالك — أرسل لك الموقع؟",
+          caller: "دوامكم لين كم؟ ووينكم؟",
+          agent: "لين 10 بالليل، في فرع الملقا — أرسل لك الموقع؟",
         },
         {
           tag: "سؤال عن طبيب بالاسم",
-          caller: "الدكتورة سارة تداوم يوم الأحد؟",
-          agent: "الدكتورة سارة تداوم الأحد والثلاثاء من 4 العصر لين 9. أحجز لك عندها الأحد؟",
+          caller: "الدكتورة سارة تداوم الأحد؟",
+          agent: "الأحد والثلاثاء من 4 لين 9. أحجز لك عندها؟",
         },
         {
           tag: "تأكيد موعد ورقم الحجز",
-          caller: "حجزت أمس بس نسيت وقت الموعد ورقمه.",
-          agent: "موعدك اليوم 6:45 مع الدكتور خالد في فرع النرجس، ورقم حجزك: 4 — 8 — 2 — 1، أقرأه لك رقم رقم مرة ثانية؟",
+          caller: "حجزت أمس ونسيت الوقت.",
+          agent: "موعدك اليوم 6:45 مع الدكتور خالد، ورقمك: 4 — 8 — 2 — 1.",
         },
       ],
     },
     why: {
-      heading: "ليش المكالمة الفايتة في العيادة أغلى من غيرها؟",
+      heading: "ليش المكالمة الفايتة في العيادة أغلى؟",
       paras: [
-        "في أغلب الأنشطة، المكالمة اللي ما تُرد عليها تعني فرصة راحت. في العيادة تعني شيئين مع بعض: فتحة موعد فاضية في جدول طبيب دوامه محسوب بالساعة، ومريض راح لعيادة ثانية. والمريض ما يزعل ويكلمك مرة ثانية — يقفل ويتصل على اللي بعدك في نتائج البحث، وغالباً ما ترجع تسمع عنه.",
-        "والوقت اللي تجيك فيه أكثر المكالمات هو نفس الوقت اللي فريقك فيه أقل قدرة على الرد: أول ساعة من الدوام، ووقت الفتح بعد الظهر، وآخر نصف ساعة قبل الإغلاق. موظف الاستقبال في هذي الأوقات يستقبل مرضى، ويجهز أوراق تأمين، ويرد على جوال — والمكالمة أول شي يضحّي فيه، لأن اللي واقف قدامه أهم. وهذا قرار صحيح منه، بس نتيجته إن مكالمات تضيع كل يوم.",
-        "وفيه خسارة ثانية أثقل من المكالمة الفايتة نفسها: عدم الحضور. مريض حجز قبل عشرة أيام ونسي، أو تغيّر ظرفه ودوّر أحد يرد عليه الساعة تسع بالليل عشان يلغي وما لقى — فالفتحة تقعد فاضية والطبيب ينتظر، وما أحد على قائمة الانتظار يعرف إنها فضت. أغلب حالات عدم الحضور هذي كانت بتصير إلغاءً مرتّباً لو كان فيه أحد يرد.",
-        "وجدول الأطباء نفسه مصدر تعب دايم في العيادة: طبيب يعتذر عن يوم، وطبيبة ترجع من إجازة، وقسم يفتح بعد الظهر بس، والجلدية يتغيّر دوامها في رمضان. أي تعديل في الجدول لازم يوصل لثلاث جهات في نفس اللحظة — الاستقبال، والتقويم، واللي يرد على الجوال — وأكثر حجز غلط في العيادة سببه إن الطرف الثالث ما وصله التعديل. ولما يكون اللي يرد على الجوال يقرأ من نفس التقويم اللي عدّلته، تسقط حلقة كاملة من هالسلسلة.",
-        "والمكالمات المتكررة — «متى موعدي؟» و«دوامكم لين كم؟» و«الدكتور موجود اليوم؟» — تاكل من وقته أكثر من الحجوزات الجديدة نفسها، وهي بالضبط النوع اللي يقدر الوكيل يخلّصه من أوله لآخره. النتيجة مو إن موظفك يشتغل أقل، النتيجة إنه يشتغل على اللي يحتاج إنسان فعلاً.",
+        "خسارتين مع بعض: فتحة فاضية في جدول طبيب محسوب بالساعة، ومريض راح لعيادة ثانية وما يرجع.",
+        "وأزحم ساعاتك هي اللي ما يقدر فريقك يرد فيها. وبرا الدوام تصير الخسارة عدم حضور: المريض يبي يلغي وما يلقى أحد يرد، فالفتحة تقعد فاضية.",
       ],
     },
     handled: {
       eyebrow: "مربوط بالحوارات اللي فوق",
       heading: "وش يتكفل فيه الوكيل بالضبط؟",
-      capsule:
-        "الفرق بين وكيل يشتغل وبين رد آلي يضيّع وقت مريضك هو وش يقدر يخلّصه لآخره. الوكيل يكمل كل مكالمة من اللي فوق بنفسه — ما يسجل رسالة ويوعد المريض إن أحد يرجع له. وكل نقطة تحت مربوطة بحوار قريته قبل شوي.",
+      capsule: "ينهي المكالمة بنفسه — ما يسجل رسالة ويوعد إن أحد يرجع للمريض.",
       items: [
         {
           title: "يحجز الموعد فعلاً — مو يسجل طلب",
           body:
-            "الوكيل يفتح تقويم عيادتك وهو على الخط، يشوف المتاح عند الطبيب اللي طلبه المريض، ويثبت الموعد قبل ما تنتهي المكالمة. وإذا الوقت اللي طلبه مو فاضي، يعرض عليه أقرب بديلين بدل ما يقول له «كلّمنا بعدين». وبعد ما يخلص يقرأ له رقم الحجز رقم رقم بالعربي، عشان يكتبه من أول مرة بدون ما يطلب الإعادة. والموعد يظهر لفريقك في التقويم في نفس اللحظة، فما يصير حجزين على نفس الفتحة.",
+            "يشوف تقويمك وهو على الخط ويثبت الموعد قبل ما تسكر المكالمة، ويظهر لفريقك في نفس اللحظة.",
         },
         {
-          title: "التأجيل والإلغاء وسياسة عيادتك",
-          body:
-            "أكثر مكالمة تاكل وقت الاستقبال هي تعديل موعد، وهي بالضبط أسهل مكالمة يتكفل فيها الوكيل. يلقى موعد المريض من رقمه اللي يتصل منه، يأجله أو يلغيه، ويقول له سياسة الإلغاء زي ما كتبتها أنت: كم ساعة قبل الموعد، ووش يصير لو تأخر، ووش حكم عدم الحضور. الفتحة اللي تنلغي ترجع متاحة على طول لمريض ثاني بدل ما تضيع.",
+          title: "تأجيل وإلغاء بسياسة عيادتك",
+          body: "يلقى موعد المريض من رقمه، ويأجله أو يلغيه بسياستك. والفتحة الملغاة ترجع متاحة.",
         },
         {
-          title: "أسئلة الأسعار والتأمين",
-          body:
-            "أسعار الكشف والمتابعة، وشركات التأمين المقبولة، ووش يحتاج المريض يجيبه معه — كلها إجابات محسومة عندك مسبقاً، والوكيل يعطيها زي ما هي. ما يجتهد من راسه، وما يوعد المريض بشي ما قلته أنت. وإذا كان السؤال عن حالة تأمينية خاصة أو موافقة مسبقة تحتاج مراجعة، يحوّلها لموظفك بدل ما يخمّن.",
+          title: "الأسعار والتأمين",
+          body: "أسعار الكشف والمتابعة والتأمينات المقبولة زي ما كتبتها. والموافقات المسبقة تروح لموظفك.",
         },
         {
           title: "الدوام والفروع والوصول",
-          body:
-            "«دوامكم لين كم؟» و«وينكم بالضبط؟» و«فيه مواقف؟» — مكالمات صغيرة، بس عددها في اليوم أكبر من أي شي ثاني. الوكيل يعرف دوام كل فرع، والإجازات الرسمية، ودوام رمضان اللي يتغير كل سنة، وعنوان كل فرع وأقرب علامة مميزة له. ويوجّه المريض للفرع الأقرب له إذا كان عندك أكثر من فرع.",
+          body: "دوام كل فرع، والإجازات، ودوام رمضان، وأقرب علامة للفرع.",
         },
         {
           title: "جدول الأطباء",
-          body:
-            "المريض غالباً يسأل عن طبيب بالاسم، مو عن قسم. الوكيل يعرف مين يداوم وأي يوم وأي ساعة، وتخصص كل طبيب، وفي أي فرع — فيوجّه المريض للطبيب الصح من أول مكالمة، بدل ما يجي في يوم الطبيب فيه إجازة ويرجع زعلان. وإذا كان الطبيب مشغول لأسبوعين، يقول له بصراحة ويعرض عليه زميله في نفس التخصص.",
+          body: "مين يداوم أي يوم وفي أي فرع. وإذا كان الطبيب محجوز لأسبوعين يعرض زميله.",
         },
         {
           title: "المريض الراجع… يعرفه",
-          body:
-            "المريض اللي كلّمكم قبل ما يبدأ من الصفر كل مرة: الوكيل يحييه باسمه، ويعرف آخر موعد له وتفضيلاته — فرع معين، أو طبيبة بدل طبيب، أو وقت مسائي عشان دوامه. ونفس هذي المعلومات تكون قدام موظفك لحظة ما يستلم المكالمة، فما يسمع أبداً جملة «أنا قلت هذا الكلام للي قبلك».",
+          body: "يحييه باسمه ويعرف آخر موعد له — ونفس المعلومات قدام موظفك لحظة التحويل.",
         },
       ],
     },
     voice: {
       heading: "مكالمة العيادة كلها أسماء وأرقام",
       paras: [
-        "اسم طبيبة، وتاريخ موعد، ورقم حجز — هذي مكالمة العيادة. والمريض يقول «الساعة أربعة ونص» ويغيّر رأيه بنص الجملة، فالوكيل يسكت ويسمع ويعدّل، ويقرأ رقم الحجز رقم رقم بالعربي عشان يكتبه من أول مرة بدل ما يتصل ثاني يوم يسأل عنه.",
-        "ونبرته تفرق في العيادة أكثر من أي مكان ثاني: هدوء وهو يأكد موعد، واعتذار وهو يحوّل مريض متضايق لموظفك. وإذا كان مرضاك يتكلمون لهجة أو لغة ثانية، نجهزها لك على طلبك — وما نعلن لهجات ما أطلقناها فعلاً.",
+        "اسم طبيبة، وتاريخ، ورقم حجز. والمريض يقول «أربعة ونص» ويغيّر رأيه بنص الجملة — الوكيل يسمع ويعدّل ويقرأ الرقم رقم رقم.",
+        "والأصوات اليوم: نجدي، حجازي، شامي، وإنجليزي — رجالي ونسائي. وصوت علامتك تضيفه باستنساخ صوت شخص بموافقته، حسب باقتك.",
       ],
-      linkLead: "واللهجات والأصوات المتاحة، وكيف يتعامل الوكيل مع المقاطعة والأرقام المنطوقة، مشروحة بالتفصيل في ",
+      linkLead: "التفاصيل كاملة في ",
       linkText: "صفحة وكيل الصوت",
     },
     human: {
       heading: "وش يروح لموظفك؟",
-      capsule:
-        "الحد فاصل وواضح من أول يوم: الوكيل يشتغل في اللوجستيات — حجز وتأجيل وأسعار ودوام وفروع. وأي شي يخص صحة المريض نفسه يروح لموظفك على طول، ومعه كل الكلام اللي صار في المكالمة.",
+      capsule: "الوكيل يشتغل في اللوجستيات. وأي شي يخص صحة المريض يروح لموظفك على طول.",
       honesty:
-        "ونقولها بصراحة عشان ما يستنتجها أحد من السكوت: وكيل صوت نجدي ما يعطي استشارة طبية، ولا يشخّص، ولا يفسر تحليل أو تقرير، ولا يناقش حالة مريض. هذي مو حدود تقنية نعتذر عنها — هذي قاعدة مقصودة في إعداد الوكيل، لأن السؤال الطبي مكانه عند مختص في عيادتك، وانتهى.",
+        "الوكيل ما يعطي استشارة طبية، ولا يشخّص، ولا يفسر تقرير. قاعدة مقصودة، مو نقص نعتذر عنه.",
       honestyMore:
-        "والسؤال الطبي في العيادة نادراً يجي واضح ومعنون. غالباً يجي مغلّف داخل سؤال إداري: «أحجز عند الجلدية ولا الباطنية؟ عندي حبوب طالعة من أسبوع» — ظاهرها سؤال عن قسم، وباطنها طلب رأي. هنا الوكيل ما يختار القسم عن المريض ولا يعلّق على الأعراض؛ يقول له إن اللي يحدد هذا مختص، ويحوّله لموظفك، أو يحجز له في القسم اللي كتبته أنت في سياستك لهذي الحالة. وهذا بالضبط الفرق بين وكيل مضبوط على عيادة وبين رد آلي عام: مو إنه يعرف أكثر، إنه يعرف وين يوقف.",
+        "وحتى لو جا السؤال مغلّف — «أحجز جلدية ولا باطنية؟» — يحوّله بدل ما يختار عن المريض.",
       items: [
-        "أي سؤال طبي — أعراض، دواء، ألم بعد إجراء، تفسير نتيجة — تحويل فوري لموظفك، والوكيل ما يحاول يجاوب ولو كان الجواب «واضح».",
-        "الشكاوى ونبرة الانزعاج: تأخير، خطأ في موعد، مريض تعبان من الانتظار — الوكيل يلتقط الانزعاج في صوت المتصل ويصعّد بدل ما يكمل نص محفوظ.",
-        "طلب المريض إنسان — قانون ثابت ما يتفاوض فيه الوكيل ولا يحاول يقنعه إنه يقدر يساعده.",
-        "الحالات المستعجلة — الوكيل ما يتصرف فيها أبداً. وإذا كانت العيادة مقفلة، يقول للمريض بصراحة إنها مقفلة ويسجل طلب اتصال، وما يعطيه ولا لحظة انطباع إنه بديل عن الطوارئ.",
+        "أي سؤال طبي — أعراض، دواء، ألم بعد إجراء، تفسير نتيجة — تحويل فوري.",
+        "نبرة الانزعاج: يلتقطها في صوت المتصل ويصعّد بدل ما يكمل نصه.",
+        "طلب المريض إنسان — قانون ثابت ما يتفاوض فيه.",
+        "الحالات المستعجلة — ما يتصرف فيها أبداً ولا يقدم نفسه بديلاً عن الطوارئ.",
       ],
-      inheritLead: "ولحظة التحويل، موظفك يستلم سبب التصعيد والنص الكامل للمكالمة وملخصاً عربياً واضحاً وتاريخ المريض معكم — ",
-      inheritLink: "اقرأ كيف يشتغل التصعيد بالتفصيل",
+      inheritLead: "وموظفك يستلم سبب التصعيد ونص المكالمة وملخصاً عربياً وتاريخ المريض — ",
+      inheritLink: "اقرأ كيف يشتغل التصعيد",
       afterHours:
-        "وبرا الدوام ما فيه طريق مسدود: الوكيل يعرف أوقات عيادتك، فيخدم المريض في اللي يقدر عليه — يحجز له موعد بكرة مثلاً — وإذا احتاج الموضوع إنسان يسجل طلب اتصال بتفاصيله ووقته المفضل، ويظهر لفريقك أول ما يفتح الدوام.",
+        "وبرا الدوام يحجز موعد بكرة، أو يسجل طلب اتصال يرد عليه فريقك أول الدوام.",
       sceneHeading: "شكل التصعيد وهو يصير",
-      sceneBody:
-        "مريض يحجز موعد أسنان عادي، وبعدها يسأل سؤال عن ألم بعد حشوة. هنا بالضبط ينتهي شغل الوكيل ويبدأ شغل موظفك:",
+      sceneBody: "مريض يحجز موعد أسنان، ثم يسأل عن ألم بعد حشوة. هنا ينتهي شغل الوكيل:",
     },
     kb: {
       heading: "وش يدخل في قاعدة معرفة عيادتك؟",
-      intro:
-        "وكيلك ما يعرف عن عيادتك إلا اللي تعطيه إياه — وهذي ميزة مو نقص، لأنها تقفل باب الاجتهاد من راسه. عشان كذا أول شي نسويه معك هو بناء قاعدة معرفة عيادتك من ملفاتك أنت، مو من كلام عام عن العيادات:",
+      intro: "الوكيل ما يعرف عن عيادتك إلا اللي تعطيه إياه — وهذي ميزة تقفل باب الاجتهاد:",
       items: [
-        { title: "جدول الأطباء", body: "مين يداوم أي يوم وأي ساعة، وتخصص كل واحد، وفي أي فرع، ومين البديل إذا كان مشغول." },
-        { title: "قائمة الأسعار", body: "سعر الكشف والمتابعة والإجراءات، والفرق بين الكشف الأول والمراجعة، ووش الأسعار اللي تتغير بالتأمين." },
-        { title: "شركات التأمين", body: "المقبول والمرفوض، ووش يحتاج موافقة مسبقة، ووش يجيبه المريض معه يوم الموعد." },
-        { title: "سياسة الإلغاء والتأخير", body: "كم ساعة قبل يقدر يلغي، ووش يصير لو تأخر ربع ساعة، وسياستكم في عدم الحضور." },
-        { title: "الدوام والفروع", body: "دوام كل فرع، والإجازات الرسمية، ودوام رمضان، وعنوان كل فرع والمواقف وأقرب علامة مميزة." },
-        { title: "الأسئلة اللي تتكرر كل يوم", body: "«فيه قسم نسائي؟» «أحتاج موعد ولا أجي مباشرة؟» «تستقبلون أطفال؟» — الأسئلة اللي يكررها موظفك عشر مرات في اليوم." },
+        { title: "جدول الأطباء", body: "مين يداوم أي يوم، وتخصصه وفرعه." },
+        { title: "قائمة الأسعار", body: "الكشف والمتابعة والإجراءات، والفرق بين أول زيارة ومراجعة." },
+        { title: "شركات التأمين", body: "المقبول والمرفوض، ووش يحتاج موافقة مسبقة." },
+        { title: "سياسة الإلغاء والتأخير", body: "كم ساعة قبل، ووش يصير لو تأخر أو ما حضر." },
+        { title: "الدوام والفروع", body: "دوام كل فرع، ورمضان والإجازات، والعناوين والمواقف." },
+        { title: "الأسئلة اللي تتكرر", body: "«فيه قسم نسائي؟» «أجي مباشرة ولا أحجز؟» «تستقبلون أطفال؟»" },
       ],
       mechanics:
-        "وأصعب ملف في العيادة هو اللي ما يثبت: جدول الأطباء يتعدّل كل أسبوع، وقائمة شركات التأمين تنقص وتزيد بعقد ينتهي، ودوام رمضان يختلف عن باقي السنة كلها. تحط ملفاتك زي ما هي — PDF أو Word، وحتى لو كان الجدول ورقة ممسوحة بالسكانر، لأن التعرّف الضوئي عندنا عربي حقيقي ويطلع الحروف موصولة صح — وتعدّل المعلومة في مكان واحد بدل ما تلاحقها في أربع أوراق ملزوقة على الاستقبال.",
-      testing:
-        "وقبل ما تنشر، تجرب بنفسك في المحادثة التجريبية: تكتب سؤال مريضك زي ما بيقوله — «كم كشف الجلدية بتأميني؟» — وتشوف الجواب اللي يطلع ومن وين جابه بالضبط. وهذي الخطوة مو شكلية في عيادة: سعر غلط ينقال لمريض قبل بأسبوع يتحول لخلاف على الكاونتر يوم يجي. والنشر متعمد: مسودة، ثم مراجعة تبيّن لك وش تغيّر، ثم نشر بنسخة محفوظة تقدر ترجع لها.",
+        "وأصعب ملف هو اللي ما يثبت: الجدول يتعدّل كل أسبوع. ترفعه زي ما هو وتعدّله في مكان واحد.",
+      testing: "وقبل النشر تجربه في المحادثة التجريبية وتشوف من وين جاب الجواب.",
       channelsHeading: "ومو بس المكالمات",
       channels:
-        "مرضى كثير يفضلون يكتبون بدل ما يتصلون، خصوصاً في السؤال اللي يستحون يقولونه بصوت عالي وأحد جالس جنبهم. واتساب للأعمال وتيليجرام ودردشة موقعك تنزل كلها في نفس صندوق الوارد اللي فيه المكالمات، والرد الآلي على هذي القنوات النصية يرجع لقاعدة معرفة عيادتك ويجاوب منها — فموظفك يشوف تاريخ المريض كامل في مكان واحد بدل ما يتنقل بين أربعة تطبيقات ويسأله يعيد كلامه.",
-      kbLinkLead: "وطريقة بناء قاعدة المعرفة وتنظيمها وتحديثها مشروحة كاملة في ",
+        "واتساب وتيليجرام ودردشة موقعك في نفس الصندوق وبنفس قاعدة المعرفة — تاريخ المريض في مكان واحد.",
+      kbLinkLead: "طريقة بنائها وتحديثها في ",
       kbLinkText: "صفحة قاعدة المعرفة",
-      securityLead: "وبيانات مرضاك لها صفحة كاملة تشرح وين تنحفظ ووين تُعالَج بالضبط — ",
+      securityLead: "ووين تنحفظ بيانات مرضاك وتُعالَج — ",
       securityLink: "اقرأ صفحة الأمان والبيانات",
     },
     setup: {
       heading: "كيف نجهز عيادتك؟",
       paras: [
-        "نبدأ من القالب الجاهز للعيادات والمستشفيات، ونعبيه بمعلومات عيادتك أنت: جدول الأطباء، والأسعار، وشركات التأمين، وسياسة الإلغاء، ودوام الفروع. بعدها نضبط معك قواعد التصعيد — وش يروح لموظفك، ومتى، ولمين — وتجرب الوكيل بنفسك في محادثة تجريبية وتسمع صوته قبل ما يرد على أي مريض. وآخر خطوة نرتب معك تفعيل الرقم.",
-        "والشي اللي ياخذ وقت أكثر من غيره في العيادة مو التقنية — هو جدول الأطباء وحدود السؤال الطبي: مين يغطي مكان مين لما يعتذر، ووش السؤال اللي ما ينجاوب عليه أبداً مهما كان جوابه واضح. وما فيه تسجيل ذاتي في صوت نجدي: فريقنا يضبط هذي معك، لأن الخطأ فيها ما يكتشفه مريضك بعد شهر — يكتشفه في أول مكالمة. والجدول الزمني بالتفصيل نعطيك إياه في العرض التعريفي، على قد حجم مكالماتك وعدد فروعك.",
+        "نبدأ من قالب العيادات ونعبيه بمعلوماتك: الجدول والأسعار والتأمين وسياسة الإلغاء. بعدها نضبط قواعد التصعيد، وتسمع صوت الوكيل قبل ما يرد على أي مريض.",
+        "وما فيه تسجيل ذاتي — فريقنا يضبط معك الجدول وحدود السؤال الطبي، ونتفق معك على المدة في العرض التعريفي.",
       ],
-      linkLead: "وكيف يتبني الوكيل ويتعدّل بعدين بدون ما ترجع لنا في كل تغيير — ",
+      linkLead: "وتعدّل عليه بنفسك بعدين — ",
       linkText: "صفحة بناء الوكيل",
     },
     faqHeading: "أسئلة أصحاب العيادات",
     faq: [
       {
-        q: "الوكيل يحجز الموعد فعلاً ولا بس يسجل الطلب؟",
-        a: "يحجز فعلاً. الوكيل يشوف المتاح في تقويم عيادتك وهو على الخط، يثبت الموعد قبل ما تنتهي المكالمة، ويقرأ رقم الحجز للمريض رقم رقم بالعربي — والموعد يظهر لفريقك في التقويم في نفس اللحظة.",
+        q: "الوكيل يحجز فعلاً ولا بس يسجل الطلب؟",
+        a: "يحجز فعلاً في تقويمك وهو على الخط، ويقرأ رقم الحجز رقم رقم — ويظهر لفريقك في نفس اللحظة.",
       },
       {
         q: "وش يسوي إذا سأل المريض سؤال طبي؟",
-        a: "يحوّل على طول. وكيل صوت نجدي ما يعطي استشارة طبية ولا يشخّص ولا يفسر تقرير — أي سؤال يخص صحة المريض يروح لموظفك ومعه نص المكالمة وملخصها وتاريخ المريض عندكم.",
+        a: "يحوّل على طول — ما يعطي استشارة ولا يشخّص ولا يفسر تقرير. وموظفك يستلم ومعه النص والملخص.",
       },
       {
-        q: "عندنا أكثر من فرع وأكثر من طبيب — يفرق؟",
-        a: "ما يفرق. جدول الأطباء وأيام دوامهم وفروعهم كلها مجهزة في إعداد وكيلك، والوكيل يوجّه المريض للفرع والطبيب الصح ويحجز في تقويم نفس الفرع اللي اختاره.",
+        q: "عندنا فروع وأطباء كثير — يفرق؟",
+        a: "ما يفرق. جدول الأطباء وفروعهم في إعداد وكيلك، ويحجز في تقويم الفرع الصح.",
       },
       {
         q: "وين تنحفظ بيانات مرضانا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) على Google Cloud، وتسجيلات المكالمات تنحذف تلقائياً بعد 90 يوماً، وكل اطلاع يتسجل في سجل تدقيق ما ينعدل ولا ينحذف. وأماكن المعالجة بالضبط مذكورة بالتفصيل في صفحة الأمان والبيانات.",
-      },
-      {
-        q: "وإذا اتصل مريض بعد الدوام؟",
-        a: "الوكيل يعرف دوام عيادتك: يخدم المريض في اللي يقدر عليه — يحجز له موعد بكرة مثلاً — وإذا احتاج الموضوع إنسان يسجل طلب اتصال بوقته المفضل ويظهر لفريقك أول الدوام. وما يوهم المريض إن العيادة مفتوحة، ولا يقدم نفسه كبديل عن الطوارئ.",
-      },
-      {
-        q: "فيه قالب جاهز للعيادات ولا نبدأ من الصفر؟",
-        a: "فيه قالب جاهز للعيادات والمستشفيات: سيناريوهات الحجز والتأجيل وأسئلة الدوام والأسعار، وهيكل قاعدة معرفة تعبيه بمعلوماتك. وفريقنا يجهزه معك ويعدله على طريقة عيادتك — ما في تسجيل ذاتي ولا نتركك تركّب النظام بنفسك.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة) على Google Cloud، والتسجيلات تنحذف بعد 90 يوماً، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
       },
     ] as FaqItem[],
   },
   en: {
     h1: "AI call answering for clinics — appointments booked while your front desk is busy",
     intro:
-      "Your receptionist cannot do two things at once: look after the patient standing in front of them and answer a phone that never stops. Most of the calls you miss aren't complicated — a booking, a reschedule, a question about the consultation fee or your opening hours. The Saut Najdi agent answers those in your patient's own dialect, books the slot in your clinic's calendar, and hands anything that needs a person to your staff.",
+      "Your receptionist cannot look after the patient in front of them and answer a phone that never stops. The agent takes those calls, books the slot in your clinic's calendar, and hands anything that needs a person to your staff.",
     cta: "Book a demo",
     calls: {
       eyebrow: "A ready-made clinic and hospital template",
       heading: "The calls you're missing every day",
-      body:
-        "These aren't hypotheticals — this is what calls to a Saudi clinic actually sound like. Read them and count how many went unanswered yesterday because the line was engaged, or because the call came in after closing. Every dialogue below maps to a point in the section that follows.",
-      note: "Illustrative dialogues — this is what a call looks like, not a real recording.",
+      body: "This is what calls to a Saudi clinic sound like. How many went unanswered yesterday?",
+      note: "Illustrative dialogues — not real recordings.",
       items: [
         {
           tag: "A new appointment",
-          caller: "Hi, I'd like to book an appointment with the doctor.",
-          agent: "Of course — which department, dental or dermatology? … We have tomorrow at 4:30 PM free, shall I confirm it for you?",
+          caller: "I'd like an appointment with the doctor.",
+          agent: "Of course — dental or dermatology? Tomorrow at 4:30 PM is free, shall I confirm it?",
         },
         {
           tag: "Rescheduling",
-          caller: "I have an appointment on Thursday morning and I can't make it.",
-          agent: "No problem. That's Thursday 10:15 with Dr. Sarah — her nearest alternative is Sunday at 11:00. Does that work?",
+          caller: "I have an appointment Thursday and I can't make it.",
+          agent: "That's Thursday 10:15 with Dr. Sarah — her nearest alternative is Sunday at 11:00. Does that work?",
         },
         {
           tag: "Fees and insurance",
-          caller: "How much is a dermatology consultation? And do you take my insurer?",
-          agent: "A dermatology consultation is SAR 250, and yes, your insurer is accepted — just bring your card and ID on the day.",
+          caller: "How much is a dermatology consultation, and do you take my insurer?",
+          agent: "It's SAR 250, and your insurer is accepted — bring your card and ID.",
         },
         {
           tag: "Hours and location",
-          caller: "How late are you open today, and where exactly are you?",
-          agent: "We're open until 10 PM today, and we're in the Malqa branch on Anas bin Malik Road — shall I send you the location?",
+          caller: "How late are you open, and where are you?",
+          agent: "Until 10 PM, at the Malqa branch — shall I send you the location?",
         },
         {
           tag: "Asking for a doctor by name",
           caller: "Is Dr. Sarah in on Sunday?",
-          agent: "Dr. Sarah works Sundays and Tuesdays, 4 PM to 9. Shall I book you with her on Sunday?",
+          agent: "Sundays and Tuesdays, 4 PM to 9. Shall I book you with her?",
         },
         {
           tag: "Confirming a booking",
-          caller: "I booked yesterday but I've forgotten the time and the reference.",
-          agent: "You're booked today at 6:45 with Dr. Khalid at the Narjis branch, reference 4 — 8 — 2 — 1. Would you like me to read it back once more?",
+          caller: "I booked yesterday but forgot the time.",
+          agent: "Today at 6:45 with Dr. Khalid, reference 4 — 8 — 2 — 1.",
         },
       ],
     },
     why: {
-      heading: "Why a missed call costs a clinic more than most businesses",
+      heading: "Why a missed call costs a clinic more",
       paras: [
-        "In most businesses an unanswered call is a lost opportunity. In a clinic it is two losses at once: an empty slot in the diary of a doctor whose time is costed by the hour, and a patient who went elsewhere. Patients rarely complain about it — they hang up and call whoever is next in the search results, and you never hear about it.",
-        "The hours that generate the most calls are exactly the hours your team is least able to answer them: the first hour after opening, the afternoon reopening, and the last half hour before you close. At those moments your receptionist is checking patients in, handling insurance paperwork and holding a ringing phone — and the phone is the first thing to be sacrificed, because the person standing in front of them matters more. That's the right call to make, and its consequence is calls lost every single day.",
-        "There is a second loss that weighs more than the missed call itself: the no-show. A patient booked ten days ago and forgot, or their plans changed and at nine in the evening they found nobody to cancel with — so the slot sits empty, the doctor waits, and nobody on the waiting list ever learns it came free. Most of those no-shows would have been orderly cancellations if somebody had answered.",
-        "The rota is its own standing problem. A doctor drops a day, a colleague comes back from leave, a department opens afternoons only, dermatology shifts its hours for Ramadan. Every change has to reach three places at once — the front desk, the calendar, and whoever is answering the phone — and most wrong bookings in a clinic happen because the third one never got the update. When the thing answering the phone is reading the calendar you just edited, that link comes out of the chain.",
-        "The repetitive ones — “when is my appointment?”, “how late are you open?”, “is the doctor in today?” — take more of that time than new bookings do, and they are precisely the calls the agent can finish end to end. The point isn't that your receptionist works less; it's that they spend their time on the patients who need a person.",
+        "It is two losses at once: an empty slot in the diary of a doctor costed by the hour, and a patient who rang whoever was next in the search results.",
+        "Your busiest hours are the ones nobody can pick up. And after hours the loss becomes a no-show: a patient wants to cancel at nine, finds nobody, and the slot sits empty.",
       ],
     },
     handled: {
       eyebrow: "Mapped to the dialogues above",
       heading: "What the agent handles, precisely",
-      capsule:
-        "The difference between an agent that works and an auto-attendant that wastes your patient's time is how much it can finish on its own. Each of the calls above is completed on the line — not logged as a message with a promise that somebody will call back. Every point below maps to a dialogue you just read.",
+      capsule: "It finishes the call itself — it doesn't log a message and promise a call back.",
       items: [
         {
-          title: "It actually books — it doesn't take a request",
+          title: "It books — it doesn't take a request",
           body:
-            "The agent opens your clinic's calendar while still on the line, checks what's free with the doctor the patient asked for, and confirms the slot before the call ends. If the requested time isn't available it offers the two nearest alternatives rather than saying “call us back later.” It then reads the booking reference back digit by digit in Arabic so the patient can write it down first time. The appointment appears in your team's calendar in the same moment, so two patients never land on one slot.",
+            "It checks your calendar on the line and confirms the slot before the call ends. The appointment appears in your team's calendar in the same moment.",
         },
         {
-          title: "Reschedules, cancellations and your policy",
-          body:
-            "Changing an appointment is the call that eats the most front-desk time, and it's the easiest one for the agent to take off your hands. It finds the patient's booking from the number they're calling from, moves or cancels it, and states your cancellation policy exactly as you wrote it: how many hours' notice, what happens on a late arrival, how a no-show is treated. A cancelled slot goes straight back into availability instead of being lost.",
+          title: "Reschedules and cancellations, on your policy",
+          body: "It finds the booking from the number the patient is calling from, moves or cancels it, and puts the slot straight back into availability.",
         },
         {
-          title: "Fees and insurance questions",
-          body:
-            "Consultation and follow-up fees, which insurers you accept, and what the patient needs to bring — these are answers you've already settled, and the agent gives them as written. It doesn't improvise, and it doesn't promise the patient something you never said. Where the question involves a specific approval or an unusual policy case, it escalates instead of guessing.",
+          title: "Fees and insurance",
+          body: "Consultation and follow-up fees and the insurers you accept, exactly as written. Pre-approvals go to your staff.",
         },
         {
           title: "Hours, branches and getting there",
-          body:
-            "“How late are you open?”, “Where exactly are you?”, “Is there parking?” — small calls, but the highest-volume ones you get. The agent knows each branch's hours, public holidays, the Ramadan schedule that changes every year, and each branch's address and nearest landmark. With multiple branches, it points the patient at the one closest to them.",
+          body: "Each branch's hours, public holidays, the Ramadan schedule, and the nearest landmark.",
         },
         {
           title: "The doctors' rota",
-          body:
-            "Patients usually ask for a doctor by name, not for a department. The agent knows who works which days and hours, each doctor's specialty, and which branch they're in — so the patient is routed correctly on the first call instead of arriving on the doctor's day off. If that doctor is booked out for a fortnight, it says so plainly and offers a colleague in the same specialty.",
+          body: "Who works which days and at which branch. If a doctor is booked out for a fortnight it offers a colleague.",
         },
         {
           title: "It recognises returning patients",
-          body:
-            "A patient who has called before doesn't start from zero: the agent greets them by name and knows their last appointment and their preferences — a particular branch, a female doctor, an evening slot that fits their work. The same details are in front of your employee the instant a call is handed over, so nobody ever hears “I already told the last person.”",
+          body: "It greets them by name and knows their last appointment — the same details your employee sees at handover.",
         },
       ],
     },
     voice: {
-      heading: "A clinic call is names and numbers, spoken quickly",
+      heading: "A clinic call is names and numbers",
       paras: [
-        "A doctor's name, a date, a booking reference — that is the whole call. The patient says “half four”, then changes their mind mid-sentence, so the agent stops, listens and amends, and reads the reference back digit by digit in Arabic so it is written down first time instead of prompting another call the next morning.",
-        "Tone carries more weight in a clinic than almost anywhere: calm while confirming an appointment, apologetic while handing an unhappy patient to your staff. If your patients speak a dialect or language beyond the ones we run, we prepare it on request — and we don't advertise dialects we haven't actually released.",
+        "A doctor's name, a date, a reference. The patient says “half four”, then changes their mind mid-sentence — the agent listens, amends, and reads the reference back digit by digit.",
+        "The voices available today are Najdi, Hijazi, Levantine and English, male and female. You can add your own brand voice by cloning a named person with their consent, depending on your plan.",
       ],
-      linkLead: "The dialects and voices available, and how the agent deals with interruption and spoken numbers, are set out in detail on the ",
+      linkLead: "The full detail is on the ",
       linkText: "voice agent page",
     },
     human: {
       heading: "What goes to your staff",
-      capsule:
-        "The boundary is drawn on day one: the agent handles logistics — bookings, reschedules, fees, hours, branches. Anything touching the patient's health itself goes to your staff immediately, with the whole conversation attached.",
+      capsule: "The agent handles logistics. Anything touching the patient's health goes to your staff immediately.",
       honesty:
-        "We'd rather say this out loud than let anyone infer it from silence: the Saut Najdi agent does not give medical advice, does not diagnose, does not interpret a test result or a report, and does not discuss a patient's condition. That isn't a technical limitation we're apologising for — it's a deliberate rule in how the agent is configured, because a clinical question belongs with a clinician in your practice.",
+        "The agent gives no medical advice, makes no diagnosis, and interprets no report. A deliberate rule, not a limitation we're apologising for.",
       honestyMore:
-        "A medical question rarely arrives labelled as one. It usually comes wrapped inside an administrative one: “should I book dermatology or internal medicine? I've had a rash for a week” — a question about a department on the surface, a request for an opinion underneath. The agent does not pick the department on the patient's behalf and does not comment on the symptom; it says that a clinician decides that, and either transfers to your staff or books into whichever department your own written policy names for that case. That is the difference between an agent configured for a clinic and a generic auto-attendant: not that it knows more, but that it knows where to stop.",
+        "Even wrapped in an administrative question — “dermatology or internal medicine?” — it transfers rather than choose for the patient.",
       items: [
-        "Any medical question — symptoms, medication, pain after a procedure, a result to interpret — transfers immediately, and the agent does not attempt an answer even when the answer looks obvious.",
-        "Complaints and audible frustration: a delay, a mistaken appointment, a patient worn out by waiting — the agent hears the frustration in the caller's voice and escalates rather than reciting a script.",
-        "An explicit request for a human — an iron law the agent never negotiates and never talks the patient out of.",
-        "Urgent situations — the agent never improvises around one. If the clinic is closed it says so plainly and logs a callback, and at no point presents itself as a substitute for emergency care.",
+        "Any medical question — symptoms, medication, pain after a procedure, a result to interpret — transfers immediately.",
+        "Audible frustration: the agent hears it in the caller's voice and escalates rather than pushing on.",
+        "An explicit request for a human — an iron law it never negotiates.",
+        "Urgent situations — never improvised around, and never presented as a substitute for emergency care.",
       ],
-      inheritLead: "At the moment of transfer your employee inherits the escalation reason, the full transcript, a clear Arabic summary and the patient's history with you — ",
-      inheritLink: "read how the handoff works in detail",
+      inheritLead: "Your employee inherits the escalation reason, the transcript, an Arabic summary and the patient's history — ",
+      inheritLink: "read how the handoff works",
       afterHours:
-        "Outside hours there are no dead ends either: the agent knows your schedule, serves the patient with what it can — booking them in for tomorrow, for instance — and where a person is needed it logs a callback request with the details and the patient's preferred time, waiting for your team when the doors open.",
+        "After hours it still books tomorrow's slot, or logs a callback for your team to return when they open.",
       sceneHeading: "What an escalation looks like",
-      sceneBody:
-        "A patient books a routine dental appointment, then asks about pain after a filling. That is exactly where the agent's job ends and your employee's begins:",
+      sceneBody: "A patient books a dental appointment, then asks about pain after a filling. That is where the agent's job ends:",
     },
     kb: {
       heading: "What goes into your clinic's knowledge base",
-      intro:
-        "Your agent knows nothing about your clinic beyond what you give it — which is a feature, not a gap, because it closes the door on improvisation. So the first thing we build with you is your clinic's knowledge base, from your own documents rather than generic clinic content:",
+      intro: "The agent knows nothing about your clinic beyond what you give it — a feature, not a gap, because it closes the door on improvisation:",
       items: [
-        { title: "The doctors' rota", body: "Who works which days and hours, each one's specialty and branch, and who covers when they're away." },
-        { title: "The price list", body: "Consultation, follow-up and procedure fees, the difference between a first visit and a review, and which prices change under insurance." },
-        { title: "Insurers", body: "Which are accepted and which aren't, what needs pre-approval, and what the patient must bring on the day." },
-        { title: "Cancellation and lateness policy", body: "How much notice is required, what happens on a fifteen-minute delay, and how you treat a no-show." },
-        { title: "Hours and branches", body: "Each branch's hours, public holidays, the Ramadan schedule, addresses, parking and the nearest landmark." },
-        { title: "The questions asked every single day", body: "“Is there a women's section?” “Do I need an appointment or can I walk in?” “Do you see children?” — the ones your receptionist answers ten times a day." },
+        { title: "The doctors' rota", body: "Who works which days, their specialty and their branch." },
+        { title: "The price list", body: "Consultation, follow-up and procedure fees, and first visit versus review." },
+        { title: "Insurers", body: "Which are accepted, and what needs pre-approval." },
+        { title: "Cancellation and lateness policy", body: "How much notice is required, and how you treat a late arrival or a no-show." },
+        { title: "Hours and branches", body: "Each branch's hours, holidays and Ramadan, addresses and parking." },
+        { title: "The questions asked every day", body: "“Is there a women's section?” “Can I walk in?” “Do you see children?”" },
       ],
       mechanics:
-        "The hardest documents in a clinic are the ones that never sit still: the rota is redrawn weekly, the insurer list gains and loses a name every time a contract turns over, and Ramadan hours differ from the rest of the year entirely. You upload them as they are — PDF or Word, and a rota you only have as a scan is fine, because the Arabic OCR here is genuinely Arabic and letters come out correctly joined — and you edit a fact in one place instead of chasing it across four sheets taped to the front desk.",
-      testing:
-        "Before you publish, you check it yourself in the test chat: type your patient's question the way they'd actually ask it — “how much is a dermatology consultation on my insurance?” — and see the answer and exactly which source it came from. In a clinic that step is not a formality: a price quoted wrongly a week ago turns into an argument at the counter on the day. Publishing is deliberate too — draft, then a review that shows you what changed, then a published version you can roll back to.",
+        "The hardest document in a clinic is the one that never sits still: the rota is redrawn weekly. Upload it as it is and edit it in one place.",
+      testing: "Before publishing you check it yourself in the test chat and see where each answer came from.",
       channelsHeading: "And not only calls",
       channels:
-        "Many patients would rather type than dial, particularly for the question they'd be embarrassed to say out loud with someone sitting next to them. WhatsApp Business, Telegram and your website chat all land in the same team inbox as the calls, and the automatic replies on those written channels answer from your clinic's knowledge base — so your employee sees the patient's full history in one place instead of switching between four apps and asking them to repeat themselves.",
-      kbLinkLead: "How the knowledge base is built, organised and kept current is covered in full on the ",
+        "WhatsApp Business, Telegram and your website chat land in the same inbox and answer from the same knowledge base — the patient's history in one place.",
+      kbLinkLead: "How it is built and kept current is on the ",
       kbLinkText: "knowledge base page",
-      securityLead: "Your patients' data has a page of its own explaining exactly where it is stored and where it is processed — ",
+      securityLead: "Exactly where your patients' data is stored and processed — ",
       securityLink: "read the security and data page",
     },
     setup: {
       heading: "How we set your clinic up",
       paras: [
-        "We start from the ready-made clinic and hospital template and fill it with your clinic's own information: the doctors' rota, fees, insurers, the cancellation policy, branch hours. Then we set your escalation rules with you — what goes to your staff, when, and to whom — and you try the agent yourself in a test conversation and hear its voice before a single patient does. Arranging your number is the last step.",
-        "The part that takes longest in a clinic isn't the technology — it's the rota and the boundary around the medical question: who covers for whom when a doctor drops a day, and which question is never answered no matter how obvious the answer looks. There is no self-signup at Saut Najdi: our team settles those with you, because a mistake there isn't discovered a month later, it's discovered on the first call. The detailed timeline comes in the intro demo, sized to your call volume and the number of branches you run.",
+        "We start from the ready-made clinic template and fill it with your information: the rota, fees, insurers, the cancellation policy. Then we set your escalation rules, and you hear the agent before any patient does.",
+        "There is no self-signup: our team settles the rota and the medical boundary with you, and we agree the timeline with you in the demo.",
       ],
-      linkLead: "How the agent is built, and how you change it afterwards without coming back to us for every edit — ",
+      linkLead: "You change it yourself afterwards — ",
       linkText: "the agent builder page",
     },
     faqHeading: "Questions clinic owners ask",
     faq: [
       {
         q: "Does the agent actually book, or just take a request?",
-        a: "It actually books. The agent checks availability in your clinic's calendar while on the line, confirms the appointment before the call ends, and reads the reference back to the patient digit by digit — and the booking appears in your team's calendar in the same moment.",
+        a: "It actually books, checking your calendar on the line and reading the reference back digit by digit — and it appears in your team's calendar in the same moment.",
       },
       {
         q: "What happens if a patient asks a medical question?",
-        a: "It transfers immediately. The Saut Najdi agent gives no medical advice, makes no diagnosis and interprets no report — anything touching the patient's health goes to your employee with the transcript, the summary and the patient's history attached.",
+        a: "It transfers immediately — no advice, no diagnosis, no interpreting a report. Your employee takes over with the transcript and the summary.",
       },
       {
-        q: "We have several branches and several doctors — is that a problem?",
-        a: "No. The rota, the working days and the branches are all configured into your agent, and it routes the patient to the right branch and doctor, then books into that branch's calendar.",
+        q: "We have several branches and doctors — is that a problem?",
+        a: "No. The rota and branches are configured into your agent, and it books into the right branch's calendar.",
       },
       {
         q: "Where is our patients' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha) on Google Cloud, call recordings are deleted automatically after 90 days, and every access is written to an append-only audit log. Exactly where processing happens is set out in detail on the security page.",
-      },
-      {
-        q: "What if a patient calls after hours?",
-        a: "The agent knows your schedule: it helps with what it can — booking tomorrow's slot, for example — and where a person is needed it logs a callback request with the patient's preferred time, ready for your team in the morning. It never implies the clinic is open, and never presents itself as an alternative to emergency care.",
-      },
-      {
-        q: "Is there a ready-made clinic template, or do we start from scratch?",
-        a: "There is a ready-made template for clinics and hospitals: booking and rescheduling scenarios, hours and fee questions, and a knowledge-base skeleton you fill with your own information. Our team configures it with you and adapts it to how your clinic works — there's no self-signup and no leaving you to assemble it alone.",
+        a: "Permanent storage is in the Gulf region (Doha) on Google Cloud, recordings are deleted after 90 days, and every access is written to an audit log. Processing is set out on the security page.",
       },
     ] as FaqItem[],
   },

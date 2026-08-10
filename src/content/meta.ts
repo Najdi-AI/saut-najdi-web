@@ -23,7 +23,7 @@ export const meta: Record<
     home: {
       title: "وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك — صوت نجدي",
       description:
-        "صوت نجدي وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي وحجازي وخليجي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاجت إنسان.",
+        "صوت نجدي وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي وحجازي وشامي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاجت إنسان.",
     },
     "how-it-works": {
       title: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
@@ -42,7 +42,7 @@ export const meta: Record<
     "product/voice-agent": {
       title: "كيف يفهم الوكيل الصوتي اللهجة السعودية؟",
       description:
-        "كيف يفهم الوكيل الصوتي اللهجة السعودية ويتعامل معها: نجدي وحجازي وخليجي، يسكت إذا قاطعته، يقرأ رقم الحجز رقم رقم، وينفذ الطلب. مكالمات داخلة فقط.",
+        "كيف يفهم الوكيل الصوتي اللهجة السعودية: نجدي وحجازي وشامي، يسكت إذا قاطعته، يقرأ رقم الحجز رقم رقم، وينفذ الطلب. والاتصال الصادر يبدأه فريقك من اللوحة.",
     },
     // Blueprint §10.8: knowledge-base grounding is NOT shipped on live phone
     // calls (production inbound voice runs through the orchestrator, which has
@@ -51,7 +51,7 @@ export const meta: Record<
     "product/knowledge-base": {
       title: "قاعدة المعرفة العربية من ملفاتك",
       description:
-        "ارفع ملفاتك — PDF و Word حتى الممسوحة ضوئياً بتعرّف عربي صحيح — تصير قاعدة معرفة تغذّي وكيلك، وتتأكد من إجاباته بنفسك في الشات التجريبي قبل النشر.",
+        "ارفع ملفاتك — PDF و Word حتى الممسوحة ضوئياً بتعرّف عربي صحيح — تصير قاعدة معرفة تغذّي وكيلك، وتتأكد من إجاباته بنفسك في المحادثة التجريبية قبل النشر.",
     },
     "product/dashboard": {
       title: "لوحة التحكم — سجل المكالمات والملخصات",
@@ -61,7 +61,7 @@ export const meta: Record<
     "product/agent-builder": {
       title: "بناء الوكيل بدون كود",
       description:
-        "سوّ وكيلك بنفسك: قالب جاهز لقطاعك، تحكم بالشخصية والصوت، وصف باللهجة النجدية يكتبه لك، شات تجريبي وسيناريوهات، ونشر مع سجل نسخ ومقارنة.",
+        "سوّ وكيلك بنفسك: قالب جاهز لقطاعك، تحكم بالشخصية والصوت، وصف باللهجة النجدية يكتبه لك، ومحادثة تجريبية وسيناريوهات، ونشر مع سجل نسخ ومقارنة.",
     },
     // Wave 2 — sector pages. These carry the long-tail: the query is typed by
     // sector («رد آلي مطاعم»), never by product name.
@@ -83,7 +83,7 @@ export const meta: Record<
     "solutions/real-estate": {
       title: "رد آلي على مكالمات المكاتب العقارية",
       description:
-        "وكيل صوتي يرد على مستفسري إعلاناتك: الوحدة متاحة ولا لا، السعر والشروط، ويحجز معاينة — مكالمات داخلة فقط، بدون أي اتصال صادر.",
+        "وكيل صوتي يرد على مستفسري إعلاناتك: الوحدة متاحة ولا لا، السعر والشروط، ويحجز معاينة — ومن اللوحة فريقك يبدأ مكالمة صادرة والوكيل يمسك الحوار.",
     },
     "solutions/retail": {
       title: "رد آلي على استفسارات متجرك",
@@ -139,7 +139,7 @@ export const meta: Record<
     home: {
       title: "Arabic AI voice agent for Saudi businesses — Saut Najdi",
       description:
-        "A Saudi AI voice agent answering calls in Najdi, Hijazi and Khaleeji Arabic or English — with your employee able to take over any call in full context.",
+        "A Saudi AI voice agent answering calls in Najdi, Hijazi and Levantine Arabic or English — with your employee able to take over any call in full context.",
     },
     "how-it-works": {
       title: "How AI call answering works, step by step",
@@ -193,7 +193,7 @@ export const meta: Record<
     "solutions/real-estate": {
       title: "AI call answering for real estate",
       description:
-        "An AI voice agent answering enquiries on your listings — availability, price, terms — and booking viewings. Inbound calls only: it never cold-calls.",
+        "An AI voice agent answering listing enquiries: availability, price, terms and booking viewings. Your team can also place outbound calls from the dashboard.",
     },
     "solutions/retail": {
       title: "AI answering for retail",

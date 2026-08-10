@@ -23,368 +23,337 @@ const kbIcons: IconName[] = ["restaurant", "doc", "people", "clock", "globe", "c
  * details — it does not take payment and is not plugged into delivery apps
  * (said out loud in the FAQ); and the peak-hour claim is capability only,
  * never a number, because no concurrency figure has been published.
+ *
+ * Short-brief copy: one idea per block, outcome first, no mechanism essays —
+ * the density of the hotels and retail pages.
  */
 
 const t = {
   ar: {
     h1: "مطعمك يرد على كل مكالمة — حتى وقت الذروة",
     intro:
-      "أكثر وقت يتصل فيه زبونك هو نفس الوقت اللي ما فيه أحد فاضي يرد فيه: الثامنة والنص مساءً، الصالة مليانة، والكاشير عنده طابور. والمكالمة اللي ما ترد عليها ما تنتظرك — تروح للمطعم اللي بعدك في القائمة. وكيل صوت نجدي يرد على كل مكالمة بلهجة زبونك، ويحجز الطاولة فعلاً، ويسلّم لموظفك أي شكوى أو طلب خاص ومعه كل تفاصيل المكالمة.",
+      "زبونك يتصل الساعة ثمان ونص والصالة مليانة وما أحد فاضي يرد — والمكالمة الفايتة تروح للمطعم اللي بعدك. وكيلك يرد بلهجة زبونك، ويحجز الطاولة فعلاً، ويحوّل الشكاوى لموظفك.",
     cta: "احجز عرضاً",
     calls: {
       eyebrow: "قالب جاهز للمطاعم والكافيهات",
       heading: "المكالمات اللي تفوتك وقت الذروة",
-      body:
-        "هذي شكل المكالمات اللي تجي أي مطعم في السعودية بين السابعة والعاشرة مساءً. اقرأها وشوف كم وحدة منها راحت عليك أمس لأن الخط كان مشغول، أو لأن أحد رد وهو يمسك ثلاثة أشياء بيده. وكل حوار تحت مربوط بنقطة في القسم اللي بعده.",
-      note: "حوارات توضيحية — هذا شكل المكالمة، مو تسجيل حقيقي.",
+      body: "هذي شكل المكالمات اللي تجي أي مطعم بين السابعة والعاشرة. كم وحدة راحت عليك أمس؟",
+      note: "حوارات توضيحية — مو تسجيلات حقيقية.",
       items: [
         {
           tag: "حجز طاولة",
           caller: "مساء الخير، عندكم طاولة لأربعة الليلة؟",
-          agent: "مساء النور! الليلة عندنا فاضي 8:30 و 9:15 — أي وقت يناسبك؟",
+          agent: "مساء النور! عندنا فاضي 8:30 و 9:15 — وش يناسبك؟",
         },
         {
           tag: "تعديل حجز",
           caller: "حاجز الساعة 9 لأربعة، بس صرنا ستة.",
-          agent: "أبشر. عدّلتها لستة، ونقلتك لطاولة في قسم العوائل بنفس الوقت — رقم حجزك نفسه: 7 — 3 — 5 — 2.",
+          agent: "عدّلتها لستة ونقلتك لقسم العوائل بنفس الوقت. نفس الرقم: 7 — 3 — 5 — 2.",
         },
         {
           tag: "القائمة والحساسية",
           caller: "عندكم أطباق بدون لحم؟ وأخوي عنده حساسية من المكسرات.",
-          agent: "عندنا أطباق نباتية أقولك إياها من القائمة. وموضوع الحساسية أسجله على حجزك وأحوّلك لموظف يأكد لك من المطبخ.",
+          agent: "عندنا أطباق نباتية أقولك إياها. والحساسية أسجلها وأحوّلك لموظف يأكد من المطبخ.",
         },
         {
           tag: "الدوام والموقع والمواقف",
           caller: "لين كم مفتوحين اليوم؟ وفيه مواقف؟",
-          agent: "مفتوحين لين 1 بعد منتصف الليل، وفيه مواقف خاصة خلف المبنى — أرسل لك موقع الفرع؟",
+          agent: "لين 1 بعد منتصف الليل، والمواقف خلف المبنى — أرسل لك الموقع؟",
         },
         {
           tag: "مناسبة أو مجموعة كبيرة",
-          caller: "أبغى أحجز لعشرين شخص يوم الخميس، عندكم قسم مغلق؟",
-          agent: "عندنا قسم خاص يستوعب العدد. أسجل لك التفاصيل وأحوّلك لمسؤول المناسبات يأكد لك الترتيب والعربون.",
+          caller: "أبغى أحجز لعشرين شخص الخميس، عندكم قسم مغلق؟",
+          agent: "عندنا قسم يستوعب العدد. أسجل التفاصيل وأحوّلك لمسؤول المناسبات.",
         },
         {
           tag: "شكوى — تصعيد فوري",
           caller: "طلبت أمس توصيل ووصل ناقص صنف.",
-          agent: "أعتذر منك على هالشي. خلني أحوّلك لمسؤول الفرع على طول ومعه كل تفاصيل طلبك.",
-          human: "معك فهد مدير الفرع — قدامي طلبك والصنف الناقص، خلني أعوضك عنه.",
+          agent: "أعتذر منك. أحوّلك لمسؤول الفرع على طول ومعه تفاصيل طلبك.",
+          human: "معك فهد مدير الفرع — قدامي طلبك والصنف الناقص، خلني أعوضك.",
         },
       ],
     },
     why: {
       heading: "ليش الذروة بالذات هي المشكلة؟",
       paras: [
-        "مشكلة مكالمات المطاعم مو في عددها، مشكلتها في توقيتها. كل المكالمات تجي في نفس الساعتين اللي فيهم الصالة مليانة والمطبخ في أعلى ضغط والموظف اللي المفروض يرد على الجوال واقف يستقبل زباين على الباب. النتيجة: الجوال يرن ثلاث مرات ويسكت، أو أحد يرد وهو مستعجل ويقول «كلمنا بعدين».",
-        "والزبون اللي ما لقى رد ما يعيد الاتصال غالباً — يفتح الخريطة ويتصل على المطعم اللي بعدك في نفس الشارع. وهذا كله يصير بدون ما تشوفه في أي تقرير، لأن المكالمة اللي ما تُرد ما تخلّف أثر في دفترك.",
-        "وأكثر هذي المكالمات أصلاً بسيطة: حجز طاولة، تعديل عدد، سؤال عن الدوام أو المواقف أو القائمة. الوكيل ياخذ هذا النوع كله عن فريقك في نفس اللحظة اللي هم فيها مشغولين، ويخلي موظفك للزبون اللي داخل من الباب وللمكالمات اللي فعلاً تحتاج إنسان.",
-        "وفيه غلط صغير في الذروة يكلفك طاولة كاملة: العدد. زبون يحجز لأربعة ويجي ستة، أو يحجز لعشرة والقسم الوحيد اللي يستوعبهم محجوز من قبل يومين. واللي يرد على الجوال وهو مستعجل يكتب «٤» وخلاص، وباقي التفاصيل اللي تحدد الطاولة الصح — عوائل ولا أفراد، كرسي أطفال، جلسة خارجية في ليلة حارة — تضيع بين المكالمة والاستقبال. الوكيل يسأل هذي الأسئلة كل مرة بنفس الترتيب، لأنه ما هو واقف على الباب وهو يسأل، وما فيه أحد ينتظره يخلص.",
-        "وفيه خسارة ثانية ما تنحسب: الحجوزات اللي تضيع بالغلط. دفتر على الاستقبال، ورسالة واتساب في جوال موظف، وورقة مكتوبة على عجل — كلها تنتهي بحجزين على نفس الطاولة، أو بزبون يجي ويلقى إن حجزه ما أحد سجله. الوكيل يحجز في تقويم واحد يشوفه كل الفريق لحظة بلحظة، فما فيه دفتر جانبي ولا رسالة راحت في الزحمة.",
+        "المشكلة مو في عدد المكالمات، في توقيتها: كلها تجي في نفس الساعتين، والصالة مليانة، واللي المفروض يرد واقف على الباب.",
+        "والزبون اللي ما لقى رد ما يعيد — يفتح الخريطة ويتصل على اللي بعدك. وغلط صغير يكلفك طاولة كاملة: يحجز لأربعة ويجي ستة.",
       ],
     },
     handled: {
       eyebrow: "مربوط بالحوارات اللي فوق",
       heading: "وش ينهيه الوكيل بنفسه على الخط؟",
       capsule:
-        "الرد الآلي العادي ياخذ اسم ورقم ويقول «بنكلمك»؛ وفي مطعم يعني إن الزبون حجز عند غيرك قبل ما ترجع له. كل مكالمة من اللي فوق ينهيها الوكيل بنفسه قبل ما يقفل الخط، وكل نقطة تحت مربوطة بحوار قريته قبل شوي.",
+        "ينهي المكالمة بنفسه: يثبت الحجز، ويعدّله أو يلغيه، ويجاوب من قائمتك ودوامك — ما ياخذ اسم ويقول «بنكلمك»، لأن الزبون اللي ينتظر رد يحجز عند غيرك.",
       items: [
         {
           title: "يحجز الطاولة فعلاً — مو ياخذ اسم ورقم",
           body:
-            "الوكيل يشوف المتاح في تقويم حجوزاتك وهو على الخط: كم شخص، أي وقت، وأي قسم — عوائل ولا أفراد ولا جلسة خارجية. ويثبت الحجز قبل ما تنتهي المكالمة، ويقرأ رقم الحجز للزبون رقم رقم بالعربي عشان يكتبه من أول مرة. والحجز يظهر لفريقك في التقويم في نفس اللحظة، فما يصير حجزين على نفس الطاولة.",
+            "يشوف تقويم حجوزاتك وهو على الخط — العدد والوقت والقسم — ويثبت الحجز ويظهر لفريقك في نفس اللحظة.",
         },
         {
-          title: "التعديل والإلغاء بدون مكالمة ثانية",
+          title: "تعديل وإلغاء بدون مكالمة ثانية",
           body:
-            "أكثر شي يتغير في حجوزات المطاعم هو العدد والوقت. الوكيل يلقى حجز الزبون من رقمه اللي يتصل منه، يزيد العدد أو ينقصه، يقدم الوقت أو يأخره، أو يلغي — ويقول له سياستك زي ما كتبتها: كم قبل يقدر يلغي، وكم دقيقة تنتظرون الطاولة قبل ما تُعطى لغيره. والطاولة اللي تنلغي ترجع متاحة على طول بدل ما تقعد فاضية.",
+            "يلقى حجز الزبون من رقمه، يزيد العدد أو يقدم الوقت أو يلغي بسياستك. والطاولة الملغاة ترجع متاحة.",
         },
         {
-          title: "القائمة والأسعار والأصناف",
-          body:
-            "«عندكم أطباق نباتية؟» «كم سعر المندي؟» «فيه بوفيه فطور؟» — إجابات محسومة عندك، والوكيل يعطيها زي ما هي من قائمتك، ما يجتهد ولا يخترع صنف. أما الطلبات اللي تخص الحساسية أو المكوّنات بالتفصيل، فيسجلها على الحجز ويحوّل الزبون لموظفك يأكد له من المطبخ — لأن هذا النوع من التأكيد مكانه عند إنسان.",
+          title: "القائمة والأسعار",
+          body: "«عندكم نباتي؟» «كم المندي؟» — يجاوب من قائمتك، ما يخترع صنف. والحساسية يسجلها ويحوّل لموظفك.",
         },
         {
           title: "الذروة: ما فيه خط مشغول",
-          body:
-            "الوكيل يرد على أكثر من مكالمة في نفس اللحظة، فالزبون اللي يتصل 9 مساءً يلقى نفس الرد اللي يلقاه اللي يتصل 4 العصر — بدون نغمة انتظار وبدون «الخط مشغول». وما يفرق عنده إذا كانت المكالمة الأولى ولا العاشرة في نفس الدقيقة؛ اللي يفرق إن كل وحدة منها تنتهي بحجز مثبت في نفس التقويم، فما تنحجز طاولة مرتين لأن اثنين اتصلوا في نفس اللحظة. وحجم المكالمات اللي يحتاجه مطعمك نقيسه معك في العرض التعريفي ونجهز الوكيل عليه، بدل ما نعطيك رقماً عاماً ما يناسب الكل.",
+          body: "يرد على أكثر من مكالمة في نفس اللحظة، فاللي يتصل 9 مساءً يلقى نفس الرد.",
         },
         {
-          title: "الدوام والفروع والمواقف والتوصيل",
-          body:
-            "«لين كم مفتوحين؟» و«وينكم بالضبط؟» و«فيه مواقف؟» و«توصلون لحينا؟» — مكالمات قصيرة بس عددها أكبر من الحجوزات نفسها. الوكيل يعرف دوام كل فرع، ودوام رمضان والإجازات اللي يتغير، وعنوان كل فرع وأقرب علامة مميزة، وسياسة التوصيل عندك ومناطق التغطية — ويوجّه الزبون للفرع الأقرب له.",
+          title: "الدوام والفروع والتوصيل",
+          body: "دوام كل فرع، ورمضان والإجازات، وأقرب علامة، ومناطق التوصيل.",
         },
         {
           title: "الزبون الدايم… يعرفه",
-          body:
-            "الزبون اللي يحجز عندك كل خميس ما يبدأ من الصفر كل مرة: الوكيل يحييه باسمه، ويعرف فرعه المفضل وعدد الأشخاص المعتاد وقسمه — عوائل ولا خارجية. وهذي نفس المعلومات تكون قدام موظفك لحظة ما يستلم المكالمة، فالزبون ما يسمع أبداً «ممكن تعيد لي الطلب من الأول؟».",
+          body: "يحييه باسمه ويعرف فرعه المفضل وعدده المعتاد — ونفس المعلومات قدام موظفك.",
         },
       ],
     },
     voice: {
       heading: "مكالمة المطعم تجي من مكان مزعج",
       paras: [
-        "زبونك يتصل وهو في سيارته، أو واقف في الشارع، أو حوله ناس يتكلمون — ويغيّر كلامه وهو يتكلم: «لا لا، خلها 9 بدل 8:30، وصرنا ستة مو أربعة». الوكيل يسكت ويسمع ويعدّل العدد والوقت في نفس المكالمة، ويقرأ رقم الحجز رقم رقم عشان ما يجي الخميس ويطلع الحجز باسم غيره.",
-        "ويرد بلهجة زبونك — نجدية أو حجازية أو خليجية، بصوت رجالي أو نسائي، وبالإنجليزية إذا كان يفضلها. وإذا كان زبائنك يتكلمون لهجة أو لغة ثانية، نجهزها لك على طلبك — وما نعلن لهجات ما أطلقناها فعلاً.",
+        "زبونك يتصل من سيارته ويغيّر كلامه وهو يتكلم: «خلها 9 بدل 8:30، وصرنا ستة». الوكيل يسمع ويعدّل الاثنين في نفس المكالمة.",
+        "والأصوات اليوم: نجدي، حجازي، شامي، وإنجليزي — رجالي ونسائي. وصوت علامتك تضيفه باستنساخ صوت شخص بموافقته، حسب باقتك.",
       ],
-      linkLead: "وتفاصيل الأصوات واللهجات، وطريقة تعامل الوكيل مع الضجيج والمقاطعة، تلقاها في ",
+      linkLead: "التفاصيل كاملة في ",
       linkText: "صفحة وكيل الصوت",
     },
     human: {
       heading: "وش يروح لموظفك؟",
       capsule:
-        "الوكيل يشتغل في اللي محسوم ومكتوب: حجوزات، وتعديلات، وقائمة، ودوام، وفروع. وكل شي فيه اجتهاد أو مزاج زبون أو فلوس يروح لموظفك على طول — ومعه كل الكلام اللي صار في المكالمة.",
+        "الوكيل يشتغل في اللي محسوم ومكتوب: حجوزات وقائمة ودوام. وكل شي فيه اجتهاد أو فلوس يروح لموظفك.",
       items: [
-        "الشكاوى: صنف ناقص، طلب متأخر، خدمة ما عجبته — تحويل فوري لموظفك، لأن الشكوى اللي يجاوب عليها روبوت تصير شكويين.",
-        "نبرة الانزعاج: الوكيل يلتقط انزعاج الزبون في صوته ويصعّد بدل ما يكمل نص محفوظ ويزيد الطين بلة.",
-        "أي شي فيه فلوس: استرجاع، تعويض، خصم، عربون مناسبة — قرارات مالية مكانها موظفك، مو الوكيل.",
-        "المناسبات والمجموعات الكبيرة: الوكيل يسجل التفاصيل — العدد والتاريخ والقسم والطلبات الخاصة — ويحوّلها لمسؤول المناسبات عندك يأكد الترتيب.",
-        "طلب الزبون إنسان — قانون ثابت ما يتفاوض فيه الوكيل ولا يحاول يقنعه إنه يقدر يساعده.",
+        "الشكاوى: صنف ناقص، طلب متأخر، خدمة ما عجبته — تحويل فوري.",
+        "نبرة الانزعاج: يلتقطها في صوت الزبون ويصعّد بدل ما يكمل نصه.",
+        "أي شي فيه فلوس: استرجاع، تعويض، خصم، عربون — مكانها موظفك.",
+        "المناسبات والمجموعات: يسجل العدد والتاريخ والقسم ويحوّلها لمسؤول المناسبات.",
+        "طلب الزبون إنسان — قانون ثابت ما يتفاوض فيه.",
       ],
       complaintNote:
-        "والشكوى في المطعم لها وقت حساس ما يشبه أي قطاع ثاني: أغلبها يجي في نفس الليلة، وأحياناً والزبون قاعد على الطاولة والأكل قدامه. عشان كذا الوكيل ما يحاول يعالجها ولا يعتذر نيابة عنك ويقفل الخط — يعتذر جملة وحدة ويحوّل على مسؤول الفرع فوراً ومعه تفاصيل الطلب أو الحجز، لأن الشكوى اللي تنتظر لبكرة ما ترجع لك مكالمة، ترجع لك تقييم على الخريطة يقراه كل واحد يبحث عن مطعمك.",
-      inheritLead: "ولحظة التحويل، موظفك يستلم سبب التصعيد والنص الكامل للمكالمة وملخصاً عربياً واضحاً وتاريخ الزبون معكم — ",
-      inheritLink: "اقرأ كيف يشتغل التصعيد بالتفصيل",
+        "والشكوى في المطعم وقتها حساس — أغلبها في نفس الليلة والزبون أحياناً على الطاولة. عشان كذا يعتذر ويحوّل فوراً، لأن الشكوى اللي تنتظرها لبكرة ترجع تقييماً على الخريطة.",
+      inheritLead: "وموظفك يستلم سبب التصعيد ونص المكالمة وملخصاً عربياً وتاريخ الزبون — ",
+      inheritLink: "اقرأ كيف يشتغل التصعيد",
       afterHours:
-        "وفريقك يقدر يتابع المكالمات وهي شغالة من لوحة التحكم: يسمع أي مكالمة مباشرة، أو يوجّه الوكيل بهمسة ما يسمعها الزبون، أو يستلم المكالمة بنفسه بضغطة وحدة. وبرا الدوام ما فيه طريق مسدود: الوكيل يعرف أوقات مطعمك، يخدم الزبون في اللي يقدر عليه — يثبت له حجز بكرة مثلاً — وإذا احتاج الموضوع إنسان، يسجل طلب اتصال ويحط فيه الوقت اللي يناسب الزبون، ويكون قدام فريقك أول ما يفتحون.",
+        "وفريقك يتابع المكالمة وهي شغالة: يسمع، أو يهمس للوكيل بدون ما يسمعه الزبون، أو يستلمها بضغطة. وبرا الدوام يثبت حجز بكرة أو يسجل طلب اتصال.",
     },
     kb: {
       heading: "وش يدخل في قاعدة معرفة مطعمك؟",
-      intro:
-        "الوكيل ما يخترع صنف ولا يفتي في سعر: كل جواب يعطيه لازم يكون مكتوباً عندك أصلاً. عشان كذا نبني معك قاعدة معرفة مطعمك من ملفاتك أنت — قائمتك، وخريطة أقسامك، وسياسة الحجز عندك — مو من كلام عام عن المطاعم:",
+      intro: "الوكيل ما يخترع صنف ولا يفتي في سعر — كل جواب لازم يكون مكتوباً عندك:",
       items: [
-        { title: "القائمة والأسعار", body: "الأصناف وأسعارها، والأطباق النباتية، وقائمة الفطور، والعروض الموسمية، ووش الصنف اللي وقف عندك." },
-        { title: "سياسة الحجز والإلغاء", body: "كم شخص أقل عدد وأكثر عدد، ومدة الجلسة، وكم دقيقة تنتظرون الطاولة، وسياسة الإلغاء والعربون للمجموعات." },
-        { title: "الأقسام والطاولات", body: "عوائل، أفراد، جلسات خارجية، قسم مغلق للمناسبات — وكم يستوعب كل قسم وأي منها يحتاج حجز مسبق." },
-        { title: "الذروة وأوقات الدوام", body: "دوام كل يوم، والأوقات اللي ما تقبلون فيها حجز، وساعات الضغط اللي تحتاج ترتيب مسبق." },
-        { title: "الفروع والمواقف والتوصيل", body: "عنوان كل فرع وأقرب علامة مميزة، والمواقف، ومناطق التوصيل وطريقة الطلب عندك." },
-        { title: "رمضان والمناسبات", body: "بوفيه الفطور والسحور، وأوقاته، وسياسة الحجز في رمضان والأعياد والمواسم." },
+        { title: "القائمة والأسعار", body: "الأصناف وأسعارها، والنباتي، والعروض الموسمية، ووش الصنف اللي وقف." },
+        { title: "سياسة الحجز والإلغاء", body: "أقل وأكثر عدد، ومدة الجلسة، وكم تنتظرون الطاولة، والعربون." },
+        { title: "الأقسام والطاولات", body: "عوائل، أفراد، خارجية، قسم مغلق — وكم يستوعب كل قسم." },
+        { title: "الذروة وأوقات الدوام", body: "دوام كل يوم، والأوقات اللي ما تقبلون فيها حجز." },
+        { title: "الفروع والمواقف والتوصيل", body: "عنوان كل فرع وأقرب علامة له، والمواقف، ومناطق التوصيل." },
+        { title: "رمضان والمناسبات", body: "بوفيه الفطور والسحور وأوقاته، وسياسة الحجز في رمضان والأعياد." },
       ],
       mechanics:
-        "وقائمة المطعم أكثر ملف ما يثبت على حال: صنف يوقف بعد نص الليل، وسعر يرتفع مع المورّد، وعرض موسمي يبدأ وينتهي في أسبوعين. تحط قائمتك زي ما هي — PDF أو Word، وحتى لو ما عندك منها إلا صورة مصوّرة بالسكانر — التعرّف الضوئي عندنا عربي أصلاً، فالكلمات تطلع سليمة مو حروف مبعثرة — وتعدّل الصنف في مكان واحد بدل ما تبلّغ كل موظف على حدة وتتمنى إنهم كلهم قروا الرسالة.",
+        "والقائمة أكثر ملف ما يثبت: صنف يوقف وسعر يرتفع. ترفعها زي ما هي وتعدّل الصنف في مكان واحد.",
       testing:
-        "وقبل ما تنشر، تجرب بنفسك في المحادثة التجريبية: تكتب سؤال زبونك زي ما بيقوله — «فيه طاولة لعشرة يوم الخميس في قسم مغلق؟» — وتشوف الجواب ومن وين جابه بالضبط. وهذي مو خطوة شكلية في مطعم: جواب غلط عن حجم الطاولة أو عن صنف موقوف يوصل الزبون لين الباب وهو متوقع شي ثاني، ويرجع منك على أعصابه. والنشر ما يصير بالغلط: تعدّل على مسودة، وتشوف مقارنة تبيّن لك وش تغيّر بالضبط، وبعدها تنشر — وكل نسخة محفوظة تقدر ترجع لها لو طلع التعديل ناقص.",
+        "وقبل النشر تجربه في المحادثة التجريبية وتشوف من وين جاب الجواب. والنشر: مسودة، ثم مراجعة، ثم نسخة ترجع لها.",
       channelsHeading: "ومو بس المكالمات",
       channels:
-        "زباين كثير يحجزون بالكتابة مو بالاتصال، خصوصاً بعد منتصف الليل وهم يخططون لليلة الخميس. واتساب للأعمال وتيليجرام ودردشة موقعك تنزل في الصندوق الموحد نفسه مع المكالمات، والرد الآلي على القنوات النصية هذي يجاوب من قاعدة معرفة مطعمك — فموظفك يشوف كل تعامل سابق مع الزبون قدامه على طول، وما يخليه يعيد طلبه من الأول.",
-      kbLinkLead: "وتفاصيل بنائها وتحديثها ونسخها المحفوظة تلقاها في ",
+        "واتساب وتيليجرام ودردشة موقعك في نفس الصندوق وبنفس قاعدة المعرفة — تاريخ الزبون قدام موظفك.",
+      kbLinkLead: "تفاصيل بنائها وتحديثها في ",
       kbLinkText: "صفحة قاعدة المعرفة",
-      securityLead: "وبيانات زبائنك وتسجيلات المكالمات لها صفحة كاملة تشرح وين تنحفظ ووين تُعالَج بالضبط — ",
+      securityLead: "ووين تنحفظ بيانات زبائنك وتسجيلاتك — ",
       securityLink: "اقرأ صفحة الأمان والبيانات",
     },
     setup: {
       heading: "كيف نجهز مطعمك؟",
       paras: [
-        "نبدأ من القالب الجاهز للمطاعم، ونعبيه بمعلومات مطعمك أنت: القائمة والأسعار، والأقسام والطاولات، وسياسة الحجز والعربون، ودوام كل فرع. بعدين نتفق على خط الشكاوى تحديداً: مين يستلمها، وعلى أي رقم، ووش الكلمات اللي إذا سمعها الوكيل صعّد على طول بدون نقاش. وتسمع صوته وتجربه بنفسك قبل ما يرد على أول زبون، وآخر خطوة نرتب معك تفعيل الرقم.",
-        "والشي اللي ياخذ وقت أكثر من غيره في المطعم مو التقنية — هي خريطة أقسامك وطاولاتك: كم يستوعب كل قسم، وأي حجم مجموعة يحتاج موافقة مسبقة أو عربون، ووش الأوقات اللي تقفل فيها الحجز أصلاً عشان ما تخنق المطبخ. وما نخليك تسجل بنفسك وتركّبها: فريقنا يضبطها معك، لأن الغلط فيها ما يظهر إلا ليلة الخميس الساعة تسع — وهو آخر وقت تقدر تصلحه فيه. والمدة نحددها لك في العرض التعريفي، على قد عدد فروعك وأقسامك وضغط الذروة عندك.",
+        "نبدأ من قالب المطاعم ونعبيه بمعلوماتك: القائمة والأسعار، والأقسام والطاولات، وسياسة الحجز والعربون. بعدين نتفق على خط الشكاوى: مين يستلمها وعلى أي رقم.",
+        "وأطول شي ياخذ وقت مو التقنية — خريطة أقسامك وطاولاتك. فريقنا يضبطها معك، ونتفق معك على المدة في العرض التعريفي.",
       ],
-      linkLead: "وتقدر تعدّل القائمة والأقسام بنفسك بعد التشغيل — ",
+      linkLead: "وتعدّل القائمة بنفسك بعد التشغيل — ",
       linkText: "صفحة بناء الوكيل",
     },
     faqHeading: "أسئلة أصحاب المطاعم",
     faq: [
       {
-        q: "الوكيل يحجز الطاولة فعلاً ولا بس ياخذ الاسم والرقم؟",
-        a: "يحجز فعلاً. الوكيل يشوف المتاح في تقويم حجوزاتك وهو على الخط — العدد والوقت والقسم — ويثبت الحجز قبل ما تنتهي المكالمة، ويقرأ رقم الحجز للزبون رقم رقم. والحجز يظهر لفريقك في التقويم في نفس اللحظة.",
+        q: "الوكيل يحجز الطاولة فعلاً ولا بس ياخذ الاسم؟",
+        a: "يحجز فعلاً — العدد والوقت والقسم — ويثبته قبل ما تنتهي المكالمة ويقرأ رقمه رقم رقم. ويظهر لفريقك في نفس اللحظة.",
       },
       {
-        q: "وقت الذروة إذا اتصل أكثر من زبون في نفس اللحظة؟",
-        a: "الوكيل يرد على أكثر من مكالمة في نفس الوقت، فما فيه خط مشغول ولا نغمة انتظار في أزحم ساعة عندك. وحجم المكالمات اللي يحتاجه مطعمك نقيسه معك في العرض التعريفي ونجهز الوكيل عليه.",
+        q: "وقت الذروة إذا اتصل أكثر من زبون؟",
+        a: "يرد على أكثر من مكالمة في نفس الوقت، فما فيه خط مشغول ولا نغمة انتظار. وحجم مكالماتك نقيسه معك في العرض التعريفي.",
       },
       {
         q: "ياخذ طلبات الأكل والتوصيل؟",
-        a: "الوكيل يجاوب على أسئلة التوصيل — مناطق التغطية وطريقة الطلب عندك — ويسجل تفاصيل الطلب ويوصلها لفريقك. لكن ما فيه دفع داخل المكالمة، وما فيه ربط جاهز مع تطبيقات التوصيل اليوم؛ إذا كان هذا اللي تحتاجه، قوله لنا في العرض ونقولك بصراحة وش ممكن ووش لا.",
+        a: "يجاوب على أسئلة التوصيل ويسجل تفاصيل الطلب لفريقك. لكن ما فيه دفع داخل المكالمة ولا ربط مع تطبيقات التوصيل.",
       },
       {
-        q: "عندنا أكثر من فرع — كل فرع يحتاج وكيل؟",
-        a: "تقدر تسوي وكيل لكل فرع بمعلوماته ودوامه، أو وكيل واحد يعرف كل الفروع ويوجّه الزبون للأقرب ويحجز في تقويم نفس الفرع. أغلب المطاعم تبدأ بوكيل واحد وتتوسع بعدين — ونرتبها معك في التجهيز.",
-      },
-      {
-        q: "وإذا كان الزبون يشتكي أو معصب؟",
-        a: "يروح لموظفك على طول. الوكيل يلتقط الانزعاج في نبرة الصوت ويصعّد، والشكاوى وأي طلب فيه استرجاع أو تعويض مو من صلاحياته أصلاً — وموظفك يستلم ومعه نص المكالمة كامل وملخصها وتاريخ الزبون.",
-      },
-      {
-        q: "فيه قالب جاهز للمطاعم ولا نبدأ من الصفر؟",
-        a: "فيه قالب جاهز للمطاعم: سيناريوهات الحجز والتعديل وأسئلة القائمة والدوام والمواقف، وهيكل قاعدة معرفة تعبيه بمعلوماتك. وفريقنا يجهزه معك ويعدله على طريقة مطعمك — ما في تسجيل ذاتي ولا نتركك تركّب النظام بنفسك.",
+        q: "وإذا كان الزبون معصب؟",
+        a: "يروح لموظفك على طول — الشكاوى وأي استرجاع مو من صلاحياته أصلاً. وموظفك يستلم ومعه النص والملخص.",
       },
     ] as FaqItem[],
   },
   en: {
     h1: "Your restaurant answers every call — even at peak service",
     intro:
-      "Your customers ring at exactly the moment nobody is free to pick up: half past eight, a full dining room, a queue at the till. And a call you don't answer doesn't wait — it goes to the next restaurant on the list. The Saut Najdi agent answers every one of them in your customer's dialect, books the table for real, and hands any complaint or special request to your staff with the whole conversation attached.",
+      "Your guests ring at half past eight with a full room and nobody free to pick up — and the call you miss goes to the next restaurant on the list. The agent answers in your guest's dialect, books the table for real, and hands complaints to your staff.",
     cta: "Book a demo",
     calls: {
       eyebrow: "A ready-made restaurant template",
       heading: "The calls you miss at peak service",
-      body:
-        "This is what calls to a Saudi restaurant sound like between seven and ten in the evening. Read them and count how many went unanswered yesterday because the line was engaged, or because somebody picked up while holding three other things. Each dialogue maps to a point in the section that follows.",
-      note: "Illustrative dialogues — this is what a call looks like, not a real recording.",
+      body: "This is what calls to a Saudi restaurant sound like between seven and ten. How many went unanswered yesterday?",
+      note: "Illustrative dialogues — not real recordings.",
       items: [
         {
           tag: "Booking a table",
           caller: "Good evening — do you have a table for four tonight?",
-          agent: "Good evening! Tonight we have 8:30 and 9:15 free — which suits you better?",
+          agent: "Good evening! We have 8:30 and 9:15 free — which suits you?",
         },
         {
           tag: "Changing a booking",
           caller: "I've booked at 9 for four, but we're six now.",
-          agent: "Done — updated to six and moved you to a table in the family section at the same time. Same reference: 7 — 3 — 5 — 2.",
+          agent: "Updated to six and moved to the family section, same time. Same reference: 7 — 3 — 5 — 2.",
         },
         {
           tag: "Menu and allergies",
           caller: "Do you have anything without meat? And my brother has a nut allergy.",
-          agent: "We do have vegetarian dishes — I'll run through them. I'll note the allergy on your booking and put you through to a colleague who'll confirm it with the kitchen.",
+          agent: "We do have vegetarian dishes — I'll run through them. I'll note the allergy and put you through to confirm with the kitchen.",
         },
         {
           tag: "Hours, location, parking",
           caller: "How late are you open today? And is there parking?",
-          agent: "We're open until 1 AM, and there's dedicated parking behind the building — shall I send you the branch location?",
+          agent: "Until 1 AM, with parking behind the building — shall I send you the location?",
         },
         {
           tag: "A group or an occasion",
-          caller: "I'd like to book for twenty people on Thursday — do you have a private area?",
-          agent: "We have a private section that takes that number. I'll take the details and put you through to our events lead to confirm the arrangements and the deposit.",
+          caller: "I'd like to book for twenty on Thursday — do you have a private area?",
+          agent: "We have a section that takes that. I'll take the details and put you through to our events lead.",
         },
         {
           tag: "A complaint — instant escalation",
           caller: "I ordered delivery yesterday and an item was missing.",
-          agent: "I'm sorry about that. Let me put you straight through to the branch manager with all your order details.",
-          human: "This is Fahad, the branch manager — I have your order and the missing item in front of me. Let me make it right.",
+          agent: "I'm sorry about that. Let me put you through to the branch manager with your order details.",
+          human: "This is Fahad, the branch manager — I have your order and the missing item. Let me make it right.",
         },
       ],
     },
     why: {
       heading: "Why peak service is the whole problem",
       paras: [
-        "The problem with restaurant calls isn't their number, it's their timing. They all arrive in the same two hours: the room is full, the kitchen is at maximum pressure, and the person who is supposed to answer the phone is standing at the door seating guests. So the phone rings three times and stops, or somebody picks up in a hurry and says “call us back later.”",
-        "A customer who didn't get through usually doesn't try again — they open the map and ring the restaurant further down the same street. None of this shows up in a report, because an unanswered call leaves no trace in your books.",
-        "And most of those calls are simple: a table, a change of party size, a question about hours, parking or the menu. The agent absorbs that entire category at precisely the moment your team is busiest, leaving your staff for the guest walking through the door and the calls that genuinely need a person.",
-        "One small mistake at peak costs a whole table: the covers. A guest books for four and arrives as six, or books for ten when the only area that seats ten went two days ago. Whoever answers in a hurry writes “4” and moves on, and the details that decide which table it actually is — family or singles, a high chair, outdoor seating on a warm night — evaporate between the call and the host stand. The agent asks those questions every time in the same order, because it isn't standing at the door while it asks and nobody is waiting for it to finish.",
-        "There's a second loss nobody counts: bookings lost to the process itself. A book on the host stand, a WhatsApp message on one employee's phone, a note scribbled mid-rush — that ends in two parties on one table, or a guest arriving to find their reservation was never written down. The agent books into a single calendar the whole team sees in real time: no side ledger, no message swallowed by the rush.",
+        "The problem isn't the number of calls, it's their timing: they all arrive in the same two hours, the room is full, and whoever should answer is at the door seating guests.",
+        "A guest who didn't get through rarely tries again — they open the map and ring the next place. And one small mistake costs a whole table: a party of four arrives as six.",
       ],
     },
     handled: {
       eyebrow: "Mapped to the dialogues above",
       heading: "What the agent finishes on the line itself",
       capsule:
-        "An ordinary auto-attendant takes a name and a number and says “we'll call you back” — which in a restaurant means the guest has booked somewhere else before you do. Every call above is finished by the agent before it hangs up, and each point below maps to a dialogue you just read.",
+        "It finishes the call itself: it confirms the booking, changes or cancels it, and answers from your menu and your hours — it doesn't take a name and say “we'll call you back”, because a guest left waiting books somewhere else.",
       items: [
         {
-          title: "It books the table — it doesn't take a name and number",
+          title: "It books the table — it doesn't take a name",
           body:
-            "The agent checks your reservations calendar on the line: party size, time, and which area — family, singles, or outdoor seating. It confirms the booking before the call ends and reads the reference back digit by digit so the guest can write it down first time. The reservation appears in your team's calendar in the same moment, so two parties never land on one table.",
+            "It checks your reservations calendar on the line — covers, time and area — confirms the booking, and it appears in your team's calendar in the same moment.",
         },
         {
           title: "Changes and cancellations without a second call",
           body:
-            "Party size and timing are what change most in restaurant bookings. The agent finds the reservation from the number the guest is calling from, adds or removes covers, moves the time earlier or later, or cancels — and states your policy as you wrote it: how much notice you require, and how long you hold a table before releasing it. A cancelled table goes straight back into availability instead of sitting empty.",
+            "It finds the reservation from the number the guest is calling from, adds covers, moves the time, or cancels on your policy. A cancelled table goes back into availability.",
         },
         {
-          title: "Menu, prices and dishes",
-          body:
-            "“Do you do vegetarian?”, “How much is the mandi?”, “Is there a breakfast buffet?” — settled answers, given exactly as they appear on your menu, with nothing improvised and no dish invented. Anything touching allergies or detailed ingredients is noted on the booking and passed to your staff to confirm with the kitchen, because that kind of confirmation belongs with a person.",
+          title: "Menu and prices",
+          body: "“Do you do vegetarian?”, “How much is the mandi?” — answered from your menu, with no dish invented. Allergies are noted and passed on.",
         },
         {
           title: "Peak service: no engaged tone",
-          body:
-            "The agent answers more than one call at the same time, so a guest calling at 9 PM gets the same answer as one calling at 4 in the afternoon — no hold music, no engaged tone. Whether it's the first call or the tenth in the same minute makes no difference to it; what matters is that each one ends in a confirmed booking in the same calendar, so a table isn't taken twice because two people rang at once. The call volume your restaurant needs is sized with you during the intro demo and the agent is provisioned for it, rather than us quoting a generic number that fits nobody.",
+          body: "It answers more than one call at the same time, so a guest calling at 9 PM gets the same answer as one calling at 4.",
         },
         {
-          title: "Hours, branches, parking and delivery",
-          body:
-            "“How late are you open?”, “Where exactly are you?”, “Is there parking?”, “Do you deliver to my area?” — short calls, but more numerous than the bookings themselves. The agent knows each branch's hours, the Ramadan and holiday schedule that shifts every year, each address and its nearest landmark, and your delivery policy and coverage — and points the guest at the nearest branch.",
+          title: "Hours, branches and delivery",
+          body: "Each branch's hours, Ramadan and holidays, the nearest landmark, and your delivery coverage.",
         },
         {
           title: "It recognises your regulars",
-          body:
-            "The guest who books every Thursday doesn't start from scratch: the agent greets them by name and knows their usual branch, their usual party size and the area they prefer. The same details sit in front of your employee the instant a call is handed over, so a regular never hears “could you go through that again from the beginning?”",
+          body: "It greets them by name and knows their usual branch and party size — the same details your employee sees.",
         },
       ],
     },
     voice: {
       heading: "A restaurant call comes from a noisy place",
       paras: [
-        "Your guest rings from the car, or standing in the street, or with people talking around them — and changes their mind while they're speaking: “no, make it 9 instead of 8:30, and we're six now, not four.” The agent stops, listens, and amends both the covers and the time inside the same call, then reads the reference back digit by digit so Thursday doesn't arrive with the booking under somebody else's name.",
-        "It answers in your guest's dialect — Najdi, Hijazi or Khaleeji, in a male or female voice, or in English if that's what they prefer. If your guests speak a dialect or language beyond those, we prepare it on request — and we don't advertise dialects we haven't actually released.",
+        "Your guest rings from the car and changes their mind mid-sentence: “make it 9 instead of 8:30, and we're six now.” The agent listens and amends both in the same call.",
+        "The voices available today are Najdi, Hijazi, Levantine and English, male and female. You can add your own brand voice by cloning a named person with their consent, depending on your plan.",
       ],
-      linkLead: "The voices and dialects, and how the agent copes with background noise and interruption, are covered on the ",
+      linkLead: "The full detail is on the ",
       linkText: "voice agent page",
     },
     human: {
       heading: "What goes to your staff",
       capsule:
-        "The agent works on what is settled and written down: reservations, changes, the menu, hours, branches. Anything involving judgement, a guest's mood or money goes to your employee immediately — with everything that was said attached.",
+        "The agent works on what is settled and written down: reservations, the menu, hours. Judgement and money go to your employee.",
       items: [
-        "Complaints: a missing item, a late order, service that disappointed — an immediate transfer, because a complaint answered by a robot becomes two complaints.",
-        "Audible frustration: the agent hears it in the caller's voice and escalates rather than pushing on with a script and making it worse.",
-        "Anything involving money: refunds, compensation, discounts, event deposits — financial decisions belong with your employee, not the agent.",
-        "Occasions and large groups: the agent captures the details — numbers, date, area, special requests — and passes them to your events lead to confirm.",
-        "An explicit request for a human — an iron law the agent never negotiates and never talks the guest out of.",
+        "Complaints: a missing item, a late order, service that disappointed — an immediate transfer.",
+        "Audible frustration: the agent hears it in the caller's voice and escalates rather than pushing on.",
+        "Anything involving money: refunds, compensation, discounts, deposits — your employee's call.",
+        "Occasions and large groups: it captures numbers, date and area and passes them to your events lead.",
+        "An explicit request for a human — an iron law it never negotiates.",
       ],
       complaintNote:
-        "A complaint in a restaurant is time-critical in a way it isn't in other sectors: most of them arrive the same night, sometimes while the guest is still at the table with the food in front of them. So the agent doesn't attempt to resolve one, and doesn't apologise on your behalf and end the call — it apologises once and puts the guest through to the branch manager immediately, with the order or booking details attached. A complaint left until tomorrow doesn't come back to you as a phone call; it comes back as a review on the map that every person searching for your restaurant reads.",
-      inheritLead: "At the moment of transfer your employee inherits the escalation reason, the full transcript, a clear Arabic summary and the guest's history with you — ",
-      inheritLink: "read how the handoff works in detail",
+        "A restaurant complaint is time-critical: most arrive the same night, sometimes while the guest is still at the table. So the agent apologises once and transfers immediately, because a complaint left until tomorrow comes back as a review on the map.",
+      inheritLead: "Your employee inherits the escalation reason, the transcript, an Arabic summary and the guest's history — ",
+      inheritLink: "read how the handoff works",
       afterHours:
-        "Your team can also follow calls as they happen from the dashboard: listen in on any call, coach the agent with a whisper the guest never hears, or take the call over in one click. And outside hours there are no dead ends: the agent knows your schedule, helps with what it can — confirming a table for tomorrow, for instance — and where a person is needed it logs a callback with the time that suits the guest, sitting in front of your team the moment they open up.",
+        "Your team can follow a call live: listen in, whisper to the agent unheard by the guest, or take over in one click. After hours it still confirms tomorrow's table or logs a callback.",
     },
     kb: {
       heading: "What goes into your restaurant's knowledge base",
-      intro:
-        "The agent invents no dish and rules on no price: every answer it gives has to be written down by you first. So we build your restaurant's knowledge base with you out of your own documents — your menu, the map of your areas, your booking policy — rather than generic restaurant content:",
+      intro: "The agent invents no dish and rules on no price — every answer has to be written down by you first:",
       items: [
-        { title: "Menu and prices", body: "Dishes and prices, vegetarian options, the breakfast menu, seasonal offers, and anything currently off the list." },
-        { title: "Booking and cancellation policy", body: "Minimum and maximum party sizes, sitting length, how long a table is held, and cancellation and deposit rules for groups." },
-        { title: "Areas and tables", body: "Family, singles, outdoor seating, the private room for occasions — how many each takes and which need booking ahead." },
-        { title: "Peak times and opening hours", body: "Hours for each day, the slots you don't accept bookings for, and the pressure hours that need arranging in advance." },
-        { title: "Branches, parking and delivery", body: "Each branch's address and nearest landmark, parking, delivery coverage and how ordering works with you." },
-        { title: "Ramadan and occasions", body: "Iftar and suhoor service and their timings, and how booking works through Ramadan, Eid and the seasons." },
+        { title: "Menu and prices", body: "Dishes and prices, vegetarian options, seasonal offers, and anything off the list." },
+        { title: "Booking and cancellation policy", body: "Minimum and maximum party sizes, sitting length, how long a table is held, and deposits." },
+        { title: "Areas and tables", body: "Family, singles, outdoor, the private room — and how many each takes." },
+        { title: "Peak times and opening hours", body: "Hours for each day, and the slots you don't take bookings for." },
+        { title: "Branches, parking and delivery", body: "Each branch's address and nearest landmark, parking, and delivery coverage." },
+        { title: "Ramadan and occasions", body: "Iftar and suhoor service and timings, and how booking works through Ramadan and Eid." },
       ],
       mechanics:
-        "A menu is the least stable document a business owns: a dish runs out after midnight, a supplier moves a price, a seasonal offer starts and finishes inside a fortnight. You upload yours as it is — PDF or Word, and a menu that exists only as a scan is fine too — the OCR here was built for Arabic, so words come out intact rather than scattered into loose letters — and you change a dish in one place instead of telling every member of staff separately and hoping they all read the message.",
+        "A menu is the least stable document a business owns: a dish runs out, a price moves. Upload it as it is and change a dish in one place.",
       testing:
-        "Before you publish, you check it yourself in the test chat: type your guest's question the way they'd actually ask it — “do you have a table for ten on Thursday in the private room?” — and see the answer and exactly which source it came from. In a restaurant that isn't a formality: a wrong answer about table size or an unavailable dish gets the guest all the way to your door expecting something else, and they leave irritated. Nothing goes live by accident either: you edit a draft, read a comparison showing exactly what moved, and only then publish — with every version kept, so a bad edit is one click from being undone.",
+        "Before publishing you check it yourself in the test chat and see where each answer came from. Publishing is deliberate: a draft, a review, then a version you can roll back to.",
       channelsHeading: "And not only calls",
       channels:
-        "Plenty of guests would rather type than dial, especially after midnight while they're planning Thursday night. WhatsApp Business, Telegram and your website chat drop into the same shared inbox as the calls, and the automatic replies on those written channels answer out of your restaurant's knowledge base — so every previous dealing with that guest is in front of your employee straight away, and nobody is asked to go through their order again.",
-      kbLinkLead: "How it is assembled, updated and versioned is covered on the ",
+        "WhatsApp Business, Telegram and your website chat drop into the same inbox and answer from the same knowledge base — the guest's history in front of your employee.",
+      kbLinkLead: "How it is assembled and updated is on the ",
       kbLinkText: "knowledge base page",
-      securityLead: "Your guests' data and your call recordings have a page of their own explaining exactly where they are stored and processed — ",
+      securityLead: "Exactly where your guests' data and recordings are stored — ",
       securityLink: "read the security and data page",
     },
     setup: {
       heading: "How we set your restaurant up",
       paras: [
-        "We start from the ready-made restaurant template and fill it with your own information: menu and prices, areas and tables, the booking and deposit policy, each branch's hours. Then we settle the complaints line specifically: who receives one, on which number, and which words make the agent escalate on the spot without argument. You hear its voice and try it yourself before it answers a single guest, and arranging your number is the last step.",
-        "The part that takes longest in a restaurant isn't the technology — it's the map of your areas and tables: how many each one seats, which group size needs prior approval or a deposit, and the slots you close to bookings altogether so the kitchen isn't buried. We don't hand you a signup form and let you assemble that yourself — our team sets it with you, because a mistake there only surfaces at nine o'clock on a Thursday — the last moment you can do anything about it. We put a duration on it in the intro demo, sized to your branches, your areas and how hard your peak hits.",
+        "We start from the ready-made restaurant template and fill it with your information: menu and prices, areas and tables, the booking and deposit policy. Then we settle the complaints line — who receives one, and on which number.",
+        "The part that takes longest isn't the technology — it's the map of your areas and tables. Our team sets that with you, and we agree the timeline with you in the demo.",
       ],
-      linkLead: "You can change the menu and the areas yourself once you're live — ",
+      linkLead: "You change the menu yourself once you're live — ",
       linkText: "the agent builder page",
     },
     faqHeading: "Questions restaurant owners ask",
     faq: [
       {
         q: "Does the agent actually book the table, or just take a name?",
-        a: "It actually books. The agent checks your reservations calendar on the line — covers, time and area — confirms before the call ends, and reads the reference back to the guest digit by digit. The booking appears in your team's calendar in the same moment.",
+        a: "It actually books — covers, time and area — confirming before the call ends and reading the reference back digit by digit. It appears in your team's calendar in the same moment.",
       },
       {
         q: "What happens at peak time when several guests ring at once?",
-        a: "The agent answers more than one call at the same time, so there's no engaged tone and no hold music in your busiest hour. The call volume your restaurant needs is sized with you in the intro demo and the agent is provisioned for it.",
+        a: "The agent answers more than one call at the same time, so there's no engaged tone and no hold music. Your call volume is sized with you in the intro demo.",
       },
       {
         q: "Can it take food orders and delivery?",
-        a: "The agent answers delivery questions — coverage and how ordering works with you — and records the order details for your team. But there is no payment inside the call, and no ready-made integration with delivery apps today; if that's what you need, say so in the demo and we'll tell you plainly what is and isn't possible.",
+        a: "It answers delivery questions and records order details for your team. But there is no payment inside the call and no integration with delivery apps.",
       },
       {
-        q: "We have several branches — does each need its own agent?",
-        a: "You can run an agent per branch with its own information and hours, or one agent that knows every branch, points the guest at the nearest and books into that branch's calendar. Most restaurants start with one and expand — we plan it with you during setup.",
-      },
-      {
-        q: "What if the guest is complaining or upset?",
-        a: "It goes to your employee immediately. The agent hears frustration in the caller's tone and escalates, and complaints — or anything involving a refund or compensation — are outside its remit by design. Your employee takes over with the full transcript, the summary and the guest's history.",
-      },
-      {
-        q: "Is there a ready-made restaurant template, or do we start from scratch?",
-        a: "There is a ready-made restaurant template: booking and amendment scenarios, menu, hours and parking questions, and a knowledge-base skeleton you fill with your own information. Our team configures it with you and adapts it to how your restaurant runs — there's no self-signup and no leaving you to assemble it alone.",
+        q: "What if the guest is upset?",
+        a: "It goes to your employee immediately — complaints and refunds are outside its remit by design. Your employee takes over with the transcript and the summary.",
       },
     ] as FaqItem[],
   },

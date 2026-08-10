@@ -25,119 +25,119 @@ import type { FaqItem } from "@/lib/schema";
 const t = {
   ar: {
     h1: "احجز عرضاً تعريفياً",
-    lead: "عرض مدته 30 دقيقة: نوريك المنصة حية، نسمّعك الوكيل بلهجتك، ونجاوب على كل أسئلتك.",
-    pricingNote: "وفي نفس العرض نقيّم احتياجك — حجم مكالماتك وقنواتك — ونعطيك عرض سعر واضح يناسب نشاطك.",
+    lead: "عرض 30 دقيقة: نوريك المنصة حية، تسمع الوكيل بلهجتك، ونجاوب أسئلتك.",
+    pricingNote: "وفي نفس الجلسة نعطيك عرض سعر يناسب حجم مكالماتك.",
     expect: {
       heading: "وش تتوقع في العرض؟",
       items: [
         "تسمع الوكيل يرد بلهجة عملائك — حي، مو تسجيل",
-        "نشرح كيف يستلم موظفك المكالمة بكامل سياقها",
-        "نشوف نشاطك ووش يناسبه من القوالب الجاهزة",
-        "نجاوب على أسئلة الأمان والبيانات وPDPL",
-        "ونرسم لك خطة تجهيز واضحة، خطوة بخطوة",
+        "تشوف موظفك يستلم المكالمة بكامل سياقها",
+        "نختار القالب اللي يناسب نشاطك",
+        "نجاوب أسئلة الأمان والبيانات وPDPL",
+        "تطلع بخطة تجهيز واضحة",
       ],
     },
-    quick: "ما عندك 30 دقيقة؟ احجز مكالمة سريعة — 15 دقيقة لأسئلتك",
+    quick: "ما عندك 30 دقيقة؟ احجز مكالمة سريعة — 15 دقيقة",
     loading: "التقويم يحمّل…",
     sections: [
       {
         h: "ليش ما فيه أسعار معلنة على الموقع؟",
-        p: "أسعار صوت نجدي على قد حجم مكالماتك وقنواتك واللي تحتاجه فعلاً — عيادة تستقبل مكالمات محدودة في الشهر مو مثل مطعم عليه ضغط في كل مساء. عشان كذا ما نحط جدول أسعار عام ينصف واحد ويظلم الثاني. في العرض نسألك أسئلة قليلة عن نشاطك وقنواتك، وبعدها نرسل لك عرض سعر مكتوب وواضح — بدون رسوم مخفية وبدون التزام تشتري.",
+        p: "السعر على قد حجم مكالماتك وقنواتك — عيادة مو مثل مطعم عليه ضغط كل مساء. نسألك أسئلة قليلة في العرض، ويوصلك عرض سعر مكتوب بدون رسوم مخفية.",
       },
       {
         h: "مين المفروض يحضر من طرفك؟",
-        p: "خلها بسيطة: صاحب القرار، والشخص اللي يعرف مكالماتكم اليومية — مدير الفرع أو مسؤول خدمة العملاء، لأنه هو اللي يعرف وش الأسئلة اللي تتكرر ووش المكالمات اللي تضيع. وإذا عندكم مسؤول تقنية أو امتثال ويهمه سؤال البيانات، خله يحضر: نجاوب أسئلة التخزين والمعالجة وPDPL في نفس الجلسة بدل ما ترجعون لنا مرة ثانية.",
+        p: "صاحب القرار، والشخص اللي يعرف مكالماتكم اليومية — مدير الفرع أو مسؤول خدمة العملاء. وإذا عندكم مسؤول تقنية أو امتثال خله يحضر، ونجاوب أسئلة البيانات وPDPL في نفس الجلسة.",
       },
       {
         h: "ما أقدر أتصل وأجرب بنفسي قبل العرض؟",
-        p: "لسه ما عندنا رقم سعودي تتصل عليه وتجربه، لأن تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات، وما نعطي وعداً بتاريخ ما نتحكم فيه. عشان كذا التجربة تصير داخل العرض: نشغّل الوكيل حي، تسمعه بلهجتك، وتسأله اللي تبغى — وتشوف بعينك كيف يستلم الموظف المكالمة وهي شغالة.",
+        p: "ما عندنا للحين رقم سعودي تتصل عليه — تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات. بدالها نشغّل الوكيل حي في العرض: تسمعه بلهجتك وتسأله اللي تبغى.",
       },
       {
         h: "وش تطلع فيه من العرض؟",
-        p: "ثلاثة أشياء: عرض سعر يناسب حجم نشاطك، وخطة تجهيز مكتوبة خطوة بخطوة، وإجابات مباشرة على أسئلة البيانات والأمان. وإذا مشيت معنا، فريقنا يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد — ما في تسجيل ذاتي، وما نتركك تركّب النظام بنفسك وتتصرف.",
+        p: "عرض سعر يناسب نشاطك، وخطة تجهيز مكتوبة، وإجابات على أسئلة البيانات. وفريقنا هو اللي يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد — ما في تسجيل ذاتي.",
       },
     ],
     related: [
-      { path: "how-it-works", label: "شوف رحلة المكالمة كاملة قبل العرض" },
+      { path: "how-it-works", label: "رحلة المكالمة كاملة" },
       { path: "product/human-handoff", label: "كيف يستلم موظفك المكالمة" },
-      { path: "security", label: "أسئلة البيانات وPDPL مجاوبة هنا" },
+      { path: "security", label: "أسئلة البيانات وPDPL" },
     ],
     faqHeading: "أسئلة عن العرض التعريفي",
     faq: [
       {
         q: "العرض مجاني؟",
-        a: "العرض التعريفي في صوت نجدي مجاني وبدون التزام — 30 دقيقة نوريك فيها المنصة حية ونجاوب أسئلتك، وأنت حر بعدها.",
+        a: "العرض التعريفي في صوت نجدي مجاني وبدون التزام — 30 دقيقة نوريك فيها المنصة حية ونجاوب أسئلتك.",
       },
       {
         q: "العرض بالعربي ولا بالإنجليزي؟",
-        a: "عرض صوت نجدي بالعربي بشكل افتراضي — وإذا فريقك يفضل الإنجليزي نسويه إنجليزي، وتقدر تسمع الوكيل بالعربي والإنجليزي في نفس الجلسة.",
+        a: "عرض صوت نجدي بالعربي افتراضياً، وإنجليزي إذا فريقك يفضله. وتقدر تسمع الوكيل باللغتين في نفس الجلسة.",
       },
       {
         q: "ألزم أجهز شي قبل العرض؟",
-        a: "ما يلزمك تجهيز في صوت نجدي: جيب معك أكثر خمسة أسئلة يسألها عملاؤك، وإذا عندك ملف أسعار أو جدول مواعيد خله في بالك — نبني عليه المثال أثناء العرض.",
+        a: "ما يلزمك تجهيز. جيب معك أكثر خمسة أسئلة يسألها عملاؤك، ونبني عليها المثال الحي في العرض.",
       },
       {
         q: "إذا ما ناسبني الوقت المتاح في التقويم؟",
-        a: "إذا ما لقيت وقتاً يناسبك في تقويم صوت نجدي، راسلنا على الإيميل وبنرتب لك وقتاً ثانياً — أو احجز المكالمة السريعة 15 دقيقة وخلاص.",
+        a: "راسلنا على الإيميل وبنرتب لك وقتاً ثانياً، أو احجز المكالمة السريعة 15 دقيقة.",
       },
     ] as FaqItem[],
   },
   en: {
     h1: "Book an intro demo",
-    lead: "A 30-minute demo: we show you the platform live, let you hear the agent in your customers' dialect, and answer every question.",
-    pricingNote: "In the same demo we assess your needs — call volume and channels — and give you a clear offer that fits your business.",
+    lead: "30 minutes: the platform live, the agent speaking your customers' dialect, and your questions answered.",
+    pricingNote: "You leave the same session with a price fitted to your call volume.",
     expect: {
       heading: "What to expect in the demo",
       items: [
         "Hear the agent answer in your customers' dialect — live, not a recording",
-        "See how your employee takes over a call with full context",
-        "Look at your business and which ready-made template fits it",
+        "Watch an employee take over a call with full context",
+        "Pick the ready-made template that fits your business",
         "Get your security, data and PDPL questions answered",
-        "Leave with a clear step-by-step setup plan",
+        "Leave with a step-by-step setup plan",
       ],
     },
-    quick: "Short on time? Book a quick 15-minute call for your questions",
+    quick: "Short on time? Book a quick 15-minute call",
     loading: "Loading the calendar…",
     sections: [
       {
         h: "Why isn't there public pricing on the site?",
-        p: "Saut Najdi pricing scales with your call volume, your channels and what you actually need — a clinic taking a modest number of calls a month is not a restaurant under pressure every evening. A single public price list would be fair to one of them and unfair to the other. In the demo we ask a few questions about your business and channels, then send a written, itemised offer — no hidden fees, no obligation to buy.",
+        p: "Pricing scales with call volume and channels — a clinic taking a few hundred calls a month is not a restaurant under pressure every evening. We ask a few questions in the demo, then send a written, itemised offer with no hidden fees and no obligation.",
       },
       {
         h: "Who should join from your side?",
-        p: "Keep it simple: the decision-maker, and whoever actually knows your daily calls — a branch manager or customer-service lead, because they know which questions repeat and which calls are being lost. And if you have an IT or compliance owner who cares about the data question, bring them: storage, processing and PDPL get answered in the same session instead of a second round-trip.",
+        p: "The decision-maker, plus whoever knows your daily calls — a branch manager or customer-service lead. Bring your IT or compliance owner too, and storage, processing and PDPL get answered in the same session.",
       },
       {
         h: "Can't I just call in and try it myself first?",
-        p: "Not yet — there's no Saudi number you can ring, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. So the trial happens inside the demo: we run the agent live, you hear it in your dialect, you ask it whatever you want — and you watch an employee take a call over mid-conversation.",
+        p: "Not yet — there's no Saudi number to ring, because activation runs through Saudi telecom regulatory steps. Instead we run the agent live in the demo: hear it in your dialect, ask it anything, and watch an employee take the call over mid-conversation.",
       },
       {
         h: "What do you leave the demo with?",
-        p: "Three things: an offer sized to your business, a written step-by-step setup plan, and direct answers on data and security. And if you go ahead, our team builds your agent, your knowledge base and your escalation rules — there's no self-signup, and we don't hand you a system to assemble on your own.",
+        p: "An offer sized to your business, a written setup plan, and direct answers on data and security. If you go ahead, our team builds the agent, the knowledge base and the escalation rules — there's no self-signup.",
       },
     ],
     related: [
-      { path: "how-it-works", label: "See a full call's journey before you book" },
+      { path: "how-it-works", label: "A full call's journey" },
       { path: "product/human-handoff", label: "How your employee takes a call over" },
-      { path: "security", label: "Data and PDPL questions, answered" },
+      { path: "security", label: "Data and PDPL questions" },
     ],
     faqHeading: "Demo questions",
     faq: [
       {
         q: "Is the demo free?",
-        a: "The Saut Najdi intro demo is free and carries no obligation — 30 minutes of the platform live and your questions answered, and you decide afterwards.",
+        a: "The Saut Najdi intro demo is free and carries no obligation — 30 minutes of the platform live and your questions answered.",
       },
       {
         q: "Is the demo in Arabic or English?",
-        a: "The Saut Najdi demo runs in Arabic by default, switches to English if your team prefers it, and you can hear the agent in both languages in the same session.",
+        a: "The Saut Najdi demo runs in Arabic by default and switches to English if your team prefers. You can hear the agent in both languages in the same session.",
       },
       {
         q: "Do I need to prepare anything?",
-        a: "Nothing needs preparing for a Saut Najdi demo: bring the five questions your customers ask most, and have your price list or appointment schedule in mind — we'll build the live example around it.",
+        a: "Nothing needs preparing. Bring the five questions your customers ask most and we'll build the live example around them.",
       },
       {
         q: "What if none of the calendar slots work for me?",
-        a: "If no slot in the Saut Najdi calendar fits, email us and we'll arrange another time — or just book the 15-minute quick call instead.",
+        a: "Email us and we'll arrange another time, or book the 15-minute quick call instead.",
       },
     ] as FaqItem[],
   },

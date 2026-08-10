@@ -43,7 +43,7 @@ const KNOWS_ABOUT = {
     "خدمة العملاء",
     "اللهجة النجدية",
     "اللهجة الحجازية",
-    "اللهجة الخليجية",
+    "اللهجة الشامية",
     "التعرف على الكلام العربي",
     "قواعد المعرفة العربية",
     "واتساب للأعمال",
@@ -57,7 +57,7 @@ const KNOWS_ABOUT = {
     "Customer service automation",
     "Najdi Arabic dialect",
     "Hijazi Arabic dialect",
-    "Khaleeji Arabic dialect",
+    "Levantine Arabic dialect",
     "Arabic speech recognition",
     "Arabic knowledge bases",
     "WhatsApp Business",
@@ -168,7 +168,7 @@ export function softwareApplication(locale: Locale): JsonLd {
   const featureList =
     locale === "ar"
       ? [
-          "وكيل صوتي بالذكاء الاصطناعي يرد على المكالمات بلهجات سعودية (نجدي، حجازي، خليجي) وبالعربية والإنجليزية",
+          "وكيل صوتي بالذكاء الاصطناعي يرد على المكالمات بلهجات سعودية (نجدي، حجازي، شامي) وبالعربية والإنجليزية",
           "تصعيد فوري لموظف بشري بكامل سياق المكالمة",
           "إشراف مباشر: استماع وهمس واستلام المكالمة من لوحة التحكم",
           "قاعدة معرفة عربية من ملفات PDF وWord مع تعرّف ضوئي عربي",
@@ -178,7 +178,7 @@ export function softwareApplication(locale: Locale): JsonLd {
           "سجل تدقيق غير قابل للتعديل وحذف تلقائي للتسجيلات بعد 90 يوماً",
         ]
       : [
-          "AI voice agent answering calls in Saudi dialects (Najdi, Hijazi, Khaleeji), Arabic and English",
+          "AI voice agent answering calls in Saudi dialects (Najdi, Hijazi, Levantine), Arabic and English",
           "Instant escalation to a human employee with full conversation context",
           "Live supervision: listen, whisper, or take over from the dashboard",
           "Arabic knowledge base from PDF/Word documents with true Arabic OCR",

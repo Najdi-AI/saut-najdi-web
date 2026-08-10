@@ -12,10 +12,14 @@ import type { FaqItem } from "@/lib/schema";
 
 /**
  * /solutions/retail — sector page (blueprint §6.3, spec P2-22 row 6).
- * Same template as the other sector pages, plus the honest limit this
- * sector needs said out loud: the agent does not read your store or
- * courier system, so "where is my order" is captured and routed, not
- * looked up. Claiming a live lookup would be an integration we don't have.
+ * Short-brief copy: one idea per block, outcome first, no mechanism essays.
+ * The honest limit this sector needs said out loud stays: the agent does not
+ * read your store or courier system, so "where is my order" is captured and
+ * routed, not looked up.
+ *
+ * Voice catalog is Najdi / Hijazi / Levantine / English — there is no
+ * Khaleeji voice, so it is never listed. Brand-voice cloning is plan
+ * dependent and is mentioned unquantified.
  *
  * Dialogues are rendered locally: SampleConversation plays one fixed clinic
  * script and takes no `script` prop, and that file isn't this page's to
@@ -33,88 +37,88 @@ const t = {
   ar: {
     h1: "وصل طلبي؟ — رد على استفسارات عملائك بدون فريق",
     intro:
-      "متجرك يبيع، والمكالمات تجي ورا بعض: وين طلبي؟ ينفع أرجّع؟ عندكم هذا المقاس في فرع الرياض؟ فريقك يرد على اللي يقدر عليه، والباقي يروح بريد صوتي ويرجع لك شكوى. وكيل صوت نجدي يرد على كل مكالمة بلهجة عميلك، يجاوب من سياساتك وبيانات فروعك، ويسجل تفاصيل أي استفسار يحتاج متابعة ويوصله لفريقك مرتب مع نص المكالمة.",
+      "وين طلبي؟ ينفع أرجّع؟ عندكم المقاس في الرياض؟ وكيلك يرد على كل مكالمة من سياساتك وبيانات فروعك، واللي يحتاج متابعة يوصله لفريقك.",
     cta: "احجز عرضاً",
     calls: {
       eyebrow: "المكالمات اللي تفوتك",
-      heading: "المكالمات اللي تفوتك — وأنت تشحن وتخدم في نفس الوقت",
-      body: "مكالمات التجزئة كلها تتكرر: نفس الأسئلة الستة، بنفس الصياغة، عشرات المرات في اليوم. وأكثرها ما يحتاج موظف — يحتاج أحد يرد بسرعة وبمعلومة صحيحة. وهذي الست مكالمات اللي تشيل أغلب مكالماتك:",
-      note: "حوارات توضيحية — هذا شكل المكالمة، مو تسجيلات حقيقية.",
+      heading: "وش المكالمات اللي تفوتك وأنت تشحن وتخدم؟",
+      body: "نفس الأسئلة الستة تتكرر عشرات المرات في اليوم، وأكثرها يحتاج رد سريع بس — مو موظف.",
+      note: "حوارات توضيحية — مو تسجيلات حقيقية.",
       items: [
         {
           tag: "وين طلبي؟",
-          caller: "طلبت من عندكم قبل ثلاثة أيام، وين وصل طلبي؟",
-          agent: "أبشر. عطني رقم الطلب من الرسالة اللي وصلتك… تمام، سجلته. الشحن عادةً يوصل من يومين إلى خمسة أيام عمل — وسجلت استفسارك لخدمة العملاء ويرجعون لك اليوم بتحديث دقيق.",
-          note: "الوكيل ما يفتح نظام متجرك — لكنه يرد فوراً، يشرح المدة المعتادة بالصياغة اللي اعتمدتها أنت، وياخذ رقم الطلب وتفاصيل الاستفسار ويوصلها لفريقك مرتبة.",
+          caller: "طلبت قبل ثلاثة أيام، وين وصل طلبي؟",
+          agent: "عطني رقم الطلب… تمام. الشحن عادةً من يومين إلى خمسة أيام، وخدمة العملاء يرجعون لك اليوم.",
+          note: "يرد فوراً، وياخذ رقم الطلب ويوصله لفريقك.",
         },
         {
           tag: "الإرجاع والاستبدال",
-          caller: "اشتريت جزمة والمقاس ما ضبط، ينفع أرجعها؟",
-          agent: "إي ينفع. الإرجاع خلال 14 يوم من الاستلام والقطعة بحالتها وبكرتونها، والمبلغ يرجع لنفس وسيلة الدفع. تبيني أسجل لك طلب إرجاع بالتفاصيل؟",
-          note: "أكثر سؤال في التجزئة، وأكثر سؤال ينحل بجواب واضح. الوكيل يقوله بنفس صياغة سياستك — ما يزيد ولا ينقص.",
+          caller: "المقاس ما ضبط، ينفع أرجع الجزمة؟",
+          agent: "إي. الإرجاع خلال 14 يوماً والقطعة بكرتونها، والمبلغ يرجع لنفس وسيلة الدفع.",
+          note: "بنفس صياغة سياستك — ما يزيد ولا ينقص.",
         },
         {
           tag: "توفر منتج في فرع",
-          caller: "عندكم القميص الأزرق مقاس L في فرع العليا؟",
-          agent: "فرع العليا مفتوح لين 11 بالليل. توفر المقاس بالذات يحتاج أحد يتأكد من الرف — أسجل استفسارك برقم المنتج والمقاس وأحد من الفرع يرد عليك؟",
-          note: "الوكيل ما يدّعي إنه يشوف مخزونك. يرد بالصدق، ويحوّل الاستفسار للفرع بتفاصيل تكفي عشان يردون من أول مرة.",
+          caller: "عندكم القميص الأزرق مقاس L في العليا؟",
+          agent: "الفرع مفتوح لين 11 بالليل. توفر المقاس يبيله أحد يتأكد من الرف — أسجل استفسارك ويرد عليك الفرع؟",
+          note: "ما يدّعي إنه يشوف مخزونك.",
         },
         {
-          tag: "أوقات ومواقع الفروع",
+          tag: "أوقات الفروع",
           caller: "فرع الخبر مفتوح اليوم؟ ولين كم؟",
-          agent: "إي مفتوح اليوم من 10 الصبح إلى 11 بالليل، ويوم الجمعة يفتح بعد صلاة الجمعة. وموقعه في الشارع الرئيسي جنب المجمع — أعطيك أقرب علامة؟",
-          note: "سؤال بسيط يتكرر مئات المرات في الشهر، وياخذ من وقت موظفك أكثر من أي سؤال ثاني.",
+          agent: "من 10 الصبح إلى 11 بالليل، والجمعة بعد الصلاة. أعطيك أقرب علامة؟",
+          note: "يتكرر مئات المرات في الشهر وياكل وقت موظفك.",
         },
         {
           tag: "العروض وشروطها",
-          caller: "العرض اللي عندكم على الشنط بعده شغال؟ وينطبق على كل الموديلات؟",
-          agent: "العرض شغال لين نهاية الشهر، وينطبق على الموديلات الكلاسيك بس — ما يشمل الإصدار المحدود. تبيني أعدد لك الموديلات الداخلة فيه؟",
-          note: "شروط العرض إذا ما انقالت صح تتحول لخلاف عند الكاشير. الوكيل يقولها كاملة، بشروطها واستثناءاتها، لكل من يسأل.",
+          caller: "العرض على الشنط بعده شغال؟",
+          agent: "شغال لين نهاية الشهر، وعلى الموديلات الكلاسيك بس — الإصدار المحدود ما يشمله.",
+          note: "شرط عرض ما انقال صح يتحول لخلاف عند الكاشير.",
         },
         {
-          tag: "منتج تالف — يروح لموظفك",
+          tag: "منتج تالف",
           caller: "وصلني المنتج مكسور وأبي أكلم مسؤول.",
-          agent: "أعتذر منك، هذا ما يصير. أحوّلك الحين لموظف خدمة العملاء — ومعه رقم طلبك وكل اللي وصفته لي، ما تحتاج تعيد الكلام.",
-          note: "طلب الإنسان تحويل فوري ما يتفاوض فيه الوكيل — والموظف يستلم وهو عارف القصة، فيبدأ بالحل مو بالأسئلة.",
+          agent: "أعتذر منك. أحوّلك الحين لخدمة العملاء — ومعه رقم طلبك وكل اللي وصفته.",
+          note: "طلب الإنسان تحويل فوري، والموظف يستلم وهو عارف القصة.",
         },
       ] as Dialogue[],
     },
     boundary: {
       eyebrow: "حد واضح",
-      heading: "الوكيل ما يفتح نظام متجرك — بس ما يضيّع الاستفسار",
-      body: "نقولها بصراحة عشان ما تشتري توقع غلط: وكيل صوت نجدي ما يدخل على نظام متجرك ولا على نظام شركة الشحن عشان يجيب حالة الشحنة لحظة بلحظة. اللي يسويه أهم من كذا في أغلب المكالمات: يرد من أول رنة، ويجاوب على كل سؤال سياسة أو فرع أو عرض جواب دقيق بالصياغة اللي جهزناها معك من سياساتك، وما يخلي عميلك يسمع رنة فاضية.",
+      heading: "الوكيل يفتح نظام متجرك؟",
+      body: "لا. ما يدخل على نظام متجرك ولا الشحن، فما يجيب حالة شحنة لحظة بلحظة. لكنه يرد من أول رنة على السياسات والفروع والعروض بصياغتك.",
       body2:
-        "وإذا كان السؤال يحتاج فتح النظام — «وين شحنتي بالضبط» — ياخذ رقم الطلب واسم العميل ورقمه ووش يبي بالضبط، ويسجلها طلب متابعة يوصل فريقك مع نص المكالمة والملخص. النتيجة العملية: العميل ما يتصل ثلاث مرات، وموظفك يرد مرة وحدة على معلومة كاملة بدل ما يبدأ بالسؤال «ممكن رقم الطلب؟».",
+        "واللي يحتاج فتح النظام — «وين شحنتي؟» — يسجله طلب متابعة برقم الطلب وبيانات العميل، ويوصل فريقك مع نص المكالمة. فتردون مرة وحدة.",
     },
     handles: {
       eyebrow: "وش يتكفل فيه الوكيل",
       heading: "وش يتكفل فيه الوكيل بنفسه؟",
       capsule:
-        "وكيل صوت نجدي في التجزئة يرد على كل مكالمة من أول رنة بلهجة عميلك، ويجاوب على سياسة الإرجاع والاستبدال والضمان والشحن ورسومه، وأوقات الفروع ومواقعها، والعروض وشروطها، وطرق الدفع والفاتورة الضريبية — بالصياغة اللي جهزناها معك من سياساتك أنت. وأي استفسار يحتاج متابعة — حالة طلب، توفر مقاس في فرع — يسجله بتفاصيله كاملة لفريقك، ويحوّل الشكاوى والمبالغ لموظفك على طول.",
+        "يرد من أول رنة على الإرجاع والشحن وأوقات الفروع والعروض والدفع — من سياساتك أنت.",
       items: [
         {
-          title: "يرد على كل مكالمة بدون فريق كول سنتر",
-          body: "متجر واحد أو علامة عندها عشرة فروع — نفس المشكلة: المكالمات كلها تجي في نفس الساعات، ومع أول عرض أو موسم تتضاعف. الوكيل يرد من أول رنة، ما فيه بريد صوتي ولا انتظار ولا «الرجاء المحاولة لاحقاً» يخلي عميلك يشتري من غيرك.",
+          title: "يرد على كل مكالمة بدون كول سنتر",
+          body: "المكالمات كلها تجي في نفس الساعات ومع أول عرض تتضاعف. ما فيه بريد صوتي ولا انتظار.",
         },
         {
           title: "يعرف سياساتك حرف بحرف",
-          body: "الإرجاع، الاستبدال، الضمان، الشحن ورسومه ومدده، طرق الدفع، الفاتورة الضريبية. الوكيل يرد بالصياغة اللي كتبتها أنت، ما يجتهد ولا يوعد العميل بشي ما تقدر توفيه — وهذا وحده يقطع أكثر خلاف يصير عند الاستلام.",
+          body: "الإرجاع والضمان والشحن وطرق الدفع والفاتورة الضريبية بصياغتك أنت — بدون وعود زايدة.",
         },
         {
           title: "أوقات ومواقع كل فرع",
-          body: "كل فرع بموقعه وأوقاته، وأوقاته المختلفة يوم الجمعة وفي رمضان والأعياد، والخدمات اللي فيه: تجربة، تعديل، استلام أونلاين، إرجاع. العميل يسأل «مفتوح الحين؟» ويلقى جواب صحيح بأي ساعة يتصل فيها.",
+          body: "أوقات كل فرع وخدماته، وأوقات الجمعة ورمضان. «مفتوح الحين؟» له جواب صحيح بأي ساعة.",
         },
         {
           title: "ياخذ تفاصيل الاستفسار كاملة",
-          body: "رقم الطلب، اسم العميل ورقمه، وش المشكلة بالضبط، ووش يتوقع يصير. يوصل فريقك مرتب مع نص المكالمة والملخص — بدل «واحد اتصل يسأل عن طلبه» مكتوبة على ورقة لاصقة على الشاشة.",
+          body: "رقم الطلب واسم العميل ووش المشكلة — يوصل فريقك مرتب مع نص المكالمة.",
         },
         {
           title: "بلهجة عميلك — عربي أو إنجليزي",
-          body: "الوكيل يرد بالنجدي أو الحجازي أو الخليجي أو بالعربية العامة، وبالإنجليزية للعميل اللي يفضلها، وينتقل بين اللغتين حسب اللي يسمعه. وتختار صوت الوكيل — رجل أو امرأة — على شخصية علامتك التجارية.",
+          body: "نجدي، حجازي، شامي، وإنجليزي، وينتقل حسب اللي يسمعه. وتختار الصوت رجل أو امرأة — أو صوت علامتك، حسب باقتك.",
         },
         {
           title: "يتذكر عميلك",
-          body: "إذا اتصل عميل سبق وكلمكم، الوكيل يعرفه ويحييه باسمه ويعرف تفاعلاته السابقة معكم. العميل ما يشرح قصته من الأول كل مرة — وهذي بالذات الشي اللي يحس فيه العميل إنه يتعامل مع علامة محترمة.",
+          body: "يحيي العميل اللي سبق وكلمكم باسمه ويعرف تفاعلاته السابقة.",
         },
       ],
     },
@@ -122,208 +126,204 @@ const t = {
       eyebrow: "وش يروح لموظفك",
       heading: "وش يروح لموظفك؟",
       capsule:
-        "الوكيل ما يحاول يحل كل شي — وهذا مقصود. أربع حالات في التجزئة تروح لموظفك على طول: العميل يطلب إنسان، أو فيه شكوى ومنتج تالف، أو الموضوع فلوس واسترجاع، أو طلب جملة وفاتورة منشأة. والقواعد أنت اللي تحددها من اللوحة وتعدلها متى ما تبي.",
+        "أربع حالات تروح لموظفك على طول، والقواعد تحددها أنت من اللوحة.",
       items: [
         {
           title: "طلب الإنسان — تحويل فوري",
-          body: "إذا قال العميل «أبي أكلم موظف»، الوكيل ما يجادل ولا يحاول يقنعه إنه يقدر يساعده. يحوّل على طول — قانون ثابت في المنصة كلها، مو إعداد ينسى أحد يشغله.",
+          body: "«أبي أكلم موظف» ما فيها نقاش — قانون ثابت في المنصة كلها.",
         },
         {
           title: "شكوى أو منتج تالف",
-          body: "وصل مكسور، ناقص قطعة، مختلف عن الصورة، أو تأخر أسبوع عن الموعد. هذي مواقف عميل فيها زعلان وله حق. الوكيل يعتذر، ياخذ رقم الطلب والتفاصيل، ويحوّل لموظفك ومعه النص كامل — عشان الموظف يبدأ بالحل.",
+          body: "وصل مكسور، ناقص قطعة، أو تأخر أسبوع. يعتذر ويحوّل بالنص كامل عشان الموظف يبدأ بالحل.",
         },
         {
-          title: "استرجاع مبلغ أو نزاع على فاتورة",
-          body: "أي كلام عن مبلغ مسترجع، خصم، خطأ في الفاتورة، أو خصم انسحب مرتين من البطاقة — يروح لموظفك. والوكيل ما ياخذ بيانات بطاقات ولا يستوفي مبالغ في المكالمة أبداً.",
-        },
-        {
-          title: "إلغاء أو تعديل طلب قبل الشحن",
-          body: "العميل يبي يلغي طلبه، أو يغيّر عنوانه أو المقاس، قبل ما ينشحن. هذا يحتاج أحد يفتح النظام قبل لا يطلع الطلب من المستودع — والوقت فيه ضيق. الوكيل ياخذ رقم الطلب والتعديل المطلوب ويصعّدها لفريقك على طول، وما يوعد العميل إن التعديل تم.",
+          title: "استرجاع مبلغ أو تعديل طلب",
+          body: "أي مبلغ مسترجع أو خطأ فاتورة، وأي إلغاء أو تعديل قبل الشحن. والوكيل ما ياخذ بيانات بطاقات.",
         },
         {
           title: "طلبات الجملة والشركات",
-          body: "كمية كبيرة، فاتورة باسم منشأة، عرض سعر لجهة، أو طلب هدايا لموظفين. هذي مبيعات مو خدمة عملاء. الوكيل ياخذ الأساسيات — الجهة، الكمية، الموعد المطلوب — ويوصلها لفريق المبيعات جاهزة.",
+          body: "كمية كبيرة أو فاتورة منشأة — مبيعات مو خدمة عملاء. ياخذ الأساسيات ويوصلها للمبيعات.",
         },
       ],
-      outroLead: "وأياً كان السبب، موظفك يستلم ومعه سبب التحويل والنص الكامل وملخص عربي وتاريخ العميل معكم — ",
-      outroLink: "اقرأ كيف يشتغل التصعيد بالتفصيل",
+      outroLead: "وموظفك يستلم ومعه سبب التحويل والنص الكامل وملخص عربي وتاريخ العميل — ",
+      outroLink: "اقرأ تفاصيل التصعيد",
       outroPath: "product/human-handoff",
-      outroTail: " وفريقك يقدر يتابع المكالمات وهي شغالة من اللوحة، ويسمع، ويستلم المكالمة بنفسه بضغطة وحدة.",
+      outroTail: " وفريقك يقدر يتابع المكالمة وهي شغالة ويستلمها بضغطة.",
     },
     kb: {
       eyebrow: "قاعدة المعرفة",
       heading: "وش تحط في قاعدة معرفة متجرك؟",
-      body: "كل ما كانت سياساتك مكتوبة بوضوح، قلّت المكالمات اللي تحتاج موظف. ترفع ملفاتك — Word أو نص أو مستندات ممسوحة ضوئياً، عندنا قراءة عربية للنص المصور — أو تكتبها أسئلة وأجوبة ومقتطفات قصيرة، أو تحط رابط صفحة السياسات عندك. منها نبني وكيلك، ومنها يرد على عملائك في قنوات المحادثة النصية — واتساب وتليجرام ومحادثة موقعك — وتتأكد من كل جواب بنفسك في المحادثة التجريبية قبل النشر. وهذي أهم ستة أشياء في متجر تجزئة:",
+      body: "كلما وضحت سياساتك، قلّت المكالمات اللي تحتاج موظف. ترفع ملفاتك أو تكتبها أسئلة وأجوبة، وتجربها في المحادثة التجريبية قبل النشر:",
       items: [
         {
-          title: "سياسة الإرجاع والاستبدال",
-          body: "المدة، والشروط (الكرتون، البطاقة، الفاتورة)، والاستثناءات: الملابس الداخلية، المنتجات المخفضة، الإصدارات المحدودة، المنتجات المخصصة. وكيف يرجع المبلغ وكم ياخذ وقت. اكتبها بالتفصيل — لأن كل غموض فيها يرجع لك مكالمة زعل.",
+          title: "الإرجاع والاستبدال",
+          body: "المدة والشروط والاستثناءات: المخفضات، الإصدارات المحدودة، المنتجات المخصصة.",
         },
         {
           title: "الشحن والتوصيل",
-          body: "شركات الشحن اللي تتعامل معها، المدد داخل المدينة وخارجها، الرسوم، حد الشحن المجاني، التوصيل السريع في نفس اليوم إذا متوفر، والاستلام من الفرع. وهذي بالذات تحدّثها في المواسم لأن المدد تتغير.",
+          body: "شركات الشحن، المدد داخل المدينة وخارجها، الرسوم، والاستلام من الفرع.",
         },
         {
           title: "سيناريو «وين طلبي؟»",
-          body: "اكتب بالضبط وش يقوله الوكيل لما يسأل العميل عن طلبه: المدة المعتادة، وش تعني كل حالة في رسائل التتبع، ومتى يتصل العميل بشركة الشحن مباشرة. وحدد المعلومات اللي يجمعها قبل ما يوصل الاستفسار لفريقك.",
+          body: "وش يقوله الوكيل بالضبط، ووش يجمعه قبل ما يوصل الاستفسار لفريقك.",
         },
         {
           title: "الفروع وأوقاتها",
-          body: "عناوين الفروع وأوقاتها والأوقات الاستثنائية في رمضان والأعياد، والخدمات المتوفرة في كل فرع، وإذا كان فيه فروع تستقبل الإرجاع وفروع لا. العميل ما يفرق بين فروعك — يبي جواب عن الفرع اللي جنبه.",
+          body: "العناوين والأوقات وأوقات رمضان، وخدمات كل فرع، وأي فروع تستقبل الإرجاع.",
         },
         {
           title: "المنتجات والعروض",
-          body: "الفئات الرئيسية، المقاسات والألوان المتوفرة عادةً، العروض الحالية وشروطها وتاريخ انتهائها، وبرنامج الولاء إذا عندك واحد وكيف يستخدمه العميل. حدّث العروض أول بأول وجرب الرد في المحادثة التجريبية قبل النشر، عشان الوكيل ما يبيع عرضاً منتهي.",
+          body: "الفئات والمقاسات، والعروض الحالية بشروطها وتاريخ انتهائها، وبرنامج الولاء.",
         },
         {
           title: "الدفع والفواتير",
-          body: "طرق الدفع المقبولة في المتجر وفي الفروع، التقسيط إذا متوفر ومع مين، الفاتورة الضريبية وكيف يطلبها العميل ومتى توصله، وسياستك لو انعرض سعر خاطئ على المنتج.",
+          body: "طرق الدفع، التقسيط ومع مين، والفاتورة الضريبية وكيف يطلبها العميل.",
         },
       ],
       outro:
-        "وما تحتاج تكتبها كلها من أول يوم. ابدأ بسياسة الإرجاع والشحن وأوقات الفروع — هذي وحدها تغطي أغلب مكالماتك — وزد عليها كل أسبوع من الأسئلة اللي تشوفها في سجل مكالماتك.",
+        "ابدأ بالإرجاع والشحن وأوقات الفروع — تغطي أغلب مكالماتك — وزد كل أسبوع من سجل مكالماتك.",
     },
     after: {
       eyebrow: "بعد المكالمة",
       heading: "وبعد ما تسكر المكالمة؟",
-      body: "كل مكالمة تنحفظ في لوحتك: التسجيل، والنص كامل، وملخص عربي — مين اتصل، وش طلب، وش صار، ووش باقي. وفي التجزئة هذا مو بس أرشيف: هذا أوضح صورة تشوفها عن منتجاتك وسياساتك. لأن المكالمات تقول لك وش المنتج اللي يرجع كثير، وأي فرع يتكرر السؤال عنه، وأي سياسة ما أحد فاهمها.",
+      body: "كل مكالمة عندك بتسجيلها ونصها وملخصها العربي. واللوحة تعطيك أرقام مكالماتك — العدد، ونصيب الوكيل منها، ومعدل المدة — مع تصدير CSV أو PDF.",
       items: [
         {
           title: "سجل مكالمات كامل",
-          body: "كل مكالمة بوقتها ومدتها، مع التسجيل والنص والملخص. تسمع أي مكالمة، وتشوف وين قرر الوكيل يحوّل، وتراجع صياغته وتعدلها إذا ما مثّلت علامتك.",
+          body: "تسمع أي مكالمة، وتشوف وين قرر الوكيل يحوّل، وتعدل صياغته.",
         },
         {
           title: "ملف كل عميل",
-          body: "كل مكالمة تنضاف لملف صاحبها مع تاريخ تعامله معكم. العميل ما يعيد قصته، وموظفك يعرف قبل ما يرد إذا كان هذا العميل اتصل ثلاث مرات على نفس المشكلة.",
+          body: "موظفك يعرف قبل ما يرد إذا كان العميل اتصل ثلاث مرات على نفس المشكلة.",
         },
         {
-          title: "وسوم وتقييم",
-          body: "حط على المكالمات وسوم زي «إرجاع» أو «تأخر شحن» أو «سؤال عن عرض»، وقيّم ردود الوكيل. بعد شهر تكون عندك صورة واضحة: وش تعدله في سياساتك، ووش تضيفه لقاعدة المعرفة.",
+          title: "وسوم وتقييم فريقك",
+          body: "وسوم زي «إرجاع» أو «تأخر شحن»، وتقييم فريقك للمكالمة بالنجوم.",
         },
       ],
     },
     template: {
       heading: "تبدأ من صفر؟ لا — قالب التجزئة جاهز",
-      body: "عندنا قالب مكتوب لقطاع التجزئة: شخصية وكيل مصممة لخدمة عملاء متجر، وسيناريوهات الإرجاع والشحن وحالة الطلب وتوفر المنتج في الفرع، وقواعد تصعيد جاهزة للشكاوى والمنتج التالف واسترجاع المبالغ وطلبات الجملة، وهيكل قاعدة معرفة فيه خانات السياسات والفروع والعروض تعبيها بمعلومات متجرك.",
+      body: "شخصية وكيل لخدمة عملاء متجر، وسيناريوهات الإرجاع والشحن وحالة الطلب، وقواعد تصعيد، وهيكل قاعدة معرفة تعبيه بمعلومات متجرك.",
       body2:
-        "وإذا عندك أكثر من علامة أو أكثر من نوع نشاط تحت نفس الشركة، تسوي وكيل لكل وحدة بقاعدة معرفة خاصة فيها وقواعد تصعيد خاصة — وصلاحيات فريقك تتقسم عليها، فكل فريق يشوف مكالماته هو.",
-      linkLead: "وطريقة الإعداد والتعديل والتجربة قبل النشر ",
-      linkText: "موضحة خطوة خطوة في صفحة بناء الوكيل",
+        "وعندك أكثر من علامة؟ وكيل لكل وحدة بقاعدة معرفتها وقواعد تصعيدها، وصلاحيات فريقك تتقسم عليها.",
+      linkLead: "وطريقة الإعداد والتجربة قبل النشر ",
+      linkText: "موضحة في صفحة بناء الوكيل",
       linkPath: "product/agent-builder",
     },
     faqHeading: "أسئلة أصحاب المتاجر",
     faq: [
       {
         q: "الوكيل يقدر يشوف حالة طلب العميل في نظامنا؟",
-        a: "لا. الوكيل ما يدخل على نظام متجرك ولا نظام الشحن. اللي يسويه: يرد فوراً، يشرح المدة المعتادة بالصياغة اللي اعتمدتها أنت، وياخذ رقم الطلب وتفاصيل الاستفسار كاملة ويوصلها لفريقك مع نص المكالمة — فتردون مرة وحدة على معلومة كاملة.",
+        a: "لا. يرد فوراً بالمدة المعتادة، وياخذ رقم الطلب والتفاصيل ويوصلها لفريقك مع نص المكالمة.",
       },
       {
-        q: "يرد على واتساب وتليجرام بعد؟",
-        a: "القنوات النصية — واتساب وتليجرام ومحادثة الموقع — تجي في نفس صندوق فريقك الموحد، والرد الآلي على الرسائل يرد من قاعدة معرفتك حسب إعداد حسابك. والمكالمات الصوتية يردها الوكيل تلقائياً.",
+        q: "يرد على واتساب وتيليجرام بعد؟",
+        a: "واتساب وتيليجرام ومحادثة الموقع تجي في صندوق فريقك الموحد، والرد الآلي يجاوب من قاعدة معرفتك حسب إعداد حسابك.",
       },
       {
         q: "عندنا كذا فرع — الوكيل يفرق بينها؟",
-        a: "إي. كل فرع بموقعه وأوقاته وخدماته في قاعدة معرفتك، ومنها نجهز ردود وكيلك — ويسأل العميل عن الفرع اللي يقصده قبل ما يجاوب — عشان ما يعطي عميل في الخبر أوقات فرع الرياض.",
+        a: "إي. كل فرع بأوقاته وخدماته في قاعدة معرفتك، ويسأل العميل عن الفرع اللي يقصده قبل ما يجاوب.",
       },
       {
         q: "وش يسوي مع العميل المعصب؟",
-        a: "يعتذر ويصعّد لموظفك على طول، ومعه سبب التحويل والنص الكامل وملخص عربي وتاريخ العميل معكم. وطلب العميل الصريح لموظف بشري تحويل فوري ما يتفاوض فيه الوكيل.",
+        a: "يعتذر ويصعّد لموظفك على طول ومعه النص والملخص وتاريخ العميل. وطلب الإنسان تحويل فوري.",
       },
       {
         q: "نقدر نسمع المكالمات ونتأكد من الردود؟",
-        a: "إي. كل مكالمة عندك بتسجيلها ونصها وملخصها، وتقدر تقيّمها وتحط عليها وسوم. وفريقك يقدر يتابع المكالمات وهي شغالة من اللوحة، ويسمع، ويستلم المكالمة بنفسه إذا حس إنها تحتاج تدخل.",
+        a: "إي. كل مكالمة بتسجيلها ونصها وملخصها، وفريقك يقيّمها ويحط عليها وسوم، ويقدر يستلمها وهي شغالة.",
       },
       {
         q: "كيف نبدأ؟",
-        a: "احجز عرضاً تعريفياً — نشوف حجم مكالماتك وأكثر الأسئلة اللي تجيك، ونجهز لك القالب وقاعدة المعرفة وقواعد التصعيد بأنفسنا. ما في تسجيل ذاتي: كل عميل نجهزه معه خطوة خطوة.",
+        a: "احجز عرضاً تعريفياً — ونجهز لك القالب وقاعدة المعرفة وقواعد التصعيد بأنفسنا. ما في تسجيل ذاتي.",
       },
     ] as FaqItem[],
   },
   en: {
     h1: "“Has my order arrived?” — answer every customer without a call centre",
     intro:
-      "Your store is selling, and the calls stack up: where's my order, can I return this, do you have this size in the Riyadh branch? Your team answers what it can, and the rest goes to voicemail and comes back as a complaint. The Saut Najdi agent answers every call in your customer's dialect, in the wording we set up with you from your own policies and branch information, and captures the details of anything that needs following up — delivered to your team organised, with the transcript attached.",
+      "Your store is selling and the calls stack up: where's my order, can I return this, do you have this size in Riyadh? The Saut Najdi agent answers every one from your own policies and branch information, and captures anything that needs following up — delivered to your team with the transcript attached.",
     cta: "Book a demo",
     calls: {
       eyebrow: "The calls you're missing",
-      heading: "The calls you miss while you're shipping and serving at once",
-      body: "Retail calls repeat: the same six questions, in the same words, dozens of times a day. Most of them don't need an employee — they need someone to answer quickly with the right information. These six carry the bulk of your call volume:",
-      note: "Illustrative dialogue — this is what a call looks like, not a real recording.",
+      heading: "Which calls are you missing while you're shipping and serving?",
+      body: "The same six questions repeat dozens of times a day. Most don't need an employee — they need a fast, correct answer.",
+      note: "Illustrative dialogue — not a real recording.",
       items: [
         {
           tag: "Where is my order?",
-          caller: "I ordered three days ago — where has my order got to?",
-          agent: "Of course. Could you give me the order number from the message you received… got it, noted. Shipping normally takes two to five working days — and I've logged your enquiry with customer service, who'll come back to you today with an exact update.",
-          note: "The agent doesn't open your store system — but it answers instantly, explains the normal timeframe in the wording you approved, and captures the order number and the enquiry for your team.",
+          caller: "I ordered three days ago — where has it got to?",
+          agent: "Could I have the order number… noted. Shipping normally takes two to five working days, and customer service will come back to you today with an exact update.",
+          note: "It doesn't open your store system — it answers instantly and routes the order number to your team.",
         },
         {
           tag: "Returns and exchanges",
-          caller: "I bought a pair of shoes and the size doesn't fit — can I return them?",
-          agent: "Yes you can. Returns are accepted within 14 days of delivery, with the item in its condition and its box, and the amount goes back to the same payment method. Shall I log a return request with the details?",
-          note: "The most common question in retail, and the one most easily settled by a clear answer. The agent gives it in your policy's exact wording — nothing added, nothing dropped.",
+          caller: "The shoes I bought don't fit — can I return them?",
+          agent: "Yes. Returns are accepted within 14 days with the item in its box, refunded to the same payment method. Shall I log a return request?",
+          note: "Retail's most common question, answered in your policy's exact wording.",
         },
         {
           tag: "Is it in stock at a branch",
-          caller: "Do you have the blue shirt in size L at the Olaya branch?",
-          agent: "The Olaya branch is open until 11 tonight. Whether that exact size is on the shelf needs someone to check — shall I log your enquiry with the product code and size so someone at the branch calls you back?",
-          note: "The agent never pretends to see your stock. It says so honestly, and routes the enquiry to the branch with enough detail for them to answer the first time.",
+          caller: "Do you have the blue shirt in size L at Olaya?",
+          agent: "Olaya is open until 11 tonight. Whether that size is on the shelf needs someone to check — shall I log it so the branch calls you back?",
+          note: "It never pretends to see your stock. It says so, and routes the enquiry with enough detail.",
         },
         {
-          tag: "Branch hours and locations",
-          caller: "Is the Khobar branch open today? And until when?",
-          agent: "Yes, it's open today from 10 in the morning until 11 at night, and on Friday it opens after Friday prayers. It's on the main street next to the mall — shall I give you the nearest landmark?",
-          note: "A simple question asked hundreds of times a month — and one that takes more of your team's time than any other.",
+          tag: "Branch hours",
+          caller: "Is the Khobar branch open today? Until when?",
+          agent: "Open from 10 in the morning until 11 at night, and after prayers on Friday. Shall I give you the nearest landmark?",
+          note: "A simple question asked hundreds of times a month that eats your team's hours.",
         },
         {
-          tag: "Offers and their conditions",
-          caller: "Is the bag offer still running? And does it cover all the models?",
-          agent: "The offer runs to the end of the month, and it applies to the classic models only — the limited edition isn't included. Would you like me to list the models it covers?",
-          note: "An offer's conditions, half-explained, become an argument at the till. The agent states them in full — conditions and exclusions — to everyone who asks.",
+          tag: "Offers and conditions",
+          caller: "Is the bag offer still running? Does it cover all models?",
+          agent: "It runs to the end of the month and applies to the classic models only — the limited edition isn't included.",
+          note: "A half-explained offer becomes an argument at the till.",
         },
         {
-          tag: "A damaged item — to your team",
+          tag: "A damaged item",
           caller: "It arrived broken and I want to speak to someone in charge.",
-          agent: "I'm sorry about that, it shouldn't have happened. I'm putting you through to customer service now — with your order number and everything you've described, so you won't have to repeat it.",
-          note: "A request for a human is an immediate transfer the agent never negotiates — and the employee picks up already knowing the story, so they start with the fix.",
+          agent: "I'm sorry about that. I'm putting you through to customer service — with your order number and everything you've described.",
+          note: "A request for a human transfers immediately, with the story attached.",
         },
       ] as Dialogue[],
     },
     boundary: {
       eyebrow: "A clear boundary",
-      heading: "The agent doesn't open your store system — but no enquiry is lost",
-      body: "We'd rather you buy with the right expectation: the Saut Najdi agent does not log into your store platform or your courier's system to fetch a shipment status live. What it does matters more on most calls: it answers on the first ring, and it answers every policy, branch and offer question precisely, in the wording we set up with you from your own policies, so your customer never listens to a phone ringing out.",
+      heading: "Does the agent open your store system?",
+      body: "No. It doesn't log into your store platform or your courier's, so it can't fetch a live shipment status. What it does: answer on the first ring, and answer every policy, branch and offer question in the wording you approved.",
       body2:
-        "And when a question genuinely needs the system open — “where exactly is my shipment?” — it takes the order number, the customer's name and number, and precisely what they want, and logs a follow-up for your team with the transcript and summary. The practical result: the customer doesn't call three times, and your employee replies once, from complete information, instead of opening with “could I have your order number?”.",
+        "When a question genuinely needs the system open — “where exactly is my shipment?” — it takes the order number and the customer's details and logs a follow-up for your team with the transcript. Your employee replies once, from complete information.",
     },
     handles: {
       eyebrow: "What the agent handles",
       heading: "What does the agent handle on its own?",
       capsule:
-        "In retail, the Saut Najdi agent answers every call on the first ring in your customer's dialect, and covers returns, exchanges, warranty, shipping and its fees, branch hours and locations, offers and their conditions, payment methods and tax invoices — in the wording we set up with you from your own policies. Anything needing follow-up — an order status, a size at a branch — it captures in full for your team, and complaints or money questions go straight to your employee.",
+        "It answers on the first ring on returns, shipping, warranty, branch hours, offers and payment — from your own policies. Anything needing follow-up it captures for your team.",
       items: [
         {
           title: "Every call answered, without a call centre",
-          body: "One store or a brand with ten branches — the same problem: the calls all arrive in the same hours, and any promotion or season doubles them. The agent answers on the first ring. No voicemail, no hold, no “please try again later” that sends your customer to buy somewhere else.",
+          body: "Calls all arrive in the same hours, and any promotion doubles them. It answers on the first ring — no voicemail, no hold.",
         },
         {
           title: "It knows your policies word for word",
-          body: "Returns, exchanges, warranty, shipping and its fees and timeframes, payment methods, tax invoices. The agent replies in the wording you wrote — it doesn't improvise and doesn't promise what you can't honour, which alone removes the argument that usually happens at handover.",
+          body: "Returns, exchanges, warranty, shipping fees and timeframes, payment methods, tax invoices. In your wording, with nothing promised you can't honour.",
         },
         {
           title: "Hours and locations for every branch",
-          body: "Each branch with its location and hours, its different hours on Fridays and in Ramadan and holidays, and the services it offers: fitting, alterations, online pickup, returns. A customer asking “are you open now?” gets a correct answer at any hour they call.",
+          body: "Each branch's hours and location, its Friday, Ramadan and holiday hours, and the services it offers. “Are you open now?” gets a correct answer at any hour.",
         },
         {
           title: "It captures the enquiry in full",
-          body: "The order number, the customer's name and number, exactly what the problem is and what they expect to happen. It reaches your team organised, with the transcript and the summary — instead of “someone called about their order” on a sticky note on a monitor.",
+          body: "Order number, name and number, exactly what the problem is. It reaches your team organised, with transcript and summary.",
         },
         {
-          title: "In your customer's dialect — Arabic or English",
-          body: "The agent replies in Najdi, Hijazi or Khaleeji Arabic, in standard Arabic, or in English for customers who prefer it, switching by what it hears. You choose the voice — male or female — to match your brand's character.",
+          title: "In your customer's language",
+          body: "Najdi, Hijazi and Levantine Arabic plus English, switching by what it hears. Choose a male or female voice — or your own brand voice, depending on your plan.",
         },
         {
           title: "It remembers your customer",
-          body: "When a customer who has called before rings again, the agent recognises them, greets them by name, and knows their previous interactions with you. They don't explain themselves from scratch every time — which is exactly what makes a brand feel like a serious one.",
+          body: "A returning caller is recognised and greeted by name, with their previous interactions known. Nobody explains themselves twice.",
         },
       ],
     },
@@ -331,120 +331,116 @@ const t = {
       eyebrow: "What goes to a human",
       heading: "What goes to your employee?",
       capsule:
-        "The agent doesn't try to solve everything, and that's deliberate. Four retail situations go straight to your employee: the customer asks for a person, there's a complaint or a damaged item, money and refunds are involved, or it's a wholesale or corporate-invoice request. You set those rules from the dashboard and change them whenever you like.",
+        "Four situations transfer straight away: a request for a person, a complaint or damaged item, refunds, and wholesale requests. You set the rules from the dashboard.",
       items: [
         {
           title: "A request for a human — immediate",
-          body: "If the customer says “I want to speak to someone,” the agent doesn't argue and doesn't try to convince them it can help. It transfers immediately — an iron law across the platform, not a setting somebody might forget to switch on.",
+          body: "“I want to speak to someone” is never argued with. It transfers at once — an iron law across the platform.",
         },
         {
           title: "Complaints and damaged goods",
-          body: "It arrived broken, a piece is missing, it doesn't match the photo, or it's a week late. These are customers who are upset and entitled to be. The agent apologises, captures the order number and the details, and transfers to your employee with the full transcript — so they start with the fix.",
+          body: "Broken, missing a part, or a week late. It apologises, captures the order number, and transfers with the full transcript so your employee starts with the fix.",
         },
         {
-          title: "Refunds and billing disputes",
-          body: "Anything about a refunded amount, a discount, a billing error, or a card charged twice goes to your employee. And the agent never takes card details or collects payment on a call.",
-        },
-        {
-          title: "Cancelling or changing an order before dispatch",
-          body: "The customer wants to cancel, or change the address or the size, before the order ships. That needs someone in the system before it leaves the warehouse — and the window is short. The agent captures the order number and the change requested and escalates immediately, without promising the customer it's done.",
+          title: "Refunds and order changes",
+          body: "Refunds, billing errors, and any cancellation or change before dispatch go to your employee immediately. The agent never takes card details and never says the change is done.",
         },
         {
           title: "Wholesale and corporate requests",
-          body: "A large quantity, an invoice in a company's name, a quotation for an organisation, or a staff gifting order. That's sales, not customer service. The agent captures the essentials — the organisation, the quantity, the date needed — and passes them to your sales team ready to act on.",
+          body: "A large quantity or an invoice in a company's name is sales, not service. It captures the essentials and passes them to your sales team.",
         },
       ],
-      outroLead: "Whatever the reason, your employee inherits the escalation reason, the full transcript, an Arabic summary and the customer's history with you — ",
-      outroLink: "read how escalation works in detail",
+      outroLead: "Your employee inherits the escalation reason, the full transcript, an Arabic summary and the customer's history — ",
+      outroLink: "read how escalation works",
       outroPath: "product/human-handoff",
-      outroTail: " Your team can also follow calls live from the dashboard, listen in, and take a call over in one click.",
+      outroTail: " Your team can also follow a live call, listen in, and take it over in one click.",
     },
     kb: {
       eyebrow: "Your knowledge base",
       heading: "What belongs in your store's knowledge base?",
-      body: "The more clearly your policies are written, the fewer calls need an employee at all. Upload your files — Word, plain text, or scanned documents, since Arabic OCR reads scans correctly — or write them as question-and-answer pairs and short snippets, or point at the policy page you already publish. It is what your agent is built from, it is what answers your customers on the text channels — WhatsApp, Telegram and your website chat — and you check every answer yourself in the test chat before publishing. Six things matter most in retail:",
+      body: "The more clearly your policies are written, the fewer calls need an employee. Upload files or write question-and-answer pairs, and check every answer in the test chat before publishing. These matter most:",
       items: [
         {
-          title: "Returns and exchange policy",
-          body: "The window, the conditions (box, tags, receipt), and the exclusions: underwear, discounted items, limited editions, personalised goods. How the refund is returned and how long it takes. Write it in detail — every ambiguity comes back as an angry call.",
+          title: "Returns and exchanges",
+          body: "The window, the conditions, and the exclusions: discounted items, limited editions, personalised goods. How the refund is returned and how long it takes.",
         },
         {
           title: "Shipping and delivery",
-          body: "The couriers you use, timeframes inside and outside the city, fees, the free-shipping threshold, same-day delivery if you offer it, and in-branch pickup. Keep this one current in peak seasons, because the timeframes change.",
+          body: "Your couriers, timeframes inside and outside the city, fees, the free-shipping threshold, and in-branch pickup.",
         },
         {
           title: "The “where's my order?” script",
-          body: "Write out exactly what the agent should say when a customer asks about an order: the normal timeframe, what each tracking status means, and when the customer should contact the courier directly. And define what it must collect before the enquiry reaches your team.",
+          body: "Exactly what the agent should say: the normal timeframe, what each tracking status means, and what it must collect before the enquiry reaches your team.",
         },
         {
           title: "Branches and hours",
-          body: "Branch addresses and hours, the exceptional hours in Ramadan and holidays, the services available at each, and whether some branches accept returns and others don't. Customers don't distinguish between your branches — they want an answer about the one near them.",
+          body: "Addresses and hours, exceptional Ramadan and holiday hours, services at each branch, and which branches accept returns.",
         },
         {
           title: "Products and offers",
-          body: "Main categories, the sizes and colours you normally carry, current offers with their conditions and end dates, and your loyalty programme if you have one and how customers use it. Keep offers current and try the answer in the test chat before publishing, so the agent never sells an expired one.",
+          body: "Categories and the sizes you normally carry, current offers with their conditions and end dates, and your loyalty programme if you have one.",
         },
         {
           title: "Payment and invoices",
-          body: "Payment methods accepted online and in branch, instalment options and with whom, tax invoices — how a customer requests one and when it reaches them — and your policy when a wrong price is displayed on a product.",
+          body: "Payment methods, instalment options and with whom, how a tax invoice is requested, and your policy when a wrong price is displayed.",
         },
       ],
       outro:
-        "You don't have to write it all on day one. Start with the returns policy, shipping and branch hours — those three alone cover most of your calls — then add each week from the questions you see in your own call log.",
+        "Start with returns, shipping and branch hours — those three alone cover most of your calls — then add each week from your own call log.",
     },
     after: {
       eyebrow: "After the call",
       heading: "And once the call ends?",
-      body: "Every call is kept in your dashboard: the recording, the full transcript, and an Arabic summary — who called, what they wanted, what happened, what's still open. In retail that's not just an archive: it's the clearest picture you'll get of your products and your policies. The calls tell you which product comes back most, which branch keeps being asked about, and which policy nobody understands.",
+      body: "Every call is kept in your dashboard with its recording, transcript and Arabic summary. The dashboard also shows your own numbers — call volume, the share the agent handled end to end, average duration — with CSV and PDF export.",
       items: [
         {
           title: "A complete call log",
-          body: "Every call with its time and duration, alongside the recording, transcript and summary. Listen to any call, see where the agent chose to hand over, and adjust its wording if it doesn't sound like your brand.",
+          body: "Listen to any call, see where the agent chose to hand over, and adjust its wording if it doesn't sound like your brand.",
         },
         {
           title: "A profile for every customer",
-          body: "Each call joins its caller's profile with their history with you. The customer doesn't retell their story, and your employee knows before answering whether this person has called three times about the same thing.",
+          body: "Their history with you in one place. Your employee knows before answering whether this person has called three times about the same thing.",
         },
         {
-          title: "Tags and ratings",
-          body: "Tag calls “return”, “late shipment” or “offer question”, and rate the agent's answers. A month later you have a clear picture: what to fix in your policies, and what to add to the knowledge base.",
+          title: "Tags and your team's ratings",
+          body: "Tag calls “return” or “late shipment”, and let your team star-rate them. A month later you know what to fix in your policies.",
         },
       ],
     },
     template: {
       heading: "Starting from nothing? No — the retail template is ready",
-      body: "There's a written template for the retail sector: an agent persona built for store customer service, scenarios for returns, shipping, order status and availability at a branch, ready escalation rules for complaints, damaged goods, refunds and wholesale requests, and a knowledge-base skeleton with slots for policies, branches and offers that you fill with your own information.",
+      body: "An agent persona built for store customer service, scenarios for returns, shipping, order status and branch availability, ready escalation rules, and a knowledge-base skeleton you fill with your own information.",
       body2:
-        "If you run more than one brand or more than one line of business under the same company, each can have its own agent with its own knowledge base and escalation rules — and your team's permissions split the same way, so each team sees only its own calls.",
-      linkLead: "How the setup, the editing and the test-chat check before publishing actually work ",
-      linkText: "is shown step by step on the agent builder page",
+        "More than one brand? Each gets its own agent with its own knowledge base and escalation rules, and your team's permissions split the same way.",
+      linkLead: "How setup and the test-chat check before publishing work ",
+      linkText: "is on the agent builder page",
       linkPath: "product/agent-builder",
     },
     faqHeading: "Questions from store owners",
     faq: [
       {
         q: "Can the agent see a customer's order status in our system?",
-        a: "No. The agent doesn't log into your store platform or your courier's system. What it does: answer instantly, explain the normal timeframe in the wording you approved, and capture the order number and the full enquiry for your team along with the transcript — so you reply once, from complete information.",
+        a: "No — it doesn't log into your store platform or your courier's. It answers instantly with the normal timeframe, and captures the order number and full enquiry for your team with the transcript.",
       },
       {
         q: "Does it answer WhatsApp and Telegram too?",
-        a: "The text channels — WhatsApp, Telegram and the website chat — all land in one shared team inbox, and automatic replies to messages answer from your knowledge base, depending on your account's configuration. Voice calls the agent answers automatically.",
+        a: "The text channels — WhatsApp, Telegram and website chat — land in one shared team inbox, and automatic replies answer from your knowledge base depending on your account's configuration.",
       },
       {
         q: "We have several branches — does the agent distinguish between them?",
-        a: "Yes. Each branch has its location, hours and services in your knowledge base, your agent is built from it, and it asks which branch the customer means before answering — so a customer in Khobar never gets the Riyadh branch's hours.",
+        a: "Yes. Each branch has its location, hours and services in your knowledge base, and the agent asks which branch the customer means before answering.",
       },
       {
         q: "What does it do with an angry customer?",
-        a: "It apologises and escalates to your employee immediately, carrying the escalation reason, the full transcript, an Arabic summary and the customer's history with you. An explicit request for a person is always an immediate transfer.",
+        a: "It apologises and escalates immediately, carrying the transcript, the summary and the customer's history. An explicit request for a person is never negotiated.",
       },
       {
         q: "Can we listen to calls and check the answers?",
-        a: "Yes. Every call is there with its recording, transcript and summary, and you can rate and tag it. Your team can also follow live calls from the dashboard, listen in, and take a call over when they feel it needs them.",
+        a: "Yes. Every call has its recording, transcript and summary, your team can rate and tag it, and they can follow a live call and take it over when it needs them.",
       },
       {
         q: "How do we start?",
-        a: "Book an intro demo — we look at your call volume and the questions you get most, and we build the template, the knowledge base and the escalation rules for you. There's no self-signup: every customer is set up with us, step by step.",
+        a: "Book an intro demo — we look at your call volume and your most common questions, and we build the template, knowledge base and escalation rules for you. There's no self-signup.",
       },
     ] as FaqItem[],
   },

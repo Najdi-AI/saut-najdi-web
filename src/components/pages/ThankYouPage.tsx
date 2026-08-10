@@ -8,13 +8,13 @@ import { Waveform } from "@/components/Waveform";
 const t = {
   ar: {
     h1: "تم الحجز — نشوفك قريب!",
-    body: "وصلك تأكيد الموعد على إيميلك، ومعه رابط الاجتماع. وإذا حاب تجهز شي قبل ما نتكلم: فكر في أكثر ثلاثة أسئلة يسألها عملاؤك بالتلفون — نوريك كيف يتعامل معها الوكيل.",
+    body: "وصلك تأكيد الموعد على إيميلك ومعه رابط الاجتماع. جهّز أكثر ثلاثة أسئلة يسألها عملاؤك بالتلفون — نوريك كيف يتعامل معها الوكيل.",
     home: "الرئيسية",
     how: "اقرأ كيف يشتغل",
   },
   en: {
     h1: "Booked — see you soon!",
-    body: "A confirmation with the meeting link is in your inbox. If you'd like to prepare before we talk: think of the three questions your customers ask most on the phone — we'll show you how the agent handles them.",
+    body: "A confirmation with the meeting link is in your inbox. To prepare, jot down the three questions your customers ask most on the phone — we'll show you how the agent handles them.",
     home: "Home",
     how: "Read how it works",
   },

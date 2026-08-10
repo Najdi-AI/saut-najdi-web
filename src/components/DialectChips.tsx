@@ -1,13 +1,15 @@
 import type { Locale } from "@/lib/i18n";
 
 /**
- * Hero dialect chips (blueprint §6.1): the shipped catalog is NAMED;
- * the last chip is the capability framing — never a named list of
- * unshipped dialects (§1 honesty rule).
+ * Hero dialect chips (blueprint §6.1): the shipped catalog and nothing
+ * else (§1 honesty rule). No open «+ أي لهجة» promise — /product/voice-agent
+ * explicitly retracts it — and no «العربية» chip beside نجدي/حجازي/شامي,
+ * which are themselves Arabic. Every chip is a shipped voice, so they all
+ * carry the same style; there is no odd-one-out chip to accent.
  */
 const chips = {
-  ar: ["نجدي", "حجازي", "خليجي", "العربية", "English", "+ أي لهجة يحتاجها عملاؤك"],
-  en: ["Najdi", "Hijazi", "Khaleeji", "Arabic", "English", "+ any dialect your customers need"],
+  ar: ["نجدي", "حجازي", "شامي", "English"],
+  en: ["Najdi", "Hijazi", "Levantine", "English"],
 } as const;
 
 export function DialectChips({
@@ -19,14 +21,10 @@ export function DialectChips({
 }) {
   return (
     <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
-      {chips[locale].map((chip, i) => (
+      {chips[locale].map((chip) => (
         <li
           key={chip}
-          className={`rounded-full px-4 py-1.5 text-body font-medium ${
-            i === chips[locale].length - 1
-              ? "border border-dashed border-brand-blue/50 text-brand-blue"
-              : "border border-line bg-white text-ink/75 shadow-card"
-          }`}
+          className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
         >
           {chip}
         </li>

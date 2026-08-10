@@ -32,7 +32,7 @@ type Section = { h: string; p: Part[] };
 const t = {
   ar: {
     h1: "كلمنا",
-    lead: "راسلنا وبنرد عليك — أو إذا تبغى جواب أسرع، احجز مكالمة سريعة مع الفريق.",
+    lead: "راسلنا وبنرد عليك — أو احجز مكالمة سريعة إذا تبغى جواب أسرع.",
     onboardNote: "ما في تسجيل ذاتي — فريقنا يجهز لك كل شي، من الوكيل إلى قاعدة المعرفة.",
     name: "الاسم",
     email: "الإيميل",
@@ -47,36 +47,36 @@ const t = {
       {
         h: "وش أسرع طريقة توصل لنا؟",
         p: [
-          "أسرع طريقة: احجز مكالمة 15 دقيقة من التقويم — تختار الوقت اللي يناسبك وتكلم أحد من الفريق مباشرة، بدون تبادل إيميلات. وإذا سؤالك مكتوب أو فيه تفاصيل وملفات، راسلنا على الإيميل. الرسالة توصل لفريق صغير، واللي يرد عليك شخص قرأ رسالتك — مو رد آلي جاهز.",
+          "احجز مكالمة 15 دقيقة وتكلم أحد من الفريق مباشرة. وإذا سؤالك فيه تفاصيل أو ملفات، راسلنا على الإيميل — اللي يرد عليك شخص قرأ رسالتك.",
         ],
       },
       {
         h: "ليش ما فيه رقم تواصل في الصفحة؟",
         p: [
-          "لأن ما عندنا رقم سعودي مفعّل للحين — تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات، وما نحب نحط رقماً ما يرد عليه أحد. لين ما يجهز، الإيميل والتقويم هما القناتان الرسميتان، وهذي نفس الصراحة اللي تلقاها في باقي الموقع.",
+          "ما عندنا رقم سعودي مفعّل للحين — تفعيل الأرقام يمر بإجراءات الجهات التنظيمية، وما نحب نحط رقماً ما يرد عليه أحد. لين ما يجهز، الإيميل والتقويم هما القناتان الرسميتان.",
         ],
       },
       {
         h: "تبغى تسأل عن الأمان والبيانات؟",
         p: [
-          "أسئلة التخزين والمعالجة والتوافق مع نظام حماية البيانات الشخصية (PDPL) مجاوبة بالتفصيل في ",
+          "أسئلة التخزين والمعالجة ونظام حماية البيانات الشخصية (PDPL) مجاوبة في ",
           { text: "صفحة الأمان والبيانات", path: "security" },
           "، وفيه ملخص ",
           { text: "اتفاقية معالجة البيانات", path: "dpa" },
-          " جاهز لفريق المشتريات عندكم. وإذا احتجت النسخة الكاملة من الاتفاقية أو استبياناً أمنياً، راسلنا وبنرسلها لك.",
+          " جاهز لفريق المشتريات. تبغى النسخة الكاملة أو استبياناً أمنياً؟ راسلنا.",
         ],
       },
       {
         h: "«ما في تسجيل ذاتي» — وش يعني بالضبط؟",
         p: [
-          "يعني ما فيه زر «سجّل الآن» تضغطه وتلقى نفسك في نظام فاضي تتصرف فيه بروحك. كل عميل نجهز له وكيله وقاعدة معرفته وقواعد تصعيده مع الفريق، عشان أول مكالمة يرد عليها الوكيل تكون صح من أول مرة — مو تجربة ناقصة تخلي عميلك أول من يكتشف الخطأ.",
+          "يعني ما فيه زر «سجّل الآن» يرميك في نظام فاضي. فريقنا يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد قبل أول مكالمة.",
         ],
       },
     ] as Section[],
   },
   en: {
     h1: "Talk to us",
-    lead: "Write to us and we'll get back to you — or book a quick call with the team if you want a faster answer.",
+    lead: "Write to us and we'll get back to you — or book a quick call for a faster answer.",
     onboardNote: "There's no self-signup — our team sets everything up for you, from the agent to the knowledge base.",
     name: "Name",
     email: "Email",
@@ -91,29 +91,29 @@ const t = {
       {
         h: "What's the fastest way to reach us?",
         p: [
-          "The fastest route is the 15-minute call: pick a slot that suits you and talk to someone on the team directly, with no email back-and-forth. If your question is written, detailed, or comes with files, email us instead. It lands with a small team, and whoever replies has read your message — it isn't a canned response.",
+          "Book the 15-minute call and talk to someone on the team directly. If your question is detailed or comes with files, email us — whoever replies has read your message, and it isn't a canned response.",
         ],
       },
       {
         h: "Why is there no phone number on this page?",
         p: [
-          "Because we don't have a live Saudi number yet — number activation runs through Saudi telecom regulatory steps, and we'd rather publish nothing than a number nobody answers. Until it's ready, email and the calendar are the two official channels. It's the same plainness you'll find everywhere else on this site.",
+          "We don't have a live Saudi number yet — activation runs through Saudi telecom regulatory steps, and we'd rather publish nothing than a number nobody answers. Until then, email and the calendar are the two official channels.",
         ],
       },
       {
         h: "Want to ask about security and data?",
         p: [
-          "Storage, processing and Personal Data Protection Law (PDPL) questions are answered in detail on ",
+          "Storage, processing and Personal Data Protection Law (PDPL) questions are answered on ",
           { text: "the security and data page", path: "security" },
           ", and a summary ",
           { text: "data processing agreement", path: "dpa" },
-          " is published for your procurement team. If you need the full agreement or a security questionnaire completed, email us and we'll send it.",
+          " is published for procurement. Need the full agreement or a security questionnaire completed? Email us.",
         ],
       },
       {
         h: "“No self-signup” — what does that actually mean?",
         p: [
-          "It means there's no “sign up now” button that drops you into an empty system to figure out alone. For every customer, the team builds the agent, the knowledge base and the escalation rules together with you, so the first call the agent answers is answered correctly — rather than your customer being the one who finds the gap.",
+          "There's no “sign up now” button that drops you into an empty system. Our team builds the agent, the knowledge base and the escalation rules with you, so the first call the agent answers is answered correctly.",
         ],
       },
     ] as Section[],

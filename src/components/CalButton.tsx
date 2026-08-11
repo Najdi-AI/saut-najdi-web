@@ -24,7 +24,7 @@ export function CalButton({
         ? "btn-secondary"
         : variant === "spectrum"
           ? "btn-spectrum"
-          : "font-medium text-brand-blue underline-offset-4 hover:underline";
+          : "inline-flex min-h-[44px] items-center font-medium text-brand-blue underline-offset-4 hover:underline";
   return (
     <button
       type="button"

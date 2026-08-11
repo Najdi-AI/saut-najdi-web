@@ -52,7 +52,7 @@ export function FaqPage({ locale }: { locale: Locale }) {
               <li key={g.id}>
                 <a
                   href={`#${g.id}`}
-                  className="block rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card transition-colors hover:border-brand-blue/50 hover:text-brand-blue"
+                  className="block rounded-full border border-line bg-surface px-4 py-2 text-body font-medium text-ink/75 shadow-card transition-colors hover:border-brand-blue/50 hover:text-brand-blue"
                 >
                   {g.group}
                 </a>

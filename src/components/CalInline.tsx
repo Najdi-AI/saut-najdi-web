@@ -27,15 +27,48 @@ export function CalInline({
   const [failed, setFailed] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  /**
+   * Mount when the desk gets near the viewport, not on page load.
+   *
+   * On /demo the booker sits high up, so this fires immediately and nothing
+   * changes. It matters on the homepage, where the desk is the LAST section:
+   * eager mounting would make every visitor pay for Cal's script and iframe
+   * to render a calendar most of them never scroll to, on the page whose Core
+   * Web Vitals matter most. The margin is deliberately generous so the
+   * calendar is already there by the time it is actually on screen.
+   *
+   * No IntersectionObserver (very old browser) means mount immediately —
+   * failing towards a working calendar, never a missing one.
+   */
   useEffect(() => {
     let cancelled = false;
-    mountCalInline(id, calLink, localePath(locale, "demo/thank-you")).then(
-      (ok) => {
+    const host = document.getElementById(id);
+    const start = () => {
+      mountCalInline(id, calLink, localePath(locale, "demo/thank-you")).then((ok) => {
         if (!cancelled && !ok) setFailed(true);
+      });
+    };
+
+    if (!host || typeof IntersectionObserver === "undefined") {
+      start();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
       },
+      { rootMargin: "600px 0px" },
     );
+    io.observe(host);
     return () => {
       cancelled = true;
+      io.disconnect();
     };
   }, [calLink, locale]);
 

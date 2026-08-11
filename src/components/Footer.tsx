@@ -51,7 +51,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <span>{t.madeIn} 🇸🇦</span>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
-              className="transition-colors hover:text-brand-blue"
+              className="inline-block py-2.5 transition-colors hover:text-brand-blue"
               dir="ltr"
             >
               {SUPPORT_EMAIL}

@@ -177,7 +177,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
             <div className="card group">
               <IconChip name="mail" />
               <h2 className="mt-3 text-h5">{s.emailHeading}</h2>
-              <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className="mt-2 block text-body-lg text-brand-blue hover:underline">
+              <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className="mt-2 inline-block py-1.5 text-body-lg text-brand-blue hover:underline">
                 {SUPPORT_EMAIL}
               </a>
             </div>

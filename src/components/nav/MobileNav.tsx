@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { localePath, type Locale } from "@/lib/i18n";
-import { APP_URL, CAL_LINK_DEMO } from "@/lib/site";
+import { APP_URL } from "@/lib/site";
+import { DemoLink } from "@/components/DemoLink";
 import { chrome } from "@/content/chrome";
-import { CalButton } from "@/components/CalButton";
 
 /* Logical inset only — insetInline covers both RTL and LTR, and
    insetBlockStart is the block-axis equivalent of `top`. */
@@ -91,9 +91,9 @@ export function MobileNav({ locale }: { locale: Locale }) {
         </Link>
         <a href={APP_URL}>{t.login}</a>
         <div className="pt-4">
-          <CalButton calLink={CAL_LINK_DEMO} locale={locale} variant="spectrum" className="w-full">
+          <DemoLink locale={locale} variant="spectrum" className="w-full">
             {t.cta}
-          </CalButton>
+          </DemoLink>
         </div>
       </div>
     </>

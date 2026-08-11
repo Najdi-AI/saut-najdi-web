@@ -93,17 +93,17 @@ export function SampleConversation({ locale }: { locale: Locale }) {
                   isCaller
                     ? "rounded-es-md bg-surface text-ink"
                     : turn.who === "human"
-                      ? "rounded-ee-md bg-brand-purple text-white"
+                      ? "rounded-ee-md bg-brand-purple text-canvas"
                       : "rounded-ee-md bg-ink text-canvas"
                 }`}
               >
-                {/* Speaker label. The human bubble is bg-brand-purple — a
-                    literal, dark in both themes — so its label stays literal
-                    white. The agent bubble is bg-ink, which flips to
-                    near-white on night, so its label has to flip with it. */}
+                {/* Both non-caller bubbles sit on grounds that go LIGHT on
+                    night — bg-ink inverts, and brand-purple lightens so the
+                    icon hues stay legible — so both labels use text-canvas,
+                    which is near-white on day and near-black on night. */}
                 {turn.who !== "caller" && (
                   <span
-                    className={`mb-1 block text-body-sm font-medium ${turn.who === "human" ? "text-white/75" : "text-canvas/60"}`}
+                    className={`mb-1 block text-body-sm font-medium ${turn.who === "human" ? "text-canvas/75" : "text-canvas/60"}`}
                   >
                     {turn.who === "human"
                       ? locale === "ar" ? "موظفك" : "Your employee"

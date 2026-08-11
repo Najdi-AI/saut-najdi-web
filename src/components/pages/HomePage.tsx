@@ -1,10 +1,9 @@
 import Link from "next/link";
+import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { CAL_LINK_DEMO } from "@/lib/site";
 import { Waveform } from "@/components/Waveform";
 import { DialectChips } from "@/components/DialectChips";
-import { CalButton } from "@/components/CalButton";
 import { Reveal } from "@/components/Reveal";
 import { HeroVisual } from "@/components/HeroVisual";
 import { ProcessSteps } from "@/components/ProcessSteps";
@@ -12,7 +11,7 @@ import { AnimatedIcon, IconChip, type IconName } from "@/components/icons";
 import { TrustStrip } from "@/components/TrustStrip";
 import { SampleConversation } from "@/components/SampleConversation";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { DemoCta } from "@/components/DemoCta";
+import { BookingDesk } from "@/components/BookingDesk";
 import { homeFaq } from "@/content/faq";
 
 /**
@@ -114,6 +113,10 @@ const t = {
       ],
       link: "صفحة الأمان والبيانات",
     },
+    closing: {
+      heading: "جاهز تشوف كيف يرد على عملائك؟",
+      line: "اختر وقت يناسبك — عرض 30 دقيقة، نوريك المنصة حية ونجاوب على أسئلتك.",
+    },
     faqHeading: "أسئلة تدور ببالك؟",
     faqLink: "كل الأسئلة الشائعة",
   },
@@ -196,6 +199,10 @@ const t = {
       ],
       link: "Security & data page",
     },
+    closing: {
+      heading: "Ready to see it answer your customers?",
+      line: "Pick a time that suits you — a 30-minute demo of the platform live, with your questions answered.",
+    },
     faqHeading: "Questions on your mind?",
     faqLink: "All frequently asked questions",
   },
@@ -233,9 +240,9 @@ export function HomePage({ locale }: { locale: Locale }) {
               {s.positioning}
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <CalButton calLink={CAL_LINK_DEMO} locale={locale}>
+              <DemoLink locale={locale}>
                 {s.ctaPrimary}
-              </CalButton>
+              </DemoLink>
               <Link href={localePath(locale, "how-it-works")} className="btn-secondary">
                 {s.ctaSecondary}
               </Link>
@@ -481,8 +488,22 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* 10 · Demo CTA */}
-      <DemoCta locale={locale} />
+      {/* 10 · Close on the booking desk itself, not a button that opens one.
+          This is the same component /demo uses. The calendar is the last
+          thing on the page rather than one more click away, and because
+          CalInline only mounts the iframe when the section nears the
+          viewport, a visitor who never scrolls this far pays nothing for it. */}
+      <section className="bg-night py-14 sm:py-16">
+        <div className="container">
+          <Reveal className="text-center">
+            <h2 className="text-h2 text-white">{s.closing.heading}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-body-lg text-white/70">{s.closing.line}</p>
+          </Reveal>
+          <div className="mt-10">
+            <BookingDesk locale={locale} />
+          </div>
+        </div>
+      </section>
     </>
   );
 }

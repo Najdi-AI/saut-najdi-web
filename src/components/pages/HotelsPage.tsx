@@ -1,8 +1,7 @@
 import Link from "next/link";
+import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { CAL_LINK_DEMO } from "@/lib/site";
-import { CalButton } from "@/components/CalButton";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
@@ -470,7 +469,7 @@ export function HotelsPage({ locale }: { locale: Locale }) {
           <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
           <div className="mt-7">
-            <CalButton calLink={CAL_LINK_DEMO} locale={locale}>{s.cta}</CalButton>
+            <DemoLink locale={locale}>{s.cta}</DemoLink>
           </div>
         </div>
       </section>

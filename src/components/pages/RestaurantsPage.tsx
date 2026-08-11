@@ -1,8 +1,7 @@
 import Link from "next/link";
+import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { CAL_LINK_DEMO } from "@/lib/site";
-import { CalButton } from "@/components/CalButton";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
@@ -387,8 +386,8 @@ function DialogueCard({ d, locale }: { d: Dialogue; locale: Locale }) {
         </div>
         {d.human && (
           <div className="flex justify-end">
-            <div className="max-w-[92%] rounded-2xl rounded-ee-md bg-brand-purple px-4 py-2.5 text-body leading-relaxed text-white">
-              <span className="mb-1 block text-body-sm font-medium text-white/75">
+            <div className="max-w-[92%] rounded-2xl rounded-ee-md bg-brand-purple px-4 py-2.5 text-body leading-relaxed text-canvas">
+              <span className="mb-1 block text-body-sm font-medium text-canvas/75">
                 {locale === "ar" ? "موظفك" : "Your employee"}
               </span>
               {d.human}
@@ -410,7 +409,7 @@ export function RestaurantsPage({ locale }: { locale: Locale }) {
           <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
           <div className="mt-7">
-            <CalButton calLink={CAL_LINK_DEMO} locale={locale}>{s.cta}</CalButton>
+            <DemoLink locale={locale}>{s.cta}</DemoLink>
           </div>
         </div>
       </section>

@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { DemoLink } from "./DemoLink";
 import Image from "next/image";
 import { localePath, type Locale } from "@/lib/i18n";
-import { APP_URL, CAL_LINK_DEMO } from "@/lib/site";
+import { APP_URL } from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { megaMenus } from "@/content/nav";
-import { CalButton } from "./CalButton";
 import { HeaderScroll } from "./nav/HeaderScroll";
 import { ScrollProgress } from "./nav/ScrollProgress";
 import { NavMenu } from "./nav/NavMenu";
@@ -89,9 +89,9 @@ export function Header({ locale }: { locale: Locale }) {
           <a href={APP_URL} className="hdr-link hdr-cta">
             {t.login}
           </a>
-          <CalButton calLink={CAL_LINK_DEMO} locale={locale} variant="spectrum" className="hdr-cta">
+          <DemoLink locale={locale} variant="spectrum" className="hdr-cta">
             {t.cta}
-          </CalButton>
+          </DemoLink>
           <MobileNav locale={locale} />
         </div>
       </div>

@@ -21,12 +21,24 @@ const config: Config = {
     },
     extend: {
       colors: {
+        /**
+         * Brand hues, variable-backed so they LIGHTEN on night. The guideline
+         * values are tuned for ink on white; at icon weight — a 1.8px stroke —
+         * #6F3FA4 and #5B6CE5 disappear into a #080D1C ground. Dark mode uses
+         * the same hues raised in luminance, which is also exactly the ramp
+         * the headline gradient uses on night, so the two stay in step.
+         *
+         * The five-stop `--spectrum` (ring outlines, the header CTA) is a
+         * SEPARATE set of variables and is deliberately left at brand values:
+         * it paints solid fills and large areas, where the original weights
+         * still read correctly on dark.
+         */
         brand: {
-          cyan: "#2EC4E6",
-          blue: "#5B6CE5",
-          purple: "#6F3FA4",
-          magenta: "#E20C3A",
-          red: "#EC1B3A",
+          cyan: "rgb(var(--c-brand-cyan) / <alpha-value>)",
+          blue: "rgb(var(--c-brand-blue) / <alpha-value>)",
+          purple: "rgb(var(--c-brand-purple) / <alpha-value>)",
+          magenta: "rgb(var(--c-brand-magenta) / <alpha-value>)",
+          red: "rgb(var(--c-brand-red) / <alpha-value>)",
         },
         /**
          * SEMANTIC, NOT LITERAL. These four carry the brand's light values in

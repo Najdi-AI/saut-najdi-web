@@ -46,7 +46,12 @@ export function Footer({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mt-10 border-t border-line pt-6">
-          <Waveform bars={36} maxHeight={20} animate={false} className="opacity-50" />
+          {/* Animated, same as the hero. It used to be `animate={false}`; the
+              bars are short here (20px against the hero's 30) so the motion
+              reads as a slow idle pulse rather than a second hero. Safe to
+              run: the global prefers-reduced-motion rule in globals.css stops
+              every animation on the page, this one included. */}
+          <Waveform bars={36} maxHeight={20} className="opacity-60" />
           <div className="mt-4 flex flex-col items-center justify-between gap-3 text-body text-ink/65 sm:flex-row">
             <span>{t.madeIn} 🇸🇦</span>
             <a

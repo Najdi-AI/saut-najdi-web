@@ -461,7 +461,7 @@ function DialogueCard({ item, delay }: { item: Dialogue; delay: number }) {
             </p>
           </div>
           <div className="flex justify-end">
-            <p className="max-w-[90%] rounded-2xl rounded-ee-md bg-ink px-4 py-3 text-body-lg leading-relaxed text-white">
+            <p className="max-w-[90%] rounded-2xl rounded-ee-md bg-ink px-4 py-3 text-body-lg leading-relaxed text-canvas">
               {item.agent}
             </p>
           </div>
@@ -536,7 +536,7 @@ export function RealEstatePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="eyebrow">{s.human.eyebrow}</p>
@@ -591,7 +591,7 @@ export function RealEstatePage({ locale }: { locale: Locale }) {
         </Reveal>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="eyebrow">{s.after.eyebrow}</p>

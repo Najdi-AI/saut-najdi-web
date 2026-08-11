@@ -52,7 +52,7 @@ export function FaqPage({ locale }: { locale: Locale }) {
               <li key={g.id}>
                 <a
                   href={`#${g.id}`}
-                  className="block rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card transition-colors hover:border-brand-blue/50 hover:text-brand-blue"
+                  className="block rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card transition-colors hover:border-brand-blue/50 hover:text-brand-blue"
                 >
                   {g.group}
                 </a>
@@ -65,7 +65,7 @@ export function FaqPage({ locale }: { locale: Locale }) {
             /* scroll-mt clears the sticky header when a jump link lands here. */
             <section key={g.id} id={g.id} className="scroll-mt-28">
               <h2 className="text-h3">{g.group}</h2>
-              <div className="mt-4 divide-y divide-line rounded-2xl border border-line bg-white shadow-card">
+              <div className="mt-4 divide-y divide-line rounded-2xl border border-line bg-surface shadow-card">
                 {g.items.map((item) => (
                   <details key={item.q} className="group px-6 py-4">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">

@@ -91,14 +91,20 @@ export function SampleConversation({ locale }: { locale: Locale }) {
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 text-body-lg leading-relaxed shadow-card ${
                   isCaller
-                    ? "rounded-es-md bg-white text-ink"
+                    ? "rounded-es-md bg-surface text-ink"
                     : turn.who === "human"
                       ? "rounded-ee-md bg-brand-purple text-white"
-                      : "rounded-ee-md bg-ink text-white"
+                      : "rounded-ee-md bg-ink text-canvas"
                 }`}
               >
+                {/* Speaker label. The human bubble is bg-brand-purple — a
+                    literal, dark in both themes — so its label stays literal
+                    white. The agent bubble is bg-ink, which flips to
+                    near-white on night, so its label has to flip with it. */}
                 {turn.who !== "caller" && (
-                  <span className={`mb-1 block text-body-sm font-medium ${turn.who === "human" ? "text-white/75" : "text-white/60"}`}>
+                  <span
+                    className={`mb-1 block text-body-sm font-medium ${turn.who === "human" ? "text-white/75" : "text-canvas/60"}`}
+                  >
                     {turn.who === "human"
                       ? locale === "ar" ? "موظفك" : "Your employee"
                       : locale === "ar" ? "وكيل صوت نجدي" : "Saut Najdi agent"}

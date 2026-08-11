@@ -107,7 +107,7 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-canvas">
+      <section className="bg-gradient-to-b from-surface to-canvas">
         <div className="container py-14 text-center">
           <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.intro}</p>

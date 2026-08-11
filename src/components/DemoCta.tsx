@@ -37,7 +37,7 @@ export function DemoCta({ locale }: { locale: Locale }) {
           <CalButton
             calLink={CAL_LINK_DEMO}
             locale={locale}
-            className="!bg-white !text-ink hover:!bg-canvas"
+            className="!bg-white !text-navy hover:!bg-white/90"
           >
             {s.cta}
           </CalButton>

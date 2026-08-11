@@ -217,7 +217,7 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-canvas">
+      <section className="bg-gradient-to-b from-surface to-canvas">
         <div className="container py-14 text-center">
           <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
           <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.intro}</p>
@@ -235,7 +235,7 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
         </Reveal>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-h2">{s.kindsHeading}</h2>

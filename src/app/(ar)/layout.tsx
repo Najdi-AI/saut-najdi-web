@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
+import { ThemeScript } from "@/components/ThemeScript";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -31,7 +32,12 @@ export const metadata: Metadata = {
 };
 
 /** Next 15 wants theme-color on `viewport`, not `metadata`. */
-export const viewport: Viewport = { themeColor: "#5B6CE5" };
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#5B6CE5" },
+    { media: "(prefers-color-scheme: dark)", color: "#080D1C" },
+  ],
+};
 
 /**
  * Arabic root layout — Arabic is the default language and lives at the
@@ -43,7 +49,10 @@ export default function ArabicRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={thmanyah.variable}>
+    <html lang="ar" dir="rtl" className={thmanyah.variable} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className="font-sans">
         {/* First child of <body>, per Google's install instructions. */}
         <GtmNoScript />

@@ -28,7 +28,7 @@ const items: Record<
 
 export function TrustStrip({ locale }: { locale: Locale }) {
   return (
-    <div className="border-y border-line bg-white">
+    <div className="border-y border-line bg-surface">
       <ul className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-4">
         {items[locale].map((item, i) => {
           const inner = (

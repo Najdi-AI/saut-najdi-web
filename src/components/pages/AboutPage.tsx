@@ -79,7 +79,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-canvas py-14">
+      <section className="bg-gradient-to-b from-surface to-canvas py-14">
         <div className="container text-center">
           <h1 className="text-h1">{s.h1}</h1>
           <Waveform bars={32} maxHeight={28} className="mt-6 opacity-70" />

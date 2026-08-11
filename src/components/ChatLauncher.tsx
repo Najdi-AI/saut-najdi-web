@@ -58,6 +58,22 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  /**
+   * Mirror the site theme into the widget frame. ThemeToggle fires
+   * `themechange` on <html> rather than us polling, and the initial read
+   * happens on mount because ThemeScript has already stamped the attribute
+   * by then. Server-rendered as "light" so the markup is deterministic.
+   */
+  const [frameScheme, setFrameScheme] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    const root = document.documentElement;
+    const read = () =>
+      setFrameScheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    read();
+    root.addEventListener("themechange", read);
+    return () => root.removeEventListener("themechange", read);
+  }, []);
+
   return (
     <div className="fixed bottom-5 start-5 z-[90]">
       <AnimatePresence>
@@ -68,7 +84,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? undefined : { opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="absolute bottom-[4.5rem] start-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card-hover"
+            className="absolute bottom-[4.5rem] start-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
           >
             <div className="flex items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-3">
               <div>
@@ -88,14 +104,17 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             </div>
 
             {WEBCHAT_KEY ? (
-              // colorScheme:light forces prefers-color-scheme inside the
-              // cross-origin frame — the widget follows the visitor's OS
-              // theme otherwise, going dark on dark-mode devices.
+              // `colorScheme` is the only lever we have on a cross-origin
+              // frame: it decides what prefers-color-scheme reports INSIDE it,
+              // and the widget themes itself off that. It used to be pinned to
+              // light so the widget could not go dark under a light page;
+              // now it follows the site's own theme instead, so a dark page
+              // does not open a white rectangle over itself.
               <iframe
                 src={WEBCHAT_FRAME_URL(WEBCHAT_KEY)}
                 title={s.frameTitle}
-                className="min-h-0 w-full flex-1 border-0 bg-white"
-                style={{ colorScheme: "light" }}
+                className="min-h-0 w-full flex-1 border-0 bg-surface"
+                style={{ colorScheme: frameScheme }}
                 allow="clipboard-write; microphone"
               />
             ) : (

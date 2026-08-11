@@ -375,8 +375,8 @@ function DialogueCard({ d, locale }: { d: Dialogue; locale: Locale }) {
           </p>
         </div>
         <div className="flex justify-end">
-          <div className="max-w-[92%] rounded-2xl rounded-ee-md bg-ink px-4 py-2.5 text-body leading-relaxed text-white">
-            <span className="mb-1 block text-body-sm font-medium text-white/60">
+          <div className="max-w-[92%] rounded-2xl rounded-ee-md bg-ink px-4 py-2.5 text-body leading-relaxed text-canvas">
+            <span className="mb-1 block text-body-sm font-medium text-canvas/60">
               {locale === "ar" ? "وكيل صوت نجدي" : "Saut Najdi agent"}
             </span>
             {d.agent}
@@ -420,7 +420,7 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
         <p className="mt-6 text-center text-body-sm text-ink/60">{s.calls.note}</p>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="text-h2">{s.why.heading}</h2>
@@ -450,7 +450,7 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="text-h2">{s.voice.heading}</h2>
@@ -481,7 +481,7 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
         {/* The medical boundary is stated out loud — a clinic buyer is asking
             it silently anyway, and saying it first is the trust signal. */}
         <Reveal className="mx-auto mt-6 max-w-3xl">
-          <p className="rounded-2xl border-s-4 border-s-brand-purple bg-white p-5 text-body-lg leading-relaxed text-ink/80 shadow-card">
+          <p className="rounded-2xl border-s-4 border-s-brand-purple bg-surface p-5 text-body-lg leading-relaxed text-ink/80 shadow-card">
             {s.human.honesty}
           </p>
           <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.human.honestyMore}</p>
@@ -493,7 +493,7 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
             {s.human.items.map((x) => (
               <li
                 key={x}
-                className="flex items-start gap-3 rounded-xl border border-line bg-white p-4 text-body-lg leading-relaxed text-ink/80 shadow-card"
+                className="flex items-start gap-3 rounded-xl border border-line bg-surface p-4 text-body-lg leading-relaxed text-ink/80 shadow-card"
               >
                 <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue" aria-hidden />
                 {x}
@@ -524,7 +524,7 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-h2">{s.kb.heading}</h2>

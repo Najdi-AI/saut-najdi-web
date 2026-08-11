@@ -175,7 +175,7 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="eyebrow">{s.pillars.eyebrow}</p>

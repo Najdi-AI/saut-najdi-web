@@ -10,6 +10,7 @@ import { ScrollProgress } from "./nav/ScrollProgress";
 import { NavMenu } from "./nav/NavMenu";
 import { MobileNav } from "./nav/MobileNav";
 import { LangSwitch } from "./nav/LangSwitch";
+import { ThemeToggle } from "./nav/ThemeToggle";
 
 /**
  * Header ported from the haroon911 reference: a resting full-width bar
@@ -38,7 +39,7 @@ export function Header({ locale }: { locale: Locale }) {
       <ScrollProgress />
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-[110] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-[110] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
       >
         {t.skipToContent}
       </a>
@@ -83,6 +84,7 @@ export function Header({ locale }: { locale: Locale }) {
         </nav>
 
         <div className="hdr-actions">
+          <ThemeToggle locale={locale} />
           <LangSwitch locale={locale} />
           <a href={APP_URL} className="hdr-link hdr-cta">
             {t.login}

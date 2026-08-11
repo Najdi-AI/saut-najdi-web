@@ -79,12 +79,12 @@ export function HeroVisual({ locale }: { locale: Locale }) {
         <motion.div
           {...float(0.3, 4.2)}
           dir="rtl"
-          className="flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-white/95 px-4 py-2.5 shadow-card-hover backdrop-blur dark:border-white/15 dark:bg-night-surface/85"
+          className="flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur"
         >
           <span className="ring-spectrum flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-brand-purple dark:text-brand-cyan">
             <AnimatedIcon name="wave" size={16} delay={0.5} />
           </span>
-          <span className="text-body font-medium text-ink dark:text-white" dir="auto">
+          <span className="text-body font-medium text-ink" dir="auto">
             {s.agent}
           </span>
         </motion.div>
@@ -97,12 +97,12 @@ export function HeroVisual({ locale }: { locale: Locale }) {
         <motion.div
           {...float(1.1, 4.8)}
           dir="rtl"
-          className="flex items-center gap-2.5 rounded-2xl rounded-bl-md bg-ink px-4 py-2.5 shadow-card-hover dark:bg-white"
+          className="flex items-center gap-2.5 rounded-2xl rounded-bl-md bg-ink px-4 py-2.5 shadow-card-hover"
         >
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/15 text-white dark:bg-ink/10 dark:text-ink">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-canvas/15 text-canvas">
             <AnimatedIcon name="human" size={16} delay={0.75} />
           </span>
-          <span className="text-body font-medium text-white dark:text-ink" dir="auto">
+          <span className="text-body font-medium text-canvas" dir="auto">
             {s.caller}
           </span>
         </motion.div>

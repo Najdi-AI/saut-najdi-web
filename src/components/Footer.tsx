@@ -11,7 +11,7 @@ export function Footer({ locale }: { locale: Locale }) {
   const columns = [t.product, t.company, t.legal];
 
   return (
-    <footer className="border-t border-line bg-white">
+    <footer className="border-t border-line bg-surface">
       <div className="container py-12">
         <div className="grid gap-10 md:grid-cols-4">
           <div>

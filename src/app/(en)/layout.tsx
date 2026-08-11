@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
+import { ThemeScript } from "@/components/ThemeScript";
 import { SITE_URL } from "@/lib/site";
 
 /** English mirror of the Arabic root metadata — see (ar)/layout.tsx for why. */
@@ -18,7 +19,12 @@ export const metadata: Metadata = {
   // See (ar)/layout.tsx — robots policy is per-page in pageMetadata().
 };
 
-export const viewport: Viewport = { themeColor: "#5B6CE5" };
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#5B6CE5" },
+    { media: "(prefers-color-scheme: dark)", color: "#080D1C" },
+  ],
+};
 
 /**
  * English root layout — English is a separate piece of writing under /en,
@@ -30,7 +36,10 @@ export default function EnglishRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr" className={thmanyah.variable}>
+    <html lang="en" dir="ltr" className={thmanyah.variable} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className="font-sans">
         {/* First child of <body>, per Google's install instructions. */}
         <GtmNoScript />

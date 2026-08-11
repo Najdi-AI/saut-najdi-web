@@ -132,7 +132,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
   };
 
   const field =
-    "w-full rounded-xl border border-line bg-white px-4 py-3 text-body-lg text-ink placeholder:text-ink/55 focus:border-brand-blue focus:outline-none";
+    "w-full rounded-xl border border-line bg-surface px-4 py-3 text-body-lg text-ink placeholder:text-ink/55 focus:border-brand-blue focus:outline-none";
 
   return (
     <>

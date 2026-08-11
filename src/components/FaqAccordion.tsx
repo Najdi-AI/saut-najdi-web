@@ -7,7 +7,7 @@ import type { FaqItem } from "@/lib/schema";
  */
 export function FaqAccordion({ items }: { items: FaqItem[] }) {
   return (
-    <div className="divide-y divide-line rounded-2xl border border-line bg-white shadow-card">
+    <div className="divide-y divide-line rounded-2xl border border-line bg-surface shadow-card">
       {items.map((item) => (
         <details key={item.q} className="group px-6 py-4">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-body-lg font-bold text-ink [&::-webkit-details-marker]:hidden">

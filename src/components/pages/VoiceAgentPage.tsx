@@ -249,7 +249,7 @@ export function VoiceAgentPage({ locale }: { locale: Locale }) {
         </Reveal>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <div className="mx-auto max-w-3xl space-y-6">
             {s.sections.map((sec, i) => (

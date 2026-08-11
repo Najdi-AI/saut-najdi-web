@@ -28,10 +28,24 @@ const config: Config = {
           magenta: "#E20C3A",
           red: "#EC1B3A",
         },
-        ink: "#0D1326", // Charcoal — body text, deep bands
-        navy: "#112046", // Soft Navy — deep emphasis
-        canvas: "#F7F8FA", // Off-White — page background
-        line: "#E5E7EB", // Silver Gray — borders, dividers
+        /**
+         * SEMANTIC, NOT LITERAL. These four carry the brand's light values in
+         * :root and invert under [data-theme="dark"], which is what lets ~230
+         * existing utilities (text-ink/70, border-line, bg-canvas) flip with
+         * no edit at the call site. Read them by ROLE, not colour:
+         *   ink     = foreground text        (dark on light, light on dark)
+         *   canvas  = page ground            (the recessive layer)
+         *   surface = raised panel           (cards, chips, bubbles)
+         *   navy    = deep contrast band     (stays dark in BOTH themes)
+         * `navy` is the odd one: bands built on it are dark-on-purpose in
+         * light mode, so in dark mode it lifts to a raised panel rather than
+         * inverting — inverting would turn the site's contrast bands white.
+         */
+        ink: "rgb(var(--c-ink) / <alpha-value>)",
+        navy: "rgb(var(--c-navy) / <alpha-value>)",
+        canvas: "rgb(var(--c-canvas) / <alpha-value>)",
+        line: "rgb(var(--c-line) / <alpha-value>)",
+        surface: "rgb(var(--c-surface) / <alpha-value>)",
 
         /**
          * Dark-theme ground. Navy-leaning rather than neutral black, so the

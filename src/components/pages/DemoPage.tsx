@@ -175,7 +175,7 @@ export function DemoPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-canvas">
+      <section className="bg-gradient-to-b from-surface to-canvas">
         <div className="container py-12 text-center">
           <h1 className="text-h1">
             {s.h1} <span className="text-ink/40">{s.h1Tail}</span>
@@ -189,15 +189,29 @@ export function DemoPage({ locale }: { locale: Locale }) {
       {/* The booking desk. `BOOKER_SURFACE` also paints the booker inside the
           iframe (lib/bookerTheme.ts) — pinned to one token so the seam
           between our panel and Cal's columns disappears. */}
-      <section className="bg-ink py-12 sm:py-14">
+      {/* `bg-night`, not `bg-ink`: ink inverts with the theme and would turn
+          this band white, but the Cal booker inside it is pinned dark
+          (lib/bookerTheme.ts) — its palette is handed to the iframe once at
+          mount and cannot follow a live theme switch. So the desk stays dark
+          in both themes, and the card still lifts off it either way. */}
+      <section className="bg-night py-12 sm:py-14">
         <div className="container">
           <div
             className="mx-auto grid max-w-[1120px] overflow-hidden rounded-3xl border border-white/10 shadow-[0_30px_90px_-40px_rgba(0,0,0,0.9)] lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
-            style={{ backgroundColor: BOOKER_SURFACE }}
+            /* Pinning --surface here too, not just the background: this card
+               is dark in BOTH themes, so anything inside it that reads the
+               surface token — .ring-spectrum fills its centre with it — must
+               see the card's own colour rather than the page's, or the chip
+               turns into a white sticker whenever the site is in light mode. */
+            style={
+              { backgroundColor: BOOKER_SURFACE, "--surface": BOOKER_SURFACE } as React.CSSProperties
+            }
           >
             <aside className="border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-e">
               <div className="flex items-center gap-3">
-                <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-purple">
+                {/* Cyan, not purple: the chip's ground is the dark card in
+                    both themes, and brand-purple on it is nearly unreadable. */}
+                <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-cyan">
                   <AnimatedIcon name="wave" size={22} />
                 </span>
                 <span className="text-body font-medium text-white/55">{s.panel.org}</span>
@@ -247,7 +261,7 @@ export function DemoPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <div className="mx-auto max-w-3xl space-y-6">
             {s.sections.map((sec, i) => (

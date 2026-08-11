@@ -27,10 +27,10 @@
     @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-white px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-surface px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
   }
   .card {
-    @apply rounded-2xl border border-line bg-white p-6 shadow-card transition-all duration-300;
+    @apply rounded-2xl border border-line bg-surface p-6 shadow-card transition-all duration-300;
   }
   .card-hover {
     @apply hover:-translate-y-1 hover:shadow-card-hover;
@@ -52,6 +52,14 @@
    (adapted: light theme only, mapped to this site's palette)
    ============================================================ */
 :root {
+  /* Semantic colour roles — see tailwind.config.ts. Space-separated triplets
+     so Tailwind's <alpha-value> works (text-ink/70 and friends). */
+  --c-ink: 13 19 38;
+  --c-navy: 17 32 70;
+  --c-canvas: 247 248 250;
+  --c-line: 229 231 235;
+  --c-surface: 255 255 255;
+
   --cyan: #2ec4e6;
   --indigo: #5b6ce5;
   --purple: #6f3fa4;
@@ -89,12 +97,20 @@
 
 /* ============================================================
    DARK THEME
-   Opt-in per subtree via data-theme="dark" (see tailwind.config.ts).
-   The navbar block above is already driven entirely by these variables,
-   so redefining them is all it takes to flip the whole chrome — no
-   navbar rules are duplicated below, deliberately.
+   Set on <html> by ThemeScript/ThemeToggle. Everything below is a
+   redefinition of variables that already existed — the navbar block above
+   is driven end to end by them, so no navbar rule is duplicated here.
    ============================================================ */
 [data-theme="dark"] {
+  /* Semantic roles. `navy` LIFTS instead of inverting: the bands built on
+     it are dark-on-purpose in light mode, so they become raised panels on
+     night rather than flipping white and destroying the page's rhythm. */
+  --c-ink: 238 241 248;
+  --c-navy: 22 32 60;
+  --c-canvas: 8 13 28;
+  --c-line: 35 44 73;
+  --c-surface: 15 23 48;
+
   --ink: #eef1f8;
   --ink-2: #aab3c7;
   --ink-3: #838da3;
@@ -107,32 +123,53 @@
   --e2: 0 4px 10px -2px rgb(0 0 0 / 0.5), 0 12px 28px -8px rgb(0 0 0 / 0.6);
 }
 
-/* Shared components, inverted. Kept here rather than as `dark:` utilities at
-   each call site so the rollout does not have to revisit every button. */
+/* Shared components. `.card` and the buttons already resolve through the
+   semantic tokens, so only the pieces whose light form used a LITERAL white
+   need restating. */
 [data-theme="dark"] .btn-primary {
-  @apply bg-white text-ink hover:bg-canvas;
+  /* bg-ink would be near-white with near-white text; the primary button on
+     night is a light slab with dark type. */
+  @apply bg-white text-navy hover:bg-white/90;
 }
 [data-theme="dark"] .btn-secondary {
   @apply border-white/20 bg-white/[0.06] text-white hover:border-brand-cyan hover:text-brand-cyan;
 }
-[data-theme="dark"] .card {
-  @apply border-night-line bg-night-surface;
+[data-theme="dark"] .mobile-nav {
+  background: var(--surface);
 }
 
-/* The resting header sits ON the hero, so while that hero is dark the header
-   has to invert with it and then return to ink as it scrolls onto light
-   content. HeaderScroll flags exactly that window; the variables below are
-   the same ones the navbar block already reads, so nothing is duplicated. */
-.hdr[data-over-dark="true"] {
-  --ink: #ffffff;
-  --ink-2: #d3d9e7;
-  --ink-3: #9aa3b8;
-  --cyan-ink: #5fd8f2;
-  --line-rgb: 255 255 255;
-  --scrim-rgb: 15 23 48;
-  --shadow-rgb: 0 0 0;
-  --surface: #0f1730;
-  --surface-hi: #16203c;
+/* Applied by ThemeToggle for one frame around the swap — see the note there.
+   Animations are left alone; it is transitions that smear and latch. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* The soft brand wash is tuned to sit on white — at 5-8% alpha it vanishes
+   against night. Same hues, enough alpha to register. */
+[data-theme="dark"] .bg-brand-gradient-soft {
+  background-image: linear-gradient(
+    135deg,
+    rgba(46, 196, 230, 0.14) 0%,
+    rgba(91, 108, 229, 0.12) 40%,
+    rgba(226, 12, 58, 0.1) 100%
+  );
+}
+
+/* The five-stop brand gradient bottoms out around #6F3FA4, which on night is
+   barely separated from the ground. Lift every stop for dark; the hue order
+   and the cyan-to-red sweep are unchanged, so it still reads as the brand. */
+[data-theme="dark"] .text-gradient {
+  background-image: linear-gradient(
+    90deg,
+    #5fd8f2 0%,
+    #8b99f5 28%,
+    #b98ce0 52%,
+    #ff5c7a 78%,
+    #ff6b7f 100%
+  );
 }
 
 /* The hero cut-out is transparent around the subject's head but fully opaque
@@ -159,10 +196,10 @@
 .logo-inverse {
   display: none;
 }
-.hdr[data-over-dark="true"] .logo-default {
+[data-theme="dark"] .logo-default {
   display: none;
 }
-.hdr[data-over-dark="true"] .logo-inverse {
+[data-theme="dark"] .logo-inverse {
   display: block;
 }
 
@@ -266,7 +303,13 @@
   z-index: -1;
   border-radius: inherit;
   background: transparent;
-  transition: background-color 0.42s var(--ease);
+  /* No transition on this background, deliberately. It is written as
+     rgb(var(--scrim-rgb) / .72), and Chrome does not reliably restart a
+     running background-color transition when the custom property under it is
+     swapped — flipping the theme mid-capsule left the scrim latched at a
+     stale colour and alpha, grey over a white page. The capsule still
+     animates its size, radius and shadow, which is what reads as motion; the
+     scrim snapping in is imperceptible next to that. */
 }
 .hdr[data-scrolled="true"] .hdr-in::before {
   --glass-blur: blur(18px) saturate(180%);
@@ -615,6 +658,29 @@ a.mega-item:hover .mega-ico {
 }
 
 /* ---------- mobile nav ---------- */
+/* Theme switch — sized to match .burger so the actions row keeps its rhythm
+   whether or not the burger is showing. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line-hi);
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color 0.22s var(--ease), background 0.22s var(--ease),
+    border-color 0.22s var(--ease);
+}
+.theme-toggle:hover {
+  color: var(--ink);
+  background: rgb(var(--line-rgb) / 0.06);
+  border-color: rgb(var(--line-rgb) / 0.28);
+}
+
 .burger {
   display: inline-flex;
   align-items: center;
@@ -640,11 +706,6 @@ a.mega-item:hover .mega-ico {
   padding: 14px var(--gutter) 26px;
   max-block-size: 78vh;
   overflow-y: auto;
-}
-/* Everything else in the sheet is already variable-driven; only the ground
-   was a literal. */
-.hdr[data-over-dark="true"] .mobile-nav {
-  background: var(--surface);
 }
 /* Group labels in the sheet are <p>, not <h3> — they are chrome, and a
    heading here would enter every page's outline ahead of the real content. */

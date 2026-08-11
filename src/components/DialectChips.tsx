@@ -38,14 +38,14 @@ export function DialectChips({
         {chips[locale].map((chip) => (
           <li
             key={chip}
-            className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card dark:border-white/15 dark:bg-white/[0.07] dark:text-white/85 dark:shadow-none"
+            className="rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card dark:shadow-none"
           >
             {chip}
           </li>
         ))}
       </ul>
       <p
-        className={`text-body-sm text-ink/60 dark:text-white/55 ${className.includes("center") ? "text-center" : ""}`}
+        className={`text-body-sm text-ink/60 ${className.includes("center") ? "text-center" : ""}`}
       >
         {cloneLine[locale]}
       </p>

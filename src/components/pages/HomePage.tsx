@@ -207,17 +207,12 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles
-          DARK THEME EVALUATION: `data-theme="dark"` scopes the night palette to
-          this section only, so the rest of the page stays light for comparison.
-          Every light class below is still here — delete the attribute and the
-          hero returns to exactly what it was. Rolling the theme out means
-          moving the attribute to <html> and giving the other sections the same
-          `dark:` treatment. */}
-      <section
-        data-theme="dark"
-        className="relative overflow-hidden bg-gradient-to-b from-white to-canvas text-ink dark:from-[#0C1326] dark:to-night dark:text-white"
-      >
+      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles.
+          The evaluation-only `data-theme="dark"` that used to sit on this
+          section is gone: the attribute now lives on <html>, so the `dark:`
+          classes below answer to the visitor's choice instead of being
+          hard-on. */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-surface to-canvas dark:from-[#0C1326] dark:to-night">
         {/* Brand aurora — a soft spectrum wash so the ground is not flat
             black. Dark only; it would muddy the white hero. */}
         <div
@@ -275,7 +270,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       {/* 3 · How it works */}
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal>
             <h2 className="text-center text-h2">{s.how.heading}</h2>
@@ -331,7 +326,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             {s.vsIvr.answer}
           </p>
         </Reveal>
-        <div className="mx-auto mt-8 max-w-4xl overflow-x-auto rounded-2xl border border-line bg-white shadow-card">
+        <div className="mx-auto mt-8 max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
           <table className="w-full min-w-[640px] border-collapse text-body-lg">
             <thead>
               <tr className="border-b border-line">
@@ -378,7 +373,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           {s.inbox.channels.map((channel) => (
             <li
               key={channel}
-              className="rounded-full border border-line bg-white px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
+              className="rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
             >
               {channel}
             </li>
@@ -387,7 +382,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       {/* 5 · Capabilities — five cards, each now a real page (Wave 2) */}
-      <section className="bg-white py-16">
+      <section className="bg-surface py-16">
         <div className="container">
           <Reveal>
             <h2 className="text-center text-h2">{s.capabilities.heading}</h2>

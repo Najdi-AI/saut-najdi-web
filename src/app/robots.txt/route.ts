@@ -12,6 +12,10 @@ const BODY = `# robots.txt — sautnajdi.ai
 
 User-agent: *
 Allow: /
+# The draft-review queue and the cron endpoint. Both are already key-gated and
+# the page sends noindex; this keeps them out of crawl budget as well.
+Disallow: /admin
+Disallow: /api/
 
 # --- AI answer engines: these fetch a page at answer time and are the gate
 # --- on being CITED. Blocking them removes us from the answer, not just training.

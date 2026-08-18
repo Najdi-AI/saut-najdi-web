@@ -62,6 +62,11 @@
 
   /* Brand hues at guideline values. */
   --c-brand-cyan: 46 196 230;
+  /* Admin "healthy/live" accent. Brand cyan carries this role on dark, but
+     at 2.1:1 on white it cannot label anything in light mode — so the role
+     gets its own token: a deepened cyan in light, the bright brand cyan on
+     night. Only the admin console reads it. */
+  --c-ok: 11 116 144;
   --c-brand-blue: 91 108 229;
   --c-brand-purple: 111 63 164;
   --c-brand-magenta: 226 12 58;
@@ -121,10 +126,33 @@
   /* Same hues, raised in luminance so stroke icons read on night. Matches
      the dark .text-gradient ramp below, so icons and headline agree. */
   --c-brand-cyan: 95 216 242;
+  --c-ok: 95 216 242;
   --c-brand-blue: 139 153 245;
   --c-brand-purple: 185 140 224;
   --c-brand-magenta: 255 92 122;
   --c-brand-red: 255 107 127;
+
+  /* The literal-hex twins of the five hues above. `--spectrum` is composed
+     from THESE, which is what carries the lifted ramp into the two places
+     that still painted at full brand weight on night: the ring outlines
+     (.ring-spectrum) and the header CTA (.btn-spectrum). The #6F3FA4 stop
+     measured 2.7:1 against the ground, so a ring visibly faded out through
+     its own middle; every stop now clears 6.5:1.
+
+     Same values as the --c-brand-* triplets above and the dark
+     .text-gradient ramp below — those three must stay in step. */
+  --cyan: #5fd8f2;
+  --indigo: #8b99f5;
+  --purple: #b98ce0;
+  --crimson: #ff5c7a;
+  --red: #ff6b7f;
+  /* Tint/glow triplets follow the same lift, so the washes built on them
+     (.mega-feat-art, the .btn-spectrum hover bloom) stay in the same key.
+     --purple-rgb also backs `.mega-ico`'s colour, which was #6F3FA4 on a
+     dark ground — 2.7:1, and invisible until you opened the mega menu. */
+  --cyan-rgb: 95 216 242;
+  --purple-rgb: 185 140 224;
+  --crimson-rgb: 255 92 122;
 
   --ink: #eef1f8;
   --ink-2: #aab3c7;
@@ -148,6 +176,13 @@
 }
 [data-theme="dark"] .btn-secondary {
   @apply border-white/20 bg-white/[0.06] text-white hover:border-brand-cyan hover:text-brand-cyan;
+}
+[data-theme="dark"] .btn-spectrum {
+  /* The lifted spectrum is a LIGHT slab, so the white type it carries in
+     day mode collapses to 1.7-3.0:1 on it. Dark type instead — 6.5:1 at the
+     worst stop, 11.6:1 at the cyan end — which is the same inversion
+     .btn-primary makes directly above. */
+  color: rgb(var(--c-canvas));
 }
 [data-theme="dark"] .mobile-nav {
   background: var(--surface);
@@ -175,7 +210,13 @@
 
 /* The five-stop brand gradient bottoms out around #6F3FA4, which on night is
    barely separated from the ground. Lift every stop for dark; the hue order
-   and the cyan-to-red sweep are unchanged, so it still reads as the brand. */
+   and the cyan-to-red sweep are unchanged, so it still reads as the brand.
+
+   Restated as literals rather than `var(--spectrum)` because this class is
+   `@apply bg-brand-gradient` in day mode, whose stops sit at 0/28/52/78/100
+   against --spectrum's 0/26/50/82/100; borrowing the variable here would
+   shift the headline's colour banding between themes. Same five hues as the
+   dark --cyan..--red block above — keep them in step. */
 [data-theme="dark"] .text-gradient {
   background-image: linear-gradient(
     90deg,

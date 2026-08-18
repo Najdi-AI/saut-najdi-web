@@ -28,6 +28,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           ps: [
             "لزوّار الموقع: تُستخدم أداة قياس بلا ملفات تعريف ارتباط لإحصاءات مجمّعة عن الصفحات دون معرّفات شخصية، وأداة لإدارة وسوم القياس. الوسوم المفعّلة حالياً لا تنشئ ملف تعريف شخصي عنك؛ وإذا فُعّلت وسوم تتبّع تستخدم ملفات تعريف الارتباط، سنطلب موافقتك أولاً ونحدّث هذه السياسة.",
             "لحجوزات العرض التعريفي: عند حجزك عرضاً نجمع — عبر مزوّد خدمة الحجوزات — اسمك وبريدك وجوالك واسم منشأتك وقطاعها وحجم مكالماتك التقريبي، ورسالتك إن أضفتها، لغرض وحيد هو التواصل معك وتجهيز العرض.",
+            "للنشرة البريدية: عند اشتراكك في نشرتنا نجمع بريدك الإلكتروني ولغتك المفضلة فقط، لغرض وحيد هو إرسال تحديثات صوت نجدي وأخبار الذكاء الاصطناعي. يُحفظ بريدك في مخزننا الخاص ولا يُشارك مع أي طرف ثالث، وتقدر تلغي الاشتراك في أي وقت بمراسلتنا على ai@sautnajdi.ai فنحذف بريدك نهائياً.",
             "للمنشآت المشتركة وعملائها: تعالج المنصة محتوى المكالمات والمحادثات النصية (الصوت، والنص، والملخصات)، وبيانات العملاء التي تُدخلها المنشأة (الأسماء، أرقام التواصل، التفضيلات، الحجوزات)، وسجلات الاستخدام — لغرض تشغيل خدمة الرد الآلي والتصعيد البشري التي تعاقدت عليها المنشأة.",
           ],
         },
@@ -148,6 +149,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           ps: [
             "Website visitors: a cookieless measurement tool provides aggregate page statistics without personal identifiers, and a tag manager is used to manage measurement tags. The tags active today do not build a personal profile of you; if tracking tags that rely on cookies are enabled, we will ask for your consent first and update this policy.",
             "Demo bookings: when you book a demo we collect — through our scheduling provider — your name, email, mobile number, business name, sector, approximate call volume, and any message you include, for the sole purpose of contacting you and preparing the demo.",
+            "Newsletter: when you subscribe to our newsletter we collect only your email address and preferred language, for the sole purpose of sending Saut Najdi updates and AI news. Your email is held in our own private store, is not shared with any third party, and you can unsubscribe at any time by emailing ai@sautnajdi.ai — we then delete it permanently.",
             "Subscribed businesses and their customers: the platform processes call and text-conversation content (audio, transcripts, summaries), the customer records a business enters (names, contact numbers, preferences, bookings), and usage logs — to operate the AI answering and human-handoff service the business contracted for.",
           ],
         },

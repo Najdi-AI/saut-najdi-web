@@ -1,6 +1,7 @@
 import "../globals.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { thmanyah } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -61,7 +62,17 @@ export default function ArabicRootLayout({
         <main id="main">{children}</main>
         <Footer locale="ar" />
         <ChatLauncher locale="ar" />
+        {/* Web Analytics was already provisioned and recording; Speed Insights
+
+            was provisioned too but sat at hasData:false because nothing ever
+
+            reported to it. This is the half that was missing — it is what turns
+
+            real visitors into actual Core Web Vitals instead of lab guesses. */}
+
         <Analytics />
+
+        <SpeedInsights />
       </body>
     </html>
   );

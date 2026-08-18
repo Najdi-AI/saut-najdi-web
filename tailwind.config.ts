@@ -58,6 +58,8 @@ const config: Config = {
         canvas: "rgb(var(--c-canvas) / <alpha-value>)",
         line: "rgb(var(--c-line) / <alpha-value>)",
         surface: "rgb(var(--c-surface) / <alpha-value>)",
+        /** Admin console "live/healthy" accent — see --c-ok in globals.css. */
+        ok: "rgb(var(--c-ok) / <alpha-value>)",
 
         /**
          * Dark-theme ground. Navy-leaning rather than neutral black, so the

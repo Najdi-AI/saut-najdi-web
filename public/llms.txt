@@ -120,6 +120,19 @@ Book a 30-minute intro demo at https://sautnajdi.ai/en/demo — the platform is 
 - [شروط الخدمة](https://sautnajdi.ai/terms)
 - [اتفاقية معالجة البيانات](https://sautnajdi.ai/dpa)
 
+## Blog
+
+Explanatory writing aimed at buyers evaluating a solution. Every post exists in
+both languages at the same slug — Arabic at /blog/<slug>, English at
+/en/blog/<slug>. The PDPL post is explanatory and explicitly not legal advice.
+
+- [Enterprise Voice AI Updates — August 2026](https://sautnajdi.ai/en/blog/saudi-ai-voice-insights-august-2026) · [العربية](https://sautnajdi.ai/blog/saudi-ai-voice-insights-august-2026): weekly news roundup — Saudi AI infrastructure investment, the AudioCodes Voca CIC Microsoft Teams certification, the Five9 + Regal integration for regulated sectors, voice AI moving into sales, and Wispr Flow's Series B
+- [AI call answering: a practical buyer's guide](https://sautnajdi.ai/en/blog/ai-call-answering-guide) · [العربية](https://sautnajdi.ai/blog/ai-call-answering-guide): how a voice agent differs from a traditional IVR menu tree, five criteria to judge any solution on (dialect, escalation, grounding, supervision, compliance), and the questions that expose a weak system
+- [Call recording and Saudi PDPL compliance](https://sautnajdi.ai/en/blog/pdpl-call-recording-compliance) · [العربية](https://sautnajdi.ai/blog/pdpl-call-recording-compliance): why a voice recording is personal data, notice before recording, why "where is the data processed" must be answered per processor rather than per country, retention and automatic deletion, and five questions to put to a vendor in writing
+- [Why global voice systems fail on Saudi dialects](https://sautnajdi.ai/en/blog/saudi-dialects-voice-ai) · [العربية](https://sautnajdi.ai/blog/saudi-dialects-voice-ai): why Modern Standard Arabic training does not transfer to how customers actually speak, how Najdi and Hijazi differ, why mid-sentence Arabic-English code-switching breaks most systems, and how to test a voice agent seriously
+
+Index: [Blog](https://sautnajdi.ai/en/blog) · [المدونة](https://sautnajdi.ai/blog)
+
 ## Terminology
 
 The Arabic terms this product is searched and written about with, so an assistant answering an Arabic query can match them: وكيل صوتي (voice agent) · الرد الآلي على المكالمات (automated call answering) · مركز اتصال / كول سنتر (call centre) · موظف استقبال بالذكاء الاصطناعي (AI receptionist) · التصعيد للموظف البشري (human handoff/escalation) · صندوق وارد موحد (unified inbox) · قاعدة معرفة عربية (Arabic knowledge base) · اللهجة النجدية / الحجازية / الشامية (Najdi / Hijazi / Levantine dialect) · نظام حماية البيانات الشخصية (PDPL) · سجل تدقيق (audit log).

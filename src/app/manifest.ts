@@ -20,7 +20,9 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#F7F8FA",
     theme_color: "#5B6CE5",
     icons: [
-      { src: "/icon.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      // 192x192 is the file's real size — it was declared as 512x512, which
+      // meant the PWA advertised an icon it does not have.
+      { src: "/icon.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   };

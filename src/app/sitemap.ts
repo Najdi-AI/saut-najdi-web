@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { localePath } from "@/lib/i18n";
 import { updated } from "@/content/updated";
+import { getAllPosts } from "@/lib/allPosts";
 
 /** All indexable pages, both locales, with hreflang alternates (§8.6). */
 const paths = [
@@ -56,22 +57,55 @@ function prio(p: string): number {
  * ignore the field, forfeiting the one crawl-scheduling signal a small site
  * has. Bump the date there when a page's copy actually changes.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
-  return paths.flatMap((path) =>
-    (["ar", "en"] as const).map((locale) => ({
-      url: `${SITE_URL}${localePath(locale, path)}`,
-      lastModified: new Date(updated[keyOf(path)]),
-      changeFrequency: freq(path),
-      priority: prio(path),
-      alternates: {
-        languages: {
-          ar: `${SITE_URL}${localePath("ar", path)}`,
-          en: `${SITE_URL}${localePath("en", path)}`,
-          // Mirrors the page-level hreflang in src/lib/seo.ts — the two
-          // signals disagreeing is an avoidable crawler ambiguity.
-          "x-default": `${SITE_URL}${localePath("ar", path)}`,
-        },
+/** One entry per locale, with the reciprocal hreflang block. */
+function entries(
+  path: string,
+  lastModified: Date,
+  changeFrequency: "weekly" | "monthly" | "yearly",
+  priority: number,
+): MetadataRoute.Sitemap {
+  return (["ar", "en"] as const).map((locale) => ({
+    url: `${SITE_URL}${localePath(locale, path)}`,
+    lastModified,
+    changeFrequency,
+    priority,
+    alternates: {
+      languages: {
+        ar: `${SITE_URL}${localePath("ar", path)}`,
+        en: `${SITE_URL}${localePath("en", path)}`,
+        // Mirrors the page-level hreflang in src/lib/seo.ts — the two
+        // signals disagreeing is an avoidable crawler ambiguity.
+        "x-default": `${SITE_URL}${localePath("ar", path)}`,
       },
-    })),
+    },
+  }));
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const sortedPosts_ = await getAllPosts();
+  const staticPages = paths.flatMap((path) =>
+    entries(path, new Date(updated[keyOf(path)]), freq(path), prio(path)),
   );
+
+  /**
+   * Posts date themselves from their own `date` field, not from
+   * content/updated.ts. That map is a hand-maintained record of when a fixed
+   * page's copy changed; a post's publication date is intrinsic to the post,
+   * and duplicating it into a second file is how the two drift.
+   *
+   * The index is `weekly` because it genuinely changes whenever a post lands.
+   * Posts are `monthly` — they are written to stay correct, not to churn, and
+   * claiming otherwise trains crawlers to discount the field everywhere.
+   */
+  const blogIndexDate = sortedPosts_.length
+    ? new Date(sortedPosts_[0].date)
+    : new Date(updated.home);
+  const blogPages = [
+    ...entries("blog", blogIndexDate, "weekly", 0.8),
+    ...sortedPosts_.flatMap((p) =>
+      entries(`blog/${p.slug}`, new Date(p.date), "monthly", 0.7),
+    ),
+  ];
+
+  return [...staticPages, ...blogPages];
 }

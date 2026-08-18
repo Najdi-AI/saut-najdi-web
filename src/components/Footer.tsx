@@ -3,6 +3,8 @@ import Image from "next/image";
 import { localePath, type Locale } from "@/lib/i18n";
 import { PDPL_LINE_AR, PDPL_LINE_EN, SUPPORT_EMAIL } from "@/lib/site";
 import { chrome } from "@/content/chrome";
+import { SOCIAL_HEADING } from "@/content/social";
+import { SocialLinks } from "./SocialLinks";
 import { Waveform } from "./Waveform";
 
 export function Footer({ locale }: { locale: Locale }) {
@@ -22,6 +24,12 @@ export function Footer({ locale }: { locale: Locale }) {
               height={47}
             />
             <p className="mt-4 max-w-xs text-body text-ink/60">{pdpl}</p>
+            {/* Under the brand column rather than in the link grid: these are
+                outbound identity endpoints, not site navigation, and the three
+                nav columns are already a <nav> each. */}
+            <div className="mt-6">
+              <SocialLinks heading={SOCIAL_HEADING[locale]} />
+            </div>
           </div>
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>

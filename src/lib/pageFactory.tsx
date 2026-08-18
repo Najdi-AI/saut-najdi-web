@@ -28,7 +28,12 @@ import {
   service,
   howTo,
   siteNavigation,
+  blogIndex,
+  blogPosting,
 } from "./schema";
+import { readingMinutes, type BlogPost } from "@/content/blog";
+import { getAllPosts } from "@/lib/allPosts";
+import { postImage, POST_IMAGE_W, POST_IMAGE_H } from "./blog";
 import { SITE_URL, SUPPORT_EMAIL } from "./site";
 import { localePath, type Locale } from "./i18n";
 import { JsonLd } from "@/components/JsonLd";
@@ -70,6 +75,7 @@ const crumbNames = {
     "solutions/real-estate": "العقارات",
     "solutions/retail": "التجزئة",
     security: "الأمان والبيانات",
+    blog: "المدونة",
     faq: "الأسئلة الشائعة",
     about: "من نحن",
     contact: "تواصل معنا",
@@ -89,6 +95,7 @@ const crumbNames = {
     "solutions/real-estate": "Real estate",
     "solutions/retail": "Retail",
     security: "Security & data",
+    blog: "Blog",
     faq: "FAQ",
     about: "About us",
     contact: "Contact",
@@ -115,7 +122,7 @@ const wave2Faq = {
 } as const;
 
 /** Per-page-type JSON-LD @graph (blueprint §8 schema map). */
-export function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
+export async function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
   const c = crumbNames[locale];
 
   /** The page node every other node on this page hangs off. */
@@ -252,6 +259,20 @@ export function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
         trail("faq"),
       );
       break;
+    case "blog":
+      data = graph(
+        organization(locale),
+        webSite(locale),
+        wp("blog"),
+        blogIndex(
+          locale,
+          meta[locale].blog.title,
+          meta[locale].blog.description,
+          (await getAllPosts()).map((p) => `${SITE_URL}${localePath(locale, `blog/${p.slug}`)}`),
+        ),
+        trail("blog"),
+      );
+      break;
     case "demo":
       data = graph(
         organization(locale),
@@ -307,3 +328,70 @@ export function PageJsonLd({ locale, kind }: { locale: Locale; kind: string }) {
   }
   return <JsonLd data={data} />;
 }
+
+/**
+ * A blog post's @graph. Separate from PageJsonLd because posts are the only
+ * pages keyed by a runtime slug rather than a fixed entry in content/meta.ts,
+ * so they cannot use `wp()` / `trail()`, which both read that map.
+ *
+ * The breadcrumb is three deep — Home › Blog › post — and unlike the product
+ * pages that middle segment points at a real listing, so nothing dangles.
+ */
+export function BlogPostJsonLd({ locale, post }: { locale: Locale; post: BlogPost }) {
+  const c = post[locale];
+  const path = `blog/${post.slug}`;
+  const url = `${SITE_URL}${localePath(locale, path)}`;
+  const cn = crumbNames[locale];
+
+  const wordCount = c.body
+    .map((b) => ("text" in b ? b.text : b.items.join(" ")))
+    .join(" ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  return (
+    <JsonLd
+      data={graph(
+        organization(locale),
+        webSite(locale),
+        // dateModified === date: posts are not edited after publication yet.
+        // When one is, add an `updated` field to the post and read it here
+        // rather than reaching for build time.
+        webPage(locale, path, c.title, c.description, post.date),
+        blogPosting(
+          locale,
+          post.slug,
+          c.title,
+          c.description,
+          post.date,
+          post.date,
+          [...post.tags[locale]],
+          wordCount,
+          { url: postImage(post), width: POST_IMAGE_W, height: POST_IMAGE_H },
+        ),
+        breadcrumbs(locale, path, [
+          { name: cn.home, path: "" },
+          { name: cn.blog, path: "blog" },
+          { name: c.title, path },
+        ]),
+      )}
+    />
+  );
+}
+
+/** Per-post metadata. Mirrors metaFor() for content that has no meta.ts key. */
+export function blogPostMeta(locale: Locale, post: BlogPost): Metadata {
+  const c = post[locale];
+  return pageMetadata({
+    locale,
+    path: `blog/${post.slug}`,
+    title: c.title,
+    description: c.description,
+    // The post's own cover, so a shared link previews the article rather than
+    // the identical brand card every other page shows.
+    image: postImage(post),
+  });
+}
+
+/** Re-exported so route files import one module. */
+export { readingMinutes };

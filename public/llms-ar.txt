@@ -106,6 +106,20 @@
 - [شروط الخدمة](https://sautnajdi.ai/terms)
 - [اتفاقية معالجة البيانات](https://sautnajdi.ai/dpa)
 
+## المدونة
+
+مقالات توضيحية موجّهة لمن يقيّم حلاً فعلياً. كل مقال موجود باللغتين على نفس
+المسار — العربية على ‎/blog/<slug>‎ والإنجليزية على ‎/en/blog/<slug>‎. مقال PDPL
+توضيحي وليس استشارة قانونية.
+
+- [تطورات الذكاء الاصطناعي الصوتي — أغسطس 2026](https://sautnajdi.ai/blog/saudi-ai-voice-insights-august-2026): نشرة أسبوعية — استثمارات البنية التحتية للذكاء الاصطناعي في المملكة، واعتماد AudioCodes Voca CIC ضمن تكامل Microsoft Teams، وشراكة Five9 وRegal للقطاعات المنظمة، وتحول الذكاء الاصطناعي الصوتي نحو المبيعات، وجولة Wispr Flow التمويلية
+- [الرد الآلي على المكالمات: دليل عملي قبل ما تشتري](https://sautnajdi.ai/blog/ai-call-answering-guide): الفرق بين شجرة خيارات IVR التقليدية والوكيل الصوتي، وخمس نقاط تقيس عليها أي حل (اللهجة، التصعيد، مصدر المعلومة، الإشراف، الامتثال)، والأسئلة اللي تكشف الحل الضعيف
+- [تسجيل المكالمات ونظام حماية البيانات (PDPL)](https://sautnajdi.ai/blog/pdpl-call-recording-compliance): ليش التسجيل الصوتي بيانات شخصية، والإشعار قبل التسجيل، وليش سؤال «وين تُعالَج البيانات» لازم يُجاوَب لكل معالج على حدة مو لكل دولة، ومدة الاحتفاظ والحذف التلقائي، وخمسة أسئلة تسألها المورّد مكتوبة
+- [ليش أنظمة الصوت العالمية تفشل مع اللهجات السعودية](https://sautnajdi.ai/blog/saudi-dialects-voice-ai): ليش التدريب على الفصحى ما ينتقل لطريقة كلام العملاء، والفرق بين النجدي والحجازي، وليش التبديل بين العربي والإنجليزي داخل الجملة يكسر أغلب الأنظمة، وكيف تختبر أي وكيل صوتي بجدية
+
+الفهرس: [المدونة](https://sautnajdi.ai/blog) · [Blog](https://sautnajdi.ai/en/blog)
+
 ## الصفحات — الإنجليزية
 
 - https://sautnajdi.ai/en · /en/how-it-works · /en/product/human-handoff · /en/security · /en/faq · /en/demo · /en/contact · /en/about · /en/privacy · /en/terms · /en/dpa
+- المدونة: /en/blog · /en/blog/saudi-ai-voice-insights-august-2026 · /en/blog/ai-call-answering-guide · /en/blog/pdpl-call-recording-compliance · /en/blog/saudi-dialects-voice-ai

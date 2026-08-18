@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
+  APP_URL,
   CAL_LINK_QUICK,
   SUPPORT_EMAIL,
   WEBCHAT_KEY,
@@ -49,6 +50,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion();
   const panelRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLIFrameElement>(null);
   const s = t[locale];
 
   useEffect(() => {
@@ -56,6 +58,32 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  /**
+   * Frame -> host messages. A cross-origin frame cannot hide itself, so the
+   * widget's own header X — and Escape pressed INSIDE the frame, which never
+   * reaches the listener above because the composer holds focus — both just
+   * ask the HOST to close by posting `{source:'najdi-webchat', close:true}`.
+   * We were not listening, which made that X a dead control on our embed.
+   *
+   * Same three guards the platform's own loader.js applies, strongest first:
+   * the event origin must be the widget's origin, the source must be OUR
+   * iframe's window (so a sibling frame cannot impersonate it), and only then
+   * the shape discriminator. No message text ever crosses this boundary.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const widgetOrigin = new URL(APP_URL).origin;
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== widgetOrigin) return;
+      if (!frameRef.current || e.source !== frameRef.current.contentWindow) return;
+      const d = e.data as { source?: unknown; close?: unknown } | null;
+      if (!d || d.source !== "najdi-webchat") return;
+      if (d.close === true) setOpen(false);
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
   }, [open]);
 
   /**
@@ -84,24 +112,37 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? undefined : { opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
+            /* Named explicitly because the visible title now sits INSIDE the
+               cross-origin frame, where the host page's accessibility tree
+               cannot reach it — without this the panel announces as an
+               unlabelled group. */
+            role="dialog"
+            aria-label={s.title}
             className="absolute bottom-[4.5rem] start-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
           >
-            <div className="flex items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-3">
-              <div>
-                <p className="text-body-lg font-bold text-ink">{s.title}</p>
-                <p className="text-body-sm text-ink/60">{s.sub}</p>
+            {/* Header ONLY for the fallback panel. The widget frame renders
+                its own — title, greeting and an X — so pairing it with ours
+                stacked two headers and two close buttons on top of each
+                other. The fallback has no such chrome, and this is its only
+                close control, so it keeps one. */}
+            {!WEBCHAT_KEY && (
+              <div className="flex items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-3">
+                <div>
+                  <p className="text-body-lg font-bold text-ink">{s.title}</p>
+                  <p className="text-body-sm text-ink/60">{s.sub}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label={s.close}
+                  className="rounded-full border border-line p-2 text-ink/60 transition-colors hover:text-ink"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden fill="none">
+                    <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label={s.close}
-                className="rounded-full border border-line p-2 text-ink/60 transition-colors hover:text-ink"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden fill="none">
-                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
+            )}
 
             {WEBCHAT_KEY ? (
               // `colorScheme` is the only lever we have on a cross-origin
@@ -111,6 +152,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
               // now it follows the site's own theme instead, so a dark page
               // does not open a white rectangle over itself.
               <iframe
+                ref={frameRef}
                 src={WEBCHAT_FRAME_URL(WEBCHAT_KEY)}
                 title={s.frameTitle}
                 className="min-h-0 w-full flex-1 border-0 bg-surface"

@@ -17,6 +17,12 @@ interface PageSeo {
   noindex?: boolean;
   /** Home only: suppress the layout's "%s — صوت نجدي" template. */
   absoluteTitle?: boolean;
+  /**
+   * Page-specific social card, e.g. a blog post's cover. Falls back to the
+   * generated site-wide card. Must be an absolute path — `metadataBase` on the
+   * root layouts resolves it.
+   */
+  image?: string;
 }
 
 /**
@@ -35,14 +41,24 @@ export function pageMetadata({
   description,
   noindex,
   absoluteTitle,
+  image,
 }: PageSeo): Metadata {
   const canonical = `${SITE_URL}${localePath(locale, path)}`;
   const ar = `${SITE_URL}${localePath("ar", path)}`;
   const en = `${SITE_URL}${localePath("en", path)}`;
   // Naming the image explicitly is what activates opengraph-image.tsx: an
   // openGraph object without an `images` key suppresses the file convention.
+  // A caller-supplied `image` replaces it — same 1200×630 contract, so the
+  // alt text and dimensions below hold either way.
   const images = [
-    { url: "/opengraph-image", width: 1200, height: 630, alt: OG_ALT[locale] },
+    {
+      url: image ?? "/opengraph-image",
+      width: 1200,
+      height: 630,
+      // The generated site card keeps its own description; a post cover is
+      // better described by that post's title than by a generic brand line.
+      alt: image ? title : OG_ALT[locale],
+    },
   ];
   return {
     title: absoluteTitle ? { absolute: title } : title,
@@ -65,6 +81,15 @@ export function pageMetadata({
                   title: "llms.txt",
                 },
               ],
+              // Site-wide, not blog-only: feed discovery is how a reader
+              // subscribes from whatever page they happened to land on, and
+              // it is the standard signal aggregators look for in <head>.
+              "application/rss+xml": [
+                {
+                  url: localePath(locale, "feed.xml"),
+                  title: locale === "ar" ? "مدونة صوت نجدي" : "Saut Najdi blog",
+                },
+              ],
             },
           },
         }),
@@ -81,7 +106,7 @@ export function pageMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: ["/opengraph-image"],
+      images: [image ?? "/opengraph-image"],
     },
     // The index/snippet policy lives HERE, per real page, not on the root
     // layouts: a layout-level `robots` is inherited by the 404 boundary too,

@@ -46,6 +46,7 @@ export const chrome = {
         title: "الشركة",
         links: [
           { label: "من نحن", path: "about" },
+          { label: "المدونة", path: "blog" },
           { label: "تواصل معنا", path: "contact" },
           { label: "الأسئلة الشائعة", path: "faq" },
           { label: "احجز عرضاً", path: "demo" },
@@ -102,6 +103,7 @@ export const chrome = {
         title: "Company",
         links: [
           { label: "About us", path: "about" },
+          { label: "Blog", path: "blog" },
           { label: "Contact", path: "contact" },
           { label: "FAQ", path: "faq" },
           { label: "Book a demo", path: "demo" },

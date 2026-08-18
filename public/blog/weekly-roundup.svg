@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#5FD8F2"/><stop offset="28%" stop-color="#8B99F5"/><stop offset="52%" stop-color="#B98CE0"/><stop offset="78%" stop-color="#FF5C7A"/><stop offset="100%" stop-color="#FF6B7F"/>
+  </linearGradient>
+  <radialGradient id="glow" cx="50%" cy="45%" r="60%">
+    <stop offset="0%" stop-color="#8B99F5" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#8B99F5" stop-opacity="0"/>
+  </radialGradient></defs>
+  <rect width="1200" height="630" fill="#0F1730"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- news card, top-left -->
+  <g opacity="0.95">
+    <rect x="130" y="110" width="400" height="180" rx="32" fill="none" stroke="url(#g)" stroke-width="6"/>
+    <rect x="130" y="110" width="400" height="180" rx="32" fill="#8B99F5" opacity="0.05"/>
+  </g>
+  <rect x="172" y="158" width="200" height="14" rx="7" fill="url(#g)" opacity="0.9"/>
+  <rect x="172" y="192" width="316" height="10" rx="5" fill="url(#g)" opacity="0.45"/>
+  <rect x="172" y="216" width="272" height="10" rx="5" fill="url(#g)" opacity="0.45"/>
+  <rect x="172" y="240" width="296" height="10" rx="5" fill="url(#g)" opacity="0.45"/>
+
+  <!-- waveform card, right -->
+  <g opacity="0.95">
+    <rect x="610" y="200" width="460" height="220" rx="36" fill="none" stroke="url(#g)" stroke-width="6"/>
+    <rect x="610" y="200" width="460" height="220" rx="36" fill="#8B99F5" opacity="0.05"/>
+  </g>
+  <g fill="url(#g)">
+    <rect x="668" y="286" width="14" height="48" rx="7"/>
+    <rect x="700" y="266" width="14" height="88" rx="7"/>
+    <rect x="732" y="246" width="14" height="128" rx="7"/>
+    <rect x="764" y="282" width="14" height="56" rx="7"/>
+    <rect x="796" y="258" width="14" height="104" rx="7"/>
+    <rect x="828" y="238" width="14" height="144" rx="7"/>
+    <rect x="860" y="272" width="14" height="76" rx="7"/>
+    <rect x="892" y="252" width="14" height="116" rx="7"/>
+    <rect x="924" y="286" width="14" height="48" rx="7"/>
+    <rect x="956" y="268" width="14" height="84" rx="7"/>
+    <rect x="988" y="292" width="14" height="36" rx="7"/>
+  </g>
+
+  <!-- news card, bottom-left -->
+  <g opacity="0.75">
+    <rect x="300" y="370" width="380" height="160" rx="30" fill="none" stroke="url(#g)" stroke-width="6"/>
+    <rect x="300" y="370" width="380" height="160" rx="30" fill="#8B99F5" opacity="0.05"/>
+  </g>
+  <rect x="340" y="412" width="170" height="12" rx="6" fill="url(#g)" opacity="0.9"/>
+  <rect x="340" y="442" width="300" height="9" rx="4.5" fill="url(#g)" opacity="0.45"/>
+  <rect x="340" y="464" width="264" height="9" rx="4.5" fill="url(#g)" opacity="0.45"/>
+  <rect x="340" y="486" width="284" height="9" rx="4.5" fill="url(#g)" opacity="0.45"/>
+</svg>

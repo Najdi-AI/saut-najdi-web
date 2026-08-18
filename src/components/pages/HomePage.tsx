@@ -12,6 +12,7 @@ import { TrustStrip } from "@/components/TrustStrip";
 import { SampleConversation } from "@/components/SampleConversation";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { BookingDesk } from "@/components/BookingDesk";
+import { BlogTeaser } from "@/components/BlogTeaser";
 import { homeFaq } from "@/content/faq";
 
 /**
@@ -488,7 +489,19 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* 10 · Close on the booking desk itself, not a button that opens one.
+      {/* 10 · From the blog. Between the FAQ and the booking desk on purpose:
+          a visitor who read the FAQ and is not ready to book gets somewhere to
+          go that is not the exit, and the dated posts are the page's only
+          evidence that the site is actively maintained. */}
+      <section className="bg-surface py-16">
+        <div className="container">
+          <Reveal>
+            <BlogTeaser locale={locale} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 11 · Close on the booking desk itself, not a button that opens one.
           This is the same component /demo uses. The calendar is the last
           thing on the page rather than one more click away, and because
           CalInline only mounts the iframe when the section nears the

@@ -21,7 +21,7 @@ export const meta: Record<
 > = {
   ar: {
     home: {
-      title: "وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك — صوت نجدي",
+      title: "صوت نجدي — وكيل صوتي بالذكاء الاصطناعي يرد بلهجة عملائك",
       description:
         "صوت نجدي وكيل صوتي سعودي يرد على مكالمات عملائك بلهجتهم — نجدي وحجازي وشامي — يحجز وينفذ، وموظفك يستلم المكالمة بكامل سياقها متى ما احتاجت إنسان.",
     },
@@ -114,6 +114,11 @@ export const meta: Record<
       description:
         "صوت نجدي منتج من Najdi AI — فريق سعودي في الرياض بنى وكيلاً صوتياً على اللهجات السعودية، وهجيناً بالتصميم: الذكاء يرد، وموظفك موجود دايماً.",
     },
+    blog: {
+      title: "المدونة — الرد الآلي والبيانات واللهجات السعودية",
+      description:
+        "مقالات عن الرد الآلي على المكالمات، وتسجيل المكالمات ونظام حماية البيانات الشخصية السعودي، وليش تفشل أنظمة الصوت العالمية مع اللهجات السعودية.",
+    },
     faq: {
       title: "أسئلة شائعة عن الوكيل الصوتي بالذكاء الاصطناعي",
       description:
@@ -137,7 +142,7 @@ export const meta: Record<
   },
   en: {
     home: {
-      title: "Arabic AI voice agent for Saudi businesses — Saut Najdi",
+      title: "Saut Najdi — Arabic AI voice agent for Saudi businesses",
       description:
         "A Saudi AI voice agent answering calls in Najdi, Hijazi and Levantine Arabic or English — with your employee able to take over any call in full context.",
     },
@@ -223,6 +228,14 @@ export const meta: Record<
       title: "About us — the Saudi team behind the agent",
       description:
         "Saut Najdi is a product of Najdi AI — a Saudi team in Riyadh that built a voice agent on Saudi dialects, hybrid by design: AI answers, your employee is there.",
+    },
+    blog: {
+      // Titles here are measured WITH the layout's " — Saut Najdi" suffix
+      // against a 60-char budget, and descriptions against 160. The audit
+      // script checks both across every URL; keep new posts inside them.
+      title: "Blog — AI calls, PDPL and Saudi dialects",
+      description:
+        "Writing on automated call answering, call recording under Saudi PDPL, and why global voice systems fail on Saudi dialects.",
     },
     faq: {
       title: "AI voice agent FAQ for Saudi businesses",

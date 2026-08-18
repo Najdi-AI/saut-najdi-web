@@ -9,6 +9,7 @@ import {
   TAGLINE_EN,
 } from "./site";
 import { localePath, type Locale } from "./i18n";
+import { SOCIAL } from "@/content/social";
 
 /**
  * JSON-LD builders (blueprint §8.7 + schema map). No `Review`, no
@@ -23,12 +24,14 @@ import { localePath, type Locale } from "./i18n";
 type JsonLd = Record<string, unknown>;
 
 /**
- * TODO(owner): populate ONLY with profiles that actually exist. `sameAs` is
- * the single biggest knowledge-graph signal, and an invented URL is a
- * fabricated claim. Create the LinkedIn company page and X account first,
- * then add them here.
+ * Derived, never hand-maintained. content/social.ts is the one list, and the
+ * footer's icon row renders from it too — so the profiles a visitor can click
+ * and the profiles this graph claims as the same entity cannot drift apart.
+ *
+ * That file documents the verification rule and which platforms are
+ * deliberately excluded; add profiles there, not here.
  */
-export const SAME_AS: string[] = [];
+export const SAME_AS: string[] = SOCIAL.map((s) => s.url);
 
 /**
  * Topical scope for the Organization. These are claims about what we work on,
@@ -301,6 +304,78 @@ export function howTo(
       text: s.body,
       url: `${url}#step-${i + 1}`,
     })),
+  };
+}
+
+/**
+ * The blog index. `Blog` + an itemList of its posts by `@id`, so the posts and
+ * the index resolve as one structure rather than as unrelated documents.
+ */
+export function blogIndex(
+  locale: Locale,
+  name: string,
+  description: string,
+  postUrls: string[],
+): JsonLd {
+  return {
+    "@type": "Blog",
+    "@id": `${SITE_URL}${localePath(locale, "blog")}#blog`,
+    name,
+    description,
+    url: `${SITE_URL}${localePath(locale, "blog")}`,
+    inLanguage: locale === "ar" ? "ar-SA" : "en",
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    blogPost: postUrls.map((u) => ({ "@id": `${u}#post` })),
+  };
+}
+
+/**
+ * One post.
+ *
+ * `author` is the Organization, not a person — invented bylines are the most
+ * common fabrication in generated blog schema, and there is no named author to
+ * claim. `dateModified` falls back to `datePublished` rather than to build
+ * time, which would relabel every post on every deploy.
+ *
+ * `image` is the post's own 1200×630 cover as a full ImageObject rather than a
+ * bare URL — Google wants width and height to consider an image for rich
+ * results, and a naked string gives it neither.
+ */
+export function blogPosting(
+  locale: Locale,
+  slug: string,
+  title: string,
+  description: string,
+  datePublished: string,
+  dateModified: string,
+  keywords: string[],
+  wordCount: number,
+  image: { url: string; width: number; height: number },
+): JsonLd {
+  const url = `${SITE_URL}${localePath(locale, `blog/${slug}`)}`;
+  return {
+    "@type": "BlogPosting",
+    "@id": `${url}#post`,
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: { "@id": `${url}#webpage` },
+    datePublished,
+    dateModified: dateModified || datePublished,
+    inLanguage: locale === "ar" ? "ar-SA" : "en",
+    keywords,
+    wordCount,
+    author: { "@id": `${SITE_URL}/#organization` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    isPartOf: { "@id": `${SITE_URL}${localePath(locale, "blog")}#blog` },
+    image: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}${image.url}`,
+      contentUrl: `${SITE_URL}${image.url}`,
+      width: image.width,
+      height: image.height,
+      caption: title,
+    },
   };
 }
 

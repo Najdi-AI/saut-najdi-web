@@ -1,3 +1,4 @@
+import { OmniChannels } from "@/components/OmniChannels";
 import type { Locale } from "@/lib/i18n";
 import { DemoLink } from "@/components/DemoLink";
 import { Reveal } from "@/components/Reveal";
@@ -212,6 +213,8 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
           <FaqAccordion items={s.faq} />
         </div>
       </section>
+
+      <OmniChannels locale={locale} />
 
       <DemoCta locale={locale} />
     </>

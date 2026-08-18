@@ -1,3 +1,4 @@
+import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
@@ -247,6 +248,8 @@ export function AgentBuilderPage({ locale }: { locale: Locale }) {
           <FaqAccordion items={s.faq} />
         </div>
       </section>
+
+      <OmniChannels locale={locale} />
 
       <DemoCta locale={locale} />
     </>

@@ -13,6 +13,7 @@ import { SampleConversation } from "@/components/SampleConversation";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { BookingDesk } from "@/components/BookingDesk";
 import { BlogTeaser } from "@/components/BlogTeaser";
+import { OmniChannels } from "@/components/OmniChannels";
 import { homeFaq } from "@/content/faq";
 
 /**
@@ -77,11 +78,6 @@ const t = {
         ["حجز موعد", "يحوّلك لموظف", "يحجز داخل نفس المكالمة"],
         ["يحتاج إنسان", "يبدأ من الصفر", "يستلم ومعه النص والملخص"],
       ],
-    },
-    inbox: {
-      heading: "أقدر أجمع المكالمات والواتساب والتيليجرام في صندوق واحد؟",
-      answer: "إي — المكالمات وواتساب وتيليجرام ودردشة موقعك في صندوق واحد، وموظفك يدخل على أي محادثة.",
-      channels: ["المكالمات", "واتساب للأعمال", "تيليجرام", "دردشة موقعك"],
     },
     capabilities: {
       heading: "وش يقدم لك؟",
@@ -163,11 +159,6 @@ const t = {
         ["Booking an appointment", "Transferred to a person", "Booked inside the call"],
         ["A human is needed", "Your employee starts from zero", "They inherit transcript and summary"],
       ],
-    },
-    inbox: {
-      heading: "Can I bring calls, WhatsApp and Telegram into one inbox?",
-      answer: "Yes — all of them land in one team inbox, where your staff see a customer's whole history and can step into any conversation.",
-      channels: ["Phone calls", "WhatsApp Business", "Telegram", "Website chat"],
     },
     capabilities: {
       heading: "What do you get?",
@@ -364,30 +355,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/*
-        4c · Unified inbox — answer-first capsule under a question-shaped H2.
-        The chips list channels only; it deliberately stops short of claiming
-        the agent auto-replies on them (messaging auto-reply is off by
-        default), so the promise stays "one inbox a human steps into".
-      */}
-      <section className="container pb-16">
-        <Reveal>
-          <h2 className="text-center text-h2">{s.inbox.heading}</h2>
-          <p className="mx-auto mt-4 max-w-3xl text-center text-body-lg leading-relaxed text-ink/75">
-            {s.inbox.answer}
-          </p>
-        </Reveal>
-        <ul className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {s.inbox.channels.map((channel) => (
-            <li
-              key={channel}
-              className="rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card"
-            >
-              {channel}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* 4c · Omnichannel — every channel, one inbox, one agent. Shared with the product pages. */}
+      <OmniChannels locale={locale} />
 
       {/* 5 · Capabilities — five cards, each now a real page (Wave 2) */}
       <section className="bg-surface py-16">

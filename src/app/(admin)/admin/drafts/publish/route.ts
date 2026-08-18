@@ -43,7 +43,7 @@ export async function POST(request: Request): Promise<Response> {
     tags: draft.tags,
     ar: draft.ar,
     en: draft.en,
-    cover: "/blog/weekly-roundup.png",
+    cover: `/api/cover/${draft.slug}`,
   };
 
   const failed = await goLive(post);

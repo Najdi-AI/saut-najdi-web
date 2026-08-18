@@ -24,6 +24,8 @@ export function revalidateBlogSurfaces(slug: string): void {
     "/sitemap.xml",
     "/feed.xml",
     "/en/feed.xml",
+    "/llms.txt",
+    "/llms-ar.txt",
   ]) {
     revalidatePath(path);
   }

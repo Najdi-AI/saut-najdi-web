@@ -88,7 +88,7 @@ export async function POST(request: Request): Promise<Response> {
     tags,
     ar: sides.ar,
     en: sides.en,
-    cover: "/blog/weekly-roundup.png",
+    cover: `/api/cover/${slug}`,
   };
   const failed = await goLive(post);
   return failed ? back("/admin/blog", { error: failed }) : back("/admin/blog", { published: slug });

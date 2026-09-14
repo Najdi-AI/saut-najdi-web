@@ -1,5 +1,6 @@
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { DRAFT_SCHEMA, MODEL, RESEARCH_PROMPT } from "@/lib/newsDraft";
+import { isAuthorizedCron } from "@/lib/cronAuth";
 
 /**
  * Batch-failure probe, reachable via `vercel crons run /api/cron/batch-probe`.
@@ -14,9 +15,8 @@ import { DRAFT_SCHEMA, MODEL, RESEARCH_PROMPT } from "@/lib/newsDraft";
  * to `console.log` where `vercel logs` can read it. That takes the site owner
  * out of a loop they have already been round four times.
  *
- * Run it twice: the first call submits, the second (a few minutes later)
- * reports. It re-submits only when the newest probe is over 15 minutes old, so
- * repeated triggers report rather than pile up jobs.
+ * New submissions are disabled. Authenticated calls still report existing
+ * jobs; the submission variants below remain available for source review.
  */
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -30,7 +30,7 @@ const TAG = "[batch-probe]";
  */
 const PREFIX = "probe";
 const ROUND = "probe8-";
-const SUBMIT_ENABLED = true;
+const SUBMIT_ENABLED = false;
 
 /** Deeply removes a keyword from a JSON-Schema-shaped object. */
 function strip(node: unknown, key: string): unknown {
@@ -158,9 +158,7 @@ function unauthorized(): Response {
 }
 
 export async function GET(request: Request): Promise<Response> {
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return unauthorized();
-  if (request.headers.get("authorization") !== `Bearer ${secret}`) return unauthorized();
+  if (!isAuthorizedCron(request.headers.get("authorization"))) return unauthorized();
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return Response.json({ error: "GEMINI_API_KEY is not set" }, { status: 500 });
@@ -220,7 +218,7 @@ export async function GET(request: Request): Promise<Response> {
   const newest = seen.filter((s) => s.label.startsWith(ROUND)).map((s) => s.created).sort().pop() ?? "";
   const fresh = newest !== "" && Date.now() - Date.parse(newest) < 15 * 60 * 1000;
   if (fresh || !SUBMIT_ENABLED) {
-    console.log(TAG, "recent probe exists, reporting only");
+    console.log(TAG, SUBMIT_ENABLED ? "recent probe exists, reporting only" : "probe submissions disabled, reporting only");
     return Response.json({ ok: true, submitted: 0, report });
   }
 

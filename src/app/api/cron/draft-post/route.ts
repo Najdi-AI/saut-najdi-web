@@ -1,4 +1,5 @@
 import { submitDraftBatch, collectDraftBatch } from "@/lib/newsDraft";
+import { isAuthorizedCron } from "@/lib/cronAuth";
 import {
   addPending,
   listPending,
@@ -34,9 +35,7 @@ export async function GET(request: Request): Promise<Response> {
    * paid model run at will. Compare against the env var, and refuse to run at
    * all if it is unset — an unset secret must not degrade to "open".
    */
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return unauthorized();
-  if (request.headers.get("authorization") !== `Bearer ${secret}`) return unauthorized();
+  if (!isAuthorizedCron(request.headers.get("authorization"))) return unauthorized();
 
   const collected: string[] = [];
   const failed: string[] = [];

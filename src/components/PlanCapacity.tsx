@@ -44,8 +44,9 @@ export function PlanCapacity({ planKey, locale }: { planKey: string; locale: Loc
   </dl>;
 }
 
-// Commercial packaging PROPOSAL for Sultan's review, not runtime entitlements.
-// New feature gates and automation quotas must be approved before publication.
+// Feature gates and workflow limits approved by Sultan, 2026-09-27.
+// Growth includes takeover. Cloning uses credits from Growth upward;
+// per-clone charge awaits confirmation. This is not runtime entitlement code.
 export function planFeatureRows(key: string, locale: Locale) {
   const ar = locale === "ar";
   const t = (en: string, arabic: string) => ar ? arabic : en;
@@ -61,8 +62,8 @@ export function planFeatureRows(key: string, locale: Locale) {
     [t("Active automated workflows", "مسارات أتمتة نشطة"), [no, "3", "15", quote]],
     [t("Recordings, transcripts & summaries", "التسجيلات والنصوص والملخصات"), [yes, yes, yes, yes]],
     [t("Reporting", "التقارير"), [t("Basic usage reports", "تقارير الاستخدام الأساسية"), t("Performance & sentiment", "الأداء وتحليل المشاعر"), t("Performance & sentiment across branches", "الأداء وتحليل المشاعر عبر الفروع"), quote]],
-    [t("Live supervision", "الإشراف المباشر"), [no, t("Listen", "استماع"), t("Listen, whisper & take over", "استماع وتوجيه واستلام المكالمة"), quote]],
-    [t("Cloned brand voices", "أصوات العلامة المستنسخة"), [t("Standard voices only", "الأصوات الجاهزة فقط"), "1", "3", quote]],
+    [t("Live supervision", "الإشراف المباشر"), [no, t("Listen & take over", "استماع واستلام المكالمة"), t("Listen, whisper & take over", "استماع وتوجيه واستلام المكالمة"), quote]],
+    [t("Voice cloning", "استنساخ الصوت"), [t("Standard voices only", "الأصوات الجاهزة فقط"), t("Uses shared credits", "من الرصيد المشترك"), t("Uses shared credits", "من الرصيد المشترك"), t("Uses shared credits", "من الرصيد المشترك")]],
     [t("External integrations", "تكامل الأنظمة الخارجية"), [no, t("Quoted add-on", "إضافة بعرض سعر"), t("Eligible; setup quoted", "متاح؛ التجهيز بعرض سعر"), quote]],
     [t("API access", "الوصول إلى API"), [no, no, t("Scoped access; limits in offer", "وصول محدد؛ الحدود في العرض"), quote]],
     [t("Account manager & contractual SLA", "مدير حساب واتفاقية مستوى الخدمة"), [no, no, no, quote]],
@@ -75,8 +76,8 @@ export function planUpgradeSummary(key: string, locale: Locale) {
   const ar = locale === "ar";
   const copy = {
     essential: ar ? ["رد صوتي ودردشة الموقع", "تقارير أساسية وتحويل لموظف"] : ["Voice answering and website chat", "Basic reports and human handoff"],
-    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وصوت مستنسخ واحد وإشراف بالاستماع"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, 1 cloned voice and supervisor listening"],
-    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة و3 أصوات مستنسخة", "تقارير الفروع والتوجيه والاستلام ووصول API محدد"] : ["Everything in Growth, plus 15 active workflows and 3 cloned voices", "Branch reporting, whisper/takeover and scoped API access"],
+    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وإشراف بالاستماع واستلام المكالمة", "استنساخ الصوت من الرصيد المشترك"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, supervisor listening and takeover", "Voice cloning uses shared credits"],
+    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة", "تقارير الفروع والتوجيه ووصول API محدد", "استنساخ الصوت من الرصيد المشترك"] : ["Everything in Growth, plus 15 active workflows", "Branch reporting, whisper and scoped API access", "Voice cloning uses shared credits"],
     enterprise: ar ? ["متطلبات توسّع مخصصة بعرض مكتوب", "مدير حساب واتفاقية خدمة وتكاملات حسب الاتفاق"] : ["Custom scale requirements in a written offer", "Account management, SLA and integrations by agreement"],
   };
   return copy[key as keyof typeof copy] ?? copy.enterprise;

@@ -181,7 +181,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
         </div>
 
         <p className="mx-auto mt-6 max-w-4xl text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].note}</p>
-        <p className="mx-auto mt-3 max-w-4xl rounded-xl border border-line bg-surface p-4 text-center text-body leading-relaxed text-ink/70">{locale === "ar" ? "مقترح للمراجعة: توزيع الميزات وحدود الأتمتة الجديدة بانتظار اعتماد سلطان. " : "Review proposal: new feature gates and automation limits await Sultan’s approval. "}{capacityCopy[locale].draft}</p>
+        <p className="mx-auto mt-3 max-w-4xl rounded-xl border border-line bg-surface p-4 text-center text-body leading-relaxed text-ink/70">{locale === "ar" ? "نسخة مراجعة: اعتُمد توزيع الميزات وحدود الأتمتة. تكلفة استنساخ الصوت بالرصيد بانتظار التأكيد. " : "Review version: feature gates and automation limits are approved. The voice-cloning credit charge awaits confirmation. "}{capacityCopy[locale].draft}</p>
         {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{t.vat}</p>}
         {isHome && <div className="mt-7 text-center">
           <Link href={localePath(locale, "pricing")} className="btn-secondary">{t.compare} {locale === "ar" ? "←" : "→"}</Link>

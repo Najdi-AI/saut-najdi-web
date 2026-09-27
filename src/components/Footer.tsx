@@ -1,7 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { localePath, type Locale } from "@/lib/i18n";
-import { PDPL_LINE_AR, PDPL_LINE_EN, SUPPORT_EMAIL } from "@/lib/site";
+import {
+  BILLING_EMAIL,
+  PDPL_LINE_AR,
+  PDPL_LINE_EN,
+  SELLER_CR,
+  SELLER_NAME,
+  SELLER_NAME_AR,
+  SUPPORT_EMAIL,
+  VAT_NUMBER,
+} from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { SOCIAL_HEADING } from "@/content/social";
 import { SocialLinks } from "./SocialLinks";
@@ -70,6 +79,12 @@ export function Footer({ locale }: { locale: Locale }) {
               {SUPPORT_EMAIL}
             </a>
             <span dir="ltr">{t.rights}</span>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-body-sm text-ink/60">
+            <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span>
+            <span>{locale === "ar" ? "السجل التجاري" : "CR"}: <bdi dir="ltr">{SELLER_CR}</bdi></span>
+            <span>{locale === "ar" ? "الرقم الضريبي" : "VAT number"}: <bdi dir="ltr">{VAT_NUMBER}</bdi></span>
+            <a href={`mailto:${BILLING_EMAIL}`} dir="ltr" className="hover:text-brand-blue">{BILLING_EMAIL}</a>
           </div>
         </div>
       </div>

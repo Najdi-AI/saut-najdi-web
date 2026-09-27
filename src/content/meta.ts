@@ -124,6 +124,14 @@ export const meta: Record<
       description:
         "إجابات صريحة: وش هو صوت نجدي، كيف يفهم اللهجة السعودية، متى يحوّل المكالمة لموظف، وين تنحفظ البيانات، PDPL، كم الأسعار، وكيف تبدأ.",
     },
+    pricing: {
+      title: "باقات وأسعار صوت نجدي",
+      description: "باقات شهرية برصيد مشترك للمكالمات والمحادثات: أساسي 990 ريال، نمو 2900 ريال، توسّع 6900 ريال قبل الضريبة. قارن الرصيد واحجز عرضاً.",
+    },
+    "refund-policy": {
+      title: "سياسة الاسترداد والإلغاء",
+      description: "شروط إلغاء اشتراك صوت نجدي والاسترداد خلال 7 أيام دون استخدام، ورصيد الاستخدام ورسوم التجهيز وطرق التواصل.",
+    },
     privacy: {
       title: "سياسة الخصوصية",
       description:
@@ -241,6 +249,14 @@ export const meta: Record<
       title: "AI voice agent FAQ for Saudi businesses",
       description:
         "Straight answers: what Saut Najdi is, how it handles Saudi dialects, when calls go to a human, where data is stored, PDPL, pricing, and how to start.",
+    },
+    pricing: {
+      title: "Plans and pricing",
+      description: "Compare monthly shared-credit plans: Essential SAR 990, Growth SAR 2,900, Expansion SAR 6,900 before VAT. See usage capacity and book a demo.",
+    },
+    "refund-policy": {
+      title: "Refund & Cancellation Policy",
+      description: "Saut Najdi subscription cancellation, the seven-day unused first-invoice refund, usage balance, setup fees and refund requests.",
     },
     privacy: {
       title: "Privacy policy",

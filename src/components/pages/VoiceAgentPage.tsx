@@ -23,8 +23,8 @@ const sectionIcons: IconName[] = ["wave", "headset", "check", "mic", "badge", "d
  * - Voice catalogue is Najdi / Hijazi / Levantine / English, male and female.
  *   There is NO Khaleeji voice — do not reintroduce it.
  * - Voice cloning ships: one sample of 60s+, a recorded consent attestation
- *   naming the speaker, revocable at any time with permanent deletion within
- *   30 days. It clones a VOICE, never a new conversational dialect — the
+ *   naming the speaker. Withdrawal disables use immediately; sample deletion
+ *   has a separate retention schedule. It clones a VOICE, never a new conversational dialect — the
  *   agent's words stay Najdi Arabic. Plan-dependent, never quantified.
  * - Outbound calling ships as human-initiated only: a person starts each call
  *   from the dashboard. No auto-dialling of a list; no quiet-hours, opt-out or
@@ -68,7 +68,7 @@ const t = {
       {
         title: "أقدر أخلي الوكيل يتكلم بصوت علامتي التجارية؟",
         body:
-          "تقدر. ترفع عينة من الشخص اللي تبي صوته — 60 ثانية على الأقل — مع إقرار موافقة مسجّل باسمه، وبعدها تعيّن الصوت لوكيلك زي أي صوت ثاني. والموافقة تنسحب بأي وقت: الصوت يوقف فوراً ويُحذف نهائياً من عندنا ومن المزوّد خلال 30 يوماً. وانتبه لحد واضح: الاستنساخ ينسخ الصوت، مو لهجة محادثة جديدة — كلام الوكيل يبقى بالعربية النجدية مهما كان الصوت. والميزة حسب باقتك.",
+          "تقدر. ترفع عينة من الشخص اللي تبي صوته — 60 ثانية على الأقل — مع إقرار موافقة مسجّل باسمه، وبعدها تعيّن الصوت لوكيلك زي أي صوت ثاني. والموافقة تنسحب بأي وقت، وعندها نوقف استخدام الصوت فوراً. العينة تخضع لمدة احتفاظ مستقلة؛ اسأل فريقنا عن تفاصيل الحذف قبل رفعها. وانتبه لحد واضح: الاستنساخ ينسخ الصوت، مو لهجة محادثة جديدة — كلام الوكيل يبقى بالعربية النجدية مهما كان الصوت. والميزة حسب باقتك.",
       },
       {
         title: "من وين ياخذ الوكيل معلومات نشاطي؟",
@@ -120,7 +120,7 @@ const t = {
       },
       {
         q: "أقدر أستخدم صوتي أو صوت موظفي للوكيل؟",
-        a: "تقدر: عينة 60 ثانية على الأقل مع إقرار موافقة مسجّل باسم صاحب الصوت، وبعدها تعيّنه لوكيلك. والموافقة تنسحب بأي وقت — الصوت يوقف فوراً ويُحذف نهائياً خلال 30 يوماً. والاستنساخ ينسخ الصوت مو لهجة محادثة جديدة، والميزة حسب باقتك.",
+        a: "تقدر: عينة 60 ثانية على الأقل مع إقرار موافقة مسجّل باسم صاحب الصوت، وبعدها تعيّنه لوكيلك. والموافقة تنسحب بأي وقت، فيتوقف استخدام الصوت فوراً. اسأل فريقنا عن مدة الاحتفاظ بالعينة وإجراءات حذفها قبل رفعها. والاستنساخ ينسخ الصوت مو لهجة محادثة جديدة، والميزة حسب باقتك.",
       },
       {
         q: "هل الوكيل يتصل على عملائي؟",
@@ -162,7 +162,7 @@ const t = {
       {
         title: "Can the agent speak in my brand's own voice?",
         body:
-          "Yes. You upload a sample of the person whose voice you want — 60 seconds or longer — with a recorded consent attestation naming that speaker, then assign the voice to your agent like any other. Consent is revocable at any time: the voice stops immediately and is permanently deleted from us and from the provider within 30 days. One boundary worth stating: cloning reproduces a voice, not a new conversational dialect — the agent's words stay Najdi Arabic whichever voice it uses. Availability depends on your plan.",
+          "Yes. You upload a sample of the person whose voice you want — 60 seconds or longer — with a recorded consent attestation naming that speaker, then assign the voice to your agent like any other. You can withdraw consent at any time, which stops further use of that voice immediately. The sample has a separate retention period; ask our team for deletion details before uploading it. Cloning reproduces a voice, not a new conversational dialect — the agent's words stay Najdi Arabic whichever voice it uses. Availability depends on your plan.",
       },
       {
         title: "Where does the agent get information about my business?",
@@ -214,7 +214,7 @@ const t = {
       },
       {
         q: "Can I use my own voice, or an employee's, for the agent?",
-        a: "Yes: a sample of at least 60 seconds plus a recorded consent attestation naming the speaker, then you assign the voice to your agent. Consent is revocable at any time — the voice stops immediately and is permanently deleted within 30 days. Cloning reproduces a voice, not a new conversational dialect, and availability depends on your plan.",
+        a: "Yes: a sample of at least 60 seconds plus a recorded consent attestation naming the speaker, then you assign the voice to your agent. You can withdraw consent at any time, which stops further use immediately. Ask our team about sample retention and deletion before uploading. Cloning reproduces a voice, not a new conversational dialect, and availability depends on your plan.",
       },
       {
         q: "Does the agent call my customers?",

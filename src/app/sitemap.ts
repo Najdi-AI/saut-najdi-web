@@ -23,14 +23,16 @@ const paths = [
   "contact",
   "about",
   "faq",
+  "pricing",
+  "refund-policy",
   "privacy",
   "terms",
   "dpa",
 ];
 
 const keyOf = (p: string) => (p === "" ? "home" : p);
-const LEGAL = new Set(["privacy", "terms", "dpa"]);
-const OFTEN = new Set(["", "faq", "demo"]);
+const LEGAL = new Set(["privacy", "terms", "dpa", "refund-policy"]);
+const OFTEN = new Set(["", "faq", "demo", "pricing"]);
 
 function freq(p: string): "weekly" | "monthly" | "yearly" {
   if (LEGAL.has(p)) return "yearly";

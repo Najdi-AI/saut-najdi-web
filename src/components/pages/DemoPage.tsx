@@ -9,7 +9,7 @@ import type { FaqItem } from "@/lib/schema";
 
 /**
  * /demo (blueprint §2.4): server-rendered copy on top, the booking desk
- * below. Pricing is sized here — no pricing page (§6.5).
+ * below. Public plan prices live on /pricing; setup is scoped here.
  *
  * THE BOOKING DESK is one dark card holding three columns: our panel, then
  * Cal's calendar and slot columns. Cal's own event panel is switched off
@@ -31,11 +31,11 @@ const t = {
     h1: "احجز",
     h1Tail: "عرضاً تعريفياً",
     lead: "عرض 30 دقيقة: نوريك المنصة حية، تسمع الوكيل بلهجتك، ونجاوب أسئلتك.",
-    pricingNote: "وفي نفس الجلسة نعطيك عرض سعر يناسب حجم مكالماتك.",
+    pricingNote: "بعد العرض نرسل لك سعراً مكتوباً يوضح رسوم الباقة والتجهيز حسب احتياج منشأتك.",
     sections: [
       {
-        h: "ليش ما فيه أسعار معلنة على الموقع؟",
-        p: "السعر على قد حجم مكالماتك وقنواتك — عيادة مو مثل مطعم عليه ضغط كل مساء. نسألك أسئلة قليلة في العرض، ويوصلك عرض سعر مكتوب بدون رسوم مخفية.",
+        h: "كيف تُحسب رسوم التجهيز؟",
+        p: "أسعار الباقات الشهرية ورصيدها معلنة في صفحة الباقات. في العرض نعرف احتياج منشأتك ونرسل لك عرضاً مكتوباً يوضح رسوم التجهيز وأي تكاليف إضافية قبل الدفع.",
       },
       {
         h: "مين المفروض يحضر من طرفك؟",
@@ -47,13 +47,15 @@ const t = {
       },
       {
         h: "وش تطلع فيه من العرض؟",
-        p: "عرض سعر يناسب نشاطك، وخطة تجهيز مكتوبة، وإجابات على أسئلة البيانات. وفريقنا هو اللي يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد — ما في تسجيل ذاتي.",
+        p: "تفهم كيف تشتغل المنصة وتلقى إجابات على أسئلة البيانات. وبعد العرض نرسل لك سعراً مكتوباً وخطة تجهيز تبين الرسوم حسب احتياج منشأتك. وفريقنا يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد — ما في تسجيل ذاتي.",
       },
     ],
     related: [
       { path: "how-it-works", label: "رحلة المكالمة كاملة" },
       { path: "product/human-handoff", label: "كيف يستلم موظفك المكالمة" },
       { path: "security", label: "أسئلة البيانات وPDPL" },
+      { path: "pricing", label: "الباقات والأسعار" },
+      { path: "refund-policy", label: "سياسة الاسترداد والإلغاء" },
     ],
     faqHeading: "أسئلة عن العرض التعريفي",
     faq: [
@@ -79,11 +81,11 @@ const t = {
     h1: "Book",
     h1Tail: "an intro demo",
     lead: "30 minutes: the platform live, the agent speaking your customers' dialect, and your questions answered.",
-    pricingNote: "You leave the same session with a price fitted to your call volume.",
+    pricingNote: "After the demo, we send a written quote covering your plan and setup needs.",
     sections: [
       {
-        h: "Why isn't there public pricing on the site?",
-        p: "Pricing scales with call volume and channels — a clinic taking a few hundred calls a month is not a restaurant under pressure every evening. We ask a few questions in the demo, then send a written, itemised offer with no hidden fees and no obligation.",
+        h: "How is the setup fee calculated?",
+        p: "Monthly plan prices and credits are on the pricing page. In the demo we learn your business needs, then send a written offer showing setup fees and any additional costs before payment.",
       },
       {
         h: "Who should join from your side?",
@@ -95,13 +97,15 @@ const t = {
       },
       {
         h: "What do you leave the demo with?",
-        p: "An offer sized to your business, a written setup plan, and direct answers on data and security. If you go ahead, our team builds the agent, the knowledge base and the escalation rules — there's no self-signup.",
+        p: "You see how the platform works and get answers on data and security. After the demo, we send a written quote and setup plan showing the fees for your needs. If you go ahead, our team builds the agent, the knowledge base and the escalation rules — there's no self-signup.",
       },
     ],
     related: [
       { path: "how-it-works", label: "A full call's journey" },
       { path: "product/human-handoff", label: "How your employee takes a call over" },
       { path: "security", label: "Data and PDPL questions" },
+      { path: "pricing", label: "Plans & pricing" },
+      { path: "refund-policy", label: "Refund & Cancellation Policy" },
     ],
     faqHeading: "Demo questions",
     faq: [

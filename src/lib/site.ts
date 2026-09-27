@@ -1,20 +1,23 @@
 /**
  * Single source of truth for site-wide constants.
  *
- * Domain (2026-08-09): sautnajdi.ai is becoming the primary domain and
- * sautnajdi.com will 301 to it. Every canonical, hreflang, sitemap URL,
- * OG url and schema @id derives from SITE_URL, so the cutover is one env
- * change — NOT a code edit — and it is instantly reversible if anything
- * goes wrong mid-migration.
- *
- * Set NEXT_PUBLIC_SITE_URL=https://sautnajdi.ai in Vercel ONLY once .ai
- * actually resolves to this deployment: pointing canonicals at a domain
- * that serves someone else's placeholder is worse than not migrating.
+ * sautnajdi.ai is the canonical public domain. Every canonical, hreflang,
+ * sitemap URL, OG URL and schema @id derives from SITE_URL. An explicit
+ * NEXT_PUBLIC_SITE_URL can still override this default for an environment.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sautnajdi.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sautnajdi.ai";
 export const SITE_NAME_AR = "صوت نجدي";
 export const SITE_NAME_EN = "Saut Najdi";
+export const SELLER_NAME = "SAUT NAJDI Company (شركة صوت نجدي)";
+export const SELLER_NAME_AR = "شركة صوت نجدي (SAUT NAJDI Company)";
+export const SELLER_CR = "7054897538";
+export const SELLER_ADDRESS_AR =
+  "مبنى 3848، شارع عبدالله العنقري، حي الورود، الرياض 12254، الرقم الإضافي 7427، المملكة العربية السعودية";
+export const SELLER_ADDRESS_EN =
+  "Building 3848, Abdullah Al-Anqari St., Al Woroud District, Riyadh 12254, Additional No. 7427, Saudi Arabia";
+export const BILLING_EMAIL = "billing@sautnajdi.ai";
+export const VAT_NUMBER = "314931940900003";
 export const APP_URL = "https://app.najdiai.com";
 
 /**
@@ -39,7 +42,7 @@ export const CAL_LINK_QUICK = "sautnajdi/quick-call";
  * The platform's embeddable web-chat widget key (dashboard → Integrations
  * → Web chat). Set NEXT_PUBLIC_WEBCHAT_KEY in Vercel to activate the AI
  * chat launcher; empty = launcher shows the contact fallback panel.
- * The widget's frame-ancestors CSP must allow sautnajdi.com.
+ * The widget's frame-ancestors CSP must allow sautnajdi.ai.
  */
 export const WEBCHAT_KEY = process.env.NEXT_PUBLIC_WEBCHAT_KEY ?? "";
 export const WEBCHAT_FRAME_URL = (key: string) =>

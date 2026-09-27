@@ -4,7 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { SUPPORT_EMAIL, CAL_LINK_QUICK } from "@/lib/site";
+import {
+  SUPPORT_EMAIL,
+  CAL_LINK_QUICK,
+  SELLER_NAME,
+  SELLER_NAME_AR,
+  SELLER_CR,
+  SELLER_ADDRESS_AR,
+  SELLER_ADDRESS_EN,
+  BILLING_EMAIL,
+  VAT_NUMBER,
+} from "@/lib/site";
 import { CalButton } from "@/components/CalButton";
 import { DemoCta } from "@/components/DemoCta";
 import { Reveal } from "@/components/Reveal";
@@ -43,6 +53,12 @@ const t = {
     or: "أو",
     quick: "احجز مكالمة 15 دقيقة",
     emailHeading: "الإيميل",
+    companyHeading: "بيانات الشركة",
+    sellerLabel: "الاسم المسجل",
+    crLabel: "السجل التجاري",
+    vatLabel: "الرقم الضريبي",
+    addressLabel: "العنوان الوطني",
+    billingLabel: "استفسارات الفوترة",
     sections: [
       {
         h: "وش أسرع طريقة توصل لنا؟",
@@ -87,6 +103,12 @@ const t = {
     or: "or",
     quick: "Book a 15-minute call",
     emailHeading: "Email",
+    companyHeading: "Company details",
+    sellerLabel: "Registered seller",
+    crLabel: "Commercial Registration",
+    vatLabel: "VAT number",
+    addressLabel: "National address",
+    billingLabel: "Billing enquiries",
     sections: [
       {
         h: "What's the fastest way to reach us?",
@@ -194,6 +216,36 @@ export function ContactPage({ locale }: { locale: Locale }) {
             </div>
           </div>
         </div>
+
+        <section className="card mx-auto mt-10 max-w-4xl" aria-label={s.companyHeading}>
+          <h2 className="text-h4">{s.companyHeading}</h2>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <dt className="text-body-sm text-ink/60">{s.sellerLabel}</dt>
+              <dd className="mt-1 text-body text-ink">{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</dd>
+            </div>
+            <div>
+              <dt className="text-body-sm text-ink/60">{s.crLabel}</dt>
+              <dd className="mt-1 text-body text-ink" dir="ltr">{SELLER_CR}</dd>
+            </div>
+            <div>
+              <dt className="text-body-sm text-ink/60">{s.vatLabel}</dt>
+              <dd className="mt-1 text-body text-ink" dir="ltr">{VAT_NUMBER}</dd>
+            </div>
+            <div>
+              <dt className="text-body-sm text-ink/60">{s.billingLabel}</dt>
+              <dd className="mt-1 text-body">
+                <a href={`mailto:${BILLING_EMAIL}`} dir="ltr" className="text-brand-blue hover:underline">{BILLING_EMAIL}</a>
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-body-sm text-ink/60">{s.addressLabel}</dt>
+              <dd className="mt-1 text-body text-ink">
+                <address className="not-italic">{locale === "ar" ? SELLER_ADDRESS_AR : SELLER_ADDRESS_EN}</address>
+              </dd>
+            </div>
+          </dl>
+        </section>
 
         <div className="mx-auto mt-14 max-w-3xl space-y-6">
           {s.sections.map((sec, i) => (

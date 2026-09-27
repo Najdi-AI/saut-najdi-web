@@ -45,7 +45,7 @@ export const updated: Record<string, string> = {
   pricing: "2026-09-27",
   "refund-policy": "2026-09-27",
   privacy: "2026-08-10",
-  terms: "2026-08-10",
+  terms: "2026-09-27",
   dpa: "2026-08-10",
 };
 

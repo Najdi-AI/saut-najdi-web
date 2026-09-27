@@ -7,7 +7,7 @@ import { SELLER_NAME, SELLER_NAME_AR, VAT_NUMBER } from "@/lib/site";
 import { PricingTooltip } from "@/components/pages/PricingTooltip";
 import { PricingOverview } from "@/components/PricingOverview";
 import { Waveform } from "@/components/Waveform";
-import { capacityCopy, planCapacityRows } from "@/components/PlanCapacity";
+import { capacityCopy, planCapacityRows, planFeatureRows } from "@/components/PlanCapacity";
 import { WorkflowComparison } from "@/components/WorkflowComparison";
 
 const copy = {
@@ -200,6 +200,8 @@ export function PricingPage({ locale }: { locale: Locale }) {
               {primaryRows.map((row) => renderRow(row, true))}
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{capacityCopy[locale].title}</th></tr>
               {planCapacityRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: row.key === "recordings" ? capacityCopy[locale].draft : capacityCopy[locale].note, value: (p) => planCapacityRows(p.key, locale)[index].value }, false))}
+              <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{locale === "ar" ? "ميّزات المنصة" : "Platform features"}</th></tr>
+              {planFeatureRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: locale === "ar" ? "يخضع استخدام المكالمات والمحادثات النصية لقواعد الرصيد الموضحة أعلاه. يوضح العرض المكتوب نطاق الربط ورسوم التجهيز وأي رسوم خارجية." : "Call and text usage follows the credit rules shown above. The written offer specifies integration scope, setup and any external charges.", value: (p) => planFeatureRows(p.key, locale)[index].value }, false))}
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{t.usageDetail}</th></tr>
               {detailRows.map((row) => renderRow(row, false))}
             </tbody>

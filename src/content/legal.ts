@@ -28,7 +28,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
   ar: {
     privacy: {
       title: "سياسة الخصوصية",
-      updated: "آخر تحديث: يوليو 2026",
+      updated: "آخر تحديث: 27 سبتمبر 2026",
       intro:
         "تُبيّن هذه السياسة كيف تجمع منصة صوت نجدي («المنصة») البيانات الشخصية وتعالجها وتخزنها، لزوّار هذا الموقع وللمنشآت المشتركة وعملائها المتصلين، بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL).",
       sections: [
@@ -62,7 +62,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "4. مدد الاحتفاظ",
           ps: [
-            "تسجيلات المكالمات: تُحذف تلقائياً بعد 90 يوماً من تاريخ المكالمة.",
+            "تسجيلات المكالمات: مدة الحفظ حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، وتُحذف تلقائياً عند انتهاء المدة المتفق عليها من تاريخ المكالمة.",
             "النصوص والملخصات وسجل العملاء: يُحتفظ بها طوال مدة اشتراك المنشأة لتشغيل الخدمة وسياق العملاء، وتُعالَج وفق تعليمات المنشأة عند انتهاء الاشتراك.",
             "بيانات حجز العرض والتواصل: يُحتفظ بها للمدة اللازمة لمتابعة طلبك ثم لأغراض التعاقد إن تم.",
           ],
@@ -124,7 +124,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
     },
     dpa: {
       title: "اتفاقية معالجة البيانات — ملخص",
-      updated: "آخر تحديث: يوليو 2026",
+      updated: "آخر تحديث: 27 سبتمبر 2026",
       intro:
         "هذا ملخص عام لاتفاقية معالجة البيانات (DPA) التي توقعها المنشآت المشتركة ضمن التعاقد. النسخة الكاملة الموقعة هي المرجع الملزم — اطلبها عبر ai@sautnajdi.ai.",
       sections: [
@@ -140,7 +140,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
             "• المعالجة لأغراض تشغيل الخدمة حصراً، ووفق تعليمات المنشأة.",
             "• التخزين الدائم في منطقة الخليج (الدوحة)، مع الإفصاح الكامل عن المعالجين الفرعيين وأماكنهم في قائمة تُسلَّم عند الطلب وتُلحق بالاتفاقية، وإشعار المنشأة قبل أي تغيير فيهم.",
             "• تدابير تقنية وتنظيمية: عزل بيانات كل منشأة على مستوى قاعدة البيانات، وأدوار وصلاحيات، وسجل تدقيق غير قابل للتعديل، وروابط وصول موقعة قصيرة الصلاحية.",
-            "• حذف تسجيلات المكالمات تلقائياً بعد 90 يوماً، وتنفيذ تعليمات المنشأة في بياناتها عند انتهاء الاشتراك.",
+            "• مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، مع حذفها تلقائياً عند انتهاء المدة المتفق عليها، وتنفيذ تعليمات المنشأة في بياناتها عند انتهاء الاشتراك.",
             "• الإشعار بأي حادثة تمس البيانات الشخصية وفق المدد النظامية.",
             "• إعانة المنشأة على تلبية طلبات أصحاب البيانات (الاطلاع، التصحيح، الإتلاف).",
           ],
@@ -151,7 +151,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
   en: {
     privacy: {
       title: "Privacy Policy",
-      updated: "Last updated: July 2026",
+      updated: "Last updated: 27 September 2026",
       intro:
         "This policy explains how the Saut Najdi platform (“the platform”) collects, processes and stores personal data — for visitors of this website, for subscribed businesses, and for their calling customers — in line with Saudi Arabia's Personal Data Protection Law (PDPL).",
       sections: [
@@ -185,7 +185,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
         {
           h: "4. Retention",
           ps: [
-            "Call recordings: automatically deleted 90 days after the call.",
+            "Call recordings: retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise; automatically deleted when the agreed period after the call ends.",
             "Transcripts, summaries and customer records: retained for the duration of the business's subscription to operate the service, then handled per the business's instructions at termination.",
             "Demo-booking and contact data: retained as long as needed to follow up on your request, then for contracting if it proceeds.",
           ],
@@ -247,7 +247,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
     },
     dpa: {
       title: "Data Processing Agreement — Summary",
-      updated: "Last updated: July 2026",
+      updated: "Last updated: 27 September 2026",
       intro:
         "This is a public summary of the Data Processing Agreement (DPA) subscribed businesses sign as part of contracting. The signed full version is the binding reference — request it at ai@sautnajdi.ai.",
       sections: [
@@ -263,7 +263,7 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
             "• Processing strictly to operate the service, per the business's instructions.",
             "• Permanent storage in the Gulf region (Doha), with full disclosure of sub-processors and their locations in a list provided on request and attached to this agreement, and notice before any change to them.",
             "• Technical and organisational measures: tenant isolation enforced at the database level, roles and permissions, an append-only audit log, and short-lived signed access links.",
-            "• Automatic deletion of call recordings after 90 days, and execution of the business's instructions for its data at termination.",
+            "• Recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise; automatic deletion at the end of the agreed period, and execution of the business's instructions for its data at termination.",
             "• Notification of any personal-data incident within statutory timelines.",
             "• Assistance with data-subject requests (access, correction, destruction).",
           ],

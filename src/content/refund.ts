@@ -14,7 +14,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "تُفوتر رسوم الباقة مقدماً عن كل شهر، وتشمل رصيداً شهرياً مشتركاً للمكالمات والمحادثات. تخصم دقيقة المكالمة بالذكاء الاصطناعي 100 رصيد، وتخصم المحادثة النصية القابلة للفوترة خلال 24 ساعة 56 رصيداً.",
+              "تُفوتر رسوم الباقة مقدماً عن كل شهر، وتشمل رصيداً شهرياً مشتركاً للمكالمات والمحادثات. تخصم دقيقة المكالمة بالذكاء الاصطناعي 10 أرصدة، وتخصم المحادثة النصية القابلة للفوترة خلال 24 ساعة 4 أرصدة.",
               "إذا بدأ الاشتراك خلال الشهر، تُحتسب رسوم الشهر الأول بعدد أيامه المتبقية، ويُمنح الرصيد الشهري المشمول كاملاً.",
               "ما يتجاوز الرصيد الشهري المشمول يُفوتر بعد انتهاء الشهر على الفاتورة التالية، بأسعار باقتك.",
               "الأسعار بالريال السعودي، وتُضاف إليها ضريبة القيمة المضافة 15% في الفاتورة الضريبية.",
@@ -179,7 +179,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "The plan fee is billed monthly in advance and includes a monthly shared credit pool for call minutes and conversations. One AI call minute uses 100 credits, and one billable 24-hour text conversation uses 56 credits.",
+              "The plan fee is billed monthly in advance and includes a monthly shared credit pool for call minutes and conversations. One AI call minute uses 10 credits, and one billable 24-hour text conversation uses 4 credits.",
               "If a subscription starts mid-month, the first month's fee is prorated by the remaining days, and the full monthly credit pool is granted for that month.",
               "Usage above the monthly credit pool is billed after the month ends, on the next invoice, at your plan's rates.",
               "Prices are in Saudi riyals (SAR); 15% VAT is added on the tax invoice.",

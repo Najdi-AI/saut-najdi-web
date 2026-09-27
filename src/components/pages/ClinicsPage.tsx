@@ -188,7 +188,7 @@ const t = {
       },
       {
         q: "وين تنحفظ بيانات مرضانا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة)، والتسجيلات تنحذف بعد 90 يوماً، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
       },
     ] as FaqItem[],
   },
@@ -350,7 +350,7 @@ const t = {
       },
       {
         q: "Where is our patients' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha), recordings are deleted after 90 days, and every access is written to an audit log. Processing is set out on the security page.",
+        a: "Permanent storage is in the Gulf region (Doha), recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Every access is written to an audit log. Processing is set out on the security page.",
       },
     ] as FaqItem[],
   },

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
 import { PricingTooltip } from "@/components/pages/PricingTooltip";
 import { Waveform } from "@/components/Waveform";
+import { PlanCapacity, capacityCopy, planUpgradeSummary } from "@/components/PlanCapacity";
 import { CREDIT_COST, formatSarRate, plans, textConversations, voiceMinutes } from "@/content/pricing";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -11,15 +12,15 @@ const copy = {
     heading: "باقات لكل مرحلة من نموك",
     intro: "رصيد شهري مشترك للمكالمات مع الوكيل والمحادثات النصية. اختر السعة التي تناسب استخدامك، ثم احجز عرضاً لنحدد التجهيز لمنشأتك.",
     fit: {
-      essential: "بداية برصيد شهري مشترك",
-      growth: "رصيد أكبر لنمو الاستخدام",
-      expansion: "للاستخدام الشهري الأعلى",
-      enterprise: "احتياجات خاصة يحددها عرض مكتوب",
+      essential: "لموقع واحد وتغطية المكالمات خارج الدوام وعند الانشغال",
+      growth: "لفريق ينمو ويحتاج سعة أكبر للرد والمتابعة",
+      expansion: "لتشغيل فروع متعددة بسعة أكبر للفريق والوكلاء",
+      enterprise: "احتياجات خاصة تُحدد في العقد",
     },
     monthly: "شهرياً",
     sar: "ر.س",
     credits: "الرصيد الشهري المشترك",
-    creditsHelp: `كل دقيقة مكالمة مع الوكيل تستهلك ${CREDIT_COST.voiceMinute} رصيد. كل محادثة نصية قابلة للفوترة ضمن نافذة 24 ساعة تستهلك ${CREDIT_COST.textConversation} رصيد. كلاهما من الرصيد نفسه.`,
+    creditsHelp: `مكالمة: 1 دقيقة = ${CREDIT_COST.voiceMinute} رصيد؛ نص: 1 محادثة (24 ساعة) = ${CREDIT_COST.textConversation} رصيد؛ استنساخ الصوت: 1 صوت جديد = 2 رصيد (نمو/توسّع)؛ النص والردود والملخص = مشمولة في المكالمة.`,
     voice: "إذا استُخدم كله للمكالمات",
     text: "إذا استُخدم كله للمحادثات",
     exclusive: "تقدير لكل نوع على حدة؛ عند المزج يُخصم الاستهلاك الفعلي من الرصيد نفسه.",
@@ -33,7 +34,7 @@ const copy = {
     ratesNote: "الرصيد مشمول في السعر الشهري؛ أسعار الاستخدام ضمن الباقة مرجعية ولا تُضاف إليه. يُحاسب الاستخدام بعد نفاد الرصيد بالسعر الإضافي.",
     perMinute: "ر.س/دقيقة",
     perConversation: "ر.س/محادثة",
-    quote: "عرض مكتوب",
+    quote: "حسب العقد",
     quoteCapacity: "تُحسب في العرض",
     book: "احجز عرضاً",
     compare: "قارن كل تفاصيل الباقات",
@@ -41,9 +42,10 @@ const copy = {
     vatShort: "لا يشمل ضريبة القيمة المضافة 15%",
     hoverRates: (voice: string, text: string, extraVoice: string, extraText: string) => `ضمن الباقة: ${voice} ر.س/دقيقة و${text} ر.س/محادثة. بعد نفاد الرصيد: ${extraVoice} ر.س/دقيقة و${extraText} ر.س/محادثة.`,
     inclusions: [
-      "المكالمات مع الوكيل والمحادثات النصية من رصيد واحد",
+      "بناء الوكيل وقاعدة معرفة خاصة بمنشأتك",
+      "صندوق وارد مشترك وتحويل المحادثة لموظفك",
       "نص المكالمة وردود الوكيل ومعالجة الملخص ضمن أرصدة المكالمة",
-      "رسوم التجهيز وحدود التشغيل في العرض المكتوب بعد العرض التعريفي",
+      "لوحة متابعة وسجل محادثات العملاء",
     ],
   },
   en: {
@@ -51,15 +53,15 @@ const copy = {
     heading: "Plans for every stage of growth",
     intro: "One monthly credit pool for AI calls and text conversations. Choose the capacity that fits your use, then book a demo to scope setup for your business.",
     fit: {
-      essential: "A shared monthly starting pool",
-      growth: "More room for growing usage",
-      expansion: "For higher monthly usage",
+      essential: "For a single site, after-hours and overflow coverage",
+      growth: "For growing teams that need more answering capacity",
+      expansion: "For multi-branch operations with larger teams",
       enterprise: "Custom needs set out in a written quote",
     },
     monthly: "month",
     sar: "SAR",
     credits: "Shared monthly credits",
-    creditsHelp: `Each AI call minute uses ${CREDIT_COST.voiceMinute} credits. Each billable text conversation in a 24-hour window uses ${CREDIT_COST.textConversation} credits. Both draw from the same pool.`,
+    creditsHelp: `AI call: 1 min = ${CREDIT_COST.voiceMinute} credits; Text: 1 conversation (24h) = ${CREDIT_COST.textConversation} credits; Voice clone: 1 new voice = 2 credits (Growth/Expansion); Transcript + replies + summary = included in call.`,
     voice: "If used only for voice",
     text: "If used only for conversations",
     exclusive: "Each estimate uses the whole pool for one type. Mixed usage draws actual credits from the same pool.",
@@ -73,7 +75,7 @@ const copy = {
     ratesNote: "Credits are included in the monthly base; in-plan rates are reference values, not added charges. Usage beyond the pool is billed at the extra-usage rates.",
     perMinute: "SAR/minute",
     perConversation: "SAR/conversation",
-    quote: "Written quote",
+    quote: "By contract",
     quoteCapacity: "Calculated in quote",
     book: "Book a demo",
     compare: "Compare all plan details",
@@ -81,9 +83,10 @@ const copy = {
     vatShort: "Excludes 15% VAT",
     hoverRates: (voice: string, text: string, extraVoice: string, extraText: string) => `In-plan reference rates: voice SAR ${voice}/minute and text SAR ${text}/conversation. After credits: voice SAR ${extraVoice}/minute and text SAR ${extraText}/conversation.`,
     inclusions: [
-      "AI calls and text conversations use one credit pool",
+      "Agent builder and your business knowledge base",
+      "Shared inbox and human handoff",
       "Call transcript, AI replies and summary processing are covered by voice credits",
-      "Setup fees and operating limits are confirmed in the written offer after the demo",
+      "Dashboard and customer conversation history",
     ],
   },
 } as const;
@@ -143,7 +146,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                   <div className="min-w-0 p-6 sm:p-8">
                     <dl className="divide-y divide-line">
                       <div className="flex flex-col gap-2 pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-                        <dt className="text-body-lg font-medium text-ink/75"><PricingTooltip id={`home-price-${plan.key}-credits`} explanation={isQuote ? t.creditsHelp : `${t.creditsHelp} ${t.hoverRates(formatSarRate(plan.withinVoiceSar), formatSarRate(plan.withinTextSar), formatSarRate(plan.extraVoiceSar), formatSarRate(plan.extraTextSar))}`}>{t.credits}</PricingTooltip></dt>
+                        <dt className="text-body-lg font-medium text-ink/75"><PricingTooltip id={`home-price-${plan.key}-credits`} explanation={isQuote ? (locale === "ar" ? "الرصيد ومعدلات الاستهلاك والأسعار تُحدد في العقد." : "Credits, conversion rates and pricing are set by contract.") : `${t.creditsHelp} ${t.hoverRates(formatSarRate(plan.withinVoiceSar), formatSarRate(plan.withinTextSar), formatSarRate(plan.extraVoiceSar), formatSarRate(plan.extraTextSar))}`}>{t.credits}</PricingTooltip></dt>
                         <dd className="text-h4 font-bold text-ink">{isQuote ? t.quote : <span dir="ltr" className="inline-block tabular-nums">{amount(plan.credits)}</span>}</dd>
                       </div>
                       <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
@@ -156,8 +159,9 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                       </div>
                     </dl>
                     <p className="mt-2 text-body text-ink/60">{t.exclusive}</p>
+                    <PlanCapacity planKey={plan.key} locale={locale} />
                     <ul className="mt-4 grid gap-2 border-t border-line pt-4 text-body text-ink/75 sm:grid-cols-2">
-                      {t.inclusions.map((item) => <li key={item} className="flex items-start gap-2"><span aria-hidden="true" className="text-brand-blue">✓</span><span>{item}</span></li>)}
+                      {planUpgradeSummary(plan.key, locale).map((item) => <li key={item} className="flex items-start gap-2"><span aria-hidden="true" className="text-brand-blue">✓</span><span>{item}</span></li>)}
                     </ul>
                     <details className="group mt-5 border-t border-line pt-4">
                       <summary className="cursor-pointer font-semibold text-brand-blue underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-brand-blue">{t.rates}</summary>
@@ -176,6 +180,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
           })}
         </div>
 
+        <p className="mx-auto mt-6 max-w-4xl text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].note}</p>
         {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{t.vat}</p>}
         {isHome && <div className="mt-7 text-center">
           <Link href={localePath(locale, "pricing")} className="btn-secondary">{t.compare} {locale === "ar" ? "←" : "→"}</Link>

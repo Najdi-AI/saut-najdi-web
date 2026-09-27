@@ -182,7 +182,7 @@ export function softwareApplication(locale: Locale): JsonLd {
           "حجوزات ومواعيد تلقائية مع تقويم للفريق",
           "قنوات نصية: واتساب وتيليجرام ودردشة الموقع في صندوق موحد",
           "لوحة تحكم بسجل المكالمات والنصوص والتسجيلات والملخصات",
-          "سجل تدقيق غير قابل للتعديل وحذف تلقائي للتسجيلات بعد 90 يوماً",
+          "سجل تدقيق غير قابل للتعديل واحتفاظ بالتسجيلات حسب الباقة والعقد",
         ]
       : [
           "AI voice agent answering calls in Saudi dialects (Najdi, Hijazi, Levantine), Arabic and English",
@@ -192,7 +192,7 @@ export function softwareApplication(locale: Locale): JsonLd {
           "Automatic bookings with a team-managed reservations calendar",
           "Text channels: WhatsApp, Telegram and website chat in one inbox",
           "Dashboard with call logs, transcripts, recordings and summaries",
-          "Append-only audit log and automatic 90-day recording deletion",
+          "Append-only audit log and recording retention according to the plan and contract",
         ];
   // This node cannot earn a rich result: Google requires `offers` or
   // `aggregateRating` for that, and we have neither honestly (no public

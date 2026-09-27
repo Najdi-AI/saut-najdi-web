@@ -15,6 +15,7 @@ import { BookingDesk } from "@/components/BookingDesk";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { OmniChannels } from "@/components/OmniChannels";
 import { PricingOverview } from "@/components/PricingOverview";
+import { WorkflowComparison } from "@/components/WorkflowComparison";
 import { homeFaq } from "@/content/faq";
 
 /**
@@ -411,6 +412,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       <PricingOverview locale={locale} />
+      <WorkflowComparison locale={locale} />
 
       {/* 8 · Data & governance (7 · screenshot pending demo-tenant assets) */}
       <section className="bg-navy py-16 text-white">

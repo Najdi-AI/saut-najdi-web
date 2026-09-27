@@ -44,7 +44,7 @@ const t = {
       },
       {
         title: "هل تسجيل المكالمات متوافق مع نظام حماية البيانات الشخصية؟",
-        body: "التسجيلات في المنطقة نفسها، وتُحذَف تلقائياً بعد 90 يوماً تطبيقاً لحدود الاحتفاظ، ولا تُفتح إلا عبر روابط موقَّعة قصيرة الصلاحية، ويُدوَّن كل اطلاع في سجل التدقيق. ويبقى إشعار المتصل والأساس النظامي مسؤولية المنشأة المشغِّلة، ويمكن ضبط جملة الافتتاح لتتضمن إشعاراً بالتسجيل.",
+        body: "التسجيلات في المنطقة نفسها. مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، ولا تُفتح إلا عبر روابط موقَّعة قصيرة الصلاحية، ويُدوَّن كل اطلاع في سجل التدقيق. ويبقى إشعار المتصل والأساس النظامي مسؤولية المنشأة المشغِّلة، ويمكن ضبط جملة الافتتاح لتتضمن إشعاراً بالتسجيل.",
         link: null,
       },
       {
@@ -71,7 +71,7 @@ const t = {
     faq: [
       {
         q: "أين تُخزَّن بيانات مكالماتي تحديداً؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) عبر شبكة خاصة، والتسجيلات تُحذَف تلقائياً بعد 90 يوماً.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة) عبر شبكة خاصة، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات.",
       },
       {
         q: "هل تُعالَج البيانات داخل السعودية؟",
@@ -109,7 +109,7 @@ const t = {
       },
       {
         title: "Is recording customer calls PDPL compliant?",
-        body: "Recordings sit in the same region, are deleted automatically after 90 days under the retention-limit principle, open only through short-lived signed links, and every access is written to the audit log. Notifying the caller and establishing a lawful basis remain the operating organisation's responsibility — and the agent's opening line can carry a recording notice.",
+        body: "Recordings sit in the same region; recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. They open only through short-lived signed links, and every access is written to the audit log. Notifying the caller and establishing a lawful basis remain the operating organisation's responsibility — and the agent's opening line can carry a recording notice.",
         link: null,
       },
       {
@@ -136,7 +136,7 @@ const t = {
     faq: [
       {
         q: "Where exactly is my call data stored?",
-        a: "Permanent storage is in the Gulf region (Doha) over private networking, and recordings are deleted automatically after 90 days.",
+        a: "Permanent storage is in the Gulf region (Doha) over private networking, and recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise.",
       },
       {
         q: "Is data processed inside Saudi Arabia?",

@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-export function PricingTooltip({ children, explanation, id }: { children: ReactNode; explanation: string; id: string }) {
+type HelpSection = { title: string; rows: { label: string; value: string }[]; note?: string };
+
+export function PricingTooltip({ children, explanation, id, sections }: { children: ReactNode; explanation: string; id: string; sections?: HelpSection[] }) {
   const trigger = useRef<HTMLSpanElement>(null);
   const tooltip = useRef<HTMLSpanElement>(null);
   const focusHelp = useRef(false);
@@ -33,11 +35,12 @@ export function PricingTooltip({ children, explanation, id }: { children: ReactN
       return;
     }
 
-    const left = Math.max(8, Math.min(rect.left, window.innerWidth - 264));
+    const width = sections ? 320 : 256;
+    const left = Math.max(8, Math.min(rect.left, document.documentElement.clientWidth - width - 8));
     setPosition(rect.top < window.innerHeight / 2
       ? { left, top: rect.bottom + 8 }
       : { left, bottom: window.innerHeight - rect.top + 8 });
-  }, [keepOpen]);
+  }, [keepOpen, sections]);
 
   useEffect(() => {
     if (!position) return;
@@ -87,9 +90,15 @@ export function PricingTooltip({ children, explanation, id }: { children: ReactN
             }
           }}
           style={position}
-          className="fixed z-50 w-64 max-h-[50vh] overflow-y-auto rounded-lg bg-ink px-3 py-2 text-start text-sm leading-relaxed text-canvas shadow-lg"
+          className={`fixed z-50 ${sections ? "w-80" : "w-64"} max-w-[calc(100vw-16px)] max-h-[50vh] overflow-y-auto rounded-xl bg-ink p-4 text-start text-sm leading-relaxed text-canvas shadow-lg`}
         >
-          {explanation.split(/[;؛]/).map((line, index) => <span key={index} className="block">{line.trim()}</span>)}
+          {sections ? sections.map((section, index) => <span key={section.title} className={`block ${index ? "mt-3 border-t border-canvas/20 pt-3" : ""}`}>
+            <span className="mb-2 block text-xs font-semibold text-canvas/70">{section.title}</span>
+            <span className="grid gap-2">{section.rows.map(row => <span key={row.label} className="flex items-start justify-between gap-4">
+              <span className="min-w-0">{row.label}</span><bdi className="shrink-0 whitespace-nowrap font-semibold tabular-nums">{row.value}</bdi>
+            </span>)}</span>
+            {section.note && <span className="mt-2 block text-xs text-canvas/70">{section.note}</span>}
+          </span>) : explanation.split(/[;؛]/).map((line, index) => <span key={index} className={index ? "mt-2 block" : "block"}>{line.trim()}</span>)}
         </span>,
         document.body,
       )}

@@ -18,14 +18,14 @@ import { ThemeToggle } from "./nav/ThemeToggle";
  * progress bar, two mega menus, and the mobile sheet.
  */
 /**
- * The four top-row slots. «القطاعات»/"Industries" rather than
+ * The top-row destinations. «القطاعات»/"Industries" rather than
  * «الحلول»/"Solutions": that menu holds industry pages and only industry
  * pages, so the label should say so. "Security & data" matches the page's
  * own h1 and the footer link, which previously disagreed with each other.
  */
 const labels = {
-  ar: { product: "المنتج", solutions: "القطاعات", how: "كيف يشتغل", security: "الأمان والبيانات" },
-  en: { product: "Product", solutions: "Industries", how: "How it works", security: "Security & data" },
+  ar: { product: "المنتج", solutions: "القطاعات", how: "كيف يشتغل", pricing: "الأسعار", security: "الأمان والبيانات" },
+  en: { product: "Product", solutions: "Industries", how: "How it works", pricing: "Pricing", security: "Security & data" },
 } as const;
 
 export function Header({ locale }: { locale: Locale }) {
@@ -77,6 +77,9 @@ export function Header({ locale }: { locale: Locale }) {
           <NavMenu locale={locale} label={l.solutions} menu={mega.sectors} />
           <Link href={localePath(locale, "how-it-works")} className="hdr-link">
             {l.how}
+          </Link>
+          <Link href={localePath(locale, "pricing")} className="hdr-link">
+            {l.pricing}
           </Link>
           <Link href={localePath(locale, "security")} className="hdr-link">
             {l.security}

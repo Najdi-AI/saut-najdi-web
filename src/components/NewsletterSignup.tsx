@@ -10,9 +10,9 @@ import type { Locale } from "@/lib/i18n";
  *
  * The "website" input is a HONEYPOT — visually hidden but present in the DOM,
  * where form-stuffing bots fill it and humans never see it. `hidden`/
- * display:none would be skipped by smarter bots, hence the sr-only-style
- * offscreen positioning; aria-hidden + tabIndex keep it out of screen readers
- * and tab order so it costs real visitors nothing.
+ * display:none would be skipped by smarter bots. The clipped sr-only class
+ * keeps it in the DOM without expanding the page in RTL layouts;
+ * aria-hidden + tabIndex keep it out of screen readers and tab order.
  */
 const copy = {
   ar: {
@@ -52,10 +52,7 @@ export function NewsletterSignup({ locale, source }: { locale: Locale; source: s
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="source" value={source} />
           {/* Honeypot — see the component comment. */}
-          <div
-            aria-hidden="true"
-            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
-          >
+          <div aria-hidden="true" className="sr-only">
             <label>
               website
               <input type="text" name="website" tabIndex={-1} autoComplete="off" />

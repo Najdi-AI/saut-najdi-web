@@ -7,6 +7,8 @@ import { SELLER_NAME, SELLER_NAME_AR, VAT_NUMBER } from "@/lib/site";
 import { PricingTooltip } from "@/components/pages/PricingTooltip";
 import { PricingOverview } from "@/components/PricingOverview";
 import { Waveform } from "@/components/Waveform";
+import { capacityCopy, planCapacityRows } from "@/components/PlanCapacity";
+import { WorkflowComparison } from "@/components/WorkflowComparison";
 
 const copy = {
   ar: {
@@ -196,6 +198,8 @@ export function PricingPage({ locale }: { locale: Locale }) {
             </thead>
             <tbody>
               {primaryRows.map((row) => renderRow(row, true))}
+              <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{capacityCopy[locale].title}</th></tr>
+              {planCapacityRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: row.key === "recordings" ? capacityCopy[locale].draft : capacityCopy[locale].note, value: (p) => planCapacityRows(p.key, locale)[index].value }, false))}
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{t.usageDetail}</th></tr>
               {detailRows.map((row) => renderRow(row, false))}
             </tbody>
@@ -210,7 +214,8 @@ export function PricingPage({ locale }: { locale: Locale }) {
         <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><p className="mt-4 text-body-lg leading-relaxed text-ink/75">{t.math}</p><p className="mt-4 text-body-lg font-medium text-ink">{t.example}</p><h3 className="mt-6 text-h4 font-semibold">{t.callCostTitle}</h3><p className="mt-3 text-body-lg leading-relaxed text-ink/75">{t.callCost}</p><p className="mt-3 text-body leading-relaxed text-ink/70">{t.callCostNote}</p></div>
         <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{t.conditions.map((c) => <li key={c}>{c}</li>)}</ul></div>
       </section>
-      <section className="container pb-16 text-center">
+      <WorkflowComparison locale={locale} />
+      <section className="container py-16 text-center">
         <Link href={localePath(locale, "demo")} className="btn-primary">{t.book}</Link>
         <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-body">
           <Link href={localePath(locale, "refund-policy")} className="text-brand-blue hover:underline">{t.policy}</Link>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
 import { PricingTooltip } from "@/components/pages/PricingTooltip";
 import { Waveform } from "@/components/Waveform";
+import { PlanCapacity, capacityCopy } from "@/components/PlanCapacity";
 import { CREDIT_COST, formatSarRate, plans, textConversations, voiceMinutes } from "@/content/pricing";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -11,9 +12,9 @@ const copy = {
     heading: "باقات لكل مرحلة من نموك",
     intro: "رصيد شهري مشترك للمكالمات مع الوكيل والمحادثات النصية. اختر السعة التي تناسب استخدامك، ثم احجز عرضاً لنحدد التجهيز لمنشأتك.",
     fit: {
-      essential: "بداية برصيد شهري مشترك",
-      growth: "رصيد أكبر لنمو الاستخدام",
-      expansion: "للاستخدام الشهري الأعلى",
+      essential: "لموقع واحد وتغطية المكالمات خارج الدوام وعند الانشغال",
+      growth: "لفريق ينمو ويحتاج سعة أكبر للرد والمتابعة",
+      expansion: "لتشغيل فروع متعددة بسعة أكبر للفريق والوكلاء",
       enterprise: "احتياجات خاصة يحددها عرض مكتوب",
     },
     monthly: "شهرياً",
@@ -41,9 +42,10 @@ const copy = {
     vatShort: "لا يشمل ضريبة القيمة المضافة 15%",
     hoverRates: (voice: string, text: string, extraVoice: string, extraText: string) => `ضمن الباقة: ${voice} ر.س/دقيقة و${text} ر.س/محادثة. بعد نفاد الرصيد: ${extraVoice} ر.س/دقيقة و${extraText} ر.س/محادثة.`,
     inclusions: [
-      "المكالمات مع الوكيل والمحادثات النصية من رصيد واحد",
+      "بناء الوكيل وقاعدة معرفة خاصة بمنشأتك",
+      "صندوق وارد مشترك وتحويل المحادثة لموظفك",
       "نص المكالمة وردود الوكيل ومعالجة الملخص ضمن أرصدة المكالمة",
-      "رسوم التجهيز وحدود التشغيل في العرض المكتوب بعد العرض التعريفي",
+      "لوحة متابعة وسجل محادثات العملاء",
     ],
   },
   en: {
@@ -51,9 +53,9 @@ const copy = {
     heading: "Plans for every stage of growth",
     intro: "One monthly credit pool for AI calls and text conversations. Choose the capacity that fits your use, then book a demo to scope setup for your business.",
     fit: {
-      essential: "A shared monthly starting pool",
-      growth: "More room for growing usage",
-      expansion: "For higher monthly usage",
+      essential: "For a single site, after-hours and overflow coverage",
+      growth: "For growing teams that need more answering capacity",
+      expansion: "For multi-branch operations with larger teams",
       enterprise: "Custom needs set out in a written quote",
     },
     monthly: "month",
@@ -81,9 +83,10 @@ const copy = {
     vatShort: "Excludes 15% VAT",
     hoverRates: (voice: string, text: string, extraVoice: string, extraText: string) => `In-plan reference rates: voice SAR ${voice}/minute and text SAR ${text}/conversation. After credits: voice SAR ${extraVoice}/minute and text SAR ${extraText}/conversation.`,
     inclusions: [
-      "AI calls and text conversations use one credit pool",
+      "Agent builder and your business knowledge base",
+      "Shared inbox and human handoff",
       "Call transcript, AI replies and summary processing are covered by voice credits",
-      "Setup fees and operating limits are confirmed in the written offer after the demo",
+      "Dashboard and customer conversation history",
     ],
   },
 } as const;
@@ -156,6 +159,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                       </div>
                     </dl>
                     <p className="mt-2 text-body text-ink/60">{t.exclusive}</p>
+                    <PlanCapacity planKey={plan.key} locale={locale} />
                     <ul className="mt-4 grid gap-2 border-t border-line pt-4 text-body text-ink/75 sm:grid-cols-2">
                       {t.inclusions.map((item) => <li key={item} className="flex items-start gap-2"><span aria-hidden="true" className="text-brand-blue">✓</span><span>{item}</span></li>)}
                     </ul>
@@ -176,6 +180,8 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
           })}
         </div>
 
+        <p className="mx-auto mt-6 max-w-4xl text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].note}</p>
+        <p className="mx-auto mt-3 max-w-4xl rounded-xl border border-line bg-surface p-4 text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].draft}</p>
         {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{t.vat}</p>}
         {isHome && <div className="mt-7 text-center">
           <Link href={localePath(locale, "pricing")} className="btn-secondary">{t.compare} {locale === "ar" ? "←" : "→"}</Link>

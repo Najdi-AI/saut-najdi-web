@@ -236,7 +236,7 @@ const t = {
       },
       {
         q: "وين تنحفظ بيانات مستفسرينا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة)، والتسجيلات تنحذف بعد 90 يوماً. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
+        a: "التخزين الدائم في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
       },
     ] as FaqItem[],
   },
@@ -441,7 +441,7 @@ const t = {
       },
       {
         q: "Where is our enquirers' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha), and recordings are deleted automatically after 90 days. Realtime speech processing transits global providers — detailed on our security page.",
+        a: "Permanent storage is in the Gulf region (Doha), and recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Realtime speech processing transits global providers — detailed on our security page.",
       },
     ] as FaqItem[],
   },

@@ -114,7 +114,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "وين تنحفظ بيانات مكالماتي؟",
-          a: "بياناتك في صوت نجدي تنحفظ في منطقة الخليج (الدوحة)، والتسجيلات تنحذف تلقائياً بعد 90 يوماً، مع إفصاح كامل عن أماكن معالجة الصوت والذكاء الاصطناعي في سياسة الخصوصية.",
+          a: "بياناتك في صوت نجدي تنحفظ في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، مع إفصاح كامل عن أماكن معالجة الصوت والذكاء الاصطناعي في سياسة الخصوصية.",
         },
         {
           q: "متوافقين مع نظام حماية البيانات الشخصية (PDPL)؟",
@@ -128,7 +128,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "كم تكلفة الوكيل الصوتي في السعودية؟",
-          a: "باقاتنا الشهرية معلنة: أساسي 990 ريال مع 80,000 رصيد، نمو 2,900 ريال مع 240,000 رصيد، وتوسّع 6,900 ريال مع 580,000 رصيد. الأسعار لا تشمل ضريبة القيمة المضافة. الدقيقة الصوتية 100 رصيد والمحادثة النصية خلال 24 ساعة 56 رصيد. رسوم التجهيز تُوضح في عرض مكتوب بعد العرض التعريفي، وأسعار الاستخدام الإضافي في صفحة الباقات.",
+          a: "باقاتنا الشهرية معلنة: أساسي 990 ريال مع 9,000 رصيد، نمو 2,900 ريال مع 29,000 رصيد، وتوسّع 6,900 ريال مع 76,666 رصيد. الأسعار لا تشمل ضريبة القيمة المضافة. الدقيقة الصوتية 10 أرصدة والمحادثة النصية خلال 24 ساعة 4 أرصدة. رسوم التجهيز تُوضح في عرض مكتوب بعد العرض التعريفي، وأسعار الاستخدام الإضافي في صفحة الباقات.",
         },
         {
           q: "كيف أبدأ؟",
@@ -140,7 +140,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "عندكم رقم سعودي أتصل عليه وأجرب؟",
-          a: "صوت نجدي ما ينشر رقماً سعودياً للتجربة اليوم، لأن تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات وما نعطي وعداً بتاريخ ما نتحكم فيه. التجربة تصير في العرض التعريفي: نشغّل الوكيل حي، تسمعه بلهجتك، وتسأله اللي تبغى.",
+          a: "صوت نجدي ما ينشر رقماً سعودياً للتجربة اليوم، لأن تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات وما نعطي وعداً بتاريخ ما نتحكم فيه. ابدأ بالعرض التعريفي: نشغّل الوكيل حي وتسمعه بلهجتك، ثم نرتّب تجربة 14 يوماً بحدود الاستخدام المنشورة.",
         },
       ],
     },
@@ -232,7 +232,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "Where is my call data stored?",
-          a: "Saut Najdi stores your data in the Gulf region (Doha), call recordings are automatically deleted after 90 days, and the privacy policy fully discloses where speech and AI processing happen.",
+          a: "Saut Najdi stores your data in the Gulf region (Doha), recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. The privacy policy fully discloses where speech and AI processing happen.",
         },
         {
           q: "Are you compliant with the Saudi PDPL?",
@@ -246,7 +246,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "How much does an AI voice agent cost in Saudi Arabia?",
-          a: "Our monthly plans are public: Essential SAR 990 with 80,000 credits, Growth SAR 2,900 with 240,000 credits, and Expansion SAR 6,900 with 580,000 credits. Prices exclude VAT. A call minute uses 100 credits; a billable 24-hour text conversation uses 56. The pricing page shows extra-usage rates, and setup is stated in a written offer after the demo.",
+          a: "Our monthly plans are public: Essential SAR 990 with 9,000 credits, Growth SAR 2,900 with 29,000 credits, and Expansion SAR 6,900 with 76,666 credits. Prices exclude VAT. A call minute uses 10 credits; a billable 24-hour text conversation uses 4. The pricing page shows extra-usage rates, and setup is stated in a written offer after the demo.",
         },
         {
           q: "How do I start?",
@@ -258,7 +258,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "Is there a Saudi number I can call to try it?",
-          a: "Saut Najdi doesn't publish a Saudi trial number today, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. The trial happens in the intro demo instead: we run the agent live, you hear it in your dialect, and you ask it whatever you want.",
+          a: "Saut Najdi doesn't publish a Saudi trial number today, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. Start with an intro demo: we run the agent live, you hear it in your dialect, and we arrange the 14-day trial with its published usage caps.",
         },
       ],
     },

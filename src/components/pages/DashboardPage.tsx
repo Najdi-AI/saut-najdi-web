@@ -47,7 +47,7 @@ const t = {
       {
         title: "وش يطلع لي في سجل المكالمات بالضبط؟",
         body:
-          "كل مكالمة سطر تفتحه: التسجيل تشغّله من مكانك، والنص الكامل — كلام العميل والوكيل بالترتيب — وملخص عربي يختصرها في ثوانٍ، ومؤشر مزاج المكالمة. تقيّمها بالنجوم وتحط عليها وسوماً زي «شكوى» أو «سؤال سعر». والنص قابل للبحث، فلو قال عميل «قلت لكم قبل شهر» تقرأ اللي انقال بالحرف. التسجيلات تُفتح بروابط موقّعة قصيرة الصلاحية وتُحذف تلقائياً بعد 90 يوماً.",
+          "كل مكالمة سطر تفتحه: التسجيل تشغّله من مكانك، والنص الكامل — كلام العميل والوكيل بالترتيب — وملخص عربي يختصرها في ثوانٍ، ومؤشر مزاج المكالمة. تقيّمها بالنجوم وتحط عليها وسوماً زي «شكوى» أو «سؤال سعر». والنص قابل للبحث، فلو قال عميل «قلت لكم قبل شهر» تقرأ اللي انقال بالحرف. التسجيلات تُفتح بروابط موقّعة قصيرة الصلاحية. مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات.",
       },
       {
         title: "أشوف أرقام أداء نشاطي؟",
@@ -94,7 +94,7 @@ const t = {
       },
       {
         q: "كم تبقى تسجيلات المكالمات محفوظة؟",
-        a: "90 يوماً وبعدها تُحذف تلقائياً، تطبيقاً لمبدأ حدود الاحتفاظ في نظام حماية البيانات الشخصية. وأي تشغيل يتم عبر رابط موقّع قصير الصلاحية.",
+        a: "مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، وتُحذف تلقائياً عند انتهاء المدة المتفق عليها. وأي تشغيل يتم عبر رابط موقّع قصير الصلاحية.",
       },
       {
         q: "أقدر أطلع بياناتي من المنصة؟",
@@ -116,7 +116,7 @@ const t = {
       {
         title: "What exactly is in the call log?",
         body:
-          "Every call is a row you can open: the recording, playable in place; the full transcript, caller and agent in order; an Arabic summary that compresses the call into seconds of reading; and a sentiment read. You can rate it with stars and tag it — complaint, pricing question, cancelled booking. Transcripts are searchable, so “I told you this a month ago” becomes something you can read rather than argue about. Recordings open only through short-lived signed links and are deleted after 90 days.",
+          "Every call is a row you can open: the recording, playable in place; the full transcript, caller and agent in order; an Arabic summary that compresses the call into seconds of reading; and a sentiment read. You can rate it with stars and tag it — complaint, pricing question, cancelled booking. Transcripts are searchable, so “I told you this a month ago” becomes something you can read rather than argue about. Recordings open only through short-lived signed links. Recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise.",
       },
       {
         title: "Do I get performance numbers for my own operation?",
@@ -161,7 +161,7 @@ const t = {
       },
       {
         q: "How long are call recordings kept?",
-        a: "90 days, then deleted automatically — implementing the PDPL's retention-limit principle. Playback happens through a short-lived signed link.",
+        a: "Recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Recordings are automatically deleted at the end of the agreed period. Playback happens through a short-lived signed link.",
       },
       {
         q: "Can I get my data out of the platform?",

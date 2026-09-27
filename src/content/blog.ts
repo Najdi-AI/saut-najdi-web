@@ -334,7 +334,7 @@ export const posts: BlogPost[] = [
         },
         {
           t: "p",
-          text: "في صوت نجدي، التسجيلات تُحذف تلقائياً بعد ٩٠ يوماً، ويوجد سجل تدقيق غير قابل للتعديل يوثّق الوصول للبيانات.",
+          text: "في صوت نجدي، مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، ويوجد سجل تدقيق غير قابل للتعديل يوثّق الوصول للبيانات.",
         },
         { t: "h2", text: "أسئلة اسألها المورّد" },
         {
@@ -394,7 +394,7 @@ export const posts: BlogPost[] = [
         },
         {
           t: "p",
-          text: "In Saut Najdi, recordings are deleted automatically after 90 days, and an append-only audit log records access to the data.",
+          text: "In Saut Najdi, recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. An append-only audit log records access to the data.",
         },
         { t: "h2", text: "Questions to put to a vendor" },
         {

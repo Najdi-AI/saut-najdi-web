@@ -23,7 +23,7 @@ const copy = {
       essential: "بداية برصيد شهري مشترك",
       growth: "رصيد أكبر لنمو الاستخدام",
       expansion: "للاستخدام الشهري الأعلى",
-      enterprise: "التفاصيل في عرض مكتوب",
+      enterprise: "التفاصيل حسب العقد",
     },
     monthly: "السعر الشهري الأساسي",
     credits: "الرصيد الشهري المشترك",
@@ -41,17 +41,17 @@ const copy = {
     conversation: "محادثة",
     perMinute: "ر.س/دقيقة",
     perConversation: "ر.س/محادثة",
-    custom: "عرض مكتوب",
+    custom: "حسب العقد",
     enterprise: "مؤسسات",
     book: "احجز عرضاً",
     mathTitle: "كيف يُحسب الرصيد؟",
-    math: "مكالمة: 1 دقيقة = 100 رصيد؛ نص: 1 محادثة (24 ساعة) = 56 رصيد؛ النص والردود والملخص = مشمولة في المكالمة.",
-    example: "مثال: 3 دقائق مكالمات ومحادثتان نصيتان = 3 × 100 + 2 × 56 = 412 رصيد.",
+    math: "مكالمة: 1 دقيقة = 10 رصيد؛ نص: 1 محادثة (24 ساعة) = 4 رصيد؛ استنساخ الصوت: 1 صوت جديد = 2 رصيد (نمو/توسّع)؛ النص والردود والملخص = مشمولة في المكالمة.",
+    example: "مثال: 3 دقائق مكالمات ومحادثتان نصيتان = 3 × 10 + 2 × 4 = 38 رصيد.",
     exclusive: "الأرقام في صفَّي الدقائق والمحادثات تفترض استخدام الرصيد كله لنوع واحد. عند مزج النوعين، يكون الإجمالي حسب الرصيد المستهلك فعلياً.",
     unitHelp: "السعر المرجعي المعتمد لهذا النوع من الاستخدام ضمن الباقة. يُخصم الاستخدام من الرصيد المشمول، ولا تُضاف رسوم استخدام مستقلة ما دام الرصيد متاحاً.",
-    inPlanNote: "أسعار الاستخدام ضمن الباقة أسعار مرجعية، ولا تُضاف إلى الاشتراك ما دام الرصيد المشترك متاحاً. تتغير التكلفة الفعلية لكل استخدام حسب مزيج المكالمات والمحادثات.",
+    inPlanNote: "أسعار الاستخدام ضمن الباقة أسعار مرجعية، ولا تُضاف إلى الاشتراك ما دام الرصيد المشترك متاحاً. تفترض هذه القيم استخدام الرصيد الشهري بالكامل.",
     callCostTitle: "ماذا تغطي أرصدة المكالمة؟",
-    callCost: "دقيقة مكالمة واحدة = 100 رصيد، وتشمل معالجة تحويل الكلام إلى نص للمحادثة، وردود الوكيل، ومعالجة ملخص المكالمة عند إنشائه. لا يوجد خصم أرصدة مستقل لكل خطوة من هذه الخطوات.",
+    callCost: "دقيقة مكالمة واحدة = 10 رصيد، وتشمل معالجة تحويل الكلام إلى نص للمحادثة، وردود الوكيل، ومعالجة ملخص المكالمة عند إنشائه. لا يوجد خصم أرصدة مستقل لكل خطوة من هذه الخطوات.",
     callCostNote: "نص المكالمة ينتج من تحويل الكلام إلى نص؛ ويُستخدم توليد النص في ردود الوكيل والملخص. توضح الفاتورة استخدام المكالمات والمحادثات، لا تكلفة كل مزوّد تقني على حدة.",
     conditionTitle: "قبل الاشتراك",
     conditions: [
@@ -97,17 +97,17 @@ const copy = {
     conversation: "conversations",
     perMinute: "SAR/minute",
     perConversation: "SAR/conversation",
-    custom: "Written quote",
+    custom: "By contract",
     enterprise: "Enterprise",
     book: "Book a demo",
     mathTitle: "How credits work",
-    math: "AI call: 1 min = 100 credits; Text: 1 conversation (24h) = 56 credits; Transcript + replies + summary = included in call.",
-    example: "Example: 3 call minutes and 2 text conversations = 3 × 100 + 2 × 56 = 412 credits.",
+    math: "AI call: 1 min = 10 credits; Text: 1 conversation (24h) = 4 credits; Voice clone: 1 new voice = 2 credits (Growth/Expansion); Transcript + replies + summary = included in call.",
+    example: "Example: 3 call minutes and 2 text conversations = 3 × 10 + 2 × 4 = 38 credits.",
     exclusive: "The minutes and conversations rows assume the full pool is spent on one use type. When you mix them, the total follows credits actually used.",
     unitHelp: "The approved reference rate for this use within the plan. Usage draws from included credits; there is no separate unit charge while credits remain.",
-    inPlanNote: "In-plan usage rates are reference prices and are not added to the subscription while shared credits remain. Your effective cost per use varies with your mix of calls and conversations.",
+    inPlanNote: "In-plan usage rates are reference prices and are not added to the subscription while shared credits remain. Values assume full use of the monthly credit pool.",
     callCostTitle: "What do voice credits cover?",
-    callCost: "One AI call minute = 100 credits. This covers speech-to-text processing for the call transcript, agent replies, and post-call summary processing when a summary is generated. These steps do not each consume a separate credit unit.",
+    callCost: "One AI call minute = 10 credits. This covers speech-to-text processing for the call transcript, agent replies, and post-call summary processing when a summary is generated. These steps do not each consume a separate credit unit.",
     callCostNote: "Speech-to-text creates the transcript; text generation powers agent replies and the summary. Invoices show call and conversation usage, not separate technology-provider costs.",
     conditionTitle: "Before you subscribe",
     conditions: [
@@ -176,6 +176,13 @@ export function PricingPage({ locale }: { locale: Locale }) {
       </section>
       <PricingOverview locale={locale} variant="page" />
       <section className="container pb-8">
+        <div className="rounded-2xl border border-line bg-surface p-6">
+          <h2 className="text-h3">{locale === "ar" ? "تجربة 14 يوماً" : "14-day trial"}</h2>
+          <p className="mt-3 text-body-lg">{locale === "ar" ? "5,000 رصيد مشترك · حد أقصى 400 دقيقة مكالمات و250 محادثة نصية" : "5,000 shared credits · Maximum 400 voice minutes and 250 text conversations"}</p>
+          <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "ابدأ بحجز عرض تعريفي لترتيب التجربة. تنتهي التجربة بعد 14 يوماً؛ وحدود الاستخدام لكل نوع سارية مع الرصيد المشترك." : "Book a demo to arrange your trial. The trial ends after 14 days; each usage cap applies alongside the shared credit pool."}</p>
+        </div>
+      </section>
+      <section className="container pb-8">
         <details open id="plan-comparison" className="group scroll-mt-28">
           <summary className="cursor-pointer rounded-xl border border-line bg-surface px-5 py-4 text-h4 font-semibold text-ink hover:border-brand-blue focus-visible:outline-brand-blue">{t.fullDetails}</summary>
           <p className="my-3 text-body text-ink/70 xl:hidden">{t.swipe}</p>
@@ -211,10 +218,11 @@ export function PricingPage({ locale }: { locale: Locale }) {
         </details>
         <p className="mt-4 text-body leading-relaxed text-ink/70">{t.exclusive}</p>
         <p className="mt-2 text-body leading-relaxed text-ink/70">{t.inPlanNote}</p>
+        <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "قيمة الرصيد: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب الرصيد الشهري إلى عدد صحيح. أسعار مؤسسات ورصيدها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
         <p className="mt-2 text-body text-ink/70">{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
       </section>
       <section className="container grid gap-8 py-10 lg:grid-cols-2">
-        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 100) + (2 × 56) = 412 {locale === "ar" ? "رصيد" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "رصيد واحد مشترك. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
+        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 10) + (2 × 4) = 38 {locale === "ar" ? "رصيد" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "رصيد واحد مشترك. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
         <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{t.conditions.map((c) => <li key={c}>{c}</li>)}</ul></div>
       </section>
       <WorkflowComparison locale={locale} />

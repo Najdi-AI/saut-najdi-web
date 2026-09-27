@@ -5,9 +5,27 @@ import { createPortal } from "react-dom";
 
 export function PricingTooltip({ children, explanation, id }: { children: ReactNode; explanation: string; id: string }) {
   const trigger = useRef<HTMLSpanElement>(null);
+  const tooltip = useRef<HTMLSpanElement>(null);
+  const focusHelp = useRef(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [position, setPosition] = useState<{ left: number; top?: number; bottom?: number } | null>(null);
+  const keepOpen = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }, []);
+  const hideSoon = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setPosition(null), 180);
+  }, []);
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+  useEffect(() => {
+    if (position && focusHelp.current) {
+      focusHelp.current = false;
+      tooltip.current?.focus();
+    }
+  }, [position]);
 
   const show = useCallback(() => {
+    keepOpen();
     const rect = trigger.current?.getBoundingClientRect();
     if (!rect) return;
     if (rect.bottom < 0 || rect.top > window.innerHeight) {
@@ -19,7 +37,7 @@ export function PricingTooltip({ children, explanation, id }: { children: ReactN
     setPosition(rect.top < window.innerHeight / 2
       ? { left, top: rect.bottom + 8 }
       : { left, bottom: window.innerHeight - rect.top + 8 });
-  }, []);
+  }, [keepOpen]);
 
   useEffect(() => {
     if (!position) return;
@@ -39,9 +57,16 @@ export function PricingTooltip({ children, explanation, id }: { children: ReactN
         aria-describedby={id}
         className="cursor-help rounded-sm underline decoration-dotted underline-offset-4 focus:outline-2 focus:outline-offset-2 focus:outline-brand-blue"
         onPointerEnter={show}
-        onPointerLeave={() => setPosition(null)}
+        onPointerLeave={hideSoon}
         onFocus={show}
-        onBlur={() => setPosition(null)}
+        onBlur={hideSoon}
+        onClick={show}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setPosition(null);
+          if (event.key === "Enter" || event.key === "ArrowDown") {
+            event.preventDefault(); focusHelp.current = true; show();
+          }
+        }}
       >
         {children}
       </span>
@@ -49,10 +74,22 @@ export function PricingTooltip({ children, explanation, id }: { children: ReactN
       {position && createPortal(
         <span
           role="tooltip"
+          ref={tooltip}
+          tabIndex={0}
+          onPointerEnter={keepOpen}
+          onPointerLeave={hideSoon}
+          onFocus={keepOpen}
+          onBlur={hideSoon}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              trigger.current?.focus();
+              setPosition(null);
+            }
+          }}
           style={position}
-          className="pointer-events-none fixed z-50 w-64 max-h-[50vh] overflow-y-auto rounded-lg bg-ink px-3 py-2 text-start text-sm leading-relaxed text-canvas shadow-lg"
+          className="fixed z-50 w-64 max-h-[50vh] overflow-y-auto rounded-lg bg-ink px-3 py-2 text-start text-sm leading-relaxed text-canvas shadow-lg"
         >
-          {explanation}
+          {explanation.split(/[;؛]/).map((line, index) => <span key={index} className="block">{line.trim()}</span>)}
         </span>,
         document.body,
       )}

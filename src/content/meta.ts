@@ -93,7 +93,7 @@ export const meta: Record<
     security: {
       title: "الأمان والبيانات والتوافق مع نظام PDPL السعودي",
       description:
-        "أين تُخزَّن بيانات مكالماتك وأين تُعالَج بالضبط: تخزين في منطقة الخليج (الدوحة)، إفصاح كامل عن أماكن المعالجة، وحذف تلقائي للتسجيلات بعد 90 يوماً.",
+        "أين تُخزَّن بيانات مكالماتك وأين تُعالَج بالضبط: تخزين في منطقة الخليج (الدوحة)، إفصاح كامل عن أماكن المعالجة، واحتفاظ بالتسجيلات حسب الباقة والعقد.",
     },
     demo: {
       title: "احجز عرضاً تعريفياً مدته 30 دقيقة وعرض سعر",
@@ -216,7 +216,7 @@ export const meta: Record<
     security: {
       title: "Security, data residency and PDPL alignment",
       description:
-        "Where Saut Najdi stores and processes your data: Gulf-region storage (Doha), full processing disclosure, an append-only audit log, 90-day recording deletion.",
+        "Where Saut Najdi stores and processes your data: Gulf-region storage (Doha), full processing disclosure, an append-only audit log, recording retention according to the plan and contract.",
     },
     demo: {
       title: "Book a 30-minute intro demo and get a quote",

@@ -78,7 +78,7 @@ const t = {
       {
         title: "وش يصير بعد ما تسكر المكالمة؟",
         body:
-          "خلال ثواني تلقاها في لوحتك: التسجيل، والنص كامل، وملخص عربي، ومؤشر مزاج المكالمة. تقيّمها وتحط عليها وسماً، وكل هذا ينضاف لملف العميل نفسه. التسجيلات تُفتح بروابط موقّعة قصيرة الصلاحية وتُحذف تلقائياً بعد 90 يوماً.",
+          "خلال ثواني تلقاها في لوحتك: التسجيل، والنص كامل، وملخص عربي، ومؤشر مزاج المكالمة. تقيّمها وتحط عليها وسماً، وكل هذا ينضاف لملف العميل نفسه. التسجيلات تُفتح بروابط موقّعة قصيرة الصلاحية. مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات.",
       },
     ],
     limits: {
@@ -172,7 +172,7 @@ const t = {
       {
         title: "What happens after the call ends?",
         body:
-          "Within seconds it's in your dashboard: the recording, the full transcript, an Arabic summary and a read on the caller's mood. You can rate and tag it, and all of it attaches to the customer's own record. Recordings open only through short-lived signed links and are deleted after 90 days.",
+          "Within seconds it's in your dashboard: the recording, the full transcript, an Arabic summary and a read on the caller's mood. You can rate and tag it, and all of it attaches to the customer's own record. Recordings open only through short-lived signed links. Recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise.",
       },
     ],
     limits: {

@@ -126,10 +126,7 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
           path: "product/agent-builder",
         },
         rail: [
-          // The site has no pricing page by design, so this anchor is the
-          // nav's only answer to the price question. The `pricing` group id
-          // exists in both locales and its section carries scroll-mt.
-          { label: "الأسعار والبداية", path: "faq#pricing" },
+          { label: "الأسعار والبداية", path: "pricing" },
           { label: "تواصل معنا", path: "contact" },
         ],
         railCta: { label: "احجز عرضاً", path: "demo" },
@@ -194,7 +191,7 @@ export function megaMenus(locale: Locale): { products: MegaMenu; sectors: MegaMe
         path: "product/agent-builder",
       },
       rail: [
-        { label: "Pricing & getting started", path: "faq#pricing" },
+        { label: "Pricing & getting started", path: "pricing" },
         { label: "Contact us", path: "contact" },
       ],
       railCta: { label: "Book a demo", path: "demo" },

@@ -8,11 +8,20 @@ import type { Locale } from "@/lib/i18n";
  * analytics/cookie note. Have counsel review before signing contracts.
  */
 
+export type LegalBlock =
+  | { kind: "paragraph"; text: string }
+  | { kind: "unordered" | "ordered"; items: string[] };
+
 export interface LegalDoc {
   title: string;
   updated: string;
   intro: string;
-  sections: { h: string; ps: string[] }[];
+  sections: {
+    h: string;
+    ps?: string[];
+    blocks?: LegalBlock[];
+    links?: { label: string; href: string }[];
+  }[];
 }
 
 export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>> = {
@@ -69,14 +78,14 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
     },
     terms: {
       title: "شروط الخدمة",
-      updated: "آخر تحديث: يوليو 2026",
+      updated: "آخر تحديث: 27 سبتمبر 2026",
       intro:
         "تحكم هذه الشروط استخدام موقع صوت نجدي وخدماته. باستخدامك الموقع أو حجزك عرضاً تعريفياً فأنت توافق عليها.",
       sections: [
         {
           h: "1. الخدمة",
           ps: [
-            "صوت نجدي منصة رد آلي هجينة: وكيل صوتي بالذكاء الاصطناعي يرد على مكالمات عملاء المنشآت المشتركة، مع صندوق موحد لمحادثاتها النصية (واتساب، تيليجرام، دردشة الموقع) وتصعيد المكالمة إلى موظف بشري وفق قواعد تحددها المنشأة. تُقدَّم الخدمة للمنشآت بموجب اتفاقية اشتراك مستقلة، ولا يوجد تسجيل ذاتي عام.",
+            "صوت نجدي منصة رد آلي هجينة: وكيل صوتي بالذكاء الاصطناعي يرد على مكالمات عملاء المنشآت المشتركة، مع صندوق موحد لمحادثاتها عبر واتساب وتيليجرام ودردشة الموقع والرسائل النصية والبريد الإلكتروني، وتصعيد المكالمة إلى موظف بشري وفق قواعد تحددها المنشأة. تُقدَّم الخدمة للمنشآت بموجب اتفاقية اشتراك مستقلة، ولا يوجد تسجيل ذاتي عام.",
           ],
         },
         {
@@ -101,7 +110,9 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "5. حدود المسؤولية",
           ps: [
             "يُقدَّم محتوى الموقع كما هو للتعريف العام، وتُحدَّد التزامات الخدمة ومستوياتها في اتفاقية الاشتراك الموقعة مع كل منشأة. لا يشكل محتوى الموقع وعداً تعاقدياً بذاته.",
+            "وتحكم سياسة الاسترداد والإلغاء المنشورة على هذا الموقع إلغاء الاشتراكات واسترداد المدفوعات.",
           ],
+          links: [{ label: "سياسة الاسترداد والإلغاء", href: "/refund-policy" }],
         },
         {
           h: "6. النظام الواجب التطبيق",
@@ -190,14 +201,14 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
     },
     terms: {
       title: "Terms of Service",
-      updated: "Last updated: July 2026",
+      updated: "Last updated: 27 September 2026",
       intro:
         "These terms govern the use of the Saut Najdi website and services. By using the site or booking a demo you agree to them.",
       sections: [
         {
           h: "1. The service",
           ps: [
-            "Saut Najdi is a hybrid AI answering platform: an AI voice agent that answers a subscribed business's customer calls, with text conversations (WhatsApp, Telegram, website chat) landing in a unified team inbox, and escalation to a human employee under rules the business defines. The service is provided to businesses under a separate subscription agreement; there is no public self-signup.",
+            "Saut Najdi is a hybrid AI answering platform: an AI voice agent that answers a subscribed business's customer calls, with WhatsApp, Telegram, website chat, SMS and email conversations landing in a unified team inbox, and escalation to a human employee under rules the business defines. The service is provided to businesses under a separate subscription agreement; there is no public self-signup.",
           ],
         },
         {
@@ -222,7 +233,9 @@ export const legal: Record<Locale, Record<"privacy" | "terms" | "dpa", LegalDoc>
           h: "5. Liability",
           ps: [
             "Site content is provided as-is for general information; service obligations and levels are defined in the signed subscription agreement with each business. Site content is not itself a contractual promise.",
+            "Subscription cancellation and refunds are governed by the Refund & Cancellation Policy published on this site.",
           ],
+          links: [{ label: "Refund & Cancellation Policy", href: "/en/refund-policy" }],
         },
         {
           h: "6. Governing law",

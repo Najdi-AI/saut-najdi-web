@@ -56,7 +56,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "الأصوات رجالية ولا نسائية؟ وأقدر أستخدم صوت علامتي؟",
-          a: "صوت نجدي عنده أصوات رجالية ونسائية: نجدي وحجازي وشامي وإنجليزي. وتقدر تستنسخ صوت علامتك من عيّنة 60 ثانية على الأقل، بإقرار موافقة مسجّل من صاحب الصوت، مع إمكانية السحب والحذف خلال 30 يوماً.",
+          a: "صوت نجدي عنده أصوات رجالية ونسائية: نجدي وحجازي وشامي وإنجليزي. وتقدر تستنسخ صوت علامتك من عيّنة 60 ثانية على الأقل، بإقرار موافقة مسجّل من صاحب الصوت. تقدر تسحب الموافقة بأي وقت، وعندها يتوقف استخدام الصوت. اسأل فريقنا عن مدة الاحتفاظ بالعينة وإجراءات حذفها قبل رفعها.",
         },
         {
           q: "الوكيل يسكت إذا قاطعه العميل؟",
@@ -128,7 +128,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "كم تكلفة الوكيل الصوتي في السعودية؟",
-          a: "أسعار صوت نجدي على قد حجم مكالماتك وقنواتك — ما نعلن جدول أسعار عام لأنه ما ينطبق على الكل بإنصاف؛ بعد العرض التعريفي نقيّم نشاطك ونرسل لك عرض سعر مكتوب وواضح.",
+          a: "باقاتنا الشهرية معلنة: أساسي 990 ريال مع 80,000 رصيد، نمو 2,900 ريال مع 240,000 رصيد، وتوسّع 6,900 ريال مع 580,000 رصيد. الأسعار لا تشمل ضريبة القيمة المضافة. الدقيقة الصوتية 100 رصيد والمحادثة النصية خلال 24 ساعة 56 رصيد. رسوم التجهيز تُوضح في عرض مكتوب بعد العرض التعريفي، وأسعار الاستخدام الإضافي في صفحة الباقات.",
         },
         {
           q: "كيف أبدأ؟",
@@ -174,7 +174,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "Are the voices male or female — and can I use my brand's voice?",
-          a: "Saut Najdi ships male and female voices: Najdi, Hijazi, Levantine and English. You can also clone your brand's voice from a sample of at least 60 seconds, with a recorded consent attestation from the voice owner, and revocation and deletion within 30 days.",
+          a: "Saut Najdi ships male and female voices: Najdi, Hijazi, Levantine and English. You can also clone your brand's voice from a sample of at least 60 seconds, with a recorded consent attestation from the voice owner. Consent can be withdrawn at any time, which stops further use. Ask our team about sample retention and deletion before uploading.",
         },
         {
           q: "Can the caller interrupt the agent?",
@@ -246,7 +246,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       items: [
         {
           q: "How much does an AI voice agent cost in Saudi Arabia?",
-          a: "Saut Najdi pricing scales with your call volume and channels — we don't publish a single public price list because it can't fairly fit everyone; after the intro demo we assess your business and send a written, itemised offer.",
+          a: "Our monthly plans are public: Essential SAR 990 with 80,000 credits, Growth SAR 2,900 with 240,000 credits, and Expansion SAR 6,900 with 580,000 credits. Prices exclude VAT. A call minute uses 100 credits; a billable 24-hour text conversation uses 56. The pricing page shows extra-usage rates, and setup is stated in a written offer after the demo.",
         },
         {
           q: "How do I start?",

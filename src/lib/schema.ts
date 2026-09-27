@@ -2,6 +2,8 @@ import {
   SITE_URL,
   SITE_NAME_AR,
   SITE_NAME_EN,
+  SELLER_NAME,
+  VAT_NUMBER,
   SUPPORT_EMAIL,
   POSITIONING_AR,
   POSITIONING_EN,
@@ -74,6 +76,8 @@ export function organization(locale: Locale): JsonLd {
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: locale === "ar" ? SITE_NAME_AR : SITE_NAME_EN,
+    legalName: SELLER_NAME,
+    vatID: VAT_NUMBER,
     // Both names in both locales: the brand is searched transliterated as
     // often as it is searched in Arabic.
     alternateName: [SITE_NAME_EN, SITE_NAME_AR],

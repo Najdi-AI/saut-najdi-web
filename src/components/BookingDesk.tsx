@@ -34,7 +34,7 @@ const t = {
       "تشوف موظفك يستلم المكالمة بسياقها",
       "نختار القالب اللي يناسب نشاطك",
       "نجاوب أسئلة البيانات وPDPL",
-      "تطلع بخطة تجهيز واضحة",
+      "نناقش احتياج التجهيز ورسومه",
     ],
     // Mirrors Cal's own meta rows, which hideEventTypeDetails removes.
     // «بتوقيتك المحلي» rather than a named zone: the booker reads the
@@ -56,7 +56,7 @@ const t = {
       "Watch an employee take over mid-call",
       "Pick the template that fits your business",
       "Get your data and PDPL questions answered",
-      "Leave with a setup plan",
+      "Discuss setup needs and fees",
     ],
     meta: [
       { icon: "clock", label: "30 minutes" },

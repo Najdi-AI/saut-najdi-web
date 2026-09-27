@@ -42,6 +42,8 @@ export const updated: Record<string, string> = {
   // `date` field in content/blog.ts — see the note in app/sitemap.ts.
   blog: "2026-08-16",
   faq: "2026-08-10",
+  pricing: "2026-09-27",
+  "refund-policy": "2026-09-27",
   privacy: "2026-08-10",
   terms: "2026-08-10",
   dpa: "2026-08-10",

@@ -3,17 +3,14 @@ import type { NextConfig } from "next";
 /**
  * Legacy-domain redirect, wired to the SAME switch as the canonical host.
  *
- * The .com -> .ai 301s turn on ONLY when NEXT_PUBLIC_SITE_URL says .ai is
- * primary. That coupling is the safety property: it is impossible to redirect
- * visitors to .ai while the app still calls .com canonical (which would send
- * every crawler in a loop), or to leave .com serving a duplicate of the site
- * after the cutover. One env var moves both halves at once, and unsetting it
- * rolls the whole migration back on the next deploy.
+ * The canonical host defaults to .ai; NEXT_PUBLIC_SITE_URL can override it.
+ * The redirect target follows that same setting, so canonical URLs and host
+ * redirects agree. An explicit .com override can reverse the host selection.
  *
  * 308 (permanent: true) preserves the method and passes full link equity.
  */
 const PRIMARY_HOST = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sautnajdi.com",
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sautnajdi.ai",
 ).host;
 
 /**

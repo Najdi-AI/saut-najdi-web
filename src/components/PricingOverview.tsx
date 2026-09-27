@@ -146,7 +146,21 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                   <div className="min-w-0 p-6 sm:p-8">
                     <dl className="divide-y divide-line">
                       <div className="flex flex-col gap-2 pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-                        <dt className="text-body-lg font-medium text-ink/75"><PricingTooltip id={`home-price-${plan.key}-credits`} explanation={isQuote ? (locale === "ar" ? "الرصيد ومعدلات الاستهلاك والأسعار تُحدد في العقد." : "Credits, conversion rates and pricing are set by contract.") : `${t.creditsHelp} ${t.hoverRates(formatSarRate(plan.withinVoiceSar), formatSarRate(plan.withinTextSar), formatSarRate(plan.extraVoiceSar), formatSarRate(plan.extraTextSar))}`}>{t.credits}</PricingTooltip></dt>
+                        <dt className="text-body-lg font-medium text-ink/75"><PricingTooltip id={`home-price-${plan.key}-credits`} explanation={isQuote ? (locale === "ar" ? "الرصيد ومعدلات الاستهلاك والأسعار تُحدد في العقد." : "Credits, conversion rates and pricing are set by contract.") : `${t.creditsHelp} ${t.hoverRates(formatSarRate(plan.withinVoiceSar), formatSarRate(plan.withinTextSar), formatSarRate(plan.extraVoiceSar), formatSarRate(plan.extraTextSar))}`} sections={isQuote ? undefined : [
+                          { title: locale === "ar" ? "استهلاك الرصيد" : "Credit usage", rows: [
+                            { label: locale === "ar" ? "دقيقة مكالمة" : "1 call minute", value: locale === "ar" ? "10 أرصدة" : "10 credits" },
+                            { label: locale === "ar" ? "محادثة نصية (24 ساعة)" : "1 text conversation (24h)", value: locale === "ar" ? "4 أرصدة" : "4 credits" },
+                            { label: locale === "ar" ? "استنساخ صوت جديد" : "1 new cloned voice", value: locale === "ar" ? "2 رصيد" : "2 credits" },
+                          ], note: locale === "ar" ? "الاستنساخ لنمو وتوسّع. نص المكالمة والردود والملخص مشمولة في أرصدة المكالمة." : "Cloning: Growth/Expansion. Call transcript, replies and summary are included in call credits." },
+                          { title: locale === "ar" ? "قيمة الاستخدام ضمن الباقة" : "In-plan usage value", rows: [
+                            { label: locale === "ar" ? "دقيقة مكالمة" : "Per call minute", value: `${formatSarRate(plan.withinVoiceSar)} ${t.sar}` },
+                            { label: locale === "ar" ? "محادثة نصية" : "Per text conversation", value: `${formatSarRate(plan.withinTextSar)} ${t.sar}` },
+                          ] },
+                          { title: locale === "ar" ? "بعد نفاد الرصيد" : "After credits run out", rows: [
+                            { label: locale === "ar" ? "دقيقة إضافية" : "Per extra minute", value: `${formatSarRate(plan.extraVoiceSar)} ${t.sar}` },
+                            { label: locale === "ar" ? "محادثة إضافية" : "Per extra conversation", value: `${formatSarRate(plan.extraTextSar)} ${t.sar}` },
+                          ], note: t.vatShort },
+                        ]}>{t.credits}</PricingTooltip></dt>
                         <dd className="text-h4 font-bold text-ink">{isQuote ? t.quote : <span dir="ltr" className="inline-block tabular-nums">{amount(plan.credits)}</span>}</dd>
                       </div>
                       <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">

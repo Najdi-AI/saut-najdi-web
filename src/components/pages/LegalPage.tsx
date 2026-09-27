@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { LegalDoc } from "@/content/legal";
+import { Waveform } from "@/components/Waveform";
 import { BILLING_EMAIL, SUPPORT_EMAIL } from "@/lib/site";
 
 function linkedContact(text: string) {
@@ -12,14 +13,21 @@ function linkedContact(text: string) {
 
 export function LegalPage({ doc }: { doc: LegalDoc }) {
   return (
-    <section className="container py-14">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="text-h1">{doc.title}</h1>
-        <p className="mt-2 text-body text-ink/60">{doc.updated}</p>
-        <p className="mt-6 text-body-lg leading-relaxed text-ink/80">{linkedContact(doc.intro)}</p>
-        <div className="mt-8 space-y-8">
+    <>
+      <section className="bg-gradient-to-b from-surface to-canvas">
+        <div className="container py-12 sm:py-16">
+          <div className="mx-auto max-w-3xl">
+            <h1 className="text-center text-h2 sm:text-h1">{doc.title}</h1>
+            <p className="mt-3 text-center text-body text-ink/60">{doc.updated}</p>
+            <Waveform bars={32} maxHeight={28} animate={false} className="mt-6 opacity-70" />
+            <p className="mx-auto mt-7 max-w-2xl text-body-lg leading-relaxed text-ink/80">{linkedContact(doc.intro)}</p>
+          </div>
+        </div>
+      </section>
+      <section className="container pb-16 pt-8">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-line bg-surface px-5 py-2 shadow-card sm:px-8">
           {doc.sections.map((s) => (
-            <section key={s.h}>
+            <section key={s.h} className="border-b border-line py-7 last:border-b-0">
               <h2 className="text-h4">{s.h}</h2>
               {s.blocks
                 ? s.blocks.map((block, i) => {
@@ -50,7 +58,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
             </section>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

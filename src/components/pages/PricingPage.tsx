@@ -45,7 +45,7 @@ const copy = {
     enterprise: "مؤسسات",
     book: "احجز عرضاً",
     mathTitle: "كيف يُحسب الرصيد؟",
-    math: "كل دقيقة مكالمة مع الوكيل = 100 رصيد. كل محادثة نصية قابلة للفوترة ضمن نافذة 24 ساعة = 56 رصيد. كلاهما يُخصم من الرصيد الشهري نفسه.",
+    math: "مكالمة: 1 دقيقة = 100 رصيد؛ نص: 1 محادثة (24 ساعة) = 56 رصيد؛ النص والردود والملخص = مشمولة في المكالمة.",
     example: "مثال: 3 دقائق مكالمات ومحادثتان نصيتان = 3 × 100 + 2 × 56 = 412 رصيد.",
     exclusive: "الأرقام في صفَّي الدقائق والمحادثات تفترض استخدام الرصيد كله لنوع واحد. عند مزج النوعين، يكون الإجمالي حسب الرصيد المستهلك فعلياً.",
     unitHelp: "السعر المرجعي المعتمد لهذا النوع من الاستخدام ضمن الباقة. يُخصم الاستخدام من الرصيد المشمول، ولا تُضاف رسوم استخدام مستقلة ما دام الرصيد متاحاً.",
@@ -101,7 +101,7 @@ const copy = {
     enterprise: "Enterprise",
     book: "Book a demo",
     mathTitle: "How credits work",
-    math: "Each AI call minute uses 100 credits. Each billable text conversation in a 24-hour window uses 56 credits. Both draw from the same monthly pool.",
+    math: "AI call: 1 min = 100 credits; Text: 1 conversation (24h) = 56 credits; Transcript + replies + summary = included in call.",
     example: "Example: 3 call minutes and 2 text conversations = 3 × 100 + 2 × 56 = 412 credits.",
     exclusive: "The minutes and conversations rows assume the full pool is spent on one use type. When you mix them, the total follows credits actually used.",
     unitHelp: "The approved reference rate for this use within the plan. Usage draws from included credits; there is no separate unit charge while credits remain.",
@@ -168,6 +168,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
           <h1 className="mx-auto mt-3 max-w-4xl text-3xl font-bold leading-tight sm:text-h1">{t.title}</h1>
           <p className="mx-auto mt-3 max-w-3xl text-body leading-relaxed text-ink/75 sm:text-body-lg">{t.intro}</p>
           <Waveform bars={28} animate={false} maxHeight={26} className="mt-3" />
+          <a href="#plan-comparison" className="mt-5 inline-flex rounded-full border border-line bg-surface px-6 py-3 text-body font-medium hover:border-brand-blue">{t.fullDetails} ↓</a>
         </div>
       </section>
       <section className="container pt-6 sm:pt-8">
@@ -175,7 +176,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
       </section>
       <PricingOverview locale={locale} variant="page" />
       <section className="container pb-8">
-        <details className="group">
+        <details open id="plan-comparison" className="group scroll-mt-28">
           <summary className="cursor-pointer rounded-xl border border-line bg-surface px-5 py-4 text-h4 font-semibold text-ink hover:border-brand-blue focus-visible:outline-brand-blue">{t.fullDetails}</summary>
           <p className="my-3 text-body text-ink/70 xl:hidden">{t.swipe}</p>
           <div role="region" aria-label={t.tableLabel} tabIndex={0} className="mt-4 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card focus-visible:outline-brand-blue">
@@ -213,7 +214,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
         <p className="mt-2 text-body text-ink/70">{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
       </section>
       <section className="container grid gap-8 py-10 lg:grid-cols-2">
-        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><p className="mt-4 text-body-lg leading-relaxed text-ink/75">{t.math}</p><p className="mt-4 text-body-lg font-medium text-ink">{t.example}</p><h3 className="mt-6 text-h4 font-semibold">{t.callCostTitle}</h3><p className="mt-3 text-body-lg leading-relaxed text-ink/75">{t.callCost}</p><p className="mt-3 text-body leading-relaxed text-ink/70">{t.callCostNote}</p></div>
+        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 100) + (2 × 56) = 412 {locale === "ar" ? "رصيد" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "رصيد واحد مشترك. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
         <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{t.conditions.map((c) => <li key={c}>{c}</li>)}</ul></div>
       </section>
       <WorkflowComparison locale={locale} />

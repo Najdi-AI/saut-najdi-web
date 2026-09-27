@@ -33,15 +33,23 @@ export function WorkflowComparison({ locale }: { locale: Locale }) {
   return <section className="border-y border-line bg-canvas py-16" aria-labelledby="workflow-comparison-heading">
     <div className="container">
       <div className="mx-auto max-w-3xl text-center"><h2 id="workflow-comparison-heading" className="text-h2">{t.title}</h2><p className="mt-4 text-body-lg text-ink/70">{t.intro}</p></div>
-      <div className="mx-auto mt-9 max-w-6xl overflow-hidden rounded-3xl border border-line bg-surface shadow-card">
-        <div className="hidden grid-cols-2 border-b border-line md:grid"><h3 className="p-6 text-h4 text-ink/70">{t.traditional}</h3><h3 className="border-s border-line bg-brand-gradient-soft p-6 text-h4">{t.saut}</h3></div>
-        {t.rows.map(([topic, before, after]) => <div key={topic} className="border-b border-line last:border-b-0">
-          <h3 className="bg-canvas px-6 py-3 text-body-lg font-semibold">{topic}</h3>
-          <div className="grid md:grid-cols-2"><div className="p-6 text-body-lg leading-relaxed text-ink/65"><span className="mb-2 block text-body font-semibold md:hidden">{t.traditional}</span>{before}</div><div className="border-t border-line bg-brand-blue/5 p-6 text-body-lg leading-relaxed text-ink md:border-s md:border-t-0"><span className="mb-2 block text-body font-semibold text-brand-blue md:hidden">{t.saut}</span>{after}</div></div>
-        </div>)}
+      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3" aria-label={locale === "ar" ? "قلّل العمل المتكرر" : "Reduce repetitive work"}>
+        {(locale === "ar" ? ["تكرار الردود يدوياً", "التنقل بين أدوات متفرقة", "إعادة شرح طلب العميل", "كتابة ملخص كل مكالمة يدوياً"] : ["Repetitive manual answers", "Switching between separate tools", "Customers repeating their request", "Writing every call summary manually"]).map(label => <span key={label} className="rounded-lg border border-line bg-surface px-4 py-2 text-body text-ink/70"><span aria-hidden="true" className="me-2 text-brand-blue">−</span>{label}</span>)}
       </div>
-      <p className="mx-auto mt-6 max-w-3xl text-center text-body text-ink/65">{t.note}</p>
-      <div className="mt-6 text-center"><DemoLink locale={locale}>{t.cta}</DemoLink></div>
+      <div className="mx-auto mt-9 grid max-w-6xl gap-6 md:grid-cols-2">
+        {([false, true] as const).map(withSaut => <article key={String(withSaut)} className={`flex min-w-0 flex-col rounded-3xl border p-5 shadow-card sm:p-8 ${withSaut ? "border-brand-blue/50 bg-brand-gradient-soft" : "border-line bg-surface"}`}>
+          <h3 className={`text-center text-h3 ${withSaut ? "text-brand-blue" : "text-ink/70"}`}>{withSaut ? t.saut : t.traditional}</h3>
+          <ol className="mt-6 flex-1 divide-y divide-line">
+            {t.rows.map(([topic, before, after], index) => <li key={topic} className="py-5 md:min-h-40">
+              <h4 className="flex items-start gap-3 text-body-lg font-semibold"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-body text-brand-blue">{index + 1}</span>{topic}</h4>
+              <p className="mt-3 text-body leading-relaxed text-ink/70">{withSaut ? after : before}</p>
+            </li>)}
+          </ol>
+          <div className="mt-6 rounded-xl bg-canvas p-4 text-center text-body font-medium">{withSaut ? (locale === "ar" ? "اختر الباقة المناسبة، ثم نحدد التجهيز في العرض التعريفي" : "Choose your plan, then scope setup in your demo") : (locale === "ar" ? "يعتمد الجهد والوقت على أدواتك ومزوّدي الخدمة" : "Time and effort depend on your tools and providers")}</div>
+          {withSaut && <div className="mt-6 text-center"><DemoLink locale={locale}>{t.cta}</DemoLink></div>}
+        </article>)}
+      </div>
+      <p className="mx-auto mt-6 max-w-3xl text-center text-body text-ink/65">{t.note} {locale === "ar" ? "تتوفر الميزات بحسب الباقة والنطاق المتفق عليه." : "Feature availability depends on your plan and agreed scope."}</p>
     </div>
   </section>;
 }

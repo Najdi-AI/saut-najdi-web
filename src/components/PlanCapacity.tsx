@@ -44,13 +44,40 @@ export function PlanCapacity({ planKey, locale }: { planKey: string; locale: Loc
   </dl>;
 }
 
-// Review proposal based on documented platform capabilities and current
-// paid-plan entitlements. No invented automation/API quotas or unlimited claims.
+// Commercial packaging PROPOSAL for Sultan's review, not runtime entitlements.
+// New feature gates and automation quotas must be approved before publication.
 export function planFeatureRows(key: string, locale: Locale) {
   const ar = locale === "ar";
-  const available = ar ? "متاح" : "Available";
-  const quote = ar ? "حسب نطاق التجهيز والعرض المكتوب" : "Scoped in the written offer";
-  const labels = ar ? ["الرد الصوتي بالذكاء الاصطناعي على مدار الساعة", "واتساب وتيليجرام ودردشة الموقع", "بناء الوكيل وقاعدة المعرفة", "سجل العملاء وصندوق الوارد المشترك", "أتمتة سير العمل", "تقارير المكالمات والملخصات وتحليل المشاعر", "إشراف مباشر: استماع وتوجيه واستلام المكالمة", "أصوات العلامة المستنسخة", "تكامل الأنظمة الخارجية", "تجهيز الأرقام وربط خطك"] : ["24/7 AI voice answering", "WhatsApp, Telegram and website chat", "Agent builder and knowledge base", "Customer history and shared inbox", "Workflow automation", "Call reports, summaries and sentiment", "Live supervision: listen, whisper and take over", "Cloned brand voices", "External system integrations", "Number provisioning and line connection"];
-  const voices = key === "essential" ? (ar ? "غير مشمول — تتوفر الأصوات الجاهزة" : "Not included — standard voices available") : key === "growth" ? "1" : key === "expansion" ? "3" : quote;
-  return labels.map((label, index) => ({ key: `feature-${index}`, label, value: index === 7 ? voices : index >= 8 ? quote : available }));
+  const t = (en: string, arabic: string) => ar ? arabic : en;
+  const yes = t("Included", "مشمول");
+  const no = t("Not included", "غير مشمول");
+  const quote = t("Written agreement", "حسب العرض المكتوب");
+  const index = ({ essential: 0, growth: 1, expansion: 2 } as Record<string, number>)[key] ?? 3;
+  const rows = [
+    [t("24/7 AI answering, builder & knowledge base", "رد آلي على مدار الساعة وبناء الوكيل وقاعدة المعرفة"), [yes, yes, yes, yes]],
+    [t("Text channels", "القنوات النصية"), [t("Website chat", "دردشة الموقع"), t("Website, WhatsApp & Telegram", "الموقع وواتساب وتيليجرام"), t("Website, WhatsApp & Telegram", "الموقع وواتساب وتيليجرام"), quote]],
+    [t("Customer history & human handoff", "سجل العملاء والتحويل لموظف"), [yes, yes, yes, yes]],
+    [t("Shared team inbox", "صندوق وارد مشترك للفريق"), [no, yes, yes, yes]],
+    [t("Active automated workflows", "مسارات أتمتة نشطة"), [no, "3", "15", quote]],
+    [t("Recordings, transcripts & summaries", "التسجيلات والنصوص والملخصات"), [yes, yes, yes, yes]],
+    [t("Reporting", "التقارير"), [t("Basic usage reports", "تقارير الاستخدام الأساسية"), t("Performance & sentiment", "الأداء وتحليل المشاعر"), t("Performance & sentiment across branches", "الأداء وتحليل المشاعر عبر الفروع"), quote]],
+    [t("Live supervision", "الإشراف المباشر"), [no, t("Listen", "استماع"), t("Listen, whisper & take over", "استماع وتوجيه واستلام المكالمة"), quote]],
+    [t("Cloned brand voices", "أصوات العلامة المستنسخة"), [t("Standard voices only", "الأصوات الجاهزة فقط"), "1", "3", quote]],
+    [t("External integrations", "تكامل الأنظمة الخارجية"), [no, t("Quoted add-on", "إضافة بعرض سعر"), t("Eligible; setup quoted", "متاح؛ التجهيز بعرض سعر"), quote]],
+    [t("API access", "الوصول إلى API"), [no, no, t("Scoped access; limits in offer", "وصول محدد؛ الحدود في العرض"), quote]],
+    [t("Account manager & contractual SLA", "مدير حساب واتفاقية مستوى الخدمة"), [no, no, no, quote]],
+    [t("Number provisioning & line connection", "تجهيز الأرقام وربط الخط"), [quote, quote, quote, quote]],
+  ] as const;
+  return rows.map(([label, values], i) => ({ key: `feature-${i}`, label, value: values[index] }));
+}
+
+export function planUpgradeSummary(key: string, locale: Locale) {
+  const ar = locale === "ar";
+  const copy = {
+    essential: ar ? ["رد صوتي ودردشة الموقع", "تقارير أساسية وتحويل لموظف"] : ["Voice answering and website chat", "Basic reports and human handoff"],
+    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وصوت مستنسخ واحد وإشراف بالاستماع"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, 1 cloned voice and supervisor listening"],
+    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة و3 أصوات مستنسخة", "تقارير الفروع والتوجيه والاستلام ووصول API محدد"] : ["Everything in Growth, plus 15 active workflows and 3 cloned voices", "Branch reporting, whisper/takeover and scoped API access"],
+    enterprise: ar ? ["متطلبات توسّع مخصصة بعرض مكتوب", "مدير حساب واتفاقية خدمة وتكاملات حسب الاتفاق"] : ["Custom scale requirements in a written offer", "Account management, SLA and integrations by agreement"],
+  };
+  return copy[key as keyof typeof copy] ?? copy.enterprise;
 }

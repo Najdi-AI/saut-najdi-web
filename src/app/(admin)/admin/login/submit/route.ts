@@ -34,8 +34,8 @@ export async function POST(request: Request): Promise<Response> {
   return redirectTo(
     "/admin/blog",
     [
-      // The cookie holds a HASH of the key, so a leaked cookie cannot be
-      // replayed against anything else using that secret.
+      // Each authenticated bearer token has a fresh nonce and server expiry.
+      // The key itself never enters the cookie.
       `${ADMIN_COOKIE}=${sessionToken(expected)}`,
       "HttpOnly",
       "Secure",

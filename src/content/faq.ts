@@ -1,3 +1,4 @@
+import { billingTerms } from "@/content/billingTerms";
 import type { FaqItem } from "@/lib/schema";
 import type { Locale } from "@/lib/i18n";
 
@@ -126,9 +127,18 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       id: "pricing",
       group: "الأسعار والبداية",
       items: [
+        { q: "كيف تُحتسب النقاط؟", a: billingTerms.ar.units },
+        { q: "ماذا يحصل عند نفاد النقاط؟", a: billingTerms.ar.zero },
+        { q: "كيف أزيد حصتي؟", a: billingTerms.ar.more },
+        { q: "كم أسعار حزم النقاط؟", a: billingTerms.ar.packs },
+        { q: "هل يوجد خصم سنوي؟", a: billingTerms.ar.annual },
+        { q: "ما حصة التجربة؟", a: billingTerms.ar.trial },
+        { q: "كيف أطلب التجهيز؟", a: billingTerms.ar.setup },
+        { q: "ما حدود استنساخ الصوت؟", a: billingTerms.ar.cloning },
+        { q: "هل توفرون خطاً هاتفياً؟", a: billingTerms.ar.byoc },
         {
           q: "كم تكلفة الوكيل الصوتي في السعودية؟",
-          a: "باقاتنا الشهرية معلنة: أساسي 990 ريال مع 9,000 رصيد، نمو 2,900 ريال مع 29,000 رصيد، وتوسّع 6,900 ريال مع 76,666 رصيد. الأسعار لا تشمل ضريبة القيمة المضافة. الدقيقة الصوتية 10 أرصدة والمحادثة النصية خلال 24 ساعة 4 أرصدة. رسوم التجهيز تُوضح في عرض مكتوب بعد العرض التعريفي، وأسعار الاستخدام الإضافي في صفحة الباقات.",
+          a: "باقاتنا الشهرية معلنة: أساسي 990 ريال مع 9,000 نقطة، نمو 2,900 ريال مع 29,000 نقطة، وتوسّع 6,900 ريال مع 76,666 نقطة. الأسعار لا تشمل ضريبة القيمة المضافة. الدقيقة الصوتية 10 نقاط والمحادثة النصية خلال 24 ساعة 4 نقاط. رسوم التجهيز تُوضح في عرض مكتوب بعد العرض التعريفي، ولا توجد رسوم تجاوز للحصة.",
         },
         {
           q: "كيف أبدأ؟",
@@ -140,7 +150,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "عندكم رقم سعودي أتصل عليه وأجرب؟",
-          a: "صوت نجدي ما ينشر رقماً سعودياً للتجربة اليوم، لأن تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات وما نعطي وعداً بتاريخ ما نتحكم فيه. ابدأ بالعرض التعريفي: نشغّل الوكيل حي وتسمعه بلهجتك، ثم نرتّب تجربة 14 يوماً بحدود الاستخدام المنشورة.",
+          a: "صوت نجدي ما ينشر رقماً سعودياً للتجربة اليوم، لأن تفعيل الأرقام يمر بإجراءات الجهات التنظيمية للاتصالات وما نعطي وعداً بتاريخ ما نتحكم فيه. ابدأ بالعرض التعريفي: نشغّل الوكيل حي وتسمعه بلهجتك، ثم نرتّب تجربة 14 يوماً بحصة 1,000 نقطة مشتركة.",
         },
       ],
     },
@@ -244,9 +254,18 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
       id: "pricing",
       group: "Pricing & getting started",
       items: [
+        { q: "How are credits counted?", a: billingTerms.en.units },
+        { q: "What happens at zero credits?", a: billingTerms.en.zero },
+        { q: "How can I add credits?", a: billingTerms.en.more },
+        { q: "What do credit packs cost?", a: billingTerms.en.packs },
+        { q: "Is there an annual discount?", a: billingTerms.en.annual },
+        { q: "What does the trial include?", a: billingTerms.en.trial },
+        { q: "How do I request setup?", a: billingTerms.en.setup },
+        { q: "What are the voice cloning limits?", a: billingTerms.en.cloning },
+        { q: "Do you provide a phone line?", a: billingTerms.en.byoc },
         {
           q: "How much does an AI voice agent cost in Saudi Arabia?",
-          a: "Our monthly plans are public: Essential SAR 990 with 9,000 credits, Growth SAR 2,900 with 29,000 credits, and Expansion SAR 6,900 with 76,666 credits. Prices exclude VAT. A call minute uses 10 credits; a billable 24-hour text conversation uses 4. The pricing page shows extra-usage rates, and setup is stated in a written offer after the demo.",
+          a: "Our monthly plans are public: Essential SAR 990 with 9,000 credits, Growth SAR 2,900 with 29,000 credits, and Expansion SAR 6,900 with 76,666 credits. Prices exclude VAT. A call minute uses 10 credits; a billable 24-hour text conversation uses 4. There are no overage charges; setup is quoted after the demo.",
         },
         {
           q: "How do I start?",
@@ -258,7 +277,7 @@ export const faqGroups: Record<Locale, FaqGroup[]> = {
         },
         {
           q: "Is there a Saudi number I can call to try it?",
-          a: "Saut Najdi doesn't publish a Saudi trial number today, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. Start with an intro demo: we run the agent live, you hear it in your dialect, and we arrange the 14-day trial with its published usage caps.",
+          a: "Saut Najdi doesn't publish a Saudi trial number today, because number activation runs through Saudi telecom regulatory steps and we won't promise a date we don't control. Start with an intro demo: we run the agent live, you hear it in your dialect, and we arrange the 14-day trial with 1,000 shared credits.",
         },
       ],
     },

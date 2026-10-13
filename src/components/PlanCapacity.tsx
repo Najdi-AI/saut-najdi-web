@@ -11,13 +11,13 @@ const capacity = {
 
 export const capacityCopy = {
   ar: {
-    title: "فريقك وسعة التشغيل", users: "مستخدمون من فريقك", agents: "وكلاء ذكاء اصطناعي", lines: "مكالمات متزامنة", lineCapacity: "حسب سعة خطك أو الرقم المطلوب", recordings: "حفظ التسجيلات", records: "النصوص والملخصات وسجل العملاء", active: "طوال مدة الاشتراك", support: "الرد على طلبات الدعم", quote: "حسب العقد", day: "يوماً",
-    note: "المستخدم حساب لموظف من فريقك، والوكيل مساعد ذكاء اصطناعي تُعدّه لنشاطك. تعتمد المكالمات المتزامنة على سعة خطك الهاتفي أو السعة المفعّلة للرقم المطلوب، وتُؤكد في العرض المكتوب.",
+    title: "فريقك وسعة التشغيل", users: "مستخدمون من فريقك", agents: "وكلاء ذكاء اصطناعي", lines: "مكالمات متزامنة", lineCapacity: "حسب سعة خطك أو مقسمك الحالي", recordings: "حفظ التسجيلات", records: "النصوص والملخصات وسجل العملاء", active: "طوال مدة الاشتراك", support: "الرد على طلبات الدعم", quote: "حسب العقد", day: "يوماً",
+    note: "المستخدم حساب لموظف من فريقك، والوكيل مساعد ذكاء اصطناعي تُعدّه لنشاطك. تعتمد المكالمات المتزامنة على سعة خطك الهاتفي أو سعة مقسمك الحالي، وتُؤكد في العرض المكتوب.",
     draft: "مدة حفظ التسجيلات حسب الباقة: 90 يوماً لأساسي، و180 يوماً لنمو، و365 يوماً لتوسّع، ولمؤسسات حسب العقد. تُؤكد إعدادات الاحتفاظ عند التفعيل. للنصوص والملخصات وسجل العملاء مدد مستقلة.",
   },
   en: {
-    title: "Your team and operating capacity", users: "Team users", agents: "AI agents", lines: "Simultaneous calls", lineCapacity: "Based on your line or ordered number capacity", recordings: "Recording retention", records: "Transcripts, summaries & customer records", active: "During the subscription", support: "Support response", quote: "By contract", day: "days",
-    note: "A user is a team member's account; an AI agent is an assistant configured for your business. Simultaneous calls depend on your existing phone line or the capacity provisioned with your ordered number, confirmed in the written offer.",
+    title: "Your team and operating capacity", users: "Team users", agents: "AI agents", lines: "Simultaneous calls", lineCapacity: "Based on your existing line or PBX", recordings: "Recording retention", records: "Transcripts, summaries & customer records", active: "During the subscription", support: "Support response", quote: "By contract", day: "days",
+    note: "A user is a team member's account; an AI agent is an assistant configured for your business. Simultaneous calls depend on your existing phone line or PBX capacity, confirmed in the written offer.",
     draft: "Recording retention: Essential 90 days, Growth 180 days, Expansion 365 days; Enterprise by contract. Retention settings are confirmed at activation. Transcripts, summaries and customer records have separate terms.",
   },
 } as const;
@@ -63,11 +63,11 @@ export function planFeatureRows(key: string, locale: Locale) {
     [t("Recordings, transcripts & summaries", "التسجيلات والنصوص والملخصات"), [yes, yes, yes, yes]],
     [t("Reporting", "التقارير"), [t("Basic usage reports", "تقارير الاستخدام الأساسية"), t("Performance & sentiment", "الأداء وتحليل المشاعر"), t("Performance & sentiment across branches", "الأداء وتحليل المشاعر عبر الفروع"), quote]],
     [t("Live supervision", "الإشراف المباشر"), [no, t("Listen & take over", "استماع واستلام المكالمة"), t("Listen, whisper & take over", "استماع وتوجيه واستلام المكالمة"), quote]],
-    [t("Voice cloning", "استنساخ الصوت"), [t("Standard voices only", "الأصوات الجاهزة فقط"), t("2 credits / new voice", "2 رصيد لكل صوت جديد"), t("2 credits / new voice", "2 رصيد لكل صوت جديد"), quote]],
+    [t("Voice cloning", "استنساخ الصوت"), [t("Standard voices only", "الأصوات الجاهزة فقط"), t("2 credits / new voice; 1 active clone", "نقطتان لكل صوت جديد؛ صوت نشط واحد"), t("2 credits / new voice; 3 active clones", "نقطتان لكل صوت جديد؛ 3 أصوات نشطة"), quote]],
     [t("External integrations", "تكامل الأنظمة الخارجية"), [no, t("Quoted add-on", "إضافة بعرض سعر"), t("Eligible; setup quoted", "متاح؛ التجهيز بعرض سعر"), quote]],
     [t("API access", "الوصول إلى API"), [no, no, t("Scoped access; limits in offer", "وصول محدد؛ الحدود في العرض"), quote]],
     [t("Account manager & contractual SLA", "مدير حساب واتفاقية مستوى الخدمة"), [no, no, no, quote]],
-    [t("Number provisioning & line connection", "تجهيز الأرقام وربط الخط"), [quote, quote, quote, quote]],
+    [t("Bring your own line / PBX (BYOC)", "ربط خطك أو مقسمك الحالي (BYOC)"), [quote, quote, quote, quote]],
   ] as const;
   return rows.map(([label, values], i) => ({ key: `feature-${i}`, label, value: values[index] }));
 }
@@ -76,8 +76,8 @@ export function planUpgradeSummary(key: string, locale: Locale) {
   const ar = locale === "ar";
   const copy = {
     essential: ar ? ["رد صوتي ودردشة الموقع", "تقارير أساسية وتحويل لموظف"] : ["Voice answering and website chat", "Basic reports and human handoff"],
-    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وإشراف بالاستماع واستلام المكالمة", "استنساخ الصوت 2 رصيد لكل صوت جديد"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, supervisor listening and takeover", "Voice cloning: 2 credits per new voice"],
-    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة", "تقارير الفروع والتوجيه ووصول API محدد", "استنساخ الصوت 2 رصيد لكل صوت جديد"] : ["Everything in Growth, plus 15 active workflows", "Branch reporting, whisper and scoped API access", "Voice cloning: 2 credits per new voice"],
+    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وإشراف بالاستماع واستلام المكالمة", "استنساخ الصوت: نقطتان لكل صوت جديد"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, supervisor listening and takeover", "Voice cloning: 2 credits per new voice"],
+    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة", "تقارير الفروع والتوجيه ووصول API محدد", "استنساخ الصوت: نقطتان لكل صوت جديد"] : ["Everything in Growth, plus 15 active workflows", "Branch reporting, whisper and scoped API access", "Voice cloning: 2 credits per new voice"],
     enterprise: ar ? ["متطلبات توسّع مخصصة بحسب العقد", "مدير حساب واتفاقية خدمة وتكاملات حسب الاتفاق"] : ["Custom scale requirements in a written offer", "Account management, SLA and integrations by agreement"],
   };
   return copy[key as keyof typeof copy] ?? copy.enterprise;

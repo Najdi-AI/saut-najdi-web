@@ -12,7 +12,7 @@
 export const updated: Record<string, string> = {
   // 2026-08-11: the closing booking section was replaced with the BookingDesk
   // panel — a new visible section with its own copy, not a restyle.
-  home: "2026-08-11",
+  home: "2026-10-13",
   "how-it-works": "2026-08-06",
   "product/human-handoff": "2026-08-06",
   // Wave 2 — first publication date of the nine pages in spec P2-22.
@@ -41,9 +41,9 @@ export const updated: Record<string, string> = {
   // The blog INDEX only. Individual posts date themselves from their own
   // `date` field in content/blog.ts — see the note in app/sitemap.ts.
   blog: "2026-08-16",
-  faq: "2026-08-10",
-  pricing: "2026-09-27",
-  "refund-policy": "2026-09-27",
+  faq: "2026-10-13",
+  pricing: "2026-10-13",
+  "refund-policy": "2026-10-13",
   privacy: "2026-08-10",
   terms: "2026-09-27",
   dpa: "2026-08-10",

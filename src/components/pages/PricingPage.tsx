@@ -1,3 +1,4 @@
+import { billingTerms } from "@/content/billingTerms";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
@@ -13,29 +14,26 @@ import { WorkflowComparison } from "@/components/WorkflowComparison";
 const copy = {
   ar: {
     eyebrow: "الباقات والأسعار",
-    title: "رصيد واحد للمكالمات والمحادثات",
-    intro: "اختر باقتك الشهرية واستخدم رصيدها للمكالمات الصوتية أو المحادثات النصية أو مزيج منهما. ابدأ بعرض تعريفي لنحدد التجهيز المناسب لمنشأتك.",
+    title: "حصة واحدة للمكالمات والمحادثات",
+    intro: "اختر باقتك الشهرية واستخدم حصتها من النقاط للمكالمات الصوتية أو المحادثات النصية أو مزيج منهما. ابدأ بعرض تعريفي لنحدد التجهيز المناسب لمنشأتك.",
     vat: "الأسعار المعروضة بالريال السعودي ولا تشمل ضريبة القيمة المضافة 15%. تُضاف الضريبة في الفاتورة الضريبية عند الدفع بعد العرض التعريفي والعرض المكتوب.",
     seller: "الجهة البائعة",
     vatNumber: "الرقم الضريبي",
     plan: "الباقة",
     fit: {
-      essential: "بداية برصيد شهري مشترك",
-      growth: "رصيد أكبر لنمو الاستخدام",
+      essential: "بداية بحصة نقاط شهرية مشتركة",
+      growth: "حصة أكبر لنمو الاستخدام",
       expansion: "للاستخدام الشهري الأعلى",
       enterprise: "التفاصيل حسب العقد",
     },
     monthly: "السعر الشهري الأساسي",
-    credits: "الرصيد الشهري المشترك",
-    creditsPerSar: "رصيد لكل ريال",
-    creditsPerSarHelp: "الرصيد الشهري المشمول مقسوماً على السعر الشهري الأساسي قبل الضريبة، مع تقريب الناتج إلى منزلة عشرية واحدة.",
+    credits: "حصة النقاط الشهرية المشتركة",
+    creditsPerSar: "نقاط لكل ريال",
+    creditsPerSarHelp: "عدد النقاط الشهري المشمول مقسوماً على السعر الشهري الأساسي قبل الضريبة، مع تقريب الناتج إلى منزلة عشرية واحدة.",
     voice: "إذا استُخدم كله للمكالمات",
     text: "إذا استُخدم كله للمحادثات",
     valueVoice: "سعر الدقيقة ضمن الباقة",
     valueText: "سعر المحادثة ضمن الباقة",
-    extraVoice: "الدقيقة الإضافية بعد نفاد الرصيد",
-    extraText: "المحادثة الإضافية بعد نفاد الرصيد",
-    extraHelp: "هذا السعر أعلى 10% من سعر الاستخدام ضمن الباقة، ويُحتسب بعد نفاد الرصيد الشهري المشترك. يظهر في الفاتورة التالية ويُسوّى من رصيد الاستخدام المدفوع مقدماً إن وُجد.",
     sar: "ر.س",
     min: "دقيقة",
     conversation: "محادثة",
@@ -44,27 +42,21 @@ const copy = {
     custom: "حسب العقد",
     enterprise: "مؤسسات",
     book: "احجز عرضاً",
-    mathTitle: "كيف يُحسب الرصيد؟",
-    math: "مكالمة: 1 دقيقة = 10 رصيد؛ نص: 1 محادثة (24 ساعة) = 4 رصيد؛ استنساخ الصوت: 1 صوت جديد = 2 رصيد (نمو/توسّع)؛ النص والردود والملخص = مشمولة في المكالمة.",
-    example: "مثال: 3 دقائق مكالمات ومحادثتان نصيتان = 3 × 10 + 2 × 4 = 38 رصيد.",
-    exclusive: "الأرقام في صفَّي الدقائق والمحادثات تفترض استخدام الرصيد كله لنوع واحد. عند مزج النوعين، يكون الإجمالي حسب الرصيد المستهلك فعلياً.",
-    unitHelp: "السعر المرجعي المعتمد لهذا النوع من الاستخدام ضمن الباقة. يُخصم الاستخدام من الرصيد المشمول، ولا تُضاف رسوم استخدام مستقلة ما دام الرصيد متاحاً.",
-    inPlanNote: "أسعار الاستخدام ضمن الباقة أسعار مرجعية، ولا تُضاف إلى الاشتراك ما دام الرصيد المشترك متاحاً. تفترض هذه القيم استخدام الرصيد الشهري بالكامل.",
-    callCostTitle: "ماذا تغطي أرصدة المكالمة؟",
-    callCost: "دقيقة مكالمة واحدة = 10 رصيد، وتشمل معالجة تحويل الكلام إلى نص للمحادثة، وردود الوكيل، ومعالجة ملخص المكالمة عند إنشائه. لا يوجد خصم أرصدة مستقل لكل خطوة من هذه الخطوات.",
+    mathTitle: "كيف تُحتسب النقاط؟",
+    math: "مكالمة: 1 دقيقة = 10 نقاط؛ نص: 1 محادثة (24 ساعة) = 4 نقاط؛ استنساخ الصوت: 1 صوت جديد = نقطتان (نمو/توسّع)؛ النص والردود والملخص = مشمولة في المكالمة.",
+    example: "مثال: 3 دقائق مكالمات ومحادثتان نصيتان = 3 × 10 + 2 × 4 = 38 نقطة.",
+    exclusive: "الأرقام في صفَّي الدقائق والمحادثات تفترض استخدام حصة النقاط كلها لنوع واحد. عند مزج النوعين، يكون الإجمالي حسب النقاط المستهلكة فعلياً.",
+    unitHelp: "السعر المرجعي المعتمد لهذا النوع من الاستخدام ضمن الباقة. يُخصم الاستخدام من حصة النقاط المشمولة، ولا تُضاف رسوم استخدام مستقلة ما دامت حصة النقاط متاحة.",
+    inPlanNote: "أسعار الاستخدام ضمن الباقة أسعار مرجعية، ولا تُضاف إلى الاشتراك ما دامت حصة النقاط المشتركة متاحة. تفترض هذه القيم استخدام حصة النقاط الشهرية بالكامل.",
+    callCostTitle: "ماذا تغطي نقاط المكالمة؟",
+    callCost: "دقيقة مكالمة واحدة = 10 نقاط، وتشمل معالجة تحويل الكلام إلى نص للمحادثة، وردود الوكيل، ومعالجة ملخص المكالمة عند إنشائه. لا يوجد خصم نقاط مستقل لكل خطوة من هذه الخطوات.",
     callCostNote: "نص المكالمة ينتج من تحويل الكلام إلى نص؛ ويُستخدم توليد النص في ردود الوكيل والملخص. توضح الفاتورة استخدام المكالمات والمحادثات، لا تكلفة كل مزوّد تقني على حدة.",
     conditionTitle: "قبل الاشتراك",
-    conditions: [
-      "تبدأ الخطوة الأولى بعرض تعريفي. نرسل بعده عرضاً مكتوباً يوضح رسوم التجهيز حسب احتياج منشأتك وتاريخ التفعيل.",
-      "بعد نفاد الرصيد تُحتسب الدقائق والمحادثات الإضافية بسعر أعلى 10% من سعر الاستخدام ضمن الباقة، وتُبيّن في الفاتورة التالية. يُستخدم رصيد الاستخدام المدفوع مقدماً لتسوية هذه الرسوم إن وُجد، ولا تُحصّل مرتين. يوضح العرض المكتوب أي رسوم إضافية قبل الدفع.",
-      "ينتهي الرصيد المشمول بنهاية فترة الفوترة الشهرية ولا يُستبدل بنقد. يسري إلغاء الاشتراك في نهاية الشهر الذي يصلنا فيه طلب مكتوب من مدير الحساب.",
-      "الحد الأدنى لشحن رصيد الاستخدام 250 ر.س، وصلاحيته 12 شهراً من تاريخ الدفع. توضح سياسة الاسترداد والإلغاء الحالات التي يُرد فيها الرصيد غير المستخدم.",
-    ],
     policy: "سياسة الاسترداد والإلغاء",
     contact: "تواصل معنا",
     tableLabel: "مقارنة الباقات الشهرية",
     fullDetails: "جدول المقارنة الكامل",
-    usageDetail: "التكلفة والاستخدام الإضافي",
+    usageDetail: "شروط النقاط والقيم المرجعية",
     swipe: "مرّر الجدول أفقياً لمقارنة بقية الباقات.",
   },
   en: {
@@ -89,9 +81,6 @@ const copy = {
     text: "If used only for conversations",
     valueVoice: "Voice minute rate within plan",
     valueText: "Conversation rate within plan",
-    extraVoice: "Extra voice minute after credits run out",
-    extraText: "Extra conversation after credits run out",
-    extraHelp: "This rate is 10% above the in-plan usage rate and applies after the shared monthly pool runs out. It appears on the next invoice and is settled against any prepaid usage balance, if available.",
     sar: "SAR",
     min: "minutes",
     conversation: "conversations",
@@ -110,17 +99,11 @@ const copy = {
     callCost: "One AI call minute = 10 credits. This covers speech-to-text processing for the call transcript, agent replies, and post-call summary processing when a summary is generated. These steps do not each consume a separate credit unit.",
     callCostNote: "Speech-to-text creates the transcript; text generation powers agent replies and the summary. Invoices show call and conversation usage, not separate technology-provider costs.",
     conditionTitle: "Before you subscribe",
-    conditions: [
-      "Start with a demo. We then send a written offer showing the setup fee for your needs and the activation date.",
-      "After the pool runs out, extra voice minutes and conversations cost 10% more than the in-plan usage rates and are itemized on the next invoice. Any prepaid usage balance is applied to those charges, so the same usage is not collected twice. The written offer states any other charges before payment.",
-      "Included credits expire at the end of the monthly billing period and cannot be redeemed for cash. Cancellation takes effect at the end of the month in which we receive a written request from the account administrator.",
-      "Prepaid usage balance has a minimum top-up of SAR 250 and is valid for 12 months from payment. The refund policy explains when unused balance is returned.",
-    ],
     policy: "Refund & Cancellation Policy",
     contact: "Contact us",
     tableLabel: "Monthly plan comparison",
     fullDetails: "Full plan comparison",
-    usageDetail: "Costs and extra usage",
+    usageDetail: "Credit terms and reference values",
     swipe: "Scroll the table sideways to compare the other plans.",
   },
 } as const;
@@ -131,10 +114,11 @@ function Amount({ value }: { value: number }) {
 
 export function PricingPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
+  const terms = billingTerms[locale];
   const creditsPerSar = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1, minimumFractionDigits: 1 });
   const columns = [
-    ...plans.map((p) => ({ key: p.key, label: locale === "ar" ? p.ar : p.en, fit: t.fit[p.key], credits: p.credits, monthlySar: p.monthlySar, withinVoiceSar: p.withinVoiceSar, withinTextSar: p.withinTextSar, extraVoiceSar: p.extraVoiceSar, extraTextSar: p.extraTextSar })),
-    { key: "enterprise", label: t.enterprise, fit: t.fit.enterprise, credits: null, monthlySar: null, withinVoiceSar: null, withinTextSar: null, extraVoiceSar: null, extraTextSar: null },
+    ...plans.map((p) => ({ key: p.key, label: locale === "ar" ? p.ar : p.en, fit: t.fit[p.key], credits: p.credits, monthlySar: p.monthlySar, withinVoiceSar: p.withinVoiceSar, withinTextSar: p.withinTextSar })),
+    { key: "enterprise", label: t.enterprise, fit: t.fit.enterprise, credits: null, monthlySar: null, withinVoiceSar: null, withinTextSar: null },
   ];
   type Column = typeof columns[number];
   const monthlyPrice = (p: Column) => p.monthlySar === null ? t.custom : <><Amount value={p.monthlySar} /> <span className="text-body-lg font-medium">{t.sar}</span></>;
@@ -148,8 +132,6 @@ export function PricingPage({ locale }: { locale: Locale }) {
   const detailRows: PricingRow[] = [
     { key: "valueVoice", label: t.valueVoice, detail: t.unitHelp, value: (p: Column) => p.withinVoiceSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.withinVoiceSar)} {t.perMinute}</span> },
     { key: "valueText", label: t.valueText, detail: t.unitHelp, value: (p: Column) => p.withinTextSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.withinTextSar)} {t.perConversation}</span> },
-    { key: "extraVoice", label: t.extraVoice, detail: t.extraHelp, value: (p: Column) => p.extraVoiceSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.extraVoiceSar)} {t.perMinute}</span> },
-    { key: "extraText", label: t.extraText, detail: t.extraHelp, value: (p: Column) => p.extraTextSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.extraTextSar)} {t.perConversation}</span> },
   ];
   const renderRow = (row: PricingRow, prominent: boolean) => (
     <tr key={row.key} className="border-t border-line">
@@ -178,8 +160,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
       <section className="container pb-8">
         <div className="rounded-2xl border border-line bg-surface p-6">
           <h2 className="text-h3">{locale === "ar" ? "تجربة 14 يوماً" : "14-day trial"}</h2>
-          <p className="mt-3 text-body-lg">{locale === "ar" ? "5,000 رصيد مشترك · حد أقصى 400 دقيقة مكالمات و250 محادثة نصية" : "5,000 shared credits · Maximum 400 voice minutes and 250 text conversations"}</p>
-          <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "ابدأ بحجز عرض تعريفي لترتيب التجربة. تنتهي التجربة بعد 14 يوماً؛ وحدود الاستخدام لكل نوع سارية مع الرصيد المشترك." : "Book a demo to arrange your trial. The trial ends after 14 days; each usage cap applies alongside the shared credit pool."}</p>
+          <p className="mt-3 text-body-lg">{terms.trial}</p>
         </div>
       </section>
       <section className="container pb-8">
@@ -209,7 +190,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{capacityCopy[locale].title}</th></tr>
               {planCapacityRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: row.key === "recordings" ? capacityCopy[locale].draft : capacityCopy[locale].note, value: (p) => planCapacityRows(p.key, locale)[index].value }, false))}
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{locale === "ar" ? "ميّزات المنصة" : "Platform features"}</th></tr>
-              {planFeatureRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: locale === "ar" ? "يخضع استخدام المكالمات والمحادثات النصية لقواعد الرصيد الموضحة أعلاه. يوضح العرض المكتوب نطاق الربط ورسوم التجهيز وأي رسوم خارجية." : "Call and text usage follows the credit rules shown above. The written offer specifies integration scope, setup and any external charges.", value: (p) => planFeatureRows(p.key, locale)[index].value }, false))}
+              {planFeatureRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: locale === "ar" ? "يخضع استخدام المكالمات والمحادثات النصية لقواعد حصة النقاط الموضحة أعلاه. يوضح العرض المكتوب نطاق الربط ورسوم التجهيز وأي رسوم خارجية." : "Call and text usage follows the credit rules shown above. The written offer specifies integration scope, setup and any external charges.", value: (p) => planFeatureRows(p.key, locale)[index].value }, false))}
               <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{t.usageDetail}</th></tr>
               {detailRows.map((row) => renderRow(row, false))}
             </tbody>
@@ -218,12 +199,12 @@ export function PricingPage({ locale }: { locale: Locale }) {
         </details>
         <p className="mt-4 text-body leading-relaxed text-ink/70">{t.exclusive}</p>
         <p className="mt-2 text-body leading-relaxed text-ink/70">{t.inPlanNote}</p>
-        <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "قيمة الرصيد: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب الرصيد الشهري إلى عدد صحيح. أسعار مؤسسات ورصيدها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
+        <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "قيمة النقطة: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب عدد النقاط الشهري إلى عدد صحيح. أسعار مؤسسات وحصتها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
         <p className="mt-2 text-body text-ink/70">{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
       </section>
       <section className="container grid gap-8 py-10 lg:grid-cols-2">
-        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 10) + (2 × 4) = 38 {locale === "ar" ? "رصيد" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "رصيد واحد مشترك. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
-        <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{t.conditions.map((c) => <li key={c}>{c}</li>)}</ul></div>
+        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><p className="mt-4 text-body leading-relaxed">{terms.units}</p><p className="mt-3 text-body">{terms.cloning}</p><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 10) + (2 × 4) = 38 {locale === "ar" ? "نقطة" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "حصة واحدة مشتركة. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
+        <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{[terms.zero, terms.more, terms.packs, terms.annual, terms.expiry, terms.setup, terms.byoc].map((c) => <li key={c}>{c}</li>)}</ul></div>
       </section>
       <WorkflowComparison locale={locale} />
       <section className="container py-16 text-center">

@@ -5,8 +5,8 @@ import type { LegalDoc } from "@/content/legal";
 export const refundPolicy: Record<Locale, LegalDoc> = {
   "ar": {
     "title": "سياسة الاسترداد والإلغاء",
-    "updated": "آخر تحديث: سبتمبر 2026",
-    "intro": "توضح هذه السياسة كيف تُلغي منشأتك اشتراكها في صوت نجدي، ومتى يُسترد ما دفعته وكيف. تنطبق على اشتراكات المنشآت ورصيد الاستخدام المدفوعين لشركة صوت نجدي. إذا تضمنت اتفاقية الاشتراك الموقعة مع منشأتك حكماً مختلفاً، فالاتفاقية هي المرجع.",
+    "updated": "آخر تحديث: 13 أكتوبر 2026",
+    "intro": "توضح هذه السياسة كيف تُلغي منشأتك اشتراكها في صوت نجدي، ومتى يُسترد ما دفعته وكيف. تنطبق على اشتراكات المنشآت ورصيد الاستخدام المدفوعين لشركة صوت نجدي. إذا تضمنت اتفاقية الاشتراك الموقعة مع منشأتك حكماً مختلفاً، فالاتفاقية هي المرجع. باقات النقاط الحالية لا تتضمن محفظة ريال مسبقة الدفع. أحكام الرصيد النقدي أدناه تخص الاتفاقيات السابقة التي تتضمنه فقط، ولا تغيّر حقوقها. أحكام الفوترة الشهرية والتجزئة والإلغاء والتخفيض واسترداد رسوم الاشتراك الواردة هنا تخص الاشتراكات الشهرية. تُؤكد شروط الفوترة السنوية أو مدد العقد الأخرى، بما فيها الإلغاء والتغيير والاسترداد، في اتفاقية مكتوبة قبل الدفع.",
     "sections": [
       {
         "h": "1. كيف تُحتسب الفوترة",
@@ -14,9 +14,9 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "تُفوتر رسوم الباقة مقدماً عن كل شهر، وتشمل رصيداً شهرياً مشتركاً للمكالمات والمحادثات. تخصم دقيقة المكالمة بالذكاء الاصطناعي 10 أرصدة، وتخصم المحادثة النصية القابلة للفوترة خلال 24 ساعة 4 أرصدة.",
-              "إذا بدأ الاشتراك خلال الشهر، تُحتسب رسوم الشهر الأول بعدد أيامه المتبقية، ويُمنح الرصيد الشهري المشمول كاملاً.",
-              "ما يتجاوز الرصيد الشهري المشمول يُفوتر بعد انتهاء الشهر على الفاتورة التالية، بأسعار باقتك.",
+              "للاشتراك الشهري، تُفوتر رسوم الباقة مقدماً عن كل شهر وتشمل حصة نقاط شهرية مشتركة للمكالمات والمحادثات. دقيقة المكالمة مع الذكاء الاصطناعي تستهلك 10 نقاط، والمحادثة النصية التي يرد فيها الذكاء الاصطناعي خلال نافذة 24 ساعة تستهلك 4 نقاط.",
+              "إذا بدأ اشتراك شهري خلال الشهر، تُحتسب رسوم الشهر الأول بعدد أيامه المتبقية، وتُمنح حصة النقاط الشهرية المشمولة كاملة.",
+              "باقات النقاط الحالية بلا رسوم تجاوز. عند نفاد الحصة تكتمل المكالمة الجارية، وتتوقف المكالمات والردود الآلية الجديدة حتى تتوفر نقاط؛ ويُؤكد تحويل المكالمات لفريقك أو البريد الصوتي قبل التفعيل.",
               "الأسعار بالريال السعودي، وتُضاف إليها ضريبة القيمة المضافة 15% في الفاتورة الضريبية.",
               "الدفع بالبطاقات البنكية (مدى والبطاقات الائتمانية) عبر بوابة الدفع «ميسّر»، أو بالتحويل البنكي."
             ]
@@ -28,7 +28,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
         "blocks": [
           {
             "kind": "paragraph",
-            "text": "إذا حصلت منشأتك على فترة تجريبية، فمدتها 14 يوماً، دون بطاقة ودون أي رسوم، وتنتهي تلقائياً. لا يوجد فيها ما يُلغى أو يُسترد."
+            "text": "التجربة 14 يوماً بحصة 1,000 نقطة، يفعّلها فريقنا بعد عرض تعريفي. تنتهي عند نفاد النقاط أو انقضاء المدة، بلا حدود منفصلة للدقائق والمحادثات، ودون بطاقة أو رسوم."
           }
         ]
       },
@@ -38,11 +38,11 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "يمكنك إلغاء الاشتراك في أي وقت بطلب مكتوب من مدير حساب المنشأة إلى billing@sautnajdi.ai.",
-              "يسري الإلغاء في نهاية الشهر الذي يصلنا فيه الطلب، وتستمر الخدمة حتى ذلك التاريخ.",
-              "لا تصدر فاتورة برسوم أي شهر بعد تاريخ سريان الإلغاء.",
-              "رسوم الشهر الجاري لا يُسترد منها ما يقابل الأيام المتبقية، إلا في الحالة 1 من البند 6.",
-              "الاستخدام الزائد عن الرصيد الشهري المشمول في الشهر الأخير يُفوتر في الفاتورة الختامية."
+              "يمكنك طلب إلغاء الاشتراك في أي وقت بطلب مكتوب من مدير حساب المنشأة إلى billing@sautnajdi.ai؛ ويعتمد تاريخ السريان على مدة اشتراكك واتفاقيتك.",
+              "للاشتراكات الشهرية، يسري الإلغاء في نهاية الشهر الذي يصلنا فيه الطلب، وتستمر الخدمة حتى ذلك التاريخ.",
+              "للاشتراكات الشهرية، لا تصدر فاتورة برسوم أي شهر بعد تاريخ سريان الإلغاء.",
+              "للاشتراكات الشهرية، لا يُسترد من رسوم الشهر الجاري ما يقابل الأيام المتبقية، إلا في الحالة 1 من البند 6.",
+              "لا تُضاف رسوم تجاوز لحصة النقاط في الفاتورة الختامية للباقات الحالية."
             ]
           }
         ]
@@ -53,16 +53,20 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "الترقية: تسري من أول الشهر الجاري، فيُحتسب الشهر كاملاً بسعر الباقة الجديدة ورصيدها الشهري، ويُفوتر الفرق.",
-              "التخفيض: يسري من بداية الشهر التالي، ولا يترتب عليه استرداد عن الشهر الجاري.",
+              "الترقية: تتطلب الدفع لتفعيل الباقة الجديدة. يوضح العرض المكتوب قيمة الفرق وتاريخ التفعيل.",
+              "تخفيض الاشتراك الشهري: يسري من بداية الشهر التالي، ولا يترتب عليه استرداد عن الشهر الجاري.",
               "تُرسل طلبات التغيير إلى billing@sautnajdi.ai، ويعتمدها فريقنا."
             ]
           }
         ]
       },
       {
-        "h": "5. رصيد الاستخدام",
+        "h": "5. الرصيد النقدي للاتفاقيات السابقة فقط",
         "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "هذا البند لا ينطبق على باقات النقاط الحالية. لزيادة النقاط، تواصل معنا لترقية مدفوعة أو حزمة لمرة واحدة؛ الحزمة صالحة أثناء الاشتراك النشط ولمدة أقصاها 12 شهراً. شروط شرائها واستردادها تُؤكد قبل الدفع."
+          },
           {
             "kind": "unordered",
             "items": [
@@ -86,11 +90,11 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "ordered",
             "items": [
-              "الفاتورة الأولى خلال 7 أيام من بدء الاشتراك: إذا طلبت الإلغاء خلال 7 أيام من بدء الاشتراك ولم تُستخدم الخدمة، أي لم يُرد عبر حساب منشأتك على أي مكالمة أو محادثة، نرد مبلغ الفاتورة الأولى كاملاً بإشعار دائن، ويُلغى الاشتراك.",
+              "الفاتورة الأولى للاشتراك الشهري خلال 7 أيام من بدء الاشتراك: إذا طلبت الإلغاء خلال 7 أيام من بدء الاشتراك ولم تُستخدم الخدمة، أي لم يُرد عبر حساب منشأتك على أي مكالمة أو محادثة، نرد مبلغ الفاتورة الأولى كاملاً بإشعار دائن، ويُلغى الاشتراك.",
               "الدفع المكرر: إذا دُفعت الفاتورة نفسها أكثر من مرة، يُرد المبلغ الزائد كاملاً.",
               "خطأ في الفوترة: إذا ثبت أن مبلغاً فُوتر دون استحقاق، نصحح الفاتورة بإشعار دائن، ونرد الفرق أو نخصمه من فاتورتك التالية حسب اختيارك.",
               "رصيد الاستخدام المتبقي عند انتهاء الاشتراك، وفق البند 5.",
-              "إنهاء الخدمة من جهتنا لسبب لا يعود إلى منشأتك: نرد رسوم أي فترة مدفوعة لم نقدم فيها الخدمة، مع رصيد الاستخدام المتبقي."
+              "للاشتراكات الشهرية، إنهاء الخدمة من جهتنا لسبب لا يعود إلى منشأتك: نرد رسوم أي فترة مدفوعة لم نقدم فيها الخدمة، مع رصيد الاستخدام المتبقي."
             ]
           },
           {
@@ -100,7 +104,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "رسوم الشهر الجاري، إلا في الحالة 1 أعلاه.",
+              "رسوم الشهر الجاري للاشتراكات الشهرية، إلا في الحالة 1 أعلاه.",
               "قيمة الاستخدام الذي تم فعلاً.",
               "رصيد الاستخدام المنتهية صلاحيته.",
               "رسوم الإعداد والتهيئة التي تُدفع مرة واحدة، بعد بدء العمل عليها."
@@ -170,8 +174,8 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
   },
   "en": {
     "title": "Refund & Cancellation Policy",
-    "updated": "Last updated: September 2026",
-    "intro": "This policy explains how a business cancels its Saut Najdi subscription, and when and how payments are refunded. It applies to business subscriptions and usage balance paid to SAUT NAJDI Company. Where the subscription agreement signed with your business says otherwise, the agreement prevails.",
+    "updated": "Last updated: 13 October 2026",
+    "intro": "This policy explains how a business cancels its Saut Najdi subscription, and when and how payments are refunded. It applies to business subscriptions and usage balance paid to SAUT NAJDI Company. Where the subscription agreement signed with your business says otherwise, the agreement prevails. Current credit plans do not include a prepaid SAR wallet. Monetary-balance terms below apply only to legacy agreements that include one, without changing their existing rights. The monthly billing, proration, cancellation, downgrade and subscription-fee refund clauses here apply to monthly subscriptions. Annual and other contracted billing terms, including cancellation, plan changes and refunds, are confirmed in a written agreement before payment.",
     "sections": [
       {
         "h": "1. How billing works",
@@ -179,9 +183,9 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "The plan fee is billed monthly in advance and includes a monthly shared credit pool for call minutes and conversations. One AI call minute uses 10 credits, and one billable 24-hour text conversation uses 4 credits.",
-              "If a subscription starts mid-month, the first month's fee is prorated by the remaining days, and the full monthly credit pool is granted for that month.",
-              "Usage above the monthly credit pool is billed after the month ends, on the next invoice, at your plan's rates.",
+              "For monthly subscriptions, the plan fee is billed monthly in advance and includes a shared monthly credit pool for calls and conversations. One AI call minute uses 10 credits, and a text conversation in which the AI replies during its 24-hour window uses 4 credits.",
+              "If a monthly subscription starts mid-month, the first month's fee is prorated by the remaining days, and the full monthly credit pool is granted for that month.",
+              "Current credit plans have no overage charges. At zero, a call in progress finishes and new AI calls and replies stop until credits are available; routing to your team or voicemail is confirmed before activation.",
               "Prices are in Saudi riyals (SAR); 15% VAT is added on the tax invoice.",
               "Payment is by bank card (mada and credit cards) through the Moyasar payment gateway, or by bank transfer."
             ]
@@ -193,7 +197,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
         "blocks": [
           {
             "kind": "paragraph",
-            "text": "If your business was given a pilot, it lasts 14 days, requires no card, carries no charge, and ends automatically. There is nothing to cancel or refund."
+            "text": "The trial provides 1,000 credits over 14 days, activated by our team after a demo. It ends at zero credits or the end of the period, with no separate minute or conversation caps, no card and no charge."
           }
         ]
       },
@@ -203,11 +207,11 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "You can cancel at any time by a written request from your business's account administrator to billing@sautnajdi.ai.",
-              "Cancellation takes effect at the end of the month in which we receive the request; the service keeps running until then.",
-              "No fee is invoiced for any month after the cancellation takes effect.",
-              "The current month's fee is not refunded for the days remaining, except under case 1 of section 6.",
-              "Usage above the monthly credit pool in the final month is billed on the final invoice."
+              "You can request cancellation at any time in writing from your business's account administrator to billing@sautnajdi.ai; the effective date follows your subscription term and agreement.",
+              "For monthly subscriptions, cancellation takes effect at the end of the month in which we receive the request; the service keeps running until then.",
+              "For monthly subscriptions, no fee is invoiced for any month after cancellation takes effect.",
+              "For monthly subscriptions, the current month's fee is not refunded for the days remaining, except under case 1 of section 6.",
+              "No credit-pool overage charges are added to the final invoice for current plans."
             ]
           }
         ]
@@ -218,16 +222,20 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "Upgrade: effective from the 1st of the current month — the whole month is billed at the new plan's price and monthly credit pool, and the difference is invoiced.",
-              "Downgrade: effective from the start of the next month, with no refund for the current month.",
+              "Upgrade: payment is required to activate the new plan. The written offer confirms the price difference and activation date.",
+              "Monthly subscription downgrade: effective from the start of the next month, with no refund for the current month.",
               "Send plan-change requests to billing@sautnajdi.ai; our team approves them."
             ]
           }
         ]
       },
       {
-        "h": "5. Usage balance",
+        "h": "5. Monetary usage balance — legacy agreements only",
         "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "This section does not apply to current credit plans. Contact us for a paid upgrade or a one-off credit pack; packs remain valid during an active subscription for up to 12 months. Purchase and refund terms are confirmed before payment."
+          },
           {
             "kind": "unordered",
             "items": [
@@ -251,11 +259,11 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "ordered",
             "items": [
-              "First invoice, within 7 days of the subscription starting: if you cancel within 7 days of the subscription starting and the service has not been used — no call or conversation has been answered through your business's account — we refund the first invoice in full by credit note, and the subscription ends.",
+              "First invoice for a monthly subscription, within 7 days of the subscription starting: if you cancel within 7 days of the subscription starting and the service has not been used — no call or conversation has been answered through your business's account — we refund the first invoice in full by credit note, and the subscription ends.",
               "Duplicate payment: if the same invoice was paid more than once, the extra amount is refunded in full.",
               "Billing error: if an amount is shown to have been billed in error, we correct the invoice with a credit note and either refund the difference or deduct it from your next invoice, as you prefer.",
               "Remaining usage balance when the subscription ends, per section 5.",
-              "Termination by us for a reason not attributable to your business: we refund fees for any paid period in which we did not provide the service, plus any remaining usage balance."
+              "For monthly subscriptions, termination by us for a reason not attributable to your business: we refund fees for any paid period in which we did not provide the service, plus any remaining usage balance."
             ]
           },
           {
@@ -265,7 +273,7 @@ export const refundPolicy: Record<Locale, LegalDoc> = {
           {
             "kind": "unordered",
             "items": [
-              "The current month's fee, except under case 1 above.",
+              "The current month's fee for monthly subscriptions, except under case 1 above.",
               "Usage that has already taken place.",
               "Expired usage balance.",
               "One-time setup and onboarding fees once work on them has started."

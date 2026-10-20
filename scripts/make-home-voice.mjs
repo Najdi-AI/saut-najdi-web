@@ -18,7 +18,8 @@
 //
 // Outputs, all in public/audio: <clip>.m4a (AAC-LC mono 48 kHz, about -16 LUFS integrated, true peak <= -1 dBTP,
 // faststart) and <clip>.json (start and end of each spoken turn in ms, plus the escalation chime for the clinic call).
-// The components import the JSON, so re-running this script keeps the bubbles in sync with the audio.
+// The components fetch the JSON at runtime, on the first press, so re-running this script keeps the bubbles in sync
+// with the audio without a code change.
 
 import {spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -334,9 +335,16 @@ function ffmpegPath() {
   return found;
 }
 
+// ffmpeg never needs the key, so its process does not inherit it (defence in depth).
+function childEnv() {
+  const env = {...process.env};
+  delete env.CARTESIA_API_KEY;
+  return env;
+}
+
 function ff(args) {
   return new Promise((resolve, reject) => {
-    const p = spawn(ffmpegPath(), args);
+    const p = spawn(ffmpegPath(), args, {env: childEnv()});
     let err = '';
     p.stderr.on('data', (d) => { err += d; });
     p.on('error', reject);

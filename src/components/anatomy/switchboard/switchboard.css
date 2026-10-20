@@ -114,7 +114,18 @@ html[data-theme="dark"] .sb.iso[data-theme] {
 .sb .sb-plate[data-clip] .iso-plate-corner[data-corner="hint"] {
   opacity: 0;
 }
-
+/* the polite live region: phase changes the visitor makes, for screen readers */
+.sb .sb-say {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .sb .iso-plate-corner[data-corner="title"] {
   color: var(--anatomy-strong);
 }

@@ -44,6 +44,12 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
   const glows = Object.fromEntries([...svg.querySelectorAll("[data-lamp]")].map((node) => [node.getAttribute("data-lamp"), node]));
   const plate = root.closest(".iso-plate");
   const readout = plate?.querySelector("[data-readout]");
+  // the polite live region (motion.md, "Announcing phases"): empty at load, written
+  // only when the visitor acts or arrives, never from the loop
+  const sayNode = root.closest(".sb")?.querySelector("[data-say]");
+  const say = (words) => {
+    if (sayNode && words && sayNode.textContent !== words) sayNode.textContent = words;
+  };
   const still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const tail = (jack, offset) => [data.jacks[jack] + offset[0], data.jackFace + data.plugLen + offset[1], data.jackZ + offset[2]];
@@ -328,9 +334,15 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
     engaged = false;
     quietly();
   };
-  const onFocusIn = () => engage();
+  const onFocusIn = (event) => {
+    engage();
+    // arriving from outside the card: hear where the call stands (not a spoken line,
+    // which the audio carries). Moving between its own controls says nothing here.
+    if (zone.contains(event.relatedTarget)) return;
+    say(readoutOf(locale, phaseShown === "line" ? "answer" : phaseShown, dialShown));
+  };
   const onFocusOut = (event) => {
-    if (root.contains(event.relatedTarget)) return;
+    if (zone.contains(event.relatedTarget)) return;
     engaged = false;
     quietly();
   };
@@ -382,6 +394,7 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
       } else if (was) {
         want = { ...clipTargets(), lamps: {}, speak: 0, phase: clip.status === "ended" ? "ended" : "answer" };
         mode = "user";
+        if (clip.status === "ended") say(readoutOf(locale, "ended"));
         quietly();
       }
       plate?.toggleAttribute("data-clip", clip.active);
@@ -396,6 +409,7 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
         homing = false;
         want = { ...want, dial: dialect, phase: "answer" };
       }
+      say(readoutOf(locale, "answer", dialect));
       run();
       quietly();
     },

@@ -166,6 +166,8 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
           </span>
         </span>
       </figcaption>
+      {/* written by the motion when the visitor turns the dial, arrives, or the call ends */}
+      <span className="sb-say" data-say="" aria-live="polite" />
       <audio ref={clip.audioRef} src={clip.src} preload="none" />
     </figure>
   );

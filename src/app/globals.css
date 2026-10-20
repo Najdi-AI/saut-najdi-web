@@ -403,9 +403,11 @@
 .hdr[data-scrolled="true"] {
   padding-block: 10px;
 }
+/* 60px tall and 1100px wide (were 58 and 1040) so the 120px-minimum logo and
+   the full English row both fit inside the capsule. */
 .hdr[data-scrolled="true"] .hdr-in {
-  block-size: 58px;
-  max-inline-size: min(1040px, 100%);
+  block-size: 60px;
+  max-inline-size: min(1100px, 100%);
   padding-inline: clamp(14px, 1.6vw, 22px);
   border-radius: 999px;
   border-color: rgb(var(--line-rgb) / 0.07);
@@ -459,12 +461,37 @@
     box-shadow: 0 1px 0 rgb(var(--line-rgb) / 0.08);
   }
 }
+@media (max-width: 639.98px) {
+  .hdr-in,
+  .hdr[data-scrolled="true"] .hdr-in {
+    gap: 12px;
+  }
+}
+/* The logo artboard (792x612) is mostly empty canvas above and below the
+   mark. A 2.6:1 box with object-fit: cover keeps the full width and trims
+   only that canvas, so the artwork is ~89% of the box width: 136px boxes show
+   it at ~121px, the brand guide's 120px digital minimum. Below 640px the box
+   starts at 100px (artwork ~89px) and is the one item allowed to shrink, down
+   to 64px, so the booking pill, language and burger always fit. The link
+   itself keeps a 44px-tall tap target however short the image gets. */
 .hdr-logo {
-  flex: none;
+  display: flex;
+  align-items: center;
+  flex: 0 1 100px;
+  min-inline-size: 64px;
+  min-block-size: 44px;
+}
+@media (min-width: 640px) {
+  .hdr-logo {
+    flex-basis: 136px;
+  }
 }
 .hdr-logo img {
-  block-size: 42px;
-  inline-size: auto;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 2.6;
+  object-fit: cover;
+  object-position: center;
 }
 .hdr-nav {
   display: none;
@@ -474,12 +501,20 @@
   /* Centered between the logo and the actions (owner preference). */
   margin-inline: auto;
 }
-@media (min-width: 1060px) {
+/* 1140px, not 1060px: with the 136px logo and 44px targets the full English
+   row needs about 1010px of the bar. Between 640 and 1139px the burger sheet
+   carries the menus. */
+@media (min-width: 1140px) {
   .hdr-nav {
     display: flex;
   }
 }
 .hdr-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  min-inline-size: 44px;
   padding: 8px 11px;
   border-radius: 999px;
   font-size: 0.92rem;
@@ -493,23 +528,43 @@
 }
 .hdr-actions {
   display: flex;
+  flex: none;
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
   /* On mobile the nav is hidden, so the actions carry the auto margin. */
   margin-inline-start: auto;
 }
-@media (min-width: 1060px) {
+.hdr-actions > * {
+  flex: none;
+}
+@media (min-width: 1140px) {
   .hdr-actions {
     margin-inline-start: 0;
   }
 }
+/* The booking pill shows at every width; below 640px it goes compact. */
 .hdr-cta {
-  display: none;
+  min-block-size: 44px;
 }
-@media (min-width: 640px) {
+@media (max-width: 639.98px) {
   .hdr-cta {
-    display: inline-flex;
+    padding-inline: 14px;
+    font-size: 0.9rem;
+  }
+  .hdr-actions > .theme-toggle,
+  .hdr-login {
+    display: none;
+  }
+}
+.hdr-lang {
+  display: flex;
+}
+/* Under 360px there is no room for the language switch beside the pill; it
+   is also in the sheet's footer row. */
+@media (max-width: 359.98px) {
+  .hdr-lang {
+    display: none;
   }
 }
 
@@ -758,31 +813,21 @@ a.mega-item:hover .mega-ico {
 .mega-rail-cta:hover {
   background: rgb(var(--purple-rgb) / 0.18);
 }
-@media (max-width: 1059px) {
+@media (max-width: 1139.98px) {
   .mega-panel {
     display: none;
-  }
-}
-@media (max-width: 1100px) {
-  .mega-cols {
-    grid-template-columns: 1fr 1fr;
-  }
-  .mega-feat {
-    grid-column: 1 / -1;
-    border-inline-start: 0;
-    border-block-start: 1px solid rgb(var(--line-rgb) / 0.1);
   }
 }
 
 /* ---------- mobile nav ---------- */
 /* Theme switch — sized to match .burger so the actions row keeps its rhythm
-   whether or not the burger is showing. */
+   whether or not the burger is showing. Both are 44px touch targets. */
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 36px;
-  block-size: 36px;
+  inline-size: 44px;
+  block-size: 44px;
   flex: none;
   border-radius: 999px;
   border: 1px solid var(--line-hi);
@@ -802,8 +847,8 @@ a.mega-item:hover .mega-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 40px;
-  block-size: 40px;
+  inline-size: 44px;
+  block-size: 44px;
   border-radius: 999px;
   border: 1px solid var(--line-hi);
   background: transparent;
@@ -812,37 +857,97 @@ a.mega-item:hover .mega-ico {
   color: var(--ink);
   cursor: pointer;
 }
-@media (min-width: 1060px) {
-  .burger {
+@media (min-width: 1140px) {
+  .burger,
+  .mobile-nav {
     display: none;
   }
 }
 .mobile-nav {
   border-block-start: 1px solid var(--line);
   background: #f7f8fa;
-  padding: 14px var(--gutter) 26px;
+  padding: 14px var(--gutter) 22px;
   max-block-size: 78vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* The booking CTA leads the sheet, full width, with login as a quiet link
+   beside it — never item 18 below the fold again. */
+.mnav-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mnav-cta {
+  flex: 1 1 auto;
+  min-block-size: 48px;
+}
+.mnav-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-block-size: 44px;
+  padding-inline: 14px;
+  border-radius: 999px;
+  color: var(--ink-2);
+  transition: color 0.22s var(--ease), background 0.22s var(--ease);
+}
+.mnav-login:hover {
+  color: var(--ink);
+  background: rgb(var(--line-rgb) / 0.06);
+}
+.mnav-group {
+  margin-block-start: 18px;
 }
 /* Group labels in the sheet are <p>, not <h3> — they are chrome, and a
    heading here would enter every page's outline ahead of the real content. */
-.mobile-nav > p {
+.mnav-label {
   font-size: 0.74rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 20px 0 8px;
+  color: var(--ink-2);
+  margin-block-end: 4px;
 }
-[dir="rtl"] .mobile-nav > p {
+[dir="rtl"] .mnav-label {
   letter-spacing: 0;
   text-transform: none;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
-.mobile-nav a {
-  display: block;
-  padding: 10px 0;
-  color: var(--ink-2);
+/* Two columns: the labels are short, and 17 links in one column were what
+   pushed the CTA past the panel. Rows stay 44px tall for touch. */
+.mnav-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+.mnav-links a {
+  display: flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-block: 6px;
+  color: var(--ink);
   border-block-end: 1px solid var(--line);
+  /* .hdr-in sets nowrap for the bar; a long label in a narrow column wraps. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  transition: color 0.22s var(--ease);
+}
+.mnav-links a:hover {
+  color: var(--purple);
+}
+/* Theme and language live here below 640px, where the bar has no room. */
+.mnav-utils {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 18px;
+}
+@media (min-width: 640px) {
+  .mnav-utils {
+    display: none;
+  }
 }
 
 @keyframes pulse-ring {

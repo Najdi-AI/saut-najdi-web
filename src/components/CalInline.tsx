@@ -13,6 +13,14 @@ import { localePath, type Locale } from "@/lib/i18n";
  * the host page does, so letting the Arabic page's RTL leak in only mirrors
  * the grid against its own internal assumptions. The panel beside it — the
  * one carrying our Arabic copy — is the part that flips.
+ *
+ * Language: no locale is passed because Cal documents none for embeds
+ * (checked 2026-10-20: cal.com/help/embedding instructions, config and
+ * prefill pages). Cal's embed page renders in the event type's "Interface
+ * language" (Advanced tab) when one is set, otherwise in the visitor's
+ * browser language; Arabic is a supported Cal locale and lays out RTL inside
+ * the iframe. Arabic on / and English on /en therefore needs two event types,
+ * one per language, with this component handed the matching calLink.
  */
 export function CalInline({
   calLink,
@@ -125,7 +133,8 @@ export function CalInline({
                 : "The calendar couldn't load here — open the booking page directly"}
             </a>
           ) : (
-            <span className="text-white/45">{loadingLabel}</span>
+            // white/60 on the #0F1730 card is 6.96:1; white/45 was 4.46:1.
+            <span className="text-white/60">{loadingLabel}</span>
           )}
         </p>
       )}

@@ -412,11 +412,14 @@ function transit() {
   );
 }
 
+/** The drop clip's id in BODY; figure.tsx makes it unique per instance, so two figures on one page never share it. */
+export const CLIP_ID = "kbp-drop";
+
 /** The drop: a card is drawn only above the cabinet top in its own plane, so it sinks into its slot. */
 function dropClip() {
   const a = at([-400, TRACK_Y, TOP_Z]);
   const b = at([400, TRACK_Y, TOP_Z]);
-  return `<clipPath id="kbp-drop"><path d="M${f1(a[0])} ${f1(a[1])}L${f1(b[0])} ${f1(b[1])}L${f1(b[0])} -600L${f1(a[0])} -600Z"/></clipPath>`;
+  return `<clipPath id="${CLIP_ID}"><path d="M${f1(a[0])} ${f1(a[1])}L${f1(b[0])} ${f1(b[1])}L${f1(b[0])} -600L${f1(a[0])} -600Z"/></clipPath>`;
 }
 
 /* ---------------------------------------------------------------- press */
@@ -699,7 +702,7 @@ export function bodyOf(list: readonly Entry[] = ENTRIES, transforms: Record<stri
     for (let depth = common; depth < path.length; depth++) {
       const name = path[depth]!;
       const extra = transforms[name] ? ` transform="${transforms[name]}"` : "";
-      if (name === "transit") out.push(`<g clip-path="url(#kbp-drop)">`);
+      if (name === "transit") out.push(`<g clip-path="url(#${CLIP_ID})">`);
       out.push(`<g data-kb="${name}"${name.startsWith("drawer.") ? ` data-kb-drawer="${name.slice(7)}"` : ""}${extra}>`);
       open.push(name);
     }

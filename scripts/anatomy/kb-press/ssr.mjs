@@ -75,9 +75,20 @@ for (const locale of ["ar", "en"]) {
   check("polite status region for announcements", html.includes('role="status" aria-live="polite" data-kb-status=""'));
   check("focusable stage with its label", html.includes(`class="kbp-stage" tabindex="0" role="group" aria-label="${attr(W.stage)}"`));
   check("svg is role=img with the locale's label", html.includes(`role="img" aria-label="${attr(W.svg)}"`));
-  check("svg body is byte-identical to the verified pages", html.includes(G.BODY));
+  const ids = [...html.matchAll(/id="(kbp-drop-[A-Za-z0-9_-]+)"/g)].map((match) => match[1]);
+  check("svg body is byte-identical to the verified pages (apart from its per-instance clip id)", ids.length === 1 && html.replaceAll(ids[0], G.CLIP_ID).includes(G.BODY));
+  check("the drop clip is referenced by its own id", ids.length === 1 && html.includes(`clip-path="url(#${ids[0]})"`));
   check("live groups present (arm, head, platen, transit, 4 drawers, 4 lifts, 3 files, lift slot)", ["arm", "head", "platen", "transit", "drawer.0", "drawer.3", "lift.0", "lift.3", "doc.0", "doc.2"].every((name) => html.includes(`data-kb="${name}"`)) && html.includes('data-kb-slot="lift"'));
   check("caption keeps the claim on text chat, not calls", W.caption.includes(locale === "ar" ? "المحادثة النصية" : "text chat"));
+}
+
+/* two figures on one page: every clip id is unique, and each reference finds its own */
+{
+  const html = renderToString(React.createElement(React.Fragment, null, React.createElement(KbPressFigure, { locale: "ar", fig: 3 }), React.createElement(KbPressFigure, { locale: "en", fig: 4 })));
+  const ids = [...html.matchAll(/id="(kbp-drop-[A-Za-z0-9_-]+)"/g)].map((match) => match[1]);
+  const refs = [...html.matchAll(/clip-path="url\(#([^)]+)\)"/g)].map((match) => match[1]);
+  console.log(`\ntwo instances: clip ids ${ids.join(", ")}`);
+  check("two instances get two distinct clip ids, each referenced once", ids.length === 2 && new Set(ids).size === 2 && refs.length === 2 && refs.every((ref, index) => ref === ids[index]));
 }
 
 /* client weight: the only code that ships is live.tsx + motion.ts + model.ts */

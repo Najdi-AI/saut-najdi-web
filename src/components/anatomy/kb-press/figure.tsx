@@ -1,15 +1,16 @@
 import "../../iso/iso.css";
 import "./kb-press.css";
+import { useId } from "react";
 import { Plate } from "../../iso/react/draw";
-import { BODY, LIVE, VIEW } from "./geometry";
+import { BODY, CLIP_ID, LIVE, VIEW } from "./geometry";
 import { KbPressLive } from "./live";
 import { QUESTIONS, WORDS, type Locale } from "./model";
 
 /**
  * «مكبس المعرفة» / The knowledge press — the anatomy figure for the
  * knowledge base capability. A server component: the whole drawing is
- * computed at build time and sent as markup; only motion.ts (about 4 KB
- * gzipped) runs in the browser.
+ * computed at build time and sent as markup; only live.tsx, motion.ts and
+ * model.ts (about 5 KB gzipped) run in the browser.
  *
  * Mount it anywhere inside the site layout (it reads the site theme from
  * <html data-theme>, and sets its own dir and lang):
@@ -18,6 +19,9 @@ import { QUESTIONS, WORDS, type Locale } from "./model";
  */
 export function KbPressFigure({ locale, fig = 3 }: { locale: Locale; fig?: number | string }) {
   const W = WORDS[locale];
+  /* One clip id per instance, so two figures on a page never share it. */
+  const clip = `${CLIP_ID}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
+  const body = BODY.replace(`id="${CLIP_ID}"`, `id="${clip}"`).replace(`url(#${CLIP_ID})`, `url(#${clip})`);
   return (
     <div className="iso kbp-theme">
       <div className="iso kbp" data-theme="light" dir={locale === "ar" ? "rtl" : "ltr"} lang={locale}>
@@ -49,7 +53,7 @@ export function KbPressFigure({ locale, fig = 3 }: { locale: Locale; fig?: numbe
           }
         >
           <KbPressLive data={LIVE} locale={locale} label={W.stage}>
-            <svg className="iso-svg" viewBox={`0 0 ${VIEW.width} ${VIEW.height}`} role="img" aria-label={W.svg} focusable="false" dangerouslySetInnerHTML={{ __html: BODY }} />
+            <svg className="iso-svg" viewBox={`0 0 ${VIEW.width} ${VIEW.height}`} role="img" aria-label={W.svg} focusable="false" dangerouslySetInnerHTML={{ __html: body }} />
           </KbPressLive>
         </Plate>
       </div>

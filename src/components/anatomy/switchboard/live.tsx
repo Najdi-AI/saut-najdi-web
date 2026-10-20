@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import type { Locale } from "@/lib/i18n";
 import { MediaGlyph, useVoiceClip, type ClipTimings } from "@/components/VoiceClip";
 import type { liveData } from "./geometry.mjs";
@@ -20,6 +20,18 @@ function Swatch({ mark }: { mark: string }) {
     </svg>
   );
 }
+
+/**
+ * The drawing. Memoised, with a stable innerHTML object: React 19 re-sets
+ * innerHTML whenever the dangerouslySetInnerHTML object changes, which would
+ * swap out the nodes the motion holds on every re-render of the card.
+ * The art is built on the server from numbers and one fixed word
+ * (geometry.mjs): no visitor input reaches it.
+ */
+const Art = memo(function Art({ art, width, height, label }: { art: string; width: number; height: number; label: string }) {
+  const html = useMemo(() => ({ __html: art }), [art]);
+  return <svg className="iso-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} focusable="false" dangerouslySetInnerHTML={html} />;
+});
 
 /**
  * The live switchboard card. The SVG art arrives as a finished string; this
@@ -101,15 +113,7 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
           </span>
         </div>
         <div ref={stage} className="iso-stage sb-stage" dir="ltr">
-          {/* The art is built on the server from numbers and one fixed word (geometry.mjs): no visitor input reaches it. */}
-          <svg
-            className="iso-svg"
-            viewBox={`0 0 ${data.width} ${data.height}`}
-            role="img"
-            aria-label={t.label}
-            focusable="false"
-            dangerouslySetInnerHTML={{ __html: art }}
-          />
+          <Art art={art} width={data.width} height={data.height} label={t.label} />
           <button
             type="button"
             className="sb-play"

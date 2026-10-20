@@ -101,7 +101,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
   }
   function ball(name, c, r, style = {}, { bias = 0, extra = "", meta = {}, ...rest } = {}) {
     const shape = record(A.ball(c, r, { name, ...meta }));
-    return put(name, c, S(G.sphereOf(c, r, P, { steps: 32 }), { tone: "mid", ...style }) + extra, [shape], { bias, ...rest });
+    return put(name, c, S(G.sphereOf(c, r, P, { steps: 20 }), { tone: "mid", ...style }) + extra, [shape], { bias, ...rest });
   }
   const screw = (points, size = 0.5, tone = "mid") => Dots(points.map(at), { size, tone });
 
@@ -169,6 +169,12 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
   back.push(Ln([30, 20, 25].map((w, i) => k.lineOnTop([LABEL.x + 5, LABEL.y + 4 + i * 3.4], [LABEL.x + 5 + w, LABEL.y + 4 + i * 3.4], 0.8, P)).join(""), { tone: "lo", free: true }));
   back.push(Dots([at([LABEL.x + LABEL.w - 3, LABEL.y + 3, 0.8]), at([LABEL.x + LABEL.w - 3, LABEL.y + LABEL.d - 3, 0.8])], { size: 0.45 }));
   record(A.slab(LABEL, 0, 0.8, { name: "stand.label" }, 3));
+  const STRIP = { x: -84, y: V.PLATE.y + V.PLATE.d - 12, w: 212, d: 6, r: 1 };
+  back.push(S(k.slabOf(STRIP, 0, 0.6, P, 3), { tone: "lo", crease: "none" }));
+  const ticks = k.topTicks(STRIP.x + 4, STRIP.x + STRIP.w - 4, 4, 5, STRIP.y, 0.6, [1.8, 3.4], P);
+  back.push(Ln(ticks.minor, { tone: "lo" }), Ln(ticks.major, { tone: "mid" }));
+  back.push(Dots([at([STRIP.x + 2, STRIP.y + 3, 0.6]), at([STRIP.x + STRIP.w - 2, STRIP.y + 3, 0.6])], { size: 0.45 }));
+  record(A.slab(STRIP, 0, 0.6, { name: "stand.ruler" }, 3));
 
   // ------------------------------------------------------------- the console
   layer = "panel";
@@ -182,7 +188,13 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     steps: 4,
     bevel: 0.8,
     inner: cabInner,
-    extra: Ln(sideOutline(7) + sideOutline(9.4), { tone: "faint" }),
+    extra:
+      Ln(sideOutline(7) + sideOutline(9.4), { tone: "faint" }) +
+      // the maker's plate on the side panel: its rules stand for stamped text
+      `<g>${S(G.prismOf(G.frameOf([sideX, 0, 0], X, Y, UP), rounded(V.CAB.y + 12, V.CAB.y + 30, 84, 96, 1, 2), 0, 0.5, P), { tone: "lo", crease: "none" })}` +
+      Ln([0, 1, 2].map((i) => path3([[sideX + 0.5, V.CAB.y + 15, 92.6 - i * 2.6], [sideX + 0.5, V.CAB.y + [27, 22, 25][i], 92.6 - i * 2.6]])).join(""), { tone: "lo", free: true }) +
+      Dots([at([sideX + 0.5, V.CAB.y + 13.6, 90]), at([sideX + 0.5, V.CAB.y + 28.4, 90])], { size: 0.42, tone: "mid" }) +
+      `</g>`,
   });
   // cap moulding and the bead under it
   slab("bead", k.insetPlan(V.CAP, 1.6), V.CAB_TOP - 3, 3, { tone: "lo" }, { steps: 4 });
@@ -211,7 +223,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
       return (-R0 * u) / (H0 * Math.sqrt(1 - u * u));
     };
     const knots = [0, 0.25, 0.45, 0.62, 0.76, 0.87, 0.94, 0.985].map((u) => [5.4 + u * H0, dome(5.4 + u * H0), 1]);
-    turned("bell.gong", F, [[5.4, R0 - 0.01], ...knots, [5.4 + H0, 0]], { tone: "hi" }, { smooth: { slope: domeSlope, radius: dome }, steps: 40 });
+    turned("bell.gong", F, [[5.4, R0 - 0.01], ...knots, [5.4 + H0, 0]], { tone: "hi" }, { smooth: { slope: domeSlope, radius: dome }, steps: 28 });
     disc("bell.nut", F, 5.4 + H0 - 0.2, 5.4 + H0 + 1.2, 1.3, { tone: "mid" }, { steps: 6 });
     // the clapper on its arm, beside the gong
     const arm = G.frameOf([B[0] + 10.6, B[1] + 0.5, capTop], UP, X, Y);
@@ -321,7 +333,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     );
     {
       const shape = record(A.ring(F, 0, 1.8, rim, r, { name: "speaker.bezel" }));
-      const paths = G.ringBand(0, 1.8, rim, r, F, P, { steps: 56, hole: [1.8, rim] });
+      const paths = G.ringBand(0, 1.8, rim, r, F, P, { steps: 44, hole: [1.8, rim] });
       put("speaker.bezel", G.add3(F.o, G.mul3(Y, 0.9)), S(paths, { tone: "mid" }) + Dots(G.dotsOf(F, 1.8, (r + rim) / 2 + 0.4, 6, P, { all: true, phase: Math.PI / 6 }), { size: 0.5, tone: "mid" }), [shape]);
     }
     // the inside of the bezel ring, seen through the opening
@@ -355,7 +367,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     const start = [gx + 4.4, V.GLAND.y, V.GLAND.z];
     const route = G.fillet([start, [port[0], V.GLAND.y, V.GLAND.z], [port[0], port[1], V.GLAND.z - 14], [port[0], port[1], B.h + 1.6]], 5.2, 10, { P, tube: 1.7 });
     R.route("trunk", route, 1.7, { piece: "board" });
-    tubePieces(route, 1.7, P, { maxLength: 12, spacing: 1, rings: { pitch: 1.6, twist: 0.7, cross: false, fade: [0.1, 0.55] } }).forEach((piece, index) =>
+    tubePieces(route, 1.7, P, { maxLength: 36, spacing: 1.4, rings: { pitch: 2.2, twist: 0.7, cross: false, fade: [0.1, 0.55], steps: 10 } }).forEach((piece, index) =>
       put(`trunk:${index}`, piece.mid, tubeSvg(piece, { tone: "mid" }), [A.tube(piece.points, piece.radii, { name: "trunk" })], { bias: 0.05, route: "trunk", chunk: index }),
     );
   }
@@ -416,7 +428,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     });
     const ticks = k.radialTicks(x, y, plate - 1.3, 24, 6, z + 1.2, [0.9, 0.9], P, (120 * Math.PI) / 180, (120 * Math.PI) / 180);
     post("dial.plate", x, y, plate, z, 1.2, { tone: "mid" }, {
-      steps: 64,
+      steps: 40,
       bevel: 0.4,
       extra:
         Ln(k.ring(x, y, plate - 1.3, z + 1.2, P, 64), { tone: "lo" }) +
@@ -471,7 +483,7 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     const stroke = pose.stamp * STAMP_STROKE;
     const headTop = armZ - to;
     const headF = G.frameOf([x, y, headTop - stroke], [0, 0, -1], X, [0, -1, 0]);
-    const head = S(G.disc(0, 3, 4.8, headF, P, { steps: 32, bevel: 0.3 }), { tone: "hi", lit: true }) + S(G.disc(3, 4, 4.2, headF, P, { steps: 28 }), { tone: "lo" });
+    const head = S(G.disc(0, 3, 4.8, headF, P, { steps: 32, bevel: 0.3 }), { tone: "hi" }) + S(G.disc(3, 4, 4.2, headF, P, { steps: 28 }), { tone: "lo" });
     const shift = k.translateAlong(P, [0, 0, -stroke]);
     put(
       "stamp.rod",

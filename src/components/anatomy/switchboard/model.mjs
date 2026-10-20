@@ -31,11 +31,11 @@ export const TEXT = {
     // the hero clip's three lines (HeroVisual's bubbles), shown on the readout as they are spoken
     lines: ["هلا! كيف أقدر أساعدك؟", "أبغى أحجز موعد بكرة", "أبشر! بكرة عندنا الساعة 4:30 العصر، يناسبك؟"],
     keys: [
-      { mark: "lit", label: "اللمبة تولّع لمّا يدق الخط أو يتكلم أحد" },
-      { mark: "raised", label: "سلك التحويل: من مقبس الوكيل إلى «موظفك»" },
+      { mark: "lit", label: "اللمبة: خط يدق أو صوت يتكلم" },
+      { mark: "raised", label: "سلك التحويل: من الوكيل إلى «موظفك»" },
     ],
     caption:
-      "مكالمة توضيحية: يدق الخط، يرد الوكيل بالسعودي ويعرض موعد بكرة 4:30 العصر، والختم يطبع بطاقة الحجز. وفي بعض المكالمات ينتقل السلك من مقبس الوكيل إلى مقبس «موظفك» وتطلع ورقة الملخص، وموظفك يستلم بكامل السياق.",
+      "مكالمة توضيحية: يدق الخط، يرد الوكيل بالسعودي ويحجز بكرة 4:30 العصر. وإذا لزم، ينتقل السلك لمقبس «موظفك» وتطلع ورقة الملخص.",
     readout: {
       idle: "بانتظار مكالمة",
       ring: "مكالمة واردة · الخط 2",
@@ -61,11 +61,11 @@ export const TEXT = {
     dialGroup: "Dialect dial",
     lines: ["Hello! How can I help?", "I'd like to book for tomorrow", "Sure! Tomorrow at 4:30 PM is open. Does that suit you?"],
     keys: [
-      { mark: "lit", label: "A lamp lights when a line rings or someone speaks" },
-      { mark: "raised", label: "The patch cord: from the agent's jack to «موظفك», your employee" },
+      { mark: "lit", label: "Lamp: a line ringing, or a voice speaking" },
+      { mark: "raised", label: "Patch cord: from the agent to «موظفك», your employee" },
     ],
     caption:
-      "An illustrative call: the line rings, the agent answers in Saudi Arabic and offers tomorrow at 4:30 PM, and the stamp prints the booking card. On some calls the cord moves from the agent's jack to your employee's, a summary ticket comes out, and your employee takes over in full context.",
+      "An illustrative call: the line rings, the agent answers in Saudi Arabic and books tomorrow at 4:30 PM. When needed, the cord moves to your employee's jack and a summary ticket comes out.",
     readout: {
       idle: "Waiting for a call",
       ring: "Call coming in · line 2",

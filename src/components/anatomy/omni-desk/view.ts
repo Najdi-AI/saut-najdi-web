@@ -4,7 +4,7 @@ import { LANE_Y, MOUTH_Z, PAD_REST, RAIL_TOP, SLED_TOP, CUP_TOP, TUBE_X } from "
 /** World layout of the desk, in units of about 1 px of the real thing (x along the desk, y across, z up). */
 export const WIDTH = 600;
 export const HEIGHT = 392;
-export const AZIMUTH = 56;
+export const AZIMUTH = 62;
 export const ELEVATION = 30;
 
 export const DESK: Plan = { x: -192, y: -92, w: 384, d: 106, r: 8 };

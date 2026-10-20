@@ -149,6 +149,15 @@ html[data-theme="dark"] .od.iso {
   stroke: var(--od-lamp);
 }
 
+.od-jewel-glass {
+  fill: var(--anatomy-shade-1);
+  stroke: none;
+}
+
+.od-jewel[data-on] .od-jewel-glass {
+  fill: var(--od-lamp);
+}
+
 [data-od-badge][data-hover] .iso-line {
   stroke: var(--anatomy-hi);
 }

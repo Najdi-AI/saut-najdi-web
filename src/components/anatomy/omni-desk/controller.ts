@@ -35,7 +35,7 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
   const plunger = node("plunger");
   const knob = node("knob");
   const svg = root.querySelector("svg");
-  const lamps: (Element | null)[] = Array.from({ length: COUNT }, (_, tube) => root.querySelector(`[data-od-lamp="${tube}"]`));
+  const lamps: Element[][] = Array.from({ length: COUNT }, (_, tube) => Array.from(root.querySelectorAll(`[data-od-lamp="${tube}"], [data-od-jewel="${tube}"]`)));
   const badges: (Element | null)[] = Array.from({ length: COUNT }, (_, tube) => root.querySelector(`[data-od-badge="${tube}"]`));
   const picks = Array.from(figure?.querySelectorAll<HTMLButtonElement>("[data-od-pick]") ?? []);
   const status = figure?.querySelector("[data-od-status]") ?? null;
@@ -77,7 +77,7 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
     const press = shift(0, -STROKE * pose.press);
     write(plunger, "transform", press);
     write(knob, "transform", press);
-    lamps.forEach((lamp, tube) => write(lamp, "data-on", tube === pose.lamp ? "" : null));
+    lamps.forEach((list, tube) => list.forEach((lamp) => write(lamp, "data-on", tube === pose.lamp ? "" : null)));
     const text = readoutOf(channel, pose.step, words);
     if (readout && written.get(readout) !== text) {
       written.set(readout, text);

@@ -47,6 +47,8 @@ const option = (name, fallback) => {
   return index >= 0 && argv[index + 1] ? argv[index + 1] : fallback;
 };
 const THEME = flag("--light") ? "light" : "dark";
+/* --site: mimic the site, which keeps its theme on <html data-theme="dark"> and server-renders the figure light. */
+const SITE = flag("--site");
 const LOCALE = flag("--en") ? "en" : "ar";
 const OUT = resolve(option("--out", join(tmpdir(), "anatomy", "omni-desk")));
 
@@ -75,12 +77,12 @@ body[data-page="light"]{--page:#f7f8fa;color-scheme:light}body[data-page="dark"]
 main{width:min(720px,100% - 32px);margin:56px auto 96px}`;
 
 const parts = markup.partsOf(LOCALE);
-const figure = markup.figureHtml(LOCALE, THEME);
+const figure = markup.figureHtml(LOCALE, SITE ? "light" : THEME, { sync: SITE });
 const live = `${strip("model.ts")}\n${strip("controller.ts")}\nconst DATA = ${JSON.stringify(parts.data)};\nmountDesk(document.querySelector(".od-stage"), DATA);\n`;
-const page = `<!doctype html><html lang="${LOCALE}" dir="${parts.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>One desk</title><style>${fonts}${kitCss}${figCss}${pageCss}</style></head><body data-page="${THEME}"><main>${figure}</main><script type="module">${live.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;
+const page = `<!doctype html><html lang="${LOCALE}" dir="${parts.dir}"${SITE && THEME === "dark" ? ` data-theme="dark"` : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>One desk</title><style>${fonts}${kitCss}${figCss}${pageCss}</style></head><body data-page="${THEME}"><main>${figure}</main><script type="module">${live.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;
 
 mkdirSync(OUT, { recursive: true });
-const name = `omni-desk${LOCALE === "en" ? "-en" : ""}${THEME === "light" ? "-light" : ""}.html`;
+const name = `omni-desk${SITE ? "-site" : ""}${LOCALE === "en" ? "-en" : ""}${THEME === "light" ? "-light" : ""}.html`;
 writeFileSync(join(OUT, name), page);
 
 const bytes = (text) => Buffer.byteLength(text, "utf8");

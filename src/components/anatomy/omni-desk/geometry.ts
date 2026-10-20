@@ -8,7 +8,7 @@ import * as LatheKit from "../../iso/lathe.mjs";
 import * as AuditKit from "../../iso/audit.mjs";
 import * as TubeKit from "../../iso/tube.mjs";
 import { backHalf, ellipse, frontHalf, roundOf, silhouetteOf } from "./round";
-import { CAPSULE_LEN, CHANNELS, COUNT, CUP_TOP, LANE_Y, PAD_REST, PRESS_X, RAIL_TOP, SLED_TOP, TUBE_X, tubeOf, type Locale } from "./model";
+import { CAPSULE_LEN, CHANNELS, COUNT, CUP_TOP, LANE_Y, PAD_REST, PRESS_X, RAIL_TOP, SLED_TOP, STROKE, TUBE_X, tubeOf, type Locale } from "./model";
 import {
   ARM,
   ARM_Z,
@@ -148,9 +148,39 @@ for (const [index, x0] of [-166, 34].entries()) {
   const pull = { x: x0 + w / 2 - 13, y: FRONT_Y + 1.2, w: 26, d: 2.4, r: 1 };
   const face = FRONT_Y + 1.8;
   const card = k.pathOf([at([x0 + w / 2 - 7.4, face, -6.2]), at([x0 + w / 2 + 7.4, face, -6.2]), at([x0 + w / 2 + 7.4, face, -9.6]), at([x0 + w / 2 - 7.4, face, -9.6])], true);
-  slab(`desk.drawer${index}`, front, -DESK_H + 4, DESK_H - 7, { tone: "mid" }, { steps: 3, bevel: 0.4 });
+  /** A raised panel line round each drawer front, in the plane of the front. */
+  const panelFace = FRONT_Y + 1.2;
+  const panel = k.pathOf([[x0 + 2.6, -15], [x0 + w - 2.6, -15], [x0 + w - 2.6, -4], [x0 + 2.6, -4]].map(([x, z]) => at([x!, panelFace, z!])), true);
+  slab(`desk.drawer${index}`, front, -DESK_H + 4, DESK_H - 7, { tone: "mid" }, { steps: 3, bevel: 0.4, extra: L(panel, { tone: "faint" }) });
   slab(`desk.holder${index}`, holder, -10.4, 5, { tone: "lo" }, { steps: 2, extra: L(card, { tone: "faint" }) + D([at([x0 + w / 2 - 8.2, face, -7.9]), at([x0 + w / 2 + 8.2, face, -7.9])], { size: 0.35 }) });
   slab(`desk.pull${index}`, pull, -14.6, 2.6, { tone: "mid" }, { steps: 3, bevel: 0.3 });
+}
+
+/** The lock plate between the drawers: a keyhole and its slot, both closed outlines. */
+{
+  const plate = { x: -30, y: FRONT_Y, w: 60, d: 1.2, r: 0.6 };
+  const face = FRONT_Y + 1.2;
+  const circle = (cx: number, cz: number, r: number) => k.pathOf(Array.from({ length: 20 }, (_, index) => {
+    const angle = (index / 20) * Math.PI * 2;
+    return at([cx + r * Math.cos(angle), face, cz + r * Math.sin(angle)]);
+  }), true);
+  const slot = k.pathOf([[-0.7, -10.6], [0.7, -10.6], [0.7, -13], [-0.7, -13]].map(([x, z]) => at([x!, face, z!])), true);
+  slab("desk.lock", plate, -DESK_H + 4, DESK_H - 7, { tone: "mid" }, { steps: 3, bevel: 0.4, extra: L(circle(0, -9.4, 1.6) + slot + circle(0, -9.4, 3.4), { tone: "lo" }) + D([at([-26, face, -6]), at([26, face, -6]), at([-26, face, -13]), at([26, face, -13])], { size: 0.35 }) });
+}
+
+/**
+ * The line console, front left on the desk: one jewel per tube in the tubes'
+ * own order, lit for the line that is working, like the lamp on its receiver.
+ */
+{
+  const plan = { x: -170, y: -22, w: 66, d: 16, r: 2.2 };
+  const top = 2.6;
+  const jewels = TUBE_X.map((_, tube) => {
+    const cx = plan.x + 8 + tube * 10;
+    const cy = plan.y + plan.d / 2;
+    return `<g class="od-jewel" data-od-jewel="${tube}">{{jewel${tube}}}<path class="od-jewel-glass" d="${ringOn(cx, cy, 2, top)}"/>${L(ringOn(cx, cy, 2, top) + ringOn(cx, cy, 3, top), { tone: "lo" })}</g>`;
+  }).join("");
+  slab("desk.console", plan, 0, top, { tone: "mid" }, { steps: 3, bevel: 0.4, extra: jewels + D([at([plan.x + 2.6, plan.y + 2.6, top]), at([plan.x + plan.w - 2.6, plan.y + plan.d - 2.6, top])], { size: 0.4 }) });
 }
 
 /** Ruler strip in front of the rail: minor ticks every 5, a major tick under each tube, the zero under the stamp. */
@@ -235,7 +265,7 @@ function badgeArt(tube: number, channel: number) {
   const plan = BEAM;
   const top = BEAM_Z + BEAM_H;
   const screws = [-1, 1].flatMap((side) => [at([side * POST_X, LANE_Y - 4, top]), at([side * POST_X, LANE_Y + 4, top])]);
-  slab("beam", plan, BEAM_Z, BEAM_H, { tone: "mid" }, { steps: 3, bevel: 0.8, extra: L(k.planOutline(k.insetPlan(plan, 3), top, P, 3), { tone: "faint" }) + D(screws, { size: 0.5 }) });
+  slab("beam", plan, BEAM_Z, BEAM_H, { tone: "mid" }, { steps: 3, bevel: 0.8, inner: L(k.sideSeam(plan, top - 2.2, P, 3), { tone: "faint" }), extra: L(k.planOutline(k.insetPlan(plan, 3), top, P, 3), { tone: "faint" }) + D(screws, { size: 0.5 }) });
 }
 
 /**
@@ -402,17 +432,28 @@ const plungerShapes: Shape[] = [
 ];
 
 /** The stem and knob above the head, moving with the plunger. */
+/** The stem runs down through the cap's bore; a fixed clip shows it only above the bore's front rim, wherever the stroke takes it. */
 const STEM_Z = HOUSING[1] + 1.6;
-const stemPaths = cylPaths(PRESS_X, HEAD_Y, 1.5, STEM_Z, 5);
-const knobPaths = cylPaths(PRESS_X, HEAD_Y, KNOB_R, STEM_Z + 5, 4, 0.4);
+const STEM_SHOWN = 8;
+const KNOB_Z = STEM_Z + STEM_SHOWN;
+const BORE_R = 2.4;
+const stemPaths = cylPaths(PRESS_X, HEAD_Y, 1.5, STEM_Z - STROKE - 1, STEM_SHOWN + STROKE + 1);
+const knobPaths = cylPaths(PRESS_X, HEAD_Y, KNOB_R, KNOB_Z, 4, 0.4);
+const STEM_CLIP = (() => {
+  const [cx, cy] = at([PRESS_X, HEAD_Y, STEM_Z]);
+  const rx = BORE_R * KS;
+  const ry = rx * Math.sin(ELEVATION * RAD);
+  const f = (v: number) => Math.round(v * 10) / 10;
+  return `M0 0H${WIDTH}V${f(cy)}H${f(cx + rx)}A${f(rx)} ${f(ry)} 0 0 1 ${f(cx - rx)} ${f(cy)}H0Z`;
+})();
 const KNOB =
   S(stemPaths, { tone: "mid", crease: "none" }) +
   S(knobPaths, { tone: "mid" }) +
-  L(k.knurl(PRESS_X, HEAD_Y, KNOB_R, STEM_Z + 5, STEM_Z + 9, 28, P), { tone: "lo" }) +
-  D([at([PRESS_X, HEAD_Y, STEM_Z + 9])], { size: 0.5, tone: "hi" });
+  L(k.knurl(PRESS_X, HEAD_Y, KNOB_R, KNOB_Z, KNOB_Z + 4, 28, P), { tone: "lo" }) +
+  D([at([PRESS_X, HEAD_Y, KNOB_Z + 4])], { size: 0.5, tone: "hi" });
 const knobShapes: Shape[] = [
-  R.solid(A.cylinder(PRESS_X, HEAD_Y, 1.5, STEM_Z - 1.6, 6.6, { name: "press.stem", owner: "press" })),
-  R.solid(A.cylinder(PRESS_X, HEAD_Y, KNOB_R, STEM_Z + 5, 4, { name: "press.knob", owner: "press" })),
+  R.solid(A.cylinder(PRESS_X, HEAD_Y, 1.5, STEM_Z - STROKE - 1, STEM_SHOWN + STROKE + 1, { name: "press.stem", owner: "press" })),
+  R.solid(A.cylinder(PRESS_X, HEAD_Y, KNOB_R, KNOB_Z, 4, { name: "press.knob", owner: "press" })),
 ];
 
 /** The carriage at x = 0: sled on the rail, gibs on both sides of the rail, a cup that holds the capsule upright, and a pointer over the ruler. */
@@ -509,12 +550,12 @@ export function svgOf(locale: Locale, label: string, { lamp = -1 }: { lamp?: num
     return `<g data-od-badge="${tube}" data-od-channel="${channel}">${item.svg}${badgeArt(tube, channel)}</g>`;
   };
   const sorted = ITEMS.map((item, index) => {
-    const own = item.name.startsWith("beam.badge") ? badgeSvg(item) : item.svg.replace(/\{\{lamp(\d)\}\}/, (_: string, tube: string) => (Number(tube) === lamp ? ` data-on=""` : ""));
+    const own = item.name.startsWith("beam.badge") ? badgeSvg(item) : item.svg.replace(/\{\{(lamp|jewel)(\d)\}\}/g, (_: string, kind: string, tube: string) => (Number(tube) === lamp ? (kind === "lamp" ? ` data-on=""` : "") : "")).replace(/data-od-jewel="(\d)"/g, (m: string, tube: string) => (Number(tube) === lamp ? `${m} data-on=""` : m));
     return (index === slot ? `<g class="od-carriage" data-od="carriage">${CARRIAGE}</g>` : "") + own;
   }).join("");
-  const mask = `<mask id="${MASK_ID}" maskUnits="userSpaceOnUse" x="0" y="0" width="${WIDTH}" height="${HEIGHT}"><rect width="${WIDTH}" height="${HEIGHT}" fill="#fff"/><path fill="#000" d="${MASK_BLACK.join("")}"/><path fill="#fff" d="${MASK_WHITE.join("")}"/></mask>`;
+  const mask = `<mask id="${MASK_ID}" maskUnits="userSpaceOnUse" x="0" y="0" width="${WIDTH}" height="${HEIGHT}"><rect width="${WIDTH}" height="${HEIGHT}" fill="#fff"/><path fill="#000" d="${MASK_BLACK.join("")}"/><path fill="#fff" d="${MASK_WHITE.join("")}"/></mask><clipPath id="od-stem-clip"><path d="${STEM_CLIP}"/></clipPath>`;
   const capsule = `<g mask="url(#${MASK_ID})"><g data-od="capsule">${CAPSULE}<g data-od="seal">${SEAL}</g></g></g>`;
-  const late = `${capsule}<g class="od-glass-front">${GLASS_FRONT.join("")}</g><g data-od="plunger">${PLUNGER}</g>${MOVING.head.svg}<g data-od="knob">${KNOB}</g>`;
+  const late = `${capsule}<g class="od-glass-front">${GLASS_FRONT.join("")}</g><g data-od="plunger">${PLUNGER}</g>${MOVING.head.svg}<g clip-path="url(#od-stem-clip)"><g data-od="knob">${KNOB}</g></g>`;
   return `<svg class="iso-svg od-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${label.replace(/"/g, "&quot;")}" focusable="false"><defs>${mask}</defs>${HALO}${sorted}${late}</svg>`;
 }
 

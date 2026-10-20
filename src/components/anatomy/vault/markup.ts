@@ -4,38 +4,31 @@ import { FIRST_LINE, WORDS, type Locale } from "./model";
 
 const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-type Mark = "lit" | "raised" | "edge" | "flat";
-
-function swatch(mark: Mark) {
-  if (mark === "raised" || mark === "flat" || mark === "lit") {
-    const body = mark === "flat" ? "M2 6.5 8 3.5 14 6.5 8 9.5Z" : "M2 4.5 8 1.5 14 4.5 14 6 8 9 2 6Z";
-    const crease = mark === "flat" ? "" : `<path class="iso-swatch-crease" d="M2 4.5 8 7.5 14 4.5"/>`;
-    return `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="${body}"/>${crease}</svg>`;
-  }
-  return `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="M1.5 5h13"/></svg>`;
+/** The words the frameless figure carries outside its drawing: the stage's label, the drawing's label and the resting readout. */
+export function shellWords(locale: Locale) {
+  const w = WORDS[locale];
+  return { stage: w.stage, label: w.label, rest: w.rest(FIRST_LINE) };
 }
 
 /**
- * The whole card as server-rendered HTML: corners, the drawing, the legend
- * and caption. The same string is used by the site and by the standalone
- * verification page, so what the checks see is what the site ships. `uid`
+ * The frameless figure as one string, for the standalone verification page:
+ * the same structure VaultLive renders on the site (no corners, no legend;
+ * the readout and the status off screen), with the drawing inline where the
+ * site fetches it lazily (public/figures, scripts/anatomy/export.mjs). `uid`
  * keeps the drawing's clipPath ids unique on the page; `list` lets the
  * verification build draw the items it has just settled.
  */
-export function figureHtml(locale: Locale, fig: number, { uid = "", list }: { uid?: string; list?: Item[] } = {}) {
-  const w = WORDS[locale];
-  const corner = (name: string, text: string, extra = "") => `<span class="iso-plate-corner" data-corner="${name}"${extra}>${escape(text)}</span>`;
-  const keys: [Mark, string][] = [
-    ["lit", w.keys.lit],
-    ["raised", w.keys.raised],
-    ["edge", w.keys.edge],
-    ["flat", w.keys.flat],
-  ];
-  const svg = `<svg class="iso-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${escape(w.label)}" focusable="false">${bodyFor(locale, list, uid)}</svg>`;
+export function figureHtml(locale: Locale, { uid = "", list }: { uid?: string; list?: Item[] } = {}) {
+  const words = shellWords(locale);
+  const svg = `<svg class="iso-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" aria-hidden="true" focusable="false">${bodyFor(locale, list, uid)}</svg>`;
   return (
     `<figure class="iso-figure vlt-figure"><div class="iso-plate">` +
-    `<div class="iso-plate-corners" aria-hidden="true">${corner("fig", w.fig(fig))}${corner("title", w.title)}${corner("hint", w.hint)}${corner("readout", w.rest(FIRST_LINE), " data-readout")}</div>` +
-    `<div class="iso-stage vlt-stage" tabindex="0" role="group" aria-label="${escape(w.stage)}">${svg}<span class="vlt-sr" role="status" aria-live="polite" data-status></span></div>` +
-    `</div><figcaption class="iso-legend"><span class="iso-keys">${keys.map(([mark, label]) => `<span class="iso-key">${swatch(mark)}${escape(label)}</span>`).join("")}</span><span class="iso-caption">${escape(w.caption)}</span></figcaption></figure>`
+    `<div class="iso-stage vlt-stage" tabindex="0" role="group" aria-label="${escape(words.stage)}">` +
+    `<div class="anx-art" role="img" aria-label="${escape(words.label)}" style="aspect-ratio:${WIDTH} / ${HEIGHT}" data-art="ready">${svg}</div>` +
+    `<span class="vlt-sr" role="status" aria-live="polite" data-status></span></div>` +
+    `<span class="anx-sr" data-readout>${escape(words.rest)}</span>` +
+    `</div></figure>`
   );
 }
+
+export { WIDTH, HEIGHT };

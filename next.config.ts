@@ -235,6 +235,19 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      /**
+       * The lazy anatomy figures' drawings (NAJ-897): content-hashed SVGs
+       * that scripts/anatomy/export.mjs writes, so a file never changes under
+       * its name and can be cached for a year. They are page parts, unstyled
+       * on their own, so they stay out of image search.
+       */
+      {
+        source: "/figures/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "X-Robots-Tag", value: "noindex" },
+        ],
+      },
     ];
   },
 };

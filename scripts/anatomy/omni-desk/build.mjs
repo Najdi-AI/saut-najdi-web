@@ -76,7 +76,7 @@ const strip = (file) =>
 const font = (file, weight) => `@font-face{font-family:"Thmanyah";src:url("${pathToFileURL(join(ROOT, "src", "fonts", file)).href}") format("woff2");font-weight:${weight};font-display:block}`;
 const fonts = font("thmanyahsans-Regular.woff2", 400) + font("thmanyahsans-Medium.woff2", 500) + font("thmanyahsans-Bold.woff2", "600 700");
 const kitCss = readFileSync(join(KIT, "iso.css"), "utf8");
-const figCss = readFileSync(join(FIG, "omni-desk.css"), "utf8");
+const figCss = readFileSync(join(FIG, "..", "lazy", "frameless.css"), "utf8") + readFileSync(join(FIG, "omni-desk.css"), "utf8");
 const pageCss = `*{box-sizing:border-box}html,body{margin:0}body{background:var(--page);color:#4b5468;font:15px/1.6 "Thmanyah",system-ui,sans-serif;font-feature-settings:"lnum" 1;-webkit-font-smoothing:antialiased}
 body[data-page="light"]{--page:#f7f8fa;color-scheme:light}body[data-page="dark"]{--page:#080d1c;color-scheme:dark}
 main{width:min(720px,100% - 32px);margin:56px auto 96px}`;
@@ -91,7 +91,7 @@ const name = `omni-desk${SITE ? "-site" : ""}${LOCALE === "en" ? "-en" : ""}${TH
 writeFileSync(join(OUT, name), page);
 
 const bytes = (text) => Buffer.byteLength(text, "utf8");
-console.log(`wrote ${join(OUT, name)} · page ${(bytes(page) / 1024).toFixed(1)} KB · svg ${(bytes(parts.svg) / 1024).toFixed(1)} KB · live ${(bytes(live) / 1024).toFixed(1)} KB · ${geometry.ITEMS.length} items · scale ${geometry.KS.toFixed(3)} · ${built} ms`);
+console.log(`wrote ${join(OUT, name)} · page ${(bytes(page) / 1024).toFixed(1)} KB · svg ${(bytes(markup.artOf(LOCALE, "x")) / 1024).toFixed(1)} KB · live ${(bytes(live) / 1024).toFixed(1)} KB · ${geometry.ITEMS.length} items · scale ${geometry.KS.toFixed(3)} · ${built} ms`);
 
 /* ------------------------------------------------------------ the audit */
 

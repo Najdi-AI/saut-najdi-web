@@ -68,47 +68,10 @@ html[data-theme="dark"] .od.iso {
   color: var(--anatomy-text);
 }
 
-.od .iso-figure {
-  margin: 0;
-}
-
-.od .iso-plate {
-  border-radius: 16px;
-  box-shadow: 0 0 0 1px var(--od-frame);
-  padding: 50px 22px 46px;
-}
-
-/* Card words: the site's typeface, never letter-spaced in Arabic. */
-.od .iso-plate-corner,
-.od .iso-legend,
-.od .od-pick {
+/* Frameless (lazy/frameless.css): no card, corners or legend. The buttons and the note use the site's type. */
+.od .od-pick,
+.od .od-note {
   font-family: inherit;
-}
-
-.od .iso-plate-corner {
-  font-size: 11.5px;
-}
-
-.od[dir="rtl"] .iso-plate-corner {
-  letter-spacing: 0;
-  text-transform: none;
-  font-size: 12.5px;
-}
-
-.od[dir="rtl"] .iso-plate-corner[data-corner="fig"],
-.od[dir="rtl"] .iso-plate-corner[data-corner="hint"] {
-  left: auto;
-  right: 0;
-}
-
-.od[dir="rtl"] .iso-plate-corner[data-corner="title"],
-.od[dir="rtl"] .iso-plate-corner[data-corner="readout"] {
-  right: auto;
-  left: 0;
-}
-
-.od .iso-plate-corner[data-corner="readout"] {
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .od-stage {
@@ -165,14 +128,15 @@ html[data-theme="dark"] .od.iso {
 .od-picks {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 6px 8px;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .od-pick {
   appearance: none;
-  border: 1px solid var(--od-frame);
-  background: var(--anatomy-card);
+  border: 1px solid var(--anatomy-lo);
+  background: transparent;
   color: var(--anatomy-text);
   border-radius: 999px;
   padding: 5px 12px;
@@ -198,8 +162,12 @@ html[data-theme="dark"] .od.iso {
   outline-offset: 3px;
 }
 
-.od .iso-legend {
-  margin-top: 10px;
+.od-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--anatomy-muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .od-sr {
@@ -216,18 +184,5 @@ html[data-theme="dark"] .od.iso {
 @media (prefers-reduced-motion: reduce) {
   .od * {
     transition: none !important;
-  }
-}
-
-/* Phones: let the drawing run a little past the card's padding so the tubes stay legible. */
-@media (max-width: 640px) {
-  .od .iso-plate {
-    overflow: hidden;
-    padding: 46px 10px 64px;
-  }
-
-  .od .od-art .iso-svg {
-    width: 114%;
-    margin: -2% -7% -1%;
   }
 }

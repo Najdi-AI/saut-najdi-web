@@ -65,7 +65,7 @@ const kitSource = readFileSync(join(KIT, "iso-kit.mjs"), "utf8").replace(/^expor
 const live = `{\n${strip(join(FIG, "lever.ts"))}\n${strip(join(FIG, "controller.ts"))}\nconst DATA = __DATA__;\nmountMeter(document.querySelector(".cm-stage"), DATA);\n}`;
 
 const ISO_CSS = readFileSync(join(KIT, "iso.css"), "utf8");
-const CM_CSS = readFileSync(join(FIG, "credit-meter.css"), "utf8");
+const CM_CSS = readFileSync(join(FIG, "..", "lazy", "frameless.css"), "utf8") + readFileSync(join(FIG, "credit-meter.css"), "utf8");
 const font = (file, weight) => `@font-face{font-family:"Thmanyah";src:url("${pathToFileURL(join(SRC, "fonts", file)).href}") format("woff2");font-weight:${weight};font-display:block}`;
 const PAGE_CSS = `
 ${font("thmanyahsans-Regular.woff2", 400)}${font("thmanyahsans-Medium.woff2", 500)}${font("thmanyahsans-Bold.woff2", "600 700")}
@@ -83,19 +83,21 @@ const style = (object) => Object.entries(object).map(([key, value]) => `${key}:$
 function page(locale, theme) {
   const copy = COPY[locale];
   const data = scene.liveData(locale);
+  /* The same frameless tree figure.tsx renders, with the drawing inline where the site fetches it lazily. */
   const stage =
     `<div class="iso-stage cm-stage" role="group" aria-label="${esc(copy.group)}" data-outlet="${scene.START.outlet}" data-plan="${scene.START.plan}">` +
     `<div class="cm-box">` +
-    `<svg class="iso-svg" viewBox="0 0 ${geometry.METER.width} ${geometry.METER.height}" role="img" aria-label="${esc(copy.label)}" focusable="false">${scene.sceneSvg(locale)}</svg>` +
+    `<div class="anx-art" role="img" aria-label="${esc(copy.label)}" style="aspect-ratio:${geometry.METER.width} / ${geometry.METER.height}" data-art="ready">` +
+    `<svg class="iso-svg" viewBox="0 0 ${geometry.METER.width} ${geometry.METER.height}" aria-hidden="true" focusable="false">${scene.sceneSvg(locale)}</svg></div>` +
     `<button type="button" class="cm-hit" data-control="plan" style="${style(scene.hitStyle(geometry.HITS.plan))}" aria-label="${esc(data.planButton[scene.START.plan])}"></button>` +
     `<button type="button" class="cm-hit" data-control="valve" style="${style(scene.hitStyle(geometry.HITS.valve))}" aria-label="${esc(data.valveButton[scene.START.outlet])}"></button>` +
     `</div>` +
     `<span class="cm-sr" role="status" aria-live="polite" data-status></span>` +
     `</div>`;
-  const plate = k.plateHtml({ fig: copy.fig(4), title: copy.title, hint: copy.hint, readout: copy.readout, keys: copy.keys, caption: copy.caption, body: stage });
+  const plate = `<figure class="iso-figure"><div class="iso-plate">${stage}<span class="anx-sr" data-readout="">${esc(copy.readout)}</span></div></figure>`;
   const dir = locale === "ar" ? "rtl" : "ltr";
   const script = (kitSource + "\n" + live.replace("__DATA__", JSON.stringify(data))).split("</script").join("<\\/script");
-  return `<!doctype html><html lang="${locale}" dir="${dir}"${theme === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Credit meter</title><style>${PAGE_CSS}${ISO_CSS}${CM_CSS}</style></head><body><main><div class="iso cm" data-theme="light" dir="${dir}" lang="${locale}">${plate}</div></main><script type="module">${script}</script></body></html>`;
+  return `<!doctype html><html lang="${locale}" dir="${dir}"${theme === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Credit meter</title><style>${PAGE_CSS}${ISO_CSS}${CM_CSS}</style></head><body><main><div class="iso cm anx" data-theme="light" dir="${dir}" lang="${locale}">${plate}</div></main><script type="module">${script}</script></body></html>`;
 }
 
 const written = [];

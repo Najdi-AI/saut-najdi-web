@@ -86,51 +86,7 @@
   --cm-dim: 0.42;
 }
 
-/* The card: the site's card shape, the site's type. */
-.cm .iso-figure {
-  margin: 0;
-}
-
-.cm .iso-plate {
-  border-radius: 24px;
-  box-shadow: 0 0 0 1px var(--cm-frame);
-  padding: 50px 22px 46px;
-}
-
-.cm .iso-plate-corner {
-  font-family: var(--font-thmanyah), system-ui, sans-serif;
-  font-size: 12px;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.cm .iso-plate-corner[data-corner="readout"] {
-  color: var(--anatomy-strong);
-  font-weight: 500;
-}
-
-.cm[dir="rtl"] .iso-plate-corner[data-corner="fig"],
-.cm[dir="rtl"] .iso-plate-corner[data-corner="hint"] {
-  left: auto;
-  right: 0;
-}
-
-.cm[dir="rtl"] .iso-plate-corner[data-corner="title"],
-.cm[dir="rtl"] .iso-plate-corner[data-corner="readout"] {
-  right: auto;
-  left: 0;
-}
-
-.cm .iso-legend {
-  font-family: var(--font-thmanyah), system-ui, sans-serif;
-  font-size: 13px;
-  letter-spacing: 0;
-  color: var(--anatomy-text);
-}
-
-.cm .iso-caption {
-  color: var(--anatomy-muted);
-}
+/* Frameless (lazy/frameless.css): no card, corners or legend. */
 
 /* The stage: the drawing plus two hit areas sitting on the knob and the lever. */
 .cm-box {
@@ -277,26 +233,5 @@
 @media (prefers-reduced-motion: reduce) {
   .cm .cm-scale {
     transition: none;
-  }
-}
-
-/* Phones: let the drawing run a little past the card's padding. */
-@media (max-width: 560px) {
-  .cm .iso-plate {
-    overflow: hidden;
-    padding: 46px 10px 64px;
-  }
-
-  .cm .cm-box {
-    width: 114%;
-    margin: -3% -7% -2%;
-  }
-
-  .cm .iso-plate-corner[data-corner="readout"] {
-    bottom: 0;
-  }
-
-  .cm .iso-plate-corner[data-corner="hint"] {
-    bottom: 20px;
   }
 }

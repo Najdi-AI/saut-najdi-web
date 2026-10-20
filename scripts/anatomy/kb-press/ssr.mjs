@@ -1,12 +1,12 @@
 /**
  * Server-render check for the knowledge press React component (NAJ-897).
  *
- * Nothing in the site imports the figure yet (the integration step wires it),
- * so `next build` never renders it. This renders <KbPressFigure> for both
+ * This renders <KbPressFigure> for both
  * locales with react-dom/server, transpiling the .ts/.tsx sources with the
  * repo's own TypeScript, and checks the markup the browser will get: the theme
- * wrappers, dir/lang, the plate words, the question buttons, the SVG body
- * (byte-identical to what the verification pages use) and the live hooks.
+ * wrappers, dir/lang, the frameless shell (no corners or legend, the readout
+ * off screen), the question buttons, the empty lazy art slot, and that the
+ * lazy SVG in public/figures is the verified body with its live hooks.
  * It also reports the HTML weight and a minified size of the client code.
  *
  *   node scripts/anatomy/kb-press/ssr.mjs
@@ -54,6 +54,7 @@ const React = await import(pathToFileURL(require.resolve("react")).href);
 const { KbPressFigure } = await import(pathToFileURL(join(FIG, "index.ts")).href);
 const G = await import(pathToFileURL(join(FIG, "geometry.ts")).href);
 const M = await import(pathToFileURL(join(FIG, "model.ts")).href);
+const { FIGURE_ART } = await import(pathToFileURL(join(ROOT, "src/components/anatomy/lazy/assets.ts")).href);
 
 let failed = 0;
 const check = (label, ok) => {
@@ -67,33 +68,25 @@ for (const locale of ["ar", "en"]) {
   const attr = (text) => text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
   console.log(`\n${locale}: ${(Buffer.byteLength(html) / 1024).toFixed(1)} KB HTML (${(gzipSync(html).length / 1024).toFixed(1)} KB gzip)`);
   check("outer wrapper carries the kit's dark tokens", html.startsWith('<div class="iso kbp-theme">'));
-  check("plate is light by default, follows <html data-theme> through kb-press.css", html.includes('class="iso kbp" data-theme="light"'));
+  check("figure is light by default, frameless (anx), follows <html data-theme> through kb-press.css", html.includes('class="iso kbp anx" data-theme="light"'));
   check(`dir and lang set for ${locale}`, html.includes(`dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}"`));
-  check("Fig, title, hint and resting readout in the corners", [`${W.fig} 3`, W.title, W.hint, W.ready].every((text) => html.includes(text)));
-  check("readout slot is the kit's [data-readout]", /data-corner="readout" data-readout="">/.test(html));
+  check("frameless: no corner labels, no legend, no caption", !html.includes("iso-plate-corner") && !html.includes("iso-legend") && !html.includes(W.caption) && !html.includes(W.hint));
+  check("resting readout kept off screen in the kit's [data-readout]", html.includes(`<span class="anx-sr" data-readout="">${W.ready}</span>`));
   check("four question buttons, keyboard reachable", (html.match(/<button type="button" class="kbp-ask" data-kb-ask="\d" aria-pressed="false">/g) ?? []).length === 4);
   check("polite status region for announcements", html.includes('role="status" aria-live="polite" data-kb-status=""'));
   check("focusable stage with its label", html.includes(`class="kbp-stage" tabindex="0" role="group" aria-label="${attr(W.stage)}"`));
-  check("svg is role=img with the locale's label", html.includes(`role="img" aria-label="${attr(W.svg)}"`));
-  const ids = [...html.matchAll(/id="(kbp-drop-[A-Za-z0-9_-]+)"/g)].map((match) => match[1]);
-  check("svg body is byte-identical to the verified pages (apart from its per-instance clip id)", ids.length === 1 && html.replaceAll(ids[0], G.CLIP_ID).includes(G.BODY));
-  check("the drop clip is referenced by its own id", ids.length === 1 && html.includes(`clip-path="url(#${ids[0]})"`));
-  check("live groups present (arm, head, platen, transit, 4 drawers, 4 lifts, 3 files, lift slot)", ["arm", "head", "platen", "transit", "drawer.0", "drawer.3", "lift.0", "lift.3", "doc.0", "doc.2"].every((name) => html.includes(`data-kb="${name}"`)) && html.includes('data-kb-slot="lift"'));
-  check("caption keeps the claim on text chat, not calls", W.caption.includes(locale === "ar" ? "المحادثة النصية" : "text chat"));
-}
-
-/* two figures on one page: every clip id is unique, and each reference finds its own */
-{
-  const html = renderToString(React.createElement(React.Fragment, null, React.createElement(KbPressFigure, { locale: "ar", fig: 3 }), React.createElement(KbPressFigure, { locale: "en", fig: 4 })));
-  const ids = [...html.matchAll(/id="(kbp-drop-[A-Za-z0-9_-]+)"/g)].map((match) => match[1]);
-  const refs = [...html.matchAll(/clip-path="url\(#([^)]+)\)"/g)].map((match) => match[1]);
-  console.log(`\ntwo instances: clip ids ${ids.join(", ")}`);
-  check("two instances get two distinct clip ids, each referenced once", ids.length === 2 && new Set(ids).size === 2 && refs.length === 2 && refs.every((ref, index) => ref === ids[index]));
+  check("art slot is role=img with the locale's label and the drawing's aspect ratio", html.includes(`class="anx-art" role="img" aria-label="${attr(W.svg)}" style="aspect-ratio:${G.VIEW.width} / ${G.VIEW.height}"`));
+  check("lazy: no drawing in the server HTML", !html.includes("<path") && !html.includes("data-kb="));
+  check("the chips' label keeps the claim on text chat, and illustrative", W.asks.includes(locale === "ar" ? "المحادثة النصية" : "text chat") && W.asks.includes(locale === "ar" ? "توضيحية" : "Illustrative"));
+  const file = join(ROOT, "public", FIGURE_ART["kb-press"][locale]);
+  const art = readFileSync(file, "utf8").split("\r\n").join("\n");
+  check(`lazy art ${FIGURE_ART["kb-press"][locale]} is the verified body (byte-identical apart from its per-instance clip token)`, art.replaceAll(`${G.CLIP_ID}-ANXUID`, G.CLIP_ID).includes(G.BODY) && art.split(`${G.CLIP_ID}-ANXUID`).length === 3);
+  check("live groups present in the lazy art", ["arm", "head", "platen", "transit", "drawer.0", "drawer.3", "lift.0", "lift.3", "doc.0", "doc.2"].every((name) => art.includes(`data-kb="${name}"`)) && art.includes('data-kb-slot="lift"'));
 }
 
 /* client weight: the only code that ships is live.tsx + motion.ts + model.ts */
 const terserPath = join(ROOT, "node_modules/next/dist/compiled/terser/bundle.min.js");
-const client = ["model.ts", "motion.ts", "live.tsx"]
+const client = ["model.ts", "motion.ts", "live.tsx", "../lazy/useLazyArt.ts"]
   .map((file) => ts.transpileModule(readFileSync(join(FIG, file), "utf8"), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText.replace(/^import[^;]*;\s*$/gm, ""))
   .join("\n");
 let minified = client;
@@ -103,6 +96,6 @@ try {
 } catch (error) {
   console.log(`(terser unavailable: ${error.message}; reporting unminified)`);
 }
-console.log(`\nclient code (model + motion + live): ${(Buffer.byteLength(minified) / 1024).toFixed(1)} KB minified, ${(gzipSync(minified).length / 1024).toFixed(1)} KB gzip`);
+console.log(`\nclient code (model + motion + live + useLazyArt): ${(Buffer.byteLength(minified) / 1024).toFixed(1)} KB minified, ${(gzipSync(minified).length / 1024).toFixed(1)} KB gzip`);
 console.log(failed ? `\nssr check failed: ${failed}` : "\nssr check passed");
 if (failed) process.exitCode = 1;

@@ -101,45 +101,12 @@
   --vlt-well: #c9cdd8;
 }
 
-.vlt .iso-figure {
-  margin: 0;
-}
-.vlt .iso-plate {
-  border-radius: 14px;
-  box-shadow: 0 0 0 1px var(--vlt-rule);
-}
-.vlt .iso-legend {
-  color: var(--anatomy-muted);
-}
-
-/* Arabic: the site's typeface, never letter-spaced, never upper-cased. */
-.vlt[dir="rtl"] .iso-plate-corner,
-.vlt[dir="rtl"] .iso-legend {
-  font-family: inherit;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.vlt[dir="rtl"] .iso-plate-corner {
-  font-size: 12px;
-}
-.vlt[dir="rtl"] .iso-plate-corner[data-corner="fig"],
-.vlt[dir="rtl"] .iso-plate-corner[data-corner="hint"] {
-  left: auto;
-  right: 0;
-}
-.vlt[dir="rtl"] .iso-plate-corner[data-corner="title"],
-.vlt[dir="rtl"] .iso-plate-corner[data-corner="readout"] {
-  right: auto;
-  left: 0;
-}
+/* Frameless (lazy/frameless.css): no card, corners or legend. Arabic words in the drawing use the site's typeface. */
 .vlt[dir="rtl"] .vlt-engraved {
   font-family: inherit;
   letter-spacing: 0;
   direction: rtl;
   font-weight: 700;
-}
-.vlt .iso-plate-corner[data-corner="readout"] {
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Parts. */
@@ -221,16 +188,6 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-@media (max-width: 560px) {
-  .vlt .iso-plate {
-    overflow: hidden;
-  }
-  .vlt .iso-plate .iso-svg {
-    width: 112%;
-    margin: -2% -6% -1%;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

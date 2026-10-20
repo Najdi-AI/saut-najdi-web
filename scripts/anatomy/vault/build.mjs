@@ -139,7 +139,7 @@ if (AUDIT) {
 
 const sorted = [...rest.items].sort((a, b) => a.key - b.key).map((item) => ({ ...geometry.ITEMS.find((source) => source.name === item.name), key: item.key }));
 
-const css = readFileSync(join(SRC, "vault.css"), "utf8");
+const css = readFileSync(join(SRC, "..", "lazy", "frameless.css"), "utf8") + readFileSync(join(SRC, "vault.css"), "utf8");
 const font = (file, weight) => `@font-face{font-family:"Thmanyah";src:url(data:font/woff2;base64,${readFileSync(join(ROOT, "src", "fonts", file)).toString("base64")}) format("woff2");font-weight:${weight};font-display:block}`;
 const fonts = font("thmanyahsans-Regular.woff2", 400) + font("thmanyahsans-Bold.woff2", "600 700");
 const controller = stripTypeScriptTypes(readFileSync(join(SRC, "controller.ts"), "utf8"), { mode: "strip" }).replace(/^export /gm, "");
@@ -151,12 +151,12 @@ const GROUNDS = {
 };
 
 function page(locale, ground) {
-  const html = figureHtml(locale, 7, { uid: `7${ground === "navy" ? "n" : "p"}`, list: sorted });
+  const html = figureHtml(locale, { uid: `7${ground === "navy" ? "n" : "p"}`, list: sorted });
   const dir = locale === "ar" ? "rtl" : "ltr";
   const wrapperTheme = ground === "navy" ? "dark" : THEME;
   const navy = THEME === "dark" ? "22 32 60" : "17 32 70";
   const script = `${controller}\nconst root = document.querySelector(".vlt");\nmountVault(root, ${JSON.stringify(geometry.LIVE)}, ${JSON.stringify(model.textFor(locale))});\n`;
-  return `<!doctype html><html lang="${locale}" dir="${dir}"${THEME === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gulf vault · ${locale} · ${ground} · ${THEME}</title><style>${fonts}:root{--font-thmanyah:"Thmanyah";--c-navy:${navy}}*{box-sizing:border-box}body{margin:0;background:${GROUNDS[ground][THEME]};color:#888;font:14px/1.6 var(--font-thmanyah),system-ui,sans-serif;-webkit-font-smoothing:antialiased}main{width:min(680px,100% - 32px);margin:56px auto 80px}${k.ISO_CSS}${css}</style></head><body><main><div class="iso vlt" dir="${dir}" lang="${locale}" data-theme="${wrapperTheme}" data-ground="${ground}">${html}</div></main><script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;
+  return `<!doctype html><html lang="${locale}" dir="${dir}"${THEME === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gulf vault · ${locale} · ${ground} · ${THEME}</title><style>${fonts}:root{--font-thmanyah:"Thmanyah";--c-navy:${navy}}*{box-sizing:border-box}body{margin:0;background:${GROUNDS[ground][THEME]};color:#888;font:14px/1.6 var(--font-thmanyah),system-ui,sans-serif;-webkit-font-smoothing:antialiased}main{width:min(680px,100% - 32px);margin:56px auto 80px}${k.ISO_CSS}${css}</style></head><body><main><div class="iso vlt anx" dir="${dir}" lang="${locale}" data-theme="${wrapperTheme}" data-ground="${ground}">${html}</div></main><script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;
 }
 
 mkdirSync(OUT, { recursive: true });

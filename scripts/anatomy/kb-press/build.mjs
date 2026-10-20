@@ -57,32 +57,19 @@ const K = await import(pathToFileURL(join(ISO, "iso-kit.ts")).href);
 /* ------------------------------------------------------------ the pages */
 
 const esc = (text) => String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const swatch = (mark) =>
-  mark === "flat"
-    ? `<svg class="iso-swatch" data-mark="flat" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="M2 6.5 8 3.5 14 6.5 8 9.5Z"></path></svg>`
-    : `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true" focusable="false"><path d="M2 4.5 8 1.5 14 4.5 14 6 8 9 2 6Z"></path><path class="iso-swatch-crease" d="M2 4.5 8 7.5 14 4.5"></path></svg>`;
-
-/** The same tree figure.tsx renders through the kit's <Plate>, as a string. */
-function figureHtml(locale, fig = 3) {
+/** The same frameless tree figure.tsx renders, as a string, with the drawing inline where the site fetches it lazily. */
+function figureHtml(locale) {
   const W = M.WORDS[locale];
-  const keys = [
-    ["lit", W.keys.lit],
-    ["raised", W.keys.drawers],
-    ["flat", W.keys.files],
-  ];
   const asks = M.QUESTIONS.map((_, index) => `<button type="button" class="kbp-ask" data-kb-ask="${index}" aria-pressed="false">${esc(W.questions[index])}</button>`).join("");
   return (
-    `<div class="iso kbp-theme"><div class="iso kbp" data-theme="light" dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}">` +
-    `<figure class="iso-figure"><div class="iso-plate"><div class="iso-plate-corners" aria-hidden="true">` +
-    `<span class="iso-plate-corner" data-corner="fig">${esc(`${W.fig} ${fig}`)}</span>` +
-    `<span class="iso-plate-corner" data-corner="title">${esc(W.title)}</span>` +
-    `<span class="iso-plate-corner" data-corner="hint">${esc(W.hint)}</span>` +
-    `<span class="iso-plate-corner" data-corner="readout" data-readout="">${esc(W.ready)}</span></div>` +
+    `<div class="iso kbp-theme"><div class="iso kbp anx" data-theme="light" dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}">` +
+    `<figure class="iso-figure"><div class="iso-plate">` +
     `<div class="kbp-stage" tabindex="0" role="group" aria-label="${esc(W.stage)}">` +
-    `<svg class="iso-svg" viewBox="0 0 ${G.VIEW.width} ${G.VIEW.height}" role="img" aria-label="${esc(W.svg)}" focusable="false">${G.BODY}</svg></div></div>` +
-    `<figcaption class="iso-legend"><span class="iso-keys">${keys.map(([mark, label]) => `<span class="iso-key">${swatch(mark)}${esc(label)}</span>`).join("")}</span>` +
-    `<span class="iso-caption"><span class="kbp-asks" role="group" aria-label="${esc(W.asks)}"><span class="kbp-asks-label" aria-hidden="true">${esc(W.asks)}:</span>${asks}</span>` +
-    `<span class="kbp-caption">${esc(W.caption)}</span><span class="kbp-sr" role="status" aria-live="polite" data-kb-status=""></span></span></figcaption></figure></div></div>`
+    `<div class="anx-art" role="img" aria-label="${esc(W.svg)}" style="aspect-ratio:${G.VIEW.width} / ${G.VIEW.height}" data-art="ready">` +
+    `<svg class="iso-svg" viewBox="0 0 ${G.VIEW.width} ${G.VIEW.height}" aria-hidden="true" focusable="false">${G.BODY}</svg></div></div>` +
+    `<span class="anx-sr" data-readout="">${esc(W.ready)}</span></div>` +
+    `<div class="kbp-asks" role="group" aria-label="${esc(W.asks)}"><span class="kbp-asks-label" aria-hidden="true">${esc(W.asks)}</span>${asks}</div>` +
+    `<span class="kbp-sr" role="status" aria-live="polite" data-kb-status=""></span></figure></div></div>`
   );
 }
 
@@ -94,7 +81,7 @@ const SCRIPT = strip("model.ts") + "\n" + strip("motion.ts");
 
 const font = (file, weight) => `@font-face{font-family:"Kbp Thmanyah";src:url(data:font/woff2;base64,${readFileSync(join(ROOT, "src/fonts", file)).toString("base64")}) format("woff2");font-weight:${weight};font-display:block}`;
 const FONTS = font("thmanyahsans-Regular.woff2", 400) + font("thmanyahsans-Medium.woff2", 500);
-const CSS = readFileSync(join(ISO, "iso.css"), "utf8") + readFileSync(join(FIG, "kb-press.css"), "utf8");
+const CSS = readFileSync(join(ISO, "iso.css"), "utf8") + readFileSync(join(FIG, "..", "lazy", "frameless.css"), "utf8") + readFileSync(join(FIG, "kb-press.css"), "utf8");
 const SITE = `${FONTS}
 *{box-sizing:border-box}
 html{--font-thmanyah:"Kbp Thmanyah";color-scheme:light;background:rgb(247 248 250)}

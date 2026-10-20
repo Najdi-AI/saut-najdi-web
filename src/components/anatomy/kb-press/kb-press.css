@@ -8,6 +8,37 @@
  * from that outer wrapper, so the plate follows the site with no script and
  * no flash, and no token value is copied out of the kit.
  */
+/*
+ * Night, frameless: without its card the press stands on the site's own night
+ * surfaces, so the outer wrapper takes the navy greys the other figures use
+ * (omni-desk.css) instead of the kit's neutral blacks, which read as a black
+ * patch on the navy page.
+ */
+html[data-theme="dark"] .iso.kbp-theme {
+  --anatomy-page: #080d1c;
+  --anatomy-card: #0f1730;
+  --anatomy-paper: #0f1730;
+  --anatomy-text: #aab3c7;
+  --anatomy-strong: #eef1f8;
+  --anatomy-muted: #838da3;
+  --anatomy-face: #172142;
+  --anatomy-top: #1a2444;
+  --anatomy-shade-0: #0a1126;
+  --anatomy-shade-1: #0d152d;
+  --anatomy-shade-2: #111a35;
+  --anatomy-shade-3: #151f3d;
+  --anatomy-lit-top: #26325a;
+  --anatomy-lit-shade: #1c284c;
+  --anatomy-hi: #dde3f0;
+  --anatomy-mid: #6c7795;
+  --anatomy-lo: #3c4766;
+  --anatomy-faint: #27324f;
+  --anatomy-lit: #ffffff;
+  --anatomy-halo: #02040b;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #e6eaf4;
+}
+
 html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   --anatomy-page: inherit;
   --anatomy-card: inherit;
@@ -42,114 +73,12 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   color: var(--anatomy-text);
 }
 
-.kbp .iso-figure {
-  margin: 0;
-}
-
-/* Words on the card use the site's type. Arabic is never letter-spaced. */
-.kbp .iso-plate-corner,
-.kbp .iso-legend {
+/* Frameless (lazy/frameless.css): no card, corners or legend; the chips use the site's type. */
+.kbp .kbp-asks {
   font-family: var(--kbp-font);
 }
 
-.kbp .iso-plate-corner {
-  font-size: 12px;
-  line-height: 1.25;
-}
-
-.kbp[dir="rtl"] .iso-plate-corner {
-  letter-spacing: 0;
-  text-transform: none;
-  font-size: 13px;
-}
-
-/*
- * The four corners sit in a grid instead of the kit's absolute corners, so a
- * long readout can never run under the hint: Fig and title share the top row,
- * hint and readout the bottom row as two cells, and a readout too long for
- * its cell wraps inside it. Grid columns follow dir, so Arabic mirrors (Fig
- * and hint on the right) with no left/right overrides.
- */
-.kbp {
-  container: kbp / inline-size;
-}
-
-.kbp .iso-plate-corners {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  column-gap: 24px;
-}
-
-.kbp .iso-plate-corner {
-  position: static;
-}
-
-.kbp .iso-plate-corner[data-corner="fig"] {
-  grid-area: 1 / 1;
-  align-self: start;
-}
-
-.kbp .iso-plate-corner[data-corner="title"] {
-  grid-area: 1 / 2;
-  align-self: start;
-  justify-self: end;
-  text-align: end;
-}
-
-.kbp .iso-plate-corner[data-corner="hint"] {
-  grid-area: 3 / 1;
-  align-self: end;
-}
-
-.kbp .iso-plate-corner[data-corner="readout"] {
-  grid-area: 3 / 2;
-  align-self: end;
-  justify-self: end;
-  text-align: end;
-  white-space: normal;
-  color: var(--anatomy-strong);
-  font-variant-numeric: lining-nums tabular-nums;
-}
-
-/*
- * A card narrower than the longest readout plus the hint (about 600 px for
- * the English whitening answer): the hint takes its own row and the readout
- * the row under it, with room kept for two lines, so the hint never moves.
- */
-@container kbp (max-width: 679.98px) {
-  .kbp .iso-plate {
-    padding-bottom: 84px;
-  }
-
-  .kbp .iso-plate-corners {
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
-    row-gap: 6px;
-  }
-
-  .kbp .iso-plate-corner[data-corner="title"] {
-    white-space: normal;
-  }
-
-  .kbp .iso-plate-corner[data-corner="hint"] {
-    grid-area: 3 / 1 / 4 / -1;
-    justify-self: start;
-  }
-
-  .kbp .iso-plate-corner[data-corner="readout"] {
-    grid-area: 4 / 1 / 5 / -1;
-    justify-self: stretch;
-    text-align: start;
-    min-height: 2.5em;
-  }
-}
-
-.kbp .iso-legend {
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.kbp[dir="rtl"] .iso-legend {
+.kbp[dir="rtl"] .kbp-asks {
   letter-spacing: 0;
 }
 
@@ -178,16 +107,19 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   cursor: pointer;
 }
 
-/* The question chips under the card. */
+/* The question chips under the drawing, centred under the machine. */
 .kbp-asks {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin: 2px 0 4px;
+  margin: 14px 0 0;
 }
 
 .kbp-asks-label {
+  flex-basis: 100%;
+  text-align: center;
   color: var(--anatomy-muted);
   font-size: 13px;
 }
@@ -235,17 +167,5 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
 @media (prefers-reduced-motion: reduce) {
   .kbp-ask {
     transition: none;
-  }
-}
-
-/* Phones: let the bench fill the card. */
-@media (max-width: 640px) {
-  .kbp-stage {
-    overflow: hidden;
-  }
-
-  .kbp .iso-plate .kbp-stage .iso-svg {
-    width: 106%;
-    margin: -2% -3% -2%;
   }
 }

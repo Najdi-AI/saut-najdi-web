@@ -86,7 +86,8 @@ const AR: Words = {
   ready: "جاهز للسؤال",
   stage: "مكبس المعرفة: اختر سؤالاً تحت الشكل أو استخدم الأسهم، والذراع يسحب البطاقة اللي فيها الجواب.",
   svg: "مكبس مستندات وخزانة بطاقات على منضدة. على اليمين مكبس تدخله ملفات النشاط: ملف PDF، وصفحة Word، ووسم رابط لصفحة من الموقع. المكبس يقسّم الملف إلى بطاقات، وكل بطاقة تمشي على سكة فوق الخزانة وتنزل من فتحة في درجها. على اليسار أربعة أدراج معنونة: الدوام، الأسعار، الخدمات، السياسات. وفوقها ذراع على سكة يفتح الدرج الصحيح ويرفع البطاقة اللي فيها الجواب.",
-  asks: "أسئلة توضيحية",
+  /* The chips' label is also the figure's one honest line: the answers are illustrative, and come in text chat (the VOICE_KB_RETRIEVAL gate). */
+  asks: "أسئلة توضيحية من المحادثة النصية",
   caption:
     "ملفاتك — PDF وWord، وصفحة من موقعك برابط — تدخل المكبس، تتقسّم إلى بطاقات، وكل بطاقة تنزل في درجها المعنون. ولما يسأل عميلك في قنوات المحادثة النصية، الذراع يفتح الدرج الصحيح ويرفع البطاقة اللي فيها الجواب، ومعها مصدرها. الأسئلة والبطاقات أمثلة توضيحية.",
   keys: {
@@ -112,7 +113,7 @@ const EN: Words = {
   ready: "Ready for a question",
   stage: "Knowledge press: pick a question below the figure or use the arrow keys, and the arm lifts the card that holds the answer.",
   svg: "A document press and a card cabinet on a bench. On the right, a press takes the business's files: a PDF bundle, a Word page and a link tag for a page of its website. The press splits each file into cards, and each card rides a track over the cabinet and drops through a slot into its drawer. On the left, four labelled drawers: hours, prices, services and policies. Above them an arm on a rail opens the right drawer and lifts the one card that holds the answer.",
-  asks: "Illustrative questions",
+  asks: "Illustrative questions from text chat",
   caption:
     "Your files (PDF and Word, plus a page of your website by link) go into the press, get split into cards, and each card drops into its labelled drawer. When a customer asks on your text chat channels, the arm opens the right drawer and lifts the one card that holds the answer, with its source. The questions and cards are illustrative examples.",
   keys: {

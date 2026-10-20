@@ -411,12 +411,14 @@
    only that canvas, so the artwork is ~89% of the box width: 136px boxes show
    it at ~121px, the brand guide's 120px digital minimum. Below 640px the box
    starts at 100px (artwork ~89px) and is the one item allowed to shrink, down
-   to 64px, so the booking pill, language and burger always fit. */
+   to 64px, so the booking pill, language and burger always fit. The link
+   itself keeps a 44px-tall tap target however short the image gets. */
 .hdr-logo {
   display: flex;
   align-items: center;
   flex: 0 1 100px;
   min-inline-size: 64px;
+  min-block-size: 44px;
 }
 @media (min-width: 640px) {
   .hdr-logo {

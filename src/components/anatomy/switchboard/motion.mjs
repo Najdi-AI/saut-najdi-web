@@ -208,7 +208,8 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
         if (shown.ticketFade === 0) (shown.ticket = 0), (shown.ticketFade = 1);
       } else shown.ticket = ease(shown.ticket, s.ticket ?? 0, dt, 0.35, calm);
     }
-    const dialect = mode === "user" && userDial ? userDial : s.dial ?? DIAL_HOME;
+    // the visitor's word turns the dial, also while the clip plays
+    const dialect = (mode === "user" || mode === "clip") && userDial ? userDial : s.dial ?? DIAL_HOME;
     const target = data.dial.angles[dialect];
     if (calm) {
       shown.angle = target;
@@ -258,7 +259,10 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
       mode = "tour";
       return true;
     }
-    return mode === "tour" || mode === "clip" || !settled;
+    // The clip keeps the loop alive only while something moves (the cone while the
+    // agent speaks, a lamp or plug easing): paused, it idles. Each new turn of the
+    // clip calls setClip, which starts the loop again.
+    return mode === "tour" || !settled;
   }
 
   function tick(now) {
@@ -372,6 +376,8 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
       if (clip.active) {
         window.clearTimeout(timer);
         homing = false;
+        // the clip is a call in Saudi Arabic: the dial goes to its word until the visitor turns it
+        if (!was) userDial = null;
         mode = "clip";
       } else if (was) {
         want = { ...clipTargets(), lamps: {}, speak: 0, phase: clip.status === "ended" ? "ended" : "answer" };

@@ -31,6 +31,17 @@ const PANEL_CLOSED: React.CSSProperties = {
  * forgiving close delay. Items with path=null render as non-links with
  * a badge — the no-dead-links rule.
  *
+ * One state, three inputs, and they must agree:
+ * - Mouse hover opens; leaving closes after a short grace period. Only a
+ *   real mouse counts (`pointerType`), because a touch tap also emits
+ *   compatibility hover events and would open-then-toggle-shut.
+ * - A click on a menu the hover already opened KEEPS it open (the first
+ *   click used to toggle it straight back shut, leaving aria-expanded
+ *   false). Any other click toggles.
+ * - Focus alone never opens it: keyboard users press Enter/Space, the
+ *   disclosure pattern. Opening on focus was what turned every click into
+ *   open-then-close.
+ *
  * The panel is never conditionally mounted: its descriptively-anchored links
  * must exist in the server-rendered HTML so search engines and AI agents can
  * discover the deep pages without a click. Open/closed is a matter of
@@ -49,6 +60,9 @@ export function NavMenu({
   const wrap = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* What opened the panel: a hover-opened panel survives the click that
+     usually follows it; a click-opened one closes on the next click. */
+  const openedBy = useRef<"hover" | "click" | null>(null);
   const panelId = useId();
   const pathname = usePathname();
 
@@ -56,28 +70,57 @@ export function NavMenu({
     if (timer.current) clearTimeout(timer.current);
     timer.current = null;
   };
-  const openNow = () => {
+  const show = (by: "hover" | "click") => {
     cancel();
+    openedBy.current = by;
     setOpen(true);
+  };
+  const hide = () => {
+    cancel();
+    openedBy.current = null;
+    setOpen(false);
   };
   const closeSoon = () => {
     cancel();
-    timer.current = setTimeout(() => setOpen(false), 140);
+    timer.current = setTimeout(hide, 140);
+  };
+
+  const onPointerEnter = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
+    if (open) cancel();
+    else show("hover");
+  };
+  const onPointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
+    closeSoon();
+  };
+  const onTriggerClick = () => {
+    if (!open) return show("click");
+    if (openedBy.current === "hover") {
+      // The click that follows a hover: confirm, don't close.
+      cancel();
+      openedBy.current = "click";
+      return;
+    }
+    hide();
   };
 
   useEffect(() => {
-    setOpen(false);
+    hide();
   }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      setOpen(false);
-      trigger.current?.focus();
+      // Only pull focus back when it was inside this menu; Escape over a
+      // hover-opened panel must not yank focus out of, say, a form field.
+      const within = wrap.current?.contains(document.activeElement);
+      hide();
+      if (within) trigger.current?.focus();
     };
     const onDown = (e: PointerEvent) => {
-      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+      if (!wrap.current?.contains(e.target as Node)) hide();
     };
     document.addEventListener("keydown", onKey);
     document.addEventListener("pointerdown", onDown);
@@ -93,10 +136,13 @@ export function NavMenu({
     <div
       className="mega"
       ref={wrap}
-      onMouseEnter={openNow}
-      onMouseLeave={closeSoon}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
       onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
+        // relatedTarget is null when focus leaves the document or lands on a
+        // non-focusable spot; only a move to a real element outside closes.
+        const next = e.relatedTarget as Node | null;
+        if (next && !e.currentTarget.contains(next)) hide();
       }}
     >
       <button
@@ -105,8 +151,7 @@ export function NavMenu({
         className="hdr-link mega-btn"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((v) => !v)}
-        onFocus={openNow}
+        onClick={onTriggerClick}
       >
         {label}
         <svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true">

@@ -37,7 +37,7 @@ const t = {
     caller: "I'd like to book for tomorrow",
     reply: "Sure! Tomorrow at 4:30 PM is open. Does that suit you?",
     play: "Hear the Saut Najdi agent",
-    caption: "A sample call in the Saut Najdi agent's voice, in Arabic",
+    caption: "An illustrative call in the Saut Najdi agent's voice, in Arabic",
     error: "The audio could not play. Try again.",
   },
 } as const;

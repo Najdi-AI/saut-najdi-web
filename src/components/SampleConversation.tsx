@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
 import { MediaGlyph, useVoiceClip, type ClipTimings, type Span } from "./VoiceClip";
@@ -100,6 +100,29 @@ export function SampleConversation({ locale }: { locale: Locale }) {
   const listRef = useRef<HTMLDivElement>(null);
   const inView = useInView(listRef, { once: true, margin: "-40px" });
   const clip = useVoiceClip("clinic-call", callSpans);
+  const playRef = useRef<HTMLButtonElement>(null);
+  const restartRef = useRef<HTMLButtonElement>(null);
+  const showRestart = clip.status === "playing" || clip.status === "paused" || clip.status === "loading";
+
+  // The restart control leaves when the call ends or fails. If it holds
+  // focus, hand focus to the play button during the audio event itself,
+  // while the restart button is still in the page, so focus never falls
+  // to the body (React re-renders only after this handler returns).
+  useEffect(() => {
+    const audio = clip.audioRef.current;
+    if (!audio) return;
+    const handOff = () => {
+      if (restartRef.current && document.activeElement === restartRef.current) {
+        playRef.current?.focus({ preventScroll: true });
+      }
+    };
+    audio.addEventListener("ended", handOff);
+    audio.addEventListener("error", handOff);
+    return () => {
+      audio.removeEventListener("ended", handOff);
+      audio.removeEventListener("error", handOff);
+    };
+  }, [clip.audioRef]);
 
   // Following the voice once the visitor has pressed play, unless the
   // timings could not be read (then the audio plays over the full call).
@@ -145,6 +168,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
       <div className="mt-4 flex justify-center">
         <div className="relative">
           <button
+            ref={playRef}
             type="button"
             onClick={clip.toggle}
             aria-busy={clip.status === "loading"}
@@ -155,8 +179,9 @@ export function SampleConversation({ locale }: { locale: Locale }) {
             </span>
             {label}
           </button>
-          {(clip.status === "playing" || clip.status === "paused" || clip.status === "loading") && (
+          {showRestart && (
             <button
+              ref={restartRef}
               type="button"
               onClick={clip.restart}
               aria-label={s.restart}

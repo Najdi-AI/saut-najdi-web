@@ -1,0 +1,1 @@
+export { KbPressFigure } from "./figure";

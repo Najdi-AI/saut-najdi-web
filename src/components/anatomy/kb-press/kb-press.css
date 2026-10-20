@@ -1,0 +1,251 @@
+/*
+ * The knowledge press: figure-scoped styles over the vendored kit (iso.css).
+ *
+ * Theme. The site is light unless <html data-theme="dark"> (ThemeScript).
+ * The kit's light tokens sit on .iso[data-theme="light"], so the plate is
+ * rendered light by the server, inside an outer .iso that carries the kit's
+ * dark tokens. When the site is dark, every kit token on the plate inherits
+ * from that outer wrapper, so the plate follows the site with no script and
+ * no flash, and no token value is copied out of the kit.
+ */
+html[data-theme="dark"] .kbp.iso[data-theme="light"] {
+  --anatomy-page: inherit;
+  --anatomy-card: inherit;
+  --anatomy-text: inherit;
+  --anatomy-strong: inherit;
+  --anatomy-muted: inherit;
+  --anatomy-paper: inherit;
+  --anatomy-face: inherit;
+  --anatomy-top: inherit;
+  --anatomy-shade-0: inherit;
+  --anatomy-shade-1: inherit;
+  --anatomy-shade-2: inherit;
+  --anatomy-shade-3: inherit;
+  --anatomy-lit-top: inherit;
+  --anatomy-lit-shade: inherit;
+  --anatomy-hi: inherit;
+  --anatomy-mid: inherit;
+  --anatomy-lo: inherit;
+  --anatomy-faint: inherit;
+  --anatomy-lit: inherit;
+  --anatomy-halo: inherit;
+  --anatomy-halo-opacity: inherit;
+  --anatomy-dot: inherit;
+  --anatomy-red: inherit;
+  --anatomy-green: inherit;
+  --anatomy-blue: inherit;
+  --anatomy-lift: inherit;
+}
+
+.kbp {
+  --kbp-font: var(--font-thmanyah), system-ui, "Segoe UI", sans-serif;
+  color: var(--anatomy-text);
+}
+
+.kbp .iso-figure {
+  margin: 0;
+}
+
+/* Words on the card use the site's type. Arabic is never letter-spaced. */
+.kbp .iso-plate-corner,
+.kbp .iso-legend {
+  font-family: var(--kbp-font);
+}
+
+.kbp .iso-plate-corner {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.kbp[dir="rtl"] .iso-plate-corner {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 13px;
+}
+
+/*
+ * The four corners sit in a grid instead of the kit's absolute corners, so a
+ * long readout can never run under the hint: Fig and title share the top row,
+ * hint and readout the bottom row as two cells, and a readout too long for
+ * its cell wraps inside it. Grid columns follow dir, so Arabic mirrors (Fig
+ * and hint on the right) with no left/right overrides.
+ */
+.kbp {
+  container: kbp / inline-size;
+}
+
+.kbp .iso-plate-corners {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: 24px;
+}
+
+.kbp .iso-plate-corner {
+  position: static;
+}
+
+.kbp .iso-plate-corner[data-corner="fig"] {
+  grid-area: 1 / 1;
+  align-self: start;
+}
+
+.kbp .iso-plate-corner[data-corner="title"] {
+  grid-area: 1 / 2;
+  align-self: start;
+  justify-self: end;
+  text-align: end;
+}
+
+.kbp .iso-plate-corner[data-corner="hint"] {
+  grid-area: 3 / 1;
+  align-self: end;
+}
+
+.kbp .iso-plate-corner[data-corner="readout"] {
+  grid-area: 3 / 2;
+  align-self: end;
+  justify-self: end;
+  text-align: end;
+  white-space: normal;
+  color: var(--anatomy-strong);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/*
+ * A card narrower than the longest readout plus the hint (about 600 px for
+ * the English whitening answer): the hint takes its own row and the readout
+ * the row under it, with room kept for two lines, so the hint never moves.
+ */
+@container kbp (max-width: 679.98px) {
+  .kbp .iso-plate {
+    padding-bottom: 84px;
+  }
+
+  .kbp .iso-plate-corners {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    row-gap: 6px;
+  }
+
+  .kbp .iso-plate-corner[data-corner="title"] {
+    white-space: normal;
+  }
+
+  .kbp .iso-plate-corner[data-corner="hint"] {
+    grid-area: 3 / 1 / 4 / -1;
+    justify-self: start;
+  }
+
+  .kbp .iso-plate-corner[data-corner="readout"] {
+    grid-area: 4 / 1 / 5 / -1;
+    justify-self: stretch;
+    text-align: start;
+    min-height: 2.5em;
+  }
+}
+
+.kbp .iso-legend {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.kbp[dir="rtl"] .iso-legend {
+  letter-spacing: 0;
+}
+
+/* The drawing. */
+.kbp-stage {
+  position: relative;
+  border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kbp-stage:focus {
+  outline: none;
+}
+
+.kbp-stage:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+
+.kbp .kb-slot {
+  fill: var(--anatomy-shade-0);
+  stroke: none;
+}
+
+.kbp [data-kb-drawer] {
+  cursor: pointer;
+}
+
+/* The question chips under the card. */
+.kbp-asks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 4px;
+}
+
+.kbp-asks-label {
+  color: var(--anatomy-muted);
+  font-size: 13px;
+}
+
+.kbp-ask {
+  appearance: none;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--anatomy-text);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.4;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--anatomy-ease),
+    color 160ms var(--anatomy-ease);
+}
+
+.kbp-ask:hover {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-strong);
+}
+
+.kbp-ask[aria-pressed="true"] {
+  border-color: var(--anatomy-lit);
+  color: var(--anatomy-strong);
+}
+
+.kbp-ask:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 3px;
+}
+
+.kbp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbp-ask {
+    transition: none;
+  }
+}
+
+/* Phones: let the bench fill the card. */
+@media (max-width: 640px) {
+  .kbp-stage {
+    overflow: hidden;
+  }
+
+  .kbp .iso-plate .kbp-stage .iso-svg {
+    width: 106%;
+    margin: -2% -3% -2%;
+  }
+}

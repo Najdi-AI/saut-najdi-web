@@ -90,6 +90,16 @@ const copy = {
 
 const amount = (value: number) => new Intl.NumberFormat("en-US").format(value);
 
+/**
+ * Isolate every percentage in a line of copy, the way prices already are.
+ * After an Arabic letter the bidi algorithm treats «15» as an Arabic number,
+ * which strands the % sign on its left: «15%» rendered «%15». An LTR isolate
+ * keeps the number and its sign in reading order. The strings stay plain
+ * text because llms.txt and the FAQ JSON-LD read the same billing terms.
+ */
+const isolatePercents = (text: string) =>
+  text.split(/(\d+(?:\.\d+)?%)/).map((part, i) => (i % 2 === 1 ? <bdi key={i} dir="ltr">{part}</bdi> : part));
+
 export function PricingOverview({ locale, variant = "home" }: { locale: Locale; variant?: "home" | "page" }) {
   const t = copy[locale];
   const terms = billingTerms[locale];
@@ -135,7 +145,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                       {plan.monthlySar === null ? t.quote : <><span dir="ltr" className="inline-block tabular-nums">{amount(plan.monthlySar)}</span> <span className="text-h4 font-medium">{t.sar}</span></>}
                       {plan.monthlySar !== null && <span className="ms-2 text-body-lg font-normal text-ink/60">{locale === "ar" ? t.monthly : `/ ${t.monthly}`}</span>}
                     </p>
-                    {plan.monthlySar !== null && <p className="mt-2 text-body text-ink/60">{t.vatShort}</p>}
+                    {plan.monthlySar !== null && <p className="mt-2 text-body text-ink/60">{isolatePercents(t.vatShort)}</p>}
                     <DemoLink locale={locale} className="mt-7 w-full sm:max-w-xs">{t.book}</DemoLink>
                   </div>
 
@@ -171,7 +181,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                     </ul>
                     <details className="group mt-5 border-t border-line pt-4">
                       <summary className="cursor-pointer font-semibold text-brand-blue underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-brand-blue">{t.rates}</summary>
-                      <p className="mt-3 text-body leading-relaxed text-ink/65">{t.ratesNote}</p><p className="mt-3 text-body leading-relaxed text-ink/65">{terms.zero}</p>
+                      <p className="mt-3 text-body leading-relaxed text-ink/65">{t.ratesNote}</p><p className="mt-3 text-body leading-relaxed text-ink/65">{isolatePercents(terms.zero)}</p>
                       <dl className="mt-3 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
                         <div><dt className="text-ink/65">{t.withinVoice}</dt><dd className="mt-1 font-semibold text-ink">{rate(plan.withinVoiceSar, t.perMinute)}</dd></div>
                         <div><dt className="text-ink/65">{t.withinText}</dt><dd className="mt-1 font-semibold text-ink">{rate(plan.withinTextSar, t.perConversation)}</dd></div>
@@ -185,8 +195,8 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
         </div>
 
         <p className="mx-auto mt-6 max-w-4xl text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].note}</p>
-        {isHome && <p className="mx-auto mt-4 max-w-4xl text-center text-body leading-relaxed text-ink/70">{terms.annual} {terms.more}</p>}
-        {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{t.vat}</p>}
+        {isHome && <p className="mx-auto mt-4 max-w-4xl text-center text-body leading-relaxed text-ink/70">{isolatePercents(terms.annual)} {terms.more}</p>}
+        {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{isolatePercents(t.vat)}</p>}
         {isHome && <div className="mt-7 text-center">
           <Link href={localePath(locale, "pricing")} className="btn-secondary">{t.compare} {locale === "ar" ? "←" : "→"}</Link>
         </div>}

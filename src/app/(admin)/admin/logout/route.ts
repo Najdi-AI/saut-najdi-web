@@ -2,9 +2,9 @@ import { ADMIN_COOKIE } from "@/lib/adminAuth";
 
 /**
  * Sign out — expire the session cookie. POST-only so a prefetched link can
- * never log the reviewer out. Nothing server-side to revoke: the cookie holds
- * a hash of the current key, so clearing it locally IS the sign-out, and
- * rotating ADMIN_KEY remains the global kill switch.
+ * never log the reviewer out. This clears the browser cookie; a copied token
+ * remains valid until its server expiry or an ADMIN_KEY rotation. There is no
+ * per-session server revocation registry.
  */
 export const dynamic = "force-dynamic";
 

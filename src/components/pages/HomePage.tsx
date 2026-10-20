@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
@@ -68,6 +69,8 @@ const t = {
       heading: "مو بس ذكاء… وراه ناس",
       body: "الذكاء الاصطناعي ياخذ الروتيني، وموظفك للحظات اللي تحتاج إنسان — ويستلم وهو فاهم كل شي.",
       link: "شوف صفحة التحويل لموظفك",
+      // A person at a laptop, never "our employee" (blueprint §3 imagery rule).
+      photoAlt: "رجل سعودي يبتسم وهو يشتغل على لابتوب عليه شعار صوت نجدي",
     },
     vsIvr: {
       heading: "وش الفرق بين الوكيل الصوتي الذكي والرد الآلي القديم (IVR)؟",
@@ -151,6 +154,7 @@ const t = {
       heading: "Not just AI. People behind it.",
       body: "AI takes the routine. Your team takes the moments that need a person — arriving already knowing the whole conversation.",
       link: "See the human handoff page",
+      photoAlt: "A smiling Saudi man working on a laptop that carries the Saut Najdi logo",
     },
     vsIvr: {
       heading: "What's the difference between an AI voice agent and a traditional IVR?",
@@ -210,11 +214,12 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* 1 · Hero — brand-guideline composition (p18): person + laptop + live bubbles.
-          The evaluation-only `data-theme="dark"` that used to sit on this
-          section is gone: the attribute now lives on <html>, so the `dark:`
-          classes below answer to the visitor's choice instead of being
-          hard-on. */}
+      {/* 1 · Hero — the Najdi switchboard (anatomy figure 1, HeroVisual), with
+          the voice demo on its speaker. The brand photo that used to stand
+          here moved to the hybrid section below. The evaluation-only
+          `data-theme="dark"` that used to sit on this section is gone: the
+          attribute now lives on <html>, so the `dark:` classes below answer
+          to the visitor's choice instead of being hard-on. */}
       <section className="relative overflow-hidden bg-gradient-to-b from-surface to-canvas dark:from-[#0C1326] dark:to-night">
         {/* Brand aurora — a soft spectrum wash so the ground is not flat
             black. Dark only; it would muddy the white hero. */}
@@ -290,17 +295,45 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* 4 · The hybrid difference ★ — the most visual weight on the page */}
+      {/* 4 · The hybrid difference ★ — the most visual weight on the page.
+          The brand photo (moved from the hero) stands beside the heading from
+          lg up and under it on phones. It shows a person at a laptop, not a
+          member of our team (blueprint §3), and `.people-photo` in
+          globals.css fades all four edges so the cut-out never shows a hard
+          side in either theme. */}
       <section className="relative overflow-hidden py-20">
         <div className="absolute inset-0 bg-brand-gradient-soft" aria-hidden />
         <div className="container relative">
-          <Reveal className="text-center">
-            <p className="eyebrow">{s.hybrid.eyebrow}</p>
-            <h2 className="mt-2 text-h2">{s.hybrid.heading}</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-ink/75">
-              {s.hybrid.body}
-            </p>
-          </Reveal>
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
+            <Reveal className="text-center lg:text-start">
+              <p className="eyebrow">{s.hybrid.eyebrow}</p>
+              <h2 className="mt-2 text-h2">{s.hybrid.heading}</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-ink/75 lg:mx-0">
+                {s.hybrid.body}
+              </p>
+            </Reveal>
+            <div className="relative mx-auto w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[460px]">
+              {/* Night only: a pool of brand light behind the subject, so the
+                  white thobe and desk have somewhere to come from. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 hidden dark:block"
+                style={{
+                  background:
+                    "radial-gradient(50% 45% at 55% 50%, rgba(91,108,229,0.28) 0%, transparent 72%)",
+                  filter: "blur(26px)",
+                }}
+              />
+              <Image
+                src="/brand/hero-man.webp"
+                alt={s.hybrid.photoAlt}
+                width={1100}
+                height={900}
+                sizes="(min-width: 1024px) 460px, (min-width: 640px) 400px, 340px"
+                className="people-photo relative w-full"
+              />
+            </div>
+          </div>
           <div className="mt-10">
             <SampleConversation locale={locale} />
           </div>

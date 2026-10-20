@@ -15,10 +15,15 @@ import { SwitchboardFigure } from "./anatomy/switchboard/figure";
  *
  * Server component: the drawing is server-rendered and only the motion
  * ships to the client (anatomy/switchboard/live.tsx).
+ *
+ * `data-fab-avoid` keeps the chat launcher tucked away while it would sit on
+ * the switchboard's controls (the speaker's play button and the dial), as it
+ * did over the old hero photo's bubbles and mic. The photo itself now lives
+ * in the «مو بس ذكاء… وراه ناس» section (HomePage.tsx).
  */
 export function HeroVisual({ locale }: { locale: Locale }) {
   return (
-    <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[560px]">
+    <div data-fab-avoid="" className="relative mx-auto w-full max-w-[520px] lg:max-w-[560px]">
       <SwitchboardFigure locale={locale} />
     </div>
   );

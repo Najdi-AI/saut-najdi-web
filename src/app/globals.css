@@ -287,21 +287,23 @@
   --spectrum-btn: var(--spectrum);
 }
 
-/* The hero cut-out is transparent around the subject's head but fully opaque
-   across the desk, and the desk runs off the frame — on white those cuts are
-   invisible, on night they are two hard light edges (the desk's front lip at
-   ~88% height, and the left frame boundary).
+/* The brand photo (public/brand/hero-man.webp) in the «مو بس ذكاء… وراه ناس»
+   section. The cut-out is transparent around the head but opaque across the
+   desk, and the desk, the arm and the chair all run off the frame: on night
+   those are hard light edges, and on the soft brand wash even white shows a
+   seam. So every side fades, in both themes, and nothing reads as cut.
 
-   Two gradients composited to an intersection: the vertical one sinks the
-   desk and the laptop BASE into the ground while stopping short of the lid,
-   which carries the logo and must stay crisp; the horizontal one softens both
-   side boundaries. Prefixed for Safari < 16.4 and its legacy composite
-   keyword. */
-[data-theme="dark"] .hero-photo {
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
+   Two gradients composited to an intersection. The vertical one barely
+   touches the top (the agal sits near it) and sinks the desk's front lip into
+   the ground below the laptop logo; the horizontal one dissolves the hand on
+   the physical left and the chair on the right. Physical, not logical: the
+   photo is never mirrored. Prefixed for Safari < 16.4 and its legacy
+   composite keyword. */
+.people-photo {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 90%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }

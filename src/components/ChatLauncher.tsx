@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -69,7 +70,14 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
    * flashes over the hero before the first measurement; the slot itself is
    * never transformed, so its rect is the launcher's resting place. It stays
    * put while its panel is open or it holds focus.
+   *
+   * The launcher lives in the persistent locale layout, so it survives
+   * client-side navigation. A Link that lands at scrollY 0 fires no scroll
+   * event, so the measurement also re-runs on every route change (the
+   * pathname dep) and whenever the page or the avoided art changes size
+   * after mount (late images, fonts, streamed content).
    */
+  const pathname = usePathname();
   const [clear, setClear] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   useEffect(() => {
@@ -94,14 +102,24 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
       if (!frame) frame = requestAnimationFrame(measure);
     };
     measure();
+    // Once more on the next frame: on a route change Next resets (or, on
+    // back/forward, restores) the scroll position after this commit.
+    schedule();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
+    const sizes =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
+    if (sizes) {
+      sizes.observe(document.body);
+      document.querySelectorAll(AVOID).forEach((el) => sizes.observe(el));
+    }
     return () => {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
+      sizes?.disconnect();
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [pathname]);
   const tucked = !clear && !open && !focusWithin;
 
   useEffect(() => {

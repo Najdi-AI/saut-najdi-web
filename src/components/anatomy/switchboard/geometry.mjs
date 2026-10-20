@@ -175,6 +175,15 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
   back.push(Ln(ticks.minor, { tone: "lo" }), Ln(ticks.major, { tone: "mid" }));
   back.push(Dots([at([STRIP.x + 2, STRIP.y + 3, 0.6]), at([STRIP.x + STRIP.w - 2, STRIP.y + 3, 0.6])], { size: 0.45 }));
   record(A.slab(STRIP, 0, 0.6, { name: "stand.ruler" }, 3));
+  // the rating plate on the bench's right front: its rules stand for stamped text
+  {
+    const RP = V.RATING;
+    back.push(S(k.slabOf(RP, 0, 0.8, P, 3), { tone: "lo", crease: "none" }));
+    back.push(Ln(k.planOutline(k.insetPlan(RP, 1.4), 0.8, P, 3), { tone: "faint" }));
+    back.push(Ln([16, 11, 14].map((d, i) => k.lineOnTop([RP.x + 2.6 + i * 1.6, RP.y + 5], [RP.x + 2.6 + i * 1.6, RP.y + 5 + d], 0.8, P)).join(""), { tone: "lo", free: true }));
+    back.push(Dots([at([RP.x + RP.w / 2, RP.y + 2.6, 0.8]), at([RP.x + RP.w / 2, RP.y + RP.d - 2.6, 0.8])], { size: 0.45 }));
+    record(A.slab(RP, 0, 0.8, { name: "stand.rating" }, 3));
+  }
 
   // ------------------------------------------------------------- the console
   layer = "panel";
@@ -236,9 +245,12 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
   const PANEL_F = G.frameOf([0, V.FACE_Y, 0], Y, X, UP);
   const panelRing = rounded(V.PANEL.x0, V.PANEL.x1, V.PANEL.z0, V.PANEL.z1, V.PANEL.r, 4);
   const panelScrews = [[V.PANEL.x0 + 4.4, V.PANEL.z0 + 4.4], [V.PANEL.x1 - 4.4, V.PANEL.z0 + 4.4], [V.PANEL.x0 + 4.4, V.PANEL.z1 - 4.4], [V.PANEL.x1 - 4.4, V.PANEL.z1 - 4.4]];
+  // the speaker's port: closed slots in the enamel beside its grille
+  const port = V.PORT.z.map((z) => onFace(rounded(V.PORT.x0, V.PORT.x1, z - V.PORT.h / 2, z + V.PORT.h / 2, V.PORT.h / 2, 3))).join("");
   prism("panel", PANEL_F, panelRing, 0, V.PANEL_T, { tone: "hi" }, {
     extra:
       Ln(onFace(rounded(V.PANEL.x0 + 2.2, V.PANEL.x1 - 2.2, V.PANEL.z0 + 2.2, V.PANEL.z1 - 2.2, 1.6, 3)), { tone: "faint" }) +
+      Ln(port, { tone: "lo" }) +
       Ln(panelScrews.map(([x, z]) => G.circleOf(onPanel(x, z), 0, 1.7, P, 16)).join(""), { tone: "lo" }) +
       screw(panelScrews.map(([x, z]) => [x, V.PANEL_Y, z]), 0.5),
   });
@@ -310,6 +322,15 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     const F = onPanel(x, 70);
     disc("test.ring", F, 0, 0.8, 2.6, { tone: "mid" }, { steps: 20, share: "test-ring" });
     disc("test.button", F, 0.8, 2, 1.7, { tone: "hi" }, { steps: 16, share: "test-button" });
+  }
+  // a line fuse for every circuit that has a lamp: a hex holder and a slotted cap
+  for (const name of V.LAMPED) {
+    const x = V.JACKS[name];
+    const F = onPanel(x, V.FUSE_Z);
+    const face = 2.3;
+    const slot = k.pathOf([at(G.pointOf(F, face, 1.45, 0)), at(G.pointOf(F, face, 1.45, Math.PI))]);
+    disc("fuse.holder", F, 0, 0.9, 2.5, { tone: "lo" }, { steps: 6, share: "fuse-holder" });
+    disc("fuse.cap", F, 0.9, face, 1.8, { tone: "mid" }, { steps: 20, bevel: 0.25, share: "fuse-cap", extra: Ln(slot, { tone: "lo" }) });
   }
 
   // the speaker: a ring bezel, a cross of grille spokes and a hub where the play control sits

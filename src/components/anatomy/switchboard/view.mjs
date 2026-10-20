@@ -61,6 +61,12 @@ export const CALL_LINE = "l2";
 
 /** The speaker on the panel's right: the agent's voice, and the play control. */
 export const SPEAKER = { x: 71, z: 83, r: 23, rim: 19.4 };
+/** The speaker's port: closed slots in the enamel between the employee's jack and the grille. */
+export const PORT = { x0: 30, x1: 42, h: 2, z: [72, 77.5, 83, 88.5, 94] };
+/** The row of line fuses along the bottom of the panel, one under each lamped circuit. */
+export const FUSE_Z = 59;
+/** A rating plate on the bench, right of the keyshelf. */
+export const RATING = { x: 132.5, y: 20, w: 8, d: 28, r: 1.2 };
 
 /** Plugs: turned along +y, their collar on the jack face. */
 export const PLUG = { collar: [0, 1.2, 2.5], body: [1.2, 8.6, 2.75], boot: [8.6, 13.2], r: 2.75 };

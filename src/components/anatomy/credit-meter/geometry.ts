@@ -282,7 +282,8 @@ slab("tank.nameplate", NAME_PLAN, NAME.z0, NAME.z1 - NAME.z0, { tone: "lo", crea
 export const LABEL_SPOT = { transform: nameMatrix, x: (NAME.x0 + NAME.x1) / 2, y: -(NAME.z1 - 6.4), size: 3.4 };
 
 /* Outlet boss and flange on the tank's +x face. */
-const DRAIN = G.frameOf([SIDE, TANK.y + 12, 13], X, Y, UP);
+/* Drain on the front face, low and to the right of the sight glass. */
+const DRAIN = G.frameOf([TANK.x + TANK.w - 14, FRONT, 12], Y, X, UP);
 assembly("tank.drain", () => {
   disc("tank.drain.boss", DRAIN, 0, 1.8, 4.6, { tone: "mid" });
   hex("tank.drain.plug", DRAIN, 1.8, 4.2, 3.4, { tone: "mid" }, { extra: D([G.pointOf(DRAIN, 4.2, 0, 0)].map(at), { size: 0.5, tone: "hi" }) });
@@ -300,6 +301,21 @@ const MAIN_TO = VALVE[0] - NECK;
 const TEE: Point3 = [TEE_X, LINE_Y, LINE_Z];
 const teeHalf = Math.sqrt(TEE_R * TEE_R - MAIN_R * MAIN_R);
 pipe("line.main", [[MAIN_FROM, LINE_Y, LINE_Z], [MAIN_TO, LINE_Y, LINE_Z]], MAIN_R, { gaps: [[TEE_X - teeHalf - MAIN_FROM, TEE_X + teeHalf - MAIN_FROM]], maxLength: 26 });
+
+/** A pipe support: a post on the bench, a cradle under the line and a strap over it (the line is gapped at the strap). */
+const STRAP_W = 1.8;
+function support(line: string, x: number, r: number) {
+  assembly(line, () => {
+    const CRADLE_TOP = LINE_Z - r;
+    const cradle: Plan = { x: x - 3.4, y: LINE_Y - 5, w: 6.8, d: 10, r: 1 };
+    post(`${line}.support.foot`, x, LINE_Y, 4.4, 0, 1.4, { tone: "lo" }, { steps: 24, extra: D([[-1, 0], [1, 0], [0, -1], [0, 1]].map(([dx, dy]) => at([x + dx * 3.2, LINE_Y + dy * 3.2, 1.4])), { size: 0.45 }) });
+    post(`${line}.support.post`, x, LINE_Y, 1.8, 1.4, CRADLE_TOP - 2.2 - 1.4, { tone: "mid" }, { steps: 16 });
+    slab(`${line}.support.cradle`, cradle, CRADLE_TOP - 2.2, 2.2, { tone: "mid" }, { steps: 2, bevel: 0.3, extra: D([at([x, cradle.y + 1.4, CRADLE_TOP]), at([x, cradle.y + cradle.d - 1.4, CRADLE_TOP])], { size: 0.45, tone: "mid" }) });
+    const SF = G.frameOf([x, LINE_Y, LINE_Z], X, Y, UP);
+    const strap = G.ringBand(-STRAP_W / 2, STRAP_W / 2, r, r + 0.7, SF, P, { steps: 40 });
+    put(`${line}.support.strap`, [x, LINE_Y, LINE_Z], S(strap, { tone: "mid" }), [record(A.ring(SF, -STRAP_W / 2, STRAP_W / 2, r, r + 0.7, { name: `${line}.support.strap`, owner: line }))]);
+  });
+}
 ball("line.tee", TEE, TEE_R, { tone: "mid" }, { owner: "line.main" });
 
 const CASE_S0 = -6;
@@ -506,9 +522,10 @@ interface Outlet {
   bodyZ: [number, number];
   window: number;
   flange: number;
+  support?: number;
 }
 const OUTLETS: Outlet[] = [
-  { name: "calls", r: CALL_R, start: [VALVE[0] + NECK, LINE_Y, LINE_Z], corner: [CALL_X, LINE_Y, LINE_Z], foot: [CALL_X, LINE_Y], body: { x: CALL_X - 7.5, y: LINE_Y - 7.5, w: 15, d: 15, r: 2.4 }, bodyZ: [7, 20], window: 4.6, flange: 8 },
+  { name: "calls", r: CALL_R, start: [VALVE[0] + NECK, LINE_Y, LINE_Z], corner: [CALL_X, LINE_Y, LINE_Z], foot: [CALL_X, LINE_Y], body: { x: CALL_X - 7.5, y: LINE_Y - 7.5, w: 15, d: 15, r: 2.4 }, bodyZ: [7, 20], window: 4.6, flange: 8, support: 68 },
   { name: "text", r: TEXT_R, start: [VALVE[0], LINE_Y + NECK, LINE_Z], corner: [VALVE[0], TEXT_Y, LINE_Z], foot: [VALVE[0], TEXT_Y], body: { x: VALVE[0] - 6, y: TEXT_Y - 6, w: 12, d: 12, r: 2 }, bodyZ: [7, 18], window: 3.6, flange: 6 },
 ];
 
@@ -522,7 +539,10 @@ for (const outlet of OUTLETS) {
   const [b0, b1] = outlet.bodyZ;
   const NUT_H = 2.2;
   const gap: [number, number] = [total - (b1 + NUT_H - FLANGE_H), total - (b0 - NUT_H - FLANGE_H)];
-  pipe(`line.${outlet.name}`, points, outlet.r, { gaps: [gap], maxLength: 16 });
+  const gaps: [number, number][] = [gap];
+  if (outlet.support !== undefined) gaps.unshift([outlet.support - STRAP_W / 2 - outlet.start[0], outlet.support + STRAP_W / 2 - outlet.start[0]]);
+  pipe(`line.${outlet.name}`, points, outlet.r, { gaps, maxLength: 16 });
+  if (outlet.support !== undefined) support(`line.${outlet.name}`, outlet.support, outlet.r);
 
   /* Flow indicator: a block on the drop with a round window on its +y face. */
   const faceY = outlet.body.y + outlet.body.d;

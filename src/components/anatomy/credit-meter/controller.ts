@@ -121,7 +121,7 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
     level: data.shares[data.start.plan]!,
     lever: data.leverAngle[data.start.outlet],
     pointer: data.detents[data.start.plan]!,
-    drums: digitsOf(data.counters[data.start.plan]![data.start.outlet], data.drum.count).map((digit) => ({ at: digit, goal: digit })),
+    drums: digitsOf(data.counters[data.start.plan]![data.start.outlet], data.drum.count).map((digit) => ({ at: digit, from: digit, to: digit, start: 0, span: 0 })),
     spin: { calls: 0, text: 0 } as Record<Outlet, number>,
     turn: { calls: 0, text: 0 } as Record<Outlet, number>,
     changedAt: -Infinity,
@@ -176,18 +176,19 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
     if (Math.abs(state.leverDrawn - state.lever) > 1e-3) drawLever(state.lever);
   }
 
-  function settled() {
+  /** The parts that carry the reading have reached it: the readout may say so. */
+  function arrived() {
     return (
-      state.share.rate === 0 &&
-      state.share.at === data.shares[state.plan] &&
-      state.level === data.shares[state.plan] &&
+      Math.abs(state.share.at - data.shares[state.plan]!) < 0.004 &&
+      Math.abs(state.share.rate) < 0.02 &&
       state.lever === data.leverAngle[state.outlet] &&
       state.pointer === data.detents[state.plan] &&
-      state.drums.every((drum) => drum.at === drum.goal) &&
-      state.spin.calls === 0 &&
-      state.spin.text === 0
+      state.drums.every((drum) => drum.at === drum.to)
     );
   }
+
+  /** Nothing moves at all, rotors included: the loop may stop. */
+  const settled = () => arrived() && state.share.rate === 0 && state.share.at === data.shares[state.plan] && state.level === data.shares[state.plan] && state.spin.calls === 0 && state.spin.text === 0;
 
   function writeWords() {
     const text = data.readouts[state.plan]![state.outlet];
@@ -197,7 +198,6 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
   function writeControls() {
     planButton?.setAttribute("aria-label", data.planButton[state.plan]!);
     valveButton?.setAttribute("aria-label", data.valveButton[state.outlet]);
-    valveButton?.setAttribute("aria-pressed", state.outlet === "text" ? "true" : "false");
     root.dataset.outlet = state.outlet;
     root.dataset.plan = String(state.plan);
   }
@@ -218,15 +218,13 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
     }
     const share = data.shares[state.plan]!;
     springTo(state.share, share, dt, 70, 12.5, calm);
-    state.level = ease(state.level, share, dt, 0.55, calm, 2e-4);
+    state.level = ease(state.level, share, dt, 0.4, calm, 1e-3);
     state.lever = ease(state.lever, data.leverAngle[state.outlet], dt, 0.16, calm, 0.05);
     state.pointer = ease(state.pointer, data.detents[state.plan]!, dt, 0.12, calm, 0.05);
-    state.drums.forEach((drum, index) => {
-      drum.at = ease(drum.at, drum.goal, dt, 0.16 + index * 0.035, calm, 0.002);
-      if (drum.at === drum.goal && drum.goal >= 10) {
-        drum.goal -= Math.floor(drum.goal / 10) * 10;
-        drum.at = drum.goal;
-      }
+    state.drums.forEach((drum) => {
+      const t = calm || drum.span <= 0 ? 1 : clamp((state.clock - drum.start) / drum.span, 0, 1);
+      const eased = t * t * t * (t * (t * 6 - 15) + 10);
+      drum.at = t >= 1 ? drum.to : drum.from + (drum.to - drum.from) * eased;
     });
     const flowing = !calm && state.clock - state.changedAt < SPIN_FOR;
     (["calls", "text"] as Outlet[]).forEach((outlet) => {
@@ -235,7 +233,7 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
       state.turn[outlet] = (state.turn[outlet] + state.spin[outlet] * dt) % 3600;
     });
     draw();
-    if (settled()) writeWords();
+    if (arrived()) writeWords();
     const keep = state.visible && (state.touring || !settled());
     frame = keep ? requestAnimationFrame(tick) : 0;
   }
@@ -255,8 +253,12 @@ export function mountMeter(root: HTMLElement, data: MeterLive): () => void {
     state.changedAt = state.clock;
     const digits = digitsOf(data.counters[nextPlan]![outlet], data.drum.count);
     state.drums.forEach((drum, index) => {
-      const shown = ((drum.goal % 10) + 10) % 10;
-      drum.goal += (digits[index]! - shown + 10) % 10;
+      const shown = ((drum.at % 10) + 10) % 10;
+      const steps = (digits[index]! - Math.round(shown) + 10) % 10;
+      drum.from = shown;
+      drum.to = Math.round(shown) + steps;
+      drum.start = state.clock + (data.drum.count - 1 - index) * 0.05;
+      drum.span = steps ? 0.42 + steps * 0.045 : 0.2;
     });
     writeControls();
     if (calmNow()) writeWords();

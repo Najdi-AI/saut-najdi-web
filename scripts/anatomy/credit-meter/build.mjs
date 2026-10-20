@@ -7,6 +7,7 @@
  * ships, and writes standalone pages for the anatomy skill's checks:
  *
  *   node scripts/anatomy/credit-meter/build.mjs            all four pages (ar/en × dark/light)
+ *   node scripts/anatomy/credit-meter/build.mjs --light    only the light pages (--dark: only dark)
  *   node scripts/anatomy/credit-meter/build.mjs --audit    and the geometry audit
  *   node scripts/anatomy/credit-meter/build.mjs --out DIR  write somewhere else (default: <os tmp>/anatomy/credit-meter)
  *
@@ -87,7 +88,7 @@ function page(locale, theme) {
     `<div class="cm-box">` +
     `<svg class="iso-svg" viewBox="0 0 ${geometry.METER.width} ${geometry.METER.height}" role="img" aria-label="${esc(copy.label)}" focusable="false">${scene.sceneSvg(locale)}</svg>` +
     `<button type="button" class="cm-hit" data-control="plan" style="${style(scene.hitStyle(geometry.HITS.plan))}" aria-label="${esc(data.planButton[scene.START.plan])}"></button>` +
-    `<button type="button" class="cm-hit" data-control="valve" style="${style(scene.hitStyle(geometry.HITS.valve))}" aria-pressed="false" aria-label="${esc(data.valveButton[scene.START.outlet])}"></button>` +
+    `<button type="button" class="cm-hit" data-control="valve" style="${style(scene.hitStyle(geometry.HITS.valve))}" aria-label="${esc(data.valveButton[scene.START.outlet])}"></button>` +
     `</div>` +
     `<span class="cm-sr" role="status" aria-live="polite" data-status></span>` +
     `</div>`;
@@ -98,8 +99,9 @@ function page(locale, theme) {
 }
 
 const written = [];
+const THEMES = argv.includes("--light") ? ["light"] : argv.includes("--dark") ? ["dark"] : ["dark", "light"];
 for (const locale of ["ar", "en"]) {
-  for (const theme of ["dark", "light"]) {
+  for (const theme of THEMES) {
     const name = `credit-meter-${locale}${theme === "light" ? "-light" : ""}.html`;
     const html = page(locale, theme);
     writeFileSync(join(OUT, name), html);

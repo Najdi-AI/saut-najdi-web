@@ -13,7 +13,7 @@ export const AZIMUTH = 55;
 const PAD = 26;
 
 /** Base plate on four feet. */
-export const PLATE: Plan = { x: -152, y: -64, w: 292, d: 126, r: 9 };
+export const PLATE: Plan = { x: -152, y: -64, w: 274, d: 126, r: 9 };
 export const PLATE_H = 10;
 export const FOOT_H = 5;
 

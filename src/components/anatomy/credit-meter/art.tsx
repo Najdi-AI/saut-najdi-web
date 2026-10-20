@@ -25,7 +25,7 @@ export function CreditMeterArt({ locale }: { locale: Locale }) {
           dangerouslySetInnerHTML={{ __html: SVG[locale] }}
         />
         <button type="button" className="cm-hit" data-control="plan" style={hitStyle(HITS.plan)} aria-label={data.planButton[START.plan]} />
-        <button type="button" className="cm-hit" data-control="valve" style={hitStyle(HITS.valve)} aria-pressed="false" aria-label={data.valveButton[START.outlet]} />
+        <button type="button" className="cm-hit" data-control="valve" style={hitStyle(HITS.valve)} aria-label={data.valveButton[START.outlet]} />
       </div>
       <span key="status" className="cm-sr" role="status" aria-live="polite" data-status="" />
     </CreditMeterLive>

@@ -349,6 +349,29 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
     disc("speaker.hub", F, 1.8, 2.7, 5.6, { tone: "hi" }, { steps: 32, bevel: 0.3, extra: Ln(G.circleOf(F, 2.7, 3.8, P, 24), { tone: "faint" }) });
   }
 
+  // the speaker's volume knob, beside it on the panel, with its scale
+  {
+    const KF = onPanel(105, 62);
+    const scale = G.circleOf(KF, 0.6, 6.4, P, 40);
+    disc("volume.plate", KF, 0, 0.6, 7.2, { tone: "mid" }, {
+      steps: 40,
+      extra:
+        Ln(scale, { tone: "faint" }) +
+        Ln(
+          [-135, -90, -45, 0, 45, 90, 135]
+            .map((deg) => {
+              const a = (deg * Math.PI) / 180;
+              return k.pathOf([at(G.pointOf(KF, 0.6, 6.4, Math.PI / 2 - a)), at(G.pointOf(KF, 0.6, 5.2, Math.PI / 2 - a))]);
+            })
+            .join(""),
+          { tone: "lo" },
+        ),
+    });
+    disc("volume.knob", KF, 0.6, 4.2, 4.2, {
+      tone: "hi",
+    }, { steps: 32, bevel: 0.3, inner: k.fadedSvg(G.ribsOf(KF, 0.6, 4.2, 4.2, 18, P, { fade: [0.1, 0.55], seams: true }), { tone: "lo" }), extra: Ln(k.pathOf([at(G.pointOf(KF, 4.2, 0.8, Math.PI / 2 - 0.6)), at(G.pointOf(KF, 4.2, 3.4, Math.PI / 2 - 0.6))]), { tone: "hi" }) + Dots([at(G.pointOf(KF, 4.2, 0, 0))], { size: 0.5, tone: "mid" }) });
+  }
+
   // the trunk cable: from a gland on the cabinet side down to the line box on the bench
   {
     const gx = sideX;

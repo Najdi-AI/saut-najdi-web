@@ -145,7 +145,7 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
     for (const [name, node] of Object.entries(glows)) setOpacity(node, shown.lamps[name] ?? 0);
     // the cone moves with the agent's voice: a syllable rhythm under a slower phrase swell
     const cone = shown.speak * (0.55 + 0.45 * Math.sin(wall * 2 * Math.PI * 2.3)) * (0.5 + 0.5 * Math.sin(wall * 2 * Math.PI * 7.1));
-    move(nodes.cone, [0, cone * 0.9, 0]);
+    move(nodes.cone, [0, cone * 1.4, 0]);
     move(nodes.clapper, [Math.sin(wall * 2 * Math.PI * 15) * 0.7 * shown.ring, 0, 0]);
   }
 
@@ -224,7 +224,8 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
     const lamps = s.lamps ?? {};
     for (const name of Object.keys(shown.lamps)) {
       const goal = lamps[name] ?? 0;
-      shown.lamps[name] = mode === "tour" ? goal : ease(shown.lamps[name], goal, dt, goal > shown.lamps[name] ? 0.05 : 0.14, calm);
+      // eased in every mode, so a lamp never pops between the tour's phases
+      shown.lamps[name] = ease(shown.lamps[name], goal, dt, goal > shown.lamps[name] ? 0.05 : 0.14, calm);
     }
     shown.speak = calm ? 0 : ease(shown.speak, s.speak ?? 0, dt, 0.08, false);
     shown.ring = calm ? 0 : ease(shown.ring, mode === "tour" && s.phase === "ring" && shown.a.u === 0 ? 1 : 0, dt, 0.06, false);

@@ -144,7 +144,11 @@ export function tourAt(clock) {
     ticketFade: 1,
     phase: "idle",
   };
-  if (t >= T.ring && t < T.answer + T.travel) s.lamps.l2 = t < T.answer ? blink(t - T.ring) : 1 - smooth((t - T.answer) / 0.5) * 0.0;
+  // ringing: the lamp blinks; once the plug is on its way it settles to steady
+  if (t >= T.ring && t < T.answer + T.travel) {
+    const settle = smooth((t - T.answer) / 0.3);
+    s.lamps.l2 = blink(Math.min(t, T.answer) - T.ring) * (1 - settle) + settle;
+  }
   if (t >= T.ring) s.phase = "ring";
   // plug A: park → line 2 on answer, back to park on hang-up
   const hang = hand ? T.hand.hang : T.plain.hang;

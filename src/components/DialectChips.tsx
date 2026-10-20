@@ -25,6 +25,11 @@ const cloneLine = {
   en: "Want your own voice? We clone it from a one-minute sample, with the owner's consent.",
 } as const;
 
+/**
+ * Plain text, not pills (2026-10-20 critique): bordered, shadowed pills read
+ * as buttons that did nothing when pressed. The words are unchanged; a small
+ * dot separates them, so the line reads as a list rather than a control.
+ */
 export function DialectChips({
   locale,
   className = "justify-center",
@@ -34,12 +39,10 @@ export function DialectChips({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
-        {chips[locale].map((chip) => (
-          <li
-            key={chip}
-            className="rounded-full border border-line bg-surface px-4 py-1.5 text-body font-medium text-ink/75 shadow-card dark:shadow-none"
-          >
+      <ul className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${className}`}>
+        {chips[locale].map((chip, i) => (
+          <li key={chip} className="flex items-center gap-3 text-body-lg font-medium text-ink/80">
+            {i > 0 && <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-brand-blue/70" />}
             {chip}
           </li>
         ))}

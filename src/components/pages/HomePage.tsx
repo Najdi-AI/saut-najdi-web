@@ -16,6 +16,9 @@ import { BookingDesk } from "@/components/BookingDesk";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { OmniChannels } from "@/components/OmniChannels";
 import { HomePlansStrip } from "@/components/HomePlansStrip";
+import { KbPressFigure } from "@/components/anatomy/kb-press";
+import { VaultFigure } from "@/components/anatomy/vault";
+import { OmniDeskFigure } from "@/components/anatomy/omni-desk/figure";
 import { homeFaq } from "@/content/faq";
 import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
 
@@ -36,6 +39,12 @@ import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
  *
  * Still deliberately absent: the product-screenshot section, until demo-tenant
  * screenshots actually exist (never fabricate one — §2.2).
+ *
+ * Anatomy figures (NAJ-897), numbered in page order: 1 the hero switchboard,
+ * 2 the omnichannel desk (OmniChannels), 3 the knowledge press beside the
+ * knowledge-base capability, 4 the Gulf vault in the PDPL band, 5 the credit
+ * meter in the plans strip (HomePlansStrip). Each is server-rendered art with
+ * a small client part; renumber here and in those props together.
  */
 
 const t = {
@@ -94,6 +103,7 @@ const t = {
         { title: "بناء الوكيل", body: "سوّ وكيلك بقوالب جاهزة لقطاعك، بدون كود.", path: "product/agent-builder" },
         { title: "لوحة التحكم", body: "كل مكالمة: نص وتسجيل وملخص، وأرقامك محسوبة من مكالماتك. ومنها فريقك يبدأ مكالمة صادرة والوكيل يمسك الحوار.", path: "product/dashboard" },
       ],
+      kbLink: "شوف صفحة قاعدة المعرفة",
     },
     sectors: {
       heading: "لأي نشاط؟",
@@ -178,6 +188,7 @@ const t = {
         { title: "Agent builder", body: "Build your agent on sector-ready templates. No code.", path: "product/agent-builder" },
         { title: "The dashboard", body: "Every call with transcript, recording, summary and your own numbers. Your team places outbound calls from here too, with the agent talking.", path: "product/dashboard" },
       ],
+      kbLink: "See the knowledge base page",
     },
     sectors: {
       heading: "Built for which businesses?",
@@ -208,9 +219,19 @@ const t = {
   },
 } as const;
 
+// One icon per capability card, positional: keep it the same length as
+// `capabilities.cards`.
+const capabilityIcons: IconName[] = ["mic", "people", "doc", "sliders", "chart"];
+const KB_PATH = "product/knowledge-base";
+
 export function HomePage({ locale }: { locale: Locale }) {
   const s = t[locale];
   const faq = homeFaq[locale];
+  // The knowledge-base capability leaves the card grid for its own row,
+  // beside the knowledge press; the other four stay cards.
+  const capabilities = s.capabilities.cards.map((c, i) => ({ ...c, icon: capabilityIcons[i] }));
+  const kb = capabilities.find((c) => c.path === KB_PATH)!;
+  const capabilityCards = capabilities.filter((c) => c.path !== KB_PATH);
 
   return (
     <>
@@ -417,7 +438,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       {/* 4c · Omnichannel — every channel, one inbox, one agent. Shared with the product pages. */}
-      <OmniChannels locale={locale} />
+      <OmniChannels locale={locale} figure={<OmniDeskFigure locale={locale} fig={2} />} />
 
       {/* 5 · Capabilities — five cards, each now a real page (Wave 2) */}
       <section className="bg-surface py-16">
@@ -425,21 +446,44 @@ export function HomePage({ locale }: { locale: Locale }) {
           <Reveal>
             <h2 className="text-center text-h2">{s.capabilities.heading}</h2>
           </Reveal>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {s.capabilities.cards.map((c, i) => (
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {capabilityCards.map((c, i) => (
               <Reveal key={c.title} delay={i * 0.06}>
                 <Link href={localePath(locale, c.path)} className="block h-full">
                   <div className="card card-hover group h-full border-brand-blue/25">
-                    <IconChip
-                      name={(["mic", "people", "doc", "sliders", "chart"] as IconName[])[i]}
-                      delay={i * 0.1}
-                    />
+                    <IconChip name={c.icon} delay={i * 0.1} />
                     <h3 className="mt-3 text-h4">{c.title}</h3>
                     <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{c.body}</p>
                   </div>
                 </Link>
               </Reveal>
             ))}
+          </div>
+
+          {/* The knowledge base gets its own row: the same words as its card,
+              beside the knowledge press (anatomy figure 3). The figure has its
+              own buttons, so the row is not one big link; the title and the
+              line under it are. The figure scopes answering to text chat
+              itself (the VOICE_KB_RETRIEVAL gate, see 4b above). */}
+          <div className="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-12">
+            <Reveal className="group text-center lg:text-start">
+              <IconChip name={kb.icon} />
+              <h3 className="mt-3 text-h3">
+                <Link href={localePath(locale, kb.path)} className="hover:text-brand-blue">
+                  {kb.title}
+                </Link>
+              </h3>
+              <p className="mx-auto mt-3 max-w-xl text-body-lg leading-relaxed text-ink/70 lg:mx-0">{kb.body}</p>
+              <Link
+                href={localePath(locale, kb.path)}
+                className="mt-4 inline-block font-medium text-brand-blue underline-offset-4 hover:underline"
+              >
+                {s.capabilities.kbLink} {locale === "ar" ? "←" : "→"}
+              </Link>
+            </Reveal>
+            <div className="mx-auto w-full max-w-[720px]">
+              <KbPressFigure locale={locale} fig={3} />
+            </div>
           </div>
         </div>
       </section>
@@ -486,39 +530,50 @@ export function HomePage({ locale }: { locale: Locale }) {
 
       {/* 8 · Data & governance (the screenshot section waits for demo-tenant
           assets). Before the plans, so the reassurance comes before the
-          money ask. */}
+          money ask. The Gulf vault (anatomy figure 4, ground="navy") takes
+          the band itself as its paper and stands beside the lead from lg up,
+          where the three bullets stack in one column; on phones it follows
+          the link. */}
       <section className="bg-navy py-16 text-white">
-        <div className="container">
-          <Reveal>
-            <h2 className="mx-auto max-w-3xl text-center text-h4 sm:text-h3">{s.governance.lead}</h2>
-          </Reveal>
-          <ul className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
-            {s.governance.bullets.map((b, i) => (
-              <li key={b} className="flex items-start gap-3 rounded-xl bg-white/5 p-4 text-body-lg text-white/85">
-                <span className="mt-0.5 shrink-0 text-brand-cyan">
-                  <AnimatedIcon
-                    name={(["database", "lock", "badge"] as IconName[])[i]}
-                    size={20}
-                    delay={i * 0.12}
-                  />
-                </span>
-                {b}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-7 text-center">
-            <Link
-              href={localePath(locale, "security")}
-              className="font-medium text-brand-cyan underline-offset-4 hover:underline"
-            >
-              {s.governance.link} {locale === "ar" ? "←" : "→"}
-            </Link>
+        <div className="container grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+          <div>
+            <Reveal>
+              <h2 className="mx-auto max-w-3xl text-center text-h4 sm:text-h3 lg:mx-0 lg:text-start">
+                {s.governance.lead}
+              </h2>
+            </Reveal>
+            <ul className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3 lg:mx-0 lg:grid-cols-1">
+              {s.governance.bullets.map((b, i) => (
+                <li key={b} className="flex items-start gap-3 rounded-xl bg-white/5 p-4 text-body-lg text-white/85">
+                  <span className="mt-0.5 shrink-0 text-brand-cyan">
+                    <AnimatedIcon
+                      name={(["database", "lock", "badge"] as IconName[])[i]}
+                      size={20}
+                      delay={i * 0.12}
+                    />
+                  </span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-7 text-center lg:text-start">
+              <Link
+                href={localePath(locale, "security")}
+                className="font-medium text-brand-cyan underline-offset-4 hover:underline"
+              >
+                {s.governance.link} {locale === "ar" ? "←" : "→"}
+              </Link>
+            </div>
+          </div>
+          <div className="mx-auto w-full max-w-[640px]">
+            <VaultFigure locale={locale} fig={4} ground="navy" />
           </div>
         </div>
       </section>
 
       {/* 8b · Plans: a compact strip with one «احجز عرضاً». The full matrix
-          and its footnotes live on /pricing. */}
+          and its footnotes live on /pricing. The credit meter (anatomy
+          figure 5) closes the strip, under the link to /pricing. */}
       <HomePlansStrip locale={locale} />
 
       {/* 9 · FAQ */}

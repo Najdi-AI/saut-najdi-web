@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
 
@@ -9,6 +10,16 @@ import { Reveal } from "@/components/Reveal";
  * under it, per the site's copy style; six channel cards, each an icon in the
  * house `.ring-spectrum` chip (white ground, spectrum border, purple stroke —
  * never a gradient fill, per the brand rule).
+ *
+ * `figure` takes the «مكتب واحد» anatomy figure (NAJ-897, OmniDeskFigure)
+ * and sets it beside the cards: six tubes, one desk, one stamp. Only the
+ * homepage passes it; the product pages keep the plain card grid. It is a
+ * slot rather than an import on purpose: the product pages reach this module
+ * through lib/pageFactory.ts, so an import here would load the figure's
+ * client code and CSS on every page. With the figure, the cards stack in one
+ * column next to it from lg up, which keeps the section about as tall as the
+ * drawing; below lg the figure sits under the answer and the cards follow in
+ * their usual grid.
  */
 const t = {
   ar: {
@@ -94,8 +105,31 @@ function ChannelGlyph({ name }: { name: string }) {
   }
 }
 
-export function OmniChannels({ locale }: { locale: Locale }) {
+export function OmniChannels({ locale, figure }: { locale: Locale; figure?: ReactNode }) {
   const s = t[locale];
+  const cards = (
+    <div
+      className={
+        figure
+          ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-1"
+          : "mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      }
+    >
+      {s.channels.map((c, i) => (
+        <Reveal key={c.key} delay={i * 0.06}>
+          <div className={`card card-hover flex h-full items-start gap-3${figure ? " lg:py-4" : ""}`}>
+            <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-purple">
+              <ChannelGlyph name={c.key} />
+            </span>
+            <div>
+              <h3 className="text-h5">{c.name}</h3>
+              <p className="mt-1 text-body leading-relaxed text-ink/70">{c.line}</p>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  );
   return (
     <section className="container py-16">
       <Reveal>
@@ -104,21 +138,14 @@ export function OmniChannels({ locale }: { locale: Locale }) {
           {s.answer}
         </p>
       </Reveal>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {s.channels.map((c, i) => (
-          <Reveal key={c.key} delay={i * 0.06}>
-            <div className="card card-hover flex h-full items-start gap-3">
-              <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-purple">
-                <ChannelGlyph name={c.key} />
-              </span>
-              <div>
-                <h3 className="text-h5">{c.name}</h3>
-                <p className="mt-1 text-body leading-relaxed text-ink/70">{c.line}</p>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+      {figure ? (
+        <div className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10">
+          <div className="mx-auto w-full max-w-[680px]">{figure}</div>
+          {cards}
+        </div>
+      ) : (
+        cards
+      )}
       <p className="mt-8 text-center text-body-lg font-medium text-ink/80">{s.closing}</p>
     </section>
   );

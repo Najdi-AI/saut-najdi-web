@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { DemoLink } from "@/components/DemoLink";
 import { Reveal } from "@/components/Reveal";
+import { CreditMeterFigure } from "@/components/anatomy/credit-meter/figure";
 import { plans, textConversations, voiceMinutes } from "@/content/pricing";
 import { localePath, type Locale } from "@/lib/i18n";
 
@@ -18,6 +19,12 @@ import { localePath, type Locale } from "@/lib/i18n";
  *
  * One CTA under the strip, not one per plan (blueprint §2.4). Numbers and the
  * VAT percentage are isolated so they never reorder inside Arabic (§2.1).
+ *
+ * The credit meter (anatomy figure 5, NAJ-897) closes the section, right
+ * under the link to /pricing: it draws the intro's one monthly pool spent on
+ * calls or text, with the same numbers (it reads content/pricing.ts too). It
+ * sits after the CTA on purpose, so «احجز عرضاً» stays directly under the
+ * plans and the strip does not grow before its one action.
  */
 
 const num = (value: number) => (
@@ -166,6 +173,10 @@ export function HomePlansStrip({ locale }: { locale: Locale }) {
           >
             {t.compare} {locale === "ar" ? "←" : "→"}
           </Link>
+        </div>
+
+        <div className="mx-auto mt-10 w-full max-w-[640px]">
+          <CreditMeterFigure locale={locale} fig={5} />
         </div>
       </div>
     </section>

@@ -75,9 +75,11 @@ const t = {
       rows: [
         ["العميل يبدأ", "قائمة: اضغط 1، اضغط 2", "يقول اللي يبغاه بلهجته"],
         ["إذا قاطع", "القائمة تكمل", "يسكت ويسمع"],
+        ["سؤال عن نشاطك", "رسالة مسجلة، وإلا موظف يدوّر بالملفات ويسأل زملاءه", "يجاوب من ملفات منشأتك واللي تضيفه له"],
         ["طلب مو في القائمة", "يعلق أو ينتظر موظف", "يتصرف، وإلا يصعّد"],
         ["حجز موعد", "يحوّلك لموظف", "يحجز داخل نفس المكالمة"],
         ["يحتاج إنسان", "يبدأ من الصفر", "يستلم ومعه النص والملخص"],
+        ["بعد المكالمة", "تجمع التسجيلات والملاحظات من كذا أداة", "تسجيل ونص وملخص قدامك في لوحة التحكم، حسب سياسة الاحتفاظ"],
       ],
     },
     capabilities: {
@@ -156,9 +158,11 @@ const t = {
       rows: [
         ["The caller starts", "A menu: press 1, press 2", "They say what they want"],
         ["The caller interrupts", "The menu carries on", "It stops and listens"],
+        ["A question about your business", "A recorded message, or staff digging through files and asking colleagues", "It answers from your documents and the details you give it"],
         ["The request isn't on the menu", "Stuck, or waiting for a person", "It acts, or escalates"],
         ["Booking an appointment", "Transferred to a person", "Booked inside the call"],
         ["A human is needed", "Your employee starts from zero", "They inherit transcript and summary"],
+        ["After the call", "Recordings and notes gathered from several tools", "Recording, transcript and summary in your dashboard, subject to retention terms"],
       ],
     },
     capabilities: {
@@ -314,10 +318,14 @@ export function HomePage({ locale }: { locale: Locale }) {
 
       {/*
         4b · IVR comparison — the first question-shaped H2 on the page. Real
-        <table> markup, not a div grid: row/column structure is what answer
-        engines extract, and a grid of divs extracts as prose soup. The
-        overflow wrapper keeps the min-width table scrolling inside itself so
-        the RTL page body never gains a horizontal scrollbar.
+        <table> markup from sm up, not a div grid: row/column structure is
+        what answer engines extract, and a grid of divs extracts as prose
+        soup. Below sm the same rows render as stacked blocks instead, because
+        a three-column table on a phone pushed the «صوت نجدي» answers
+        off-screen. Only one of the two is ever displayed, so assistive tech
+        reads the rows once. It also carries the two rows the removed
+        workflow comparison had that this table lacked: knowledge and
+        follow-up.
       */}
       <section className="container py-16">
         <Reveal>
@@ -326,8 +334,25 @@ export function HomePage({ locale }: { locale: Locale }) {
             {s.vsIvr.answer}
           </p>
         </Reveal>
-        <div className="mx-auto mt-8 max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
-          <table className="w-full min-w-[640px] border-collapse text-body-lg">
+        <ul className="mx-auto mt-8 max-w-4xl divide-y divide-line rounded-2xl border border-line bg-surface shadow-card sm:hidden">
+          {s.vsIvr.rows.map((r) => (
+            <li key={r[0]} className="p-4">
+              <p className="text-body-lg font-bold text-ink">{r[0]}</p>
+              <dl className="mt-3 grid gap-3">
+                <div>
+                  <dt className="text-body font-medium text-ink/65">{s.vsIvr.cols[1]}</dt>
+                  <dd className="mt-0.5 text-body-lg text-ink/60">{r[1]}</dd>
+                </div>
+                <div>
+                  <dt className="text-body font-bold text-brand-blue">{s.vsIvr.cols[2]}</dt>
+                  <dd className="mt-0.5 text-body-lg text-ink/85">{r[2]}</dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ul>
+        <div className="mx-auto mt-8 hidden max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card sm:block">
+          <table className="w-full min-w-[36rem] border-collapse text-body-lg">
             <thead>
               <tr className="border-b border-line">
                 {s.vsIvr.cols.map((c, i) => (

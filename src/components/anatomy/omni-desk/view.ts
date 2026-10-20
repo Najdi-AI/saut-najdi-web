@@ -1,5 +1,5 @@
 import { boxCorners, fitProjection, iso, type Flat, type Plan, type Point3, type Projection } from "../../iso/iso-kit";
-import { LANE_Y, MOUTH_Z, PAD_REST, RAIL_TOP, SLED_TOP, CUP_TOP, TUBE_X } from "./model";
+import { GLASS_SPAN, LANE_Y, MOUTH_Z, PAD_REST, RAIL_TOP, SLED_TOP, CUP_TOP, TUBE_X } from "./model";
 
 /** World layout of the desk, in units of about 1 px of the real thing (x along the desk, y across, z up). */
 export const WIDTH = 600;
@@ -25,7 +25,9 @@ export const STRIP: Plan = { x: -152, y: LANE_Y + 13, w: 304, d: 6, r: 1 };
 export const RECEIVER: [number, number] = [MOUTH_Z, MOUTH_Z + 12];
 export const RECEIVER_R = 8.4;
 export const LOWER_COLLAR: [number, number] = [RECEIVER[1], RECEIVER[1] + 4];
-export const GLASS: [number, number] = [LOWER_COLLAR[1], LOWER_COLLAR[1] + 22];
+/** The sight glass, from the model (the controller needs its top to know when the capsule is out of sight). */
+export const GLASS: [number, number] = GLASS_SPAN;
+if (GLASS[0] !== LOWER_COLLAR[1]) throw new Error("the sight glass must sit on the lower collar");
 export const GLASS_R = 7.4;
 export const TOP_COLLAR: [number, number] = [GLASS[1], GLASS[1] + 4];
 export const COLLAR_R = 9.2;

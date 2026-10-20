@@ -32,8 +32,10 @@ export const SLED_TOP = 9;
 export const CUP_TOP = 13;
 export const CAPSULE_LEN = 18;
 export const CAPSULE_R = 4.4;
-/** Bottom of each receiver: a seated capsule clears it by 4. */
-export const MOUTH_Z = 35;
+/** Bottom of each receiver: a capsule standing in the cup clears its lip by 10, so it reads as let go. */
+export const MOUTH_Z = 41;
+/** The sight glass above each receiver (receiver 12, lower collar 4, glass 22): the capsule shows only below its top. */
+export const GLASS_SPAN: [number, number] = [MOUTH_Z + 16, MOUTH_Z + 38];
 /** Capsule base while it is up inside the opaque tube, out of sight. */
 export const HIDDEN_Z = 100;
 /** Bottom face of the stamp pad at rest, and how far it travels to meet the capsule's cap. */

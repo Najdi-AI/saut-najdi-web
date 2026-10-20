@@ -509,6 +509,127 @@ const CAPSULE = CAPSULE_PROFILE.slice(1)
   .join("");
 const SEAL = L(ringOn(0, LANE_Y, 2.2, CAP_Z) + ringOn(0, LANE_Y, 1.1, CAP_Z), { tone: "lit" });
 
+/* ------------------------------------------------------ on the desk top */
+
+/**
+ * What a working sorting desk keeps on its top, all low so it stays below the
+ * carriage on screen: a cable duct from the line console to the left post
+ * (the lamps' wiring goes up the post to the beam), a card index (the
+ * business's own information the answers come from), the stamp's ink tin, a
+ * tray of answered dockets, and behind the rail two racks of spare capsules
+ * lying on round bars between end blocks.
+ */
+{
+  /** The duct butts the console's back face and the left post foot's front face. */
+  const duct = { x: -170, y: -41, w: 6, d: 19, r: 1 };
+  slab("desk.duct", duct, 0, 2, { tone: "mid" }, {
+    steps: 2,
+    bevel: 0.3,
+    extra: L(k.planOutline(k.insetPlan(duct, 1.3), 2, P, 2), { tone: "faint" }) + D([at([duct.x + duct.w / 2, duct.y + 2.6, 2]), at([duct.x + duct.w / 2, duct.y + duct.d - 2.6, 2])], { size: 0.38 }),
+  });
+}
+
+/** The card index: a box with a card holder on its front, six cards standing in it, each with its tab one step along. */
+const INDEX = { x: -96, y: -24, w: 52, d: 20, r: 0.6 };
+{
+  const box = INDEX;
+  const wall = 1.2;
+  const floor = 1;
+  const top = 7;
+  slab("index.floor", box, 0, floor, { tone: "lo" }, { steps: 2, bevel: 0.3 });
+  const sides: [string, k.Plan][] = [
+    ["back", { x: box.x, y: box.y, w: box.w, d: wall, r: 0.3 }],
+    ["left", { x: box.x, y: box.y + wall, w: wall, d: box.d - 2 * wall, r: 0.1 }],
+    ["right", { x: box.x + box.w - wall, y: box.y + wall, w: wall, d: box.d - 2 * wall, r: 0.1 }],
+    ["front", { x: box.x, y: box.y + box.d - wall, w: box.w, d: wall, r: 0.3 }],
+  ];
+  for (const [name, plan] of sides) {
+    const screws = name === "front" || name === "back" ? D([at([plan.x + 0.6, plan.y + wall / 2, top]), at([plan.x + plan.w - 0.6, plan.y + wall / 2, top])], { size: 0.32 }) : "";
+    slab(`index.${name}`, plan, floor, top - floor, { tone: "mid" }, { steps: 2, bevel: name === "front" ? 0.3 : 0, extra: screws });
+  }
+  const face = box.y + box.d;
+  const cx = box.x + box.w / 2;
+  const holder = { x: cx - 7, y: face, w: 14, d: 0.5, r: 0.25 };
+  const card = k.pathOf([at([cx - 5.6, face + 0.5, 5.4]), at([cx + 5.6, face + 0.5, 5.4]), at([cx + 5.6, face + 0.5, 2.8]), at([cx - 5.6, face + 0.5, 2.8])], true);
+  slab("index.holder", holder, 2.2, 3.8, { tone: "lo" }, { steps: 2, extra: L(card, { tone: "faint" }) + D([at([cx - 6.3, face + 0.5, 4.1]), at([cx + 6.3, face + 0.5, 4.1])], { size: 0.3 }) });
+  for (let index = 0; index < 6; index++) {
+    const y = box.y + 2.6 + index * 2.8;
+    const sheet = { x: box.x + 3, y, w: box.w - 6, d: 0.6, r: 0.2 };
+    const tab = { x: box.x + 4 + index * 7.4, y, w: 6.4, d: 0.6, r: 0.2 };
+    const cardTop = 9;
+    const shapes = [R.solid(A.slab(sheet, floor, cardTop - floor, { name: `index.card${index}` }, 2)), R.solid(A.slab(tab, cardTop, 1.6, { name: `index.tab${index}`, owner: `index.card${index}` }, 2))];
+    put(`index.card${index}`, [sheet.x + sheet.w / 2, y + 0.3, (floor + cardTop) / 2], S(k.slabOf(sheet, floor, cardTop - floor, P, 2), { tone: "mid" }) + S(k.slabOf(tab, cardTop, 1.6, P, 2), { tone: "mid" }), shapes);
+  }
+}
+
+/** The stamp's ink tin, in front of the press: a can and its lid, with a pressed ring and a centre boss. */
+{
+  const [cx, cy] = [PRESS_X, -15];
+  cyl("tin", cx, cy, 8, 0, 2.4, { tone: "mid" }, { inner: L(arcOn(cx, cy, 8, 1.1), { tone: "faint" }) });
+  cyl("tin.lid", cx, cy, 8.4, 2.4, 1.2, { tone: "mid" }, { bevel: 0.4, extra: L(ringOn(cx, cy, 5.8, 3.6), { tone: "faint" }) + L(ringOn(cx, cy, 2, 3.6), { tone: "lo" }) + D([at([cx, cy, 3.6])], { size: 0.42 }) });
+}
+
+/** The docket tray: three answered slips, each a little along from the one under it; the top one has its printed lines and the answered mark. */
+{
+  const tray = { x: 30, y: -24, w: 60, d: 20, r: 0.6 };
+  const wall = 1;
+  const floor = 0.8;
+  const top = 3.6;
+  slab("tray.floor", tray, 0, floor, { tone: "lo" }, { steps: 2, bevel: 0.3 });
+  const sides: [string, k.Plan][] = [
+    ["back", { x: tray.x, y: tray.y, w: tray.w, d: wall, r: 0.3 }],
+    ["left", { x: tray.x, y: tray.y + wall, w: wall, d: tray.d - 2 * wall, r: 0.1 }],
+    ["right", { x: tray.x + tray.w - wall, y: tray.y + wall, w: wall, d: tray.d - 2 * wall, r: 0.1 }],
+    ["front", { x: tray.x, y: tray.y + tray.d - wall, w: tray.w, d: wall, r: 0.3 }],
+  ];
+  for (const [name, plan] of sides) slab(`tray.${name}`, plan, floor, top - floor, { tone: "mid" }, { steps: 2, bevel: name === "front" ? 0.3 : 0 });
+  const slipH = 0.3;
+  for (let index = 0; index < 3; index++) {
+    const slip = { x: 34 + index * 1.6, y: -20.6 + index * 0.6, w: 44, d: 13, r: 0.4 };
+    const z = floor + index * slipH;
+    const face = z + slipH;
+    let extra = "";
+    if (index === 2) {
+      const rows = [0, 1, 2].map((row) => k.lineOnTop([slip.x + 4, slip.y + 3.4 + row * 2.6], [slip.x + (row === 0 ? 26 : row === 1 ? 20 : 23), slip.y + 3.4 + row * 2.6], face, P)).join("");
+      const mark: [number, number] = [slip.x + slip.w - 8, slip.y + slip.d / 2];
+      extra = L(rows, { tone: "lo", free: true }) + L(ringOn(mark[0], mark[1], 3.4, face) + ringOn(mark[0], mark[1], 1.8, face), { tone: "lo" });
+    }
+    slab(`tray.slip${index}`, slip, z, slipH, { tone: "mid", crease: "none" }, { steps: 2, extra });
+  }
+}
+
+/** Spare capsules: on each side of the press, three lying on two round bars, the bars held in end blocks. */
+const RACK_Y = -75;
+const RACK_BAR_R = 1.5;
+const RACK_BAR_Z = 4;
+const RACK_SPREAD = 4;
+const RACK_RING = 5.1;
+/** Facets for the spares' tone fills (outlines stay analytic): 24 keeps all four tone bands on a 5.1 radius at this scale. */
+const RACK_STEPS = 24;
+/** The capsule's felt rings rest on both bars: centre distance = ring + bar radius. */
+const RACK_AXIS_Z = RACK_BAR_Z + Math.sqrt((RACK_RING + RACK_BAR_R) ** 2 - RACK_SPREAD ** 2);
+for (const [index, side] of [-1, 1].entries()) {
+  const cx = side * 92;
+  const half = 36.5;
+  const block = 4;
+  for (const [end, bx] of [cx - half, cx + half - block].entries()) {
+    const plan = { x: bx, y: RACK_Y - 8, w: block, d: 16, r: 1 };
+    slab(`rack${index}.end${end}`, plan, 0, 6.5, { tone: "mid" }, { steps: 3, bevel: 0.4, extra: D([at([bx + block / 2, RACK_Y - 5.6, 6.5]), at([bx + block / 2, RACK_Y + 5.6, 6.5])], { size: 0.4 }) });
+  }
+  const x0 = cx - half + block;
+  const length = 2 * (half - block);
+  for (const [bar, y] of [RACK_Y - RACK_SPREAD, RACK_Y + RACK_SPREAD].entries()) {
+    const F = G.frameAlong([x0, y, RACK_BAR_Z], [1, 0, 0]);
+    const profile = [[0, RACK_BAR_R], [length, RACK_BAR_R]];
+    put(`rack${index}.bar${bar}`, [x0 + length / 2, y, RACK_BAR_Z], S(G.solidOf(profile, F, P, { steps: RACK_STEPS }), { tone: "mid", crease: "none" }), [R.solid(A.solid(F, profile, { name: `rack${index}.bar${bar}` }))]);
+  }
+  for (let spare = 0; spare < 3; spare++) {
+    const s0 = x0 + 2.5 + spare * 21;
+    const F = G.frameAlong([s0, RACK_Y, RACK_AXIS_Z], [1, 0, 0]);
+    put(`rack${index}.capsule${spare}`, [s0 + CAPSULE_LEN / 2, RACK_Y, RACK_AXIS_Z], S(G.solidOf(CAPSULE_PROFILE, F, P, { steps: RACK_STEPS }), { tone: "mid", crease: "lo" }), [R.solid(A.solid(F, CAPSULE_PROFILE, { name: `rack${index}.capsule${spare}` }))]);
+  }
+}
+
 /* ---------------------------------------------------------- settle and order */
 
 A.settle(R, P);

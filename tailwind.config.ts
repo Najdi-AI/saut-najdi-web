@@ -77,8 +77,10 @@ const config: Config = {
       },
       /**
        * Text-only override: `text-brand-blue` (and its hover/group variants)
-       * reads the deeper --c-brand-blue-text, so every blue link and step
-       * number clears 4.5:1 on white, the canvas and the blue 10% chips.
+       * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
+       * blue link and step number clears 4.5:1 on white (5.96), the canvas
+       * (5.60), the blue 10% chip (4.97) and that chip inside a
+       * bg-brand-gradient-soft card (4.60 at worst).
        * bg-, border-, ring- and outline-brand-blue keep the guideline value.
        * Deep-merged into `colors.brand`, so the other hues are untouched.
        */

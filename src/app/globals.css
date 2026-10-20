@@ -103,10 +103,13 @@
   --c-brand-red: 236 27 58;
   /* Brand blue for TEXT only (tailwind.config.ts maps text-brand-blue here;
      bg/border/ring keep the guideline #5B6CE5). #5B6CE5 is 4.45:1 on white,
-     4.19:1 on the canvas and 3.70:1 on its own 10% chip, all short of AA for
-     16px links. #4E5CD4 is the same hue one step deeper: 5.52:1 on white,
-     5.19:1 on #F7F8FA, 4.60:1 on the #E7EAF8 chip. */
-  --c-brand-blue-text: 78 92 212;
+     4.19:1 on the canvas and 3.71:1 on its own 10% chip, all short of AA for
+     16px links. #4A57CC is the same hue deepened: 5.96:1 on white, 5.60:1 on
+     #F7F8FA, 4.97:1 on the 10% chip over the canvas. The worst case is the
+     step-number chip inside a bg-brand-gradient-soft card (WorkflowComparison),
+     where canvas + wash + 10% blue composites to about #D9E6F6 / #DFE2F7 /
+     #E6DFEF at the wash's 0/40/100% stops: 4.72 / 4.65 / 4.60:1. */
+  --c-brand-blue-text: 74 87 204;
 
   /* Headline gradient (.text-gradient), light canvas. The guideline cyan
      #2EC4E6 is 1.95:1 on #F7F8FA, so the first stop is the same hue deepened
@@ -115,7 +118,7 @@
   --text-gradient-stops: #1290ab 0%, #5b6ce5 28%, #6f3fa4 52%, #e20c3a 78%,
     #ec1b3a 100%;
   /* .btn-spectrum carries white 15px text, so every stop must clear 4.5:1
-     against white: 5.12 (--cyan-ink's #10788F), 5.52 (the text blue above),
+     against white: 5.12 (--cyan-ink's #10788F), 5.52 (#4E5CD4),
      7.18, 4.83 and 4.60 (#E81136, the end red deepened). Points between
      stops are never lighter than the lighter of their two stops, so the
      whole ramp passes. */

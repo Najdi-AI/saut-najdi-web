@@ -529,7 +529,6 @@ const OUTLETS: Outlet[] = [
   { name: "text", r: TEXT_R, start: [VALVE[0], LINE_Y + NECK, LINE_Z], corner: [VALVE[0], TEXT_Y, LINE_Z], foot: [VALVE[0], TEXT_Y], body: { x: VALVE[0] - 6, y: TEXT_Y - 6, w: 12, d: 12, r: 2 }, bodyZ: [7, 18], window: 3.6, flange: 6 },
 ];
 
-export const ROTORS: Record<string, { transform: string }> = {};
 for (const outlet of OUTLETS) {
   const [fx, fy] = outlet.foot;
   const end: Point3 = [fx, fy, FLANGE_H];
@@ -565,7 +564,6 @@ for (const outlet of OUTLETS) {
   const ZF = G.frameOf([fx, fy, 0], UP, X, Y);
   hex(`flow.${outlet.name}.nut.top`, ZF, b1, b1 + NUT_H, outlet.r + 1.9, { tone: "mid" }, { owner: `line.${outlet.name}` });
   hex(`flow.${outlet.name}.nut.bottom`, ZF, b0 - NUT_H, b0, outlet.r + 1.9, { tone: "mid" }, { owner: `line.${outlet.name}` });
-  ROTORS[outlet.name] = { transform: `translate(${fx} ${-cz})` };
 
   /* Floor flange where the line goes into the bench. */
   post(`foot.${outlet.name}`, fx, fy, outlet.flange, 0, FLANGE_H, { tone: "mid" }, {
@@ -599,7 +597,7 @@ slab("switch.block", SWITCH, 0, SWITCH_H, { tone: "mid" }, {
 post("switch.plate", KX, KY, DIAL_PLATE_R, SWITCH_H, 0.6, { tone: "lo" }, { steps: 32, extra: L(detentTicks, { tone: "mid" }) });
 const KNOB_Z0 = SWITCH_H + 0.6;
 const KNOB_TOP = KNOB_Z0 + KNOB_H;
-export const KNOB_MATRIX = k.topMatrix([KX, KY], KNOB_TOP, P, "x");
+const KNOB_MATRIX = k.topMatrix([KX, KY], KNOB_TOP, P, "x");
 post("switch.knob", KX, KY, KNOB_R, KNOB_Z0, KNOB_H, { tone: "hi" }, {
   steps: 32,
   bevel: 0.4,
@@ -633,8 +631,6 @@ export const RECORDER = R;
 export const BACK = back.join("");
 export const ITEMS: string[] = R.items.map((item: any) => `<g class="it" data-name="${item.name}"${item.attrs ?? ""}>${item.svg}</g>`);
 
-const groundY = at([0, 0, 0])[1];
-void groundY;
 
 /** Everything the client controller needs, all plain numbers and strings. */
 export const METER = {
@@ -652,12 +648,11 @@ export const METER = {
   perMinute: PER_MINUTE,
   perConversation: PER_CONVERSATION,
 };
-export type MeterData = typeof METER;
 
-/** Where the two controls sit on the card, as fractions of the viewBox, for the hit areas. */
+/** Where the two controls sit, as fractions of the viewBox, for the hit areas (r is a fraction of the width: about 32 px across at 390 px). */
 const knobScreen = at([KX, KY, KNOB_TOP]);
 const leverScreen = at([VALVE[0] + 9, VALVE[1] + 5, LEVER.z]);
 export const HITS = {
-  plan: { x: knobScreen[0] / WIDTH, y: knobScreen[1] / HEIGHT, r: 20 / WIDTH },
-  valve: { x: leverScreen[0] / WIDTH, y: leverScreen[1] / HEIGHT, r: 22 / WIDTH },
+  plan: { x: knobScreen[0] / WIDTH, y: knobScreen[1] / HEIGHT, r: 0.043 },
+  valve: { x: leverScreen[0] / WIDTH, y: leverScreen[1] / HEIGHT, r: 0.043 },
 };

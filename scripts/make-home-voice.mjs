@@ -42,8 +42,8 @@ const CARTESIA = {
 // and «يناسبك», which in Najdi speech address a man (a woman would hear «أبشري»), and the bubbles are not changed.
 export const VOICES = {
   agent: {id: 'f9f9f472-6247-4403-9abe-616f7c407c63', name: 'Raed'}, // the product's engine voice
-  caller: {id: 'TBD', name: 'TBD'},
-  ahmed: {id: 'TBD', name: 'TBD'},
+  caller: {id: 'e3087ad8-7018-4154-9a87-11577f916cd4', name: 'Omar'},
+  ahmed: {id: 'db873303-3a70-4d9d-867a-0d70a6377195', name: 'Tariq'},
 };
 
 // The bubbles show digits; the voices must say the words. [as written on screen, as spoken].

@@ -46,6 +46,8 @@ function stepSpring(s: Spring, dt: number, calm: boolean) {
 }
 
 const arrived = (s: Spring) => s.x === s.t && s.v === 0;
+/** The picker pad is within a twentieth of a unit of the tab (well under 0.1 px on screen): grip, and snap the last of it. */
+const touching = (s: Spring) => Math.abs(s.t - s.x) < 0.05 && Math.abs(s.v) < 0.5;
 /** Close enough for the next step to start: the spring keeps settling underneath it. */
 const near = (s: Spring) => Math.abs(s.t - s.x) < s.eps * 30 && Math.abs(s.v) < s.eps * 120;
 const smooth = (a: number, b: number, x: number) => {
@@ -133,6 +135,8 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     tz: spring(0, E.drop),
   };
   let carrying: number | null = null;
+  /** performance.now() when the last answer landed (the readout named its card). */
+  let landed = -Infinity;
   /** The question being asked, and the question whose card is in the picker: the readout names a card only when they agree. */
   let asked: number | null = null;
   let held: number | null = null;
@@ -152,9 +156,13 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
 
   function putBackSteps(): Step[] {
     return [
-      { start: () => carrying !== null && (S.head.t = 0), done: () => carrying === null || arrived(S.head) },
+      { start: () => carrying !== null && (S.head.t = 0), done: () => carrying === null || touching(S.head) },
       {
         start: () => {
+          if (carrying !== null) {
+            S.head.x = 0;
+            S.head.v = 0;
+          }
           answered = false;
           carrying = null;
           held = null;
@@ -169,7 +177,8 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     return [{ start: () => (asked = null) }, ...putBackSteps(), { start: () => S.drawers.forEach((s) => (s.t = 0)), done: () => S.drawers.every(near) }];
   }
 
-  function askSteps(q: number): Step[] {
+  /** `user`: the reader picked this question; only their answers are announced in the live region. */
+  function askSteps(q: number, user = false): Step[] {
     const d = QUESTIONS[q]!.drawer;
     return [
       { start: () => (asked = q) },
@@ -182,9 +191,11 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
         done: () => near(S.arm) && S.drawers.every((s, index) => index === d || near(s)),
       },
       { start: () => (S.drawers[d]!.t = MOTION.open), done: () => near(S.drawers[d]!) },
-      { start: () => (S.head.t = 0), done: () => arrived(S.head) },
+      { start: () => (S.head.t = 0), done: () => touching(S.head) },
       {
         start: () => {
+          S.head.x = 0;
+          S.head.v = 0;
           carrying = d;
           held = q;
           S.head.t = MOTION.up;
@@ -194,7 +205,8 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
       {
         start: () => {
           answered = true;
-          say(put(q));
+          landed = performance.now();
+          if (user) say(put(q));
         },
       },
     ];
@@ -251,44 +263,75 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     ];
   }
 
+  /**
+   * The tour. A job counts as done once its work has started (tourAt moves
+   * on in `begin`), so a pause or a take-over before that replays the job
+   * rather than skipping it: files are always fed top first.
+   */
   let tourAt = 0;
   function jobSteps(job: Job): Step[] {
     const wait: Step = { done: () => !retrieval.busy && !intake.busy, hold: MOTION.hold.between };
-    if (job.kind === "ingest") return [wait, { start: () => intake.run(ingestSteps(job.doc)) }, { done: () => !intake.busy }];
-    if (job.kind === "restock") return [wait, { start: () => intake.run(restockSteps()) }, { done: () => !intake.busy }];
+    const begin = (work: () => void): Step => ({
+      start: () => {
+        tourAt++;
+        work();
+      },
+    });
+    if (job.kind === "ingest") return [wait, begin(() => intake.run(ingestSteps(job.doc))), { done: () => !intake.busy }];
+    if (job.kind === "restock") return [wait, begin(() => intake.run(restockSteps())), { done: () => !intake.busy }];
     return [
       wait,
-      { start: () => retrieval.run(askSteps(job.question)) },
+      begin(() => retrieval.run(askSteps(job.question))),
       { done: () => !retrieval.busy, hold: MOTION.hold.answer },
       { start: () => retrieval.run(returnSteps()) },
       { done: () => !retrieval.busy },
     ];
   }
   function nextJob(): Step[] {
-    const job = TOUR[tourAt % TOUR.length]!;
-    tourAt++;
-    return [...jobSteps(job), { start: () => touring && tour.run(nextJob()) }];
+    return [...jobSteps(TOUR[tourAt % TOUR.length]!), { start: () => touring && tour.run(nextJob()) }];
   }
 
+  /**
+   * Engagement (motion.md, "Idle tour"). The tour pauses while the pointer is
+   * anywhere on the figure (the drawing, the card or the question chips) or
+   * keyboard focus is inside it, and while a question the reader picked is
+   * still being fetched. It resumes MOTION.hold.back after the last of these
+   * ends: for a picked question, counted from the moment its answer lands.
+   */
   let touring = false;
-  let engaged = false;
+  let hovered = false;
+  let focused = false;
+  let fetching = false;
   let quiet = 0;
-  function startTour(delay: number) {
+  const engaged = () => hovered || focused || fetching;
+  function resumeLater(delay: number = MOTION.hold.back) {
     window.clearTimeout(quiet);
-    if (still.matches) return;
+    if (still.matches || engaged()) return;
     quiet = window.setTimeout(() => {
-      if (engaged || still.matches) return;
+      if (still.matches || engaged()) return;
       touring = true;
-      const back = answered || carrying !== null ? [{ start: () => retrieval.run(returnSteps()) }, { done: () => !retrieval.busy }] : [];
+      /* A card still up (the reader's answer, or a paused tour's) stays at least hold.answer from when it landed, then goes back. */
+      const left = Math.max(0, MOTION.hold.answer - (performance.now() - landed) / 1000);
+      const back: Step[] = answered || carrying !== null ? [{ hold: left }, { start: () => retrieval.run(returnSteps()) }, { done: () => !retrieval.busy }] : [];
       tour.run([...back, ...nextJob()]);
       run();
     }, delay * 1000);
   }
-  function takeOver() {
+  function pause() {
+    window.clearTimeout(quiet);
     touring = false;
-    tour.run([]);
-    startTour(MOTION.hold.back);
   }
+  function takeOver() {
+    pause();
+    tour.run([]);
+  }
+  /** The last step of a reader's request: the quiet window starts here, when the answer has landed, not at the click. */
+  const landing = (): Step => ({
+    start: () => {
+      fetching = false;
+      resumeLater();
+    },
+  });
 
   /* drawing */
   const shown = new Map<Element, string>();
@@ -369,12 +412,12 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
     last = now;
     const calm = still.matches;
-    tour.tick(dt, calm);
+    if (touring) tour.tick(dt, calm);
     intake.tick(dt, calm);
     retrieval.tick(dt, calm);
     for (const s of all()) stepSpring(s, dt, calm);
     draw();
-    const busy = tour.busy || intake.busy || retrieval.busy || !all().every(arrived);
+    const busy = (touring && tour.busy) || intake.busy || retrieval.busy || !all().every(arrived);
     frame = visible && busy ? requestAnimationFrame(tick) : 0;
   }
   function run() {
@@ -387,12 +430,14 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
   /* input */
   const ask = (q: number) => {
     takeOver();
-    retrieval.run(askSteps(((q % QUESTIONS.length) + QUESTIONS.length) % QUESTIONS.length));
+    fetching = true;
+    retrieval.run([...askSteps(((q % QUESTIONS.length) + QUESTIONS.length) % QUESTIONS.length, true), landing()]);
     run();
   };
   const putBack = () => {
     takeOver();
-    retrieval.run(returnSteps());
+    fetching = true;
+    retrieval.run([...returnSteps(), landing()]);
     run();
   };
   const onClick = (event: Event) => {
@@ -427,34 +472,46 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     ask(q);
   };
   const onEnter = () => {
-    engaged = true;
-    window.clearTimeout(quiet);
-    touring = false;
+    hovered = true;
+    pause();
   };
   const onLeave = () => {
-    engaged = false;
-    startTour(MOTION.hold.back);
+    hovered = false;
+    resumeLater();
   };
-  const onFocus = () => {
-    onEnter();
+  /* Keyboard focus holds the tour; a mouse click's focus does not (the pointer already does, and it leaves). */
+  const byKeyboard = (target: EventTarget | null) => {
+    try {
+      return target instanceof Element && target.matches(":focus-visible");
+    } catch {
+      return true;
+    }
+  };
+  const onFocusIn = (event: Event) => {
     if (status && !status.textContent) say(held !== null && answered ? put(held) : W.ready);
+    if (!byKeyboard(event.target)) return;
+    focused = true;
+    pause();
+  };
+  const onFocusOut = () => {
+    focused = false;
+    resumeLater();
   };
   const onStill = () => {
     if (still.matches) {
-      touring = false;
-      tour.run([]);
-      window.clearTimeout(quiet);
-    } else startTour(MOTION.hold.first);
+      takeOver();
+      fetching = false;
+    } else resumeLater(MOTION.hold.first);
     run();
   };
 
   figure.addEventListener("click", onClick);
   root.addEventListener("click", onDrawer);
   root.addEventListener("keydown", onKey);
-  root.addEventListener("pointerenter", onEnter);
-  root.addEventListener("pointerleave", onLeave);
-  root.addEventListener("focusin", onFocus);
-  root.addEventListener("focusout", onLeave);
+  figure.addEventListener("pointerenter", onEnter);
+  figure.addEventListener("pointerleave", onLeave);
+  figure.addEventListener("focusin", onFocusIn);
+  figure.addEventListener("focusout", onFocusOut);
   still.addEventListener("change", onStill);
 
   const observer = new IntersectionObserver(
@@ -471,7 +528,7 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
   observer.observe(root);
 
   if (still.matches) retrieval.run(askSteps(0));
-  else startTour(MOTION.hold.first);
+  else resumeLater(MOTION.hold.first);
 
   return () => {
     observer.disconnect();
@@ -480,10 +537,15 @@ export function mountKbPress(root: HTMLElement, data: LiveData, { locale, scope 
     figure.removeEventListener("click", onClick);
     root.removeEventListener("click", onDrawer);
     root.removeEventListener("keydown", onKey);
-    root.removeEventListener("pointerenter", onEnter);
-    root.removeEventListener("pointerleave", onLeave);
-    root.removeEventListener("focusin", onFocus);
-    root.removeEventListener("focusout", onLeave);
+    figure.removeEventListener("pointerenter", onEnter);
+    figure.removeEventListener("pointerleave", onLeave);
+    figure.removeEventListener("focusin", onFocusIn);
+    figure.removeEventListener("focusout", onFocusOut);
     still.removeEventListener("change", onStill);
+    /* Put a lifted card back in its drawer, so a remount records the true homes. */
+    lifts.forEach((lift, index) => {
+      const home = homes[index];
+      if (lift && home && lift.parentNode !== home.parent) home.parent.insertBefore(lift, home.next);
+    });
   };
 }

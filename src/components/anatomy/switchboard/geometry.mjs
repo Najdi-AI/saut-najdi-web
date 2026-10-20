@@ -599,10 +599,58 @@ export function buildScene(pose = REST, { reuse = false } = {}) {
   return { R, items, back: defsSvg + back.join("") };
 }
 
+/**
+ * Rewrite the kit's absolute path data (M, L and Z on a 0.1 grid) as relative
+ * moves with the shortest numbers. Lossless: positions are kept in integer
+ * tenths, so every point lands exactly where the kit put it.
+ */
+export function compactPath(d) {
+  const tokens = d.match(/[MLZ]|-?\d*\.?\d+/g) ?? [];
+  const num = (tenths) => {
+    if (tenths === 0) return "0";
+    const sign = tenths < 0 ? "-" : "";
+    const a = Math.abs(tenths);
+    const whole = Math.floor(a / 10);
+    const frac = a % 10;
+    return sign + (frac ? `${whole || ""}.${frac}` : `${whole}`);
+  };
+  const join = (out, text) => (out && !/[a-zA-Z]$/.test(out) && !text.startsWith("-") && !(text.startsWith(".") && /\.\d+$/.test(out.split(/[ a-zA-Z-]/).pop() ?? "")) ? `${out} ${text}` : out + text);
+  let out = "";
+  let x = 0;
+  let y = 0;
+  let sx = 0;
+  let sy = 0;
+  let last = "";
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    if (t === "Z") {
+      out += "z";
+      x = sx;
+      y = sy;
+      last = "z";
+      continue;
+    }
+    const cmd = t === "M" || t === "L" ? t : last === "m" || last === "M" ? "L" : last.toUpperCase() || "L";
+    if (t === "M" || t === "L") i++;
+    const ax = Math.round(parseFloat(tokens[i]) * 10);
+    const ay = Math.round(parseFloat(tokens[++i]) * 10);
+    const want = cmd === "M" ? "m" : "l";
+    out = want === last || (want === "l" && last === "m") ? out : out + want;
+    out = join(out, num(ax - x));
+    out = join(out, num(ay - y));
+    x = ax;
+    y = ay;
+    if (cmd === "M") (sx = x), (sy = y);
+    last = want;
+  }
+  return out;
+}
+
 /** The static art in painter's order, with the live groups in their slots. */
-export function artOf({ reuse = true } = {}) {
+export function artOf({ reuse = true, compact = true } = {}) {
   const { items, back } = buildScene(REST, { reuse });
-  return back + items.map((item) => `<g class="it" data-name="${item.name}">${item.svg}</g>`).join("");
+  const art = back + items.map((item) => `<g class="it" data-name="${item.name}">${item.svg}</g>`).join("");
+  return compact ? art.replace(/ d="([MLZ0-9. -]*)"/g, (_, d) => ` d="${compactPath(d)}"`) : art;
 }
 
 /** Numbers the client motion needs (no geometry code ships). */

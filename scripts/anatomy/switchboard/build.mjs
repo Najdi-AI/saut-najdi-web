@@ -54,7 +54,8 @@ const swatch = (mark) =>
     : `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true"><path d="M1.5 5h13"/></svg>`;
 const PLAY = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.9v12.2a.9.9 0 0 0 1.37.77l9.6-6.1a.9.9 0 0 0 0-1.53l-9.6-6.1A.9.9 0 0 0 8 5.9Z" fill="currentColor"/></svg>`;
 const plain = argv.includes("--plain");
-const art = artOf({ reuse: !plain });
+const loose = argv.includes("--loose");
+const art = artOf({ reuse: !plain, compact: !loose });
 const markup = `<figure class="sb iso" data-theme="light" dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}">
 <div class="iso-plate sb-plate">
 <div class="iso-plate-corners" aria-hidden="true"><span class="iso-plate-corner" data-corner="fig">${esc(t.fig)}</span><span class="iso-plate-corner" data-corner="title">${esc(t.title)}</span><span class="iso-plate-corner" data-corner="hint">${esc(t.hint)}</span><span class="iso-plate-corner" data-corner="readout" data-readout>${esc(readoutOf(locale, "idle"))}</span></div>
@@ -138,7 +139,7 @@ main{width:min(560px,100% - 32px);margin:48px auto 72px}
 button{border:0;font:inherit}
 `;
 const html = `<!doctype html><html lang="${locale}" dir="${locale === "ar" ? "rtl" : "ltr"}"${theme === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Najdi switchboard</title><style>${css}${pageCss}</style></head><body><main>${markup}</main><script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;
-const name = `switchboard${locale === "en" ? "-en" : ""}${plain ? "-plain" : ""}${theme === "light" ? "-light" : ""}.html`;
+const name = `switchboard${locale === "en" ? "-en" : ""}${plain ? "-plain" : ""}${loose ? "-loose" : ""}${theme === "light" ? "-light" : ""}.html`;
 writeFileSync(join(OUT, name), html);
 console.log("wrote", join(OUT, name), `${(html.length / 1024).toFixed(0)} KB`, `art ${(art.length / 1024).toFixed(0)} KB`, `scale ${G_scale()}`);
 function G_scale() {

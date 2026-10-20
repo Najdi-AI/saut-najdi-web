@@ -1,11 +1,20 @@
 /**
  * The live part of the one desk, framework-free: one loop that moves four
- * groups by translation, lights one lamp and writes the readout. React mounts
+ * groups by translation, lights the lamps and writes the readout. React mounts
  * it from live.tsx; the standalone verification page inlines this same file.
  * No geometry is shipped: the art is server-rendered, and the only numbers the
  * browser needs are two screen vectors and the model's timeline.
+ *
+ * Taking over from the tour (motion.md): a reader's press answers at once. The
+ * chosen button is pressed, its arrival lamp lights and the readout and the
+ * live region name it in the same frame. If the running capsule is out of
+ * sight, the new job starts there and then, from where the carriage is and
+ * with its speed. If the capsule is in view on the desk, the running job is
+ * hurried (its stamp and its trip back up) so the desk is clear within
+ * HANDOVER seconds, and the chosen capsule comes down after it: every
+ * message on the desk is still answered.
  */
-import { COUNT, CUP_TOP, PRESS_X, STILL_CHANNEL, STROKE, TUBE_X, channelOf, poseAt, readoutOf, stillAge, stillJob, tubeOf, type Job, type Locale, type Pose, type Step, type Words } from "./model";
+import { COUNT, CUP_TOP, STILL_CHANNEL, STROKE, TUBE_X, channelOf, hiddenAt, inSight, poseAt, rateAt, readoutOf, stillAge, stillJob, tubeOf, type Job, type Locale, type Pose, type Step, type Words } from "./model";
 
 export interface DeskData {
   locale: Locale;
@@ -21,6 +30,10 @@ export interface DeskData {
 const TOUR_FIRST = 1400;
 const TOUR_BACK = 3600;
 const LONGEST = 1 / 30;
+/** A reader's press clears the desk within this long (s) before the chosen capsule is called down. */
+const HANDOVER = 0.8;
+/** The most a hurried job is sped up. */
+const RUSH_MOST = 8;
 const STILLNESS = "(prefers-reduced-motion: reduce)";
 
 const fine = (value: number) => Math.round(value * 100) / 100;
@@ -44,8 +57,13 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
 
   let job: Job = stillJob(locale);
   let age = stillAge(job);
+  /** The channel the desk is serving: the reader's choice from the moment they press. */
   let channel = STILL_CHANNEL;
-  let queued: number | null = null;
+  /** A chosen channel waiting for the desk to clear, and the job age at which it is clear. */
+  let pending: number | null = null;
+  let clearAt = 0;
+  /** How fast the running job plays: 1, or faster while a reader's choice waits. */
+  let rush = 1;
   let announce = false;
   /** The still holds until the tour or the reader moves it. */
   let holding = true;
@@ -56,8 +74,7 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
   let frame = 0;
   let last = 0;
   let tourTimer = 0;
-  let shownStep: Step | null = null;
-  const written = new Map<Element, string>();
+  let shown: string | null = null;
 
   const write = (element: Element | null, name: string, value: string | null) => {
     if (!element) return;
@@ -77,51 +94,46 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
     const press = shift(0, -STROKE * pose.press);
     write(plunger, "transform", press);
     write(knob, "transform", press);
-    lamps.forEach((list, tube) => list.forEach((lamp) => write(lamp, "data-on", tube === pose.lamp ? "" : null)));
-    const text = readoutOf(channel, pose.step, words);
-    if (readout && written.get(readout) !== text) {
-      written.set(readout, text);
-      readout.textContent = text;
-    }
-    if (pose.step !== shownStep) {
-      shownStep = pose.step;
+    /** The running capsule's lamp, and the chosen one's while it waits: two lines live at once. */
+    const waiting = pending === null ? -1 : tubeOf(pending, locale);
+    lamps.forEach((list, tube) => list.forEach((lamp) => write(lamp, "data-on", tube === pose.lamp || tube === waiting ? "" : null)));
+    const step: Step = pending === null ? pose.step : "coming";
+    const text = readoutOf(channel, step, words);
+    if (readout && readout.textContent !== text) readout.textContent = text;
+    const key = `${channel}|${step}`;
+    if (key !== shown) {
+      shown = key;
       if (announce && status) status.textContent = text;
     }
-    picks.forEach((button) => write(button, "aria-pressed", Number(button.dataset.odPick) === channel && !pose.done ? "true" : "false"));
+    picks.forEach((button) => write(button, "aria-pressed", Number(button.dataset.odPick) === channel ? "true" : "false"));
   }
 
-  function start(next: number, user: boolean) {
-    const from = poseAt(job, age).carriage;
-    channel = next;
-    job = { tube: tubeOf(next, locale), from };
-    announce = user;
-    shownStep = null;
-    if (still.matches) {
-      job = { tube: job.tube, from: PRESS_X };
-      age = stillAge(job);
-    } else age = 0;
+  /** A new job for a channel, from where the carriage is and at the speed it has. */
+  function begin(next: number, from: number, v0: number) {
+    job = { tube: tubeOf(next, locale), from, v0 };
+    age = 0;
+    rush = 1;
+    pending = null;
   }
 
   function tick(now: number) {
     const dt = last ? Math.min((now - last) / 1000, LONGEST) : 1 / 60;
     last = now;
+    const moving = !still.matches && !holding;
     let pose = poseAt(job, age);
-    if (!pose.done && !still.matches && !holding) {
-      age += dt;
+    if (moving && (!pose.done || pending !== null)) {
+      age += dt * rush;
+      if (pending !== null && age >= clearAt) begin(pending, poseAt(job, clearAt).carriage, 0);
       pose = poseAt(job, age);
     }
-    if (pose.done || still.matches) {
-      if (queued !== null) {
-        start(queued, true);
-        queued = null;
-        pose = poseAt(job, age);
-      } else if (touring && !hovering && !focused && !still.matches) {
-        start((channel + 1) % COUNT, false);
-        pose = poseAt(job, age);
-      }
+    if (moving && pose.done && pending === null && touring && !hovering && !focused) {
+      announce = false;
+      channel = (channel + 1) % COUNT;
+      begin(channel, pose.carriage, 0);
+      pose = poseAt(job, age);
     }
     draw(pose);
-    const busy = !still.matches && !holding && (!pose.done || queued !== null || (touring && !hovering && !focused));
+    const busy = moving && (!pose.done || pending !== null || (touring && !hovering && !focused));
     frame = visible && busy ? requestAnimationFrame(tick) : 0;
   }
 
@@ -142,14 +154,27 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
     }, delay);
   };
 
+  /** A reader's choice, by button, key or pointer: it takes over at once (see the header). */
   const pick = (next: number) => {
     if (next < 0 || next >= COUNT) return;
-    const pose = poseAt(job, age);
     holding = false;
-    if (still.matches || pose.done) {
-      start(next, true);
-      draw(poseAt(job, age));
-    } else queued = next;
+    channel = next;
+    announce = true;
+    shown = null;
+    if (still.matches) {
+      job = stillJob(locale, next);
+      age = stillAge(job);
+      pending = null;
+      rush = 1;
+    } else {
+      const pose = poseAt(job, age);
+      if (inSight(pose)) {
+        pending = next;
+        clearAt = hiddenAt(job);
+        rush = Math.min(RUSH_MOST, Math.max(1, (clearAt - age) / HANDOVER));
+      } else begin(next, pose.carriage, pose.done ? 0 : rateAt(job, age));
+    }
+    draw(poseAt(job, age));
     scheduleTour(TOUR_BACK);
     run();
   };
@@ -206,7 +231,7 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
   const onFocusIn = () => {
     focused = true;
     scheduleTour(TOUR_BACK);
-    if (status && !status.textContent) status.textContent = readoutOf(channel, poseAt(job, age).step, words);
+    if (status && !status.textContent) status.textContent = readoutOf(channel, pending === null ? poseAt(job, age).step : "coming", words);
   };
   const onFocusOut = (event: FocusEvent) => {
     if (figure && event.relatedTarget instanceof Node && figure.contains(event.relatedTarget)) return;
@@ -218,8 +243,10 @@ export function mountDesk(root: HTMLElement, data: DeskData): () => void {
     if (still.matches) {
       window.clearTimeout(tourTimer);
       touring = false;
-      job = { tube: job.tube, from: PRESS_X };
+      job = stillJob(locale, channel);
       age = stillAge(job);
+      pending = null;
+      rush = 1;
       draw(poseAt(job, age));
     } else scheduleTour(TOUR_FIRST);
   };

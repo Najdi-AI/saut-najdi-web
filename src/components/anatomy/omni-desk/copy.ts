@@ -9,8 +9,8 @@ import type { Locale, Words } from "./model";
  *
  * The Arabic readout agrees with each channel's noun: مكالمة, رسالة نصية and
  * دردشة الموقع are feminine (وصلت، انرد عليها), واتساب, تيليجرام and بريد are
- * masculine (وصل، انرد عليه). The words that need no agreement (الرد رجع)
- * are plain strings.
+ * masculine (وصل، انرد عليه). The words that need no agreement (بالطريق،
+ * الرد رجع) are plain strings.
  */
 export interface Copy {
   fig: string;
@@ -45,6 +45,7 @@ const AR: Copy = {
     names: ["مكالمة", "واتساب", "تيليجرام", "رسالة نصية", "بريد", "دردشة الموقع"],
     genders: ["f", "m", "m", "f", "m", "f"],
     steps: {
+      coming: ["بالطريق"],
       in: [{ m: "وصل", f: "وصلت" }],
       answered: [{ m: "وصل", f: "وصلت" }, { m: "انرد عليه", f: "انرد عليها" }],
       sent: ["الرد رجع من نفس القناة"],
@@ -72,6 +73,7 @@ const EN: Copy = {
     names: ["Call", "WhatsApp", "Telegram", "SMS", "Email", "Web chat"],
     genders: ["m", "m", "m", "m", "m", "m"],
     steps: {
+      coming: ["on its way"],
       in: ["in"],
       answered: ["in", "answered"],
       sent: ["replied the same way"],

@@ -51,13 +51,16 @@ export const tubeOf = (channel: number, locale: Locale) => (locale === "ar" ? CO
 export const channelOf = tubeOf;
 
 export type Phase = "travel" | "arrive" | "carry" | "stamp" | "back" | "send" | "rest";
-export type Step = "in" | "answered" | "sent";
-export const STEPS: readonly Step[] = ["in", "answered", "sent"];
+/** What the readout says: on its way down, on the desk, answered, the answer gone back up. */
+export type Step = "coming" | "in" | "answered" | "sent";
+export const STEPS: readonly Step[] = ["coming", "in", "answered", "sent"];
 
 export interface Job {
   tube: number;
   /** Carriage x when the job starts (where the last one left it). */
   from: number;
+  /** Carriage speed when the job starts (units/s): a reader who takes over mid-travel keeps the carriage's momentum. */
+  v0?: number;
 }
 
 export interface Pose {
@@ -100,6 +103,8 @@ const easeOut = (t: number) => 1 - Math.pow(1 - clamp(t), 3);
 const easeIn = (t: number) => Math.pow(clamp(t), 2.2);
 
 const travel = (dx: number) => (Math.abs(dx) < 0.01 ? 0 : 0.45 + Math.abs(dx) / 170);
+/** How fast a carried-over speed dies away (s): a short brake, then the eased move takes over. */
+const CARRY_TAU = 0.09;
 
 export interface Schedule {
   x: number;
@@ -107,19 +112,22 @@ export interface Schedule {
   at: Record<Phase | "end", number>;
   /** When the stamp meets the cap. */
   contact: number;
+  /** When the capsule lands in the cup. */
+  landed: number;
 }
 
 export function scheduleOf(job: Job): Schedule {
   const x = TUBE_X[job.tube]!;
   const travelAt = 0;
-  const arriveAt = travelAt + travel(x - job.from);
+  const v0 = job.v0 ?? 0;
+  const arriveAt = travelAt + (travel(x - job.from) || (Math.abs(v0) > 1 ? 0.45 : 0));
   const carryAt = arriveAt + ARRIVE;
   const stampAt = carryAt + travel(PRESS_X - x);
   const backAt = stampAt + STAMP;
   const sendAt = backAt + travel(x - PRESS_X);
   const restAt = sendAt + SEND;
   const end = restAt + REST;
-  return { x, at: { travel: travelAt, arrive: arriveAt, carry: carryAt, stamp: stampAt, back: backAt, send: sendAt, rest: restAt, end }, contact: stampAt + PRESS_DOWN };
+  return { x, at: { travel: travelAt, arrive: arriveAt, carry: carryAt, stamp: stampAt, back: backAt, send: sendAt, rest: restAt, end }, contact: stampAt + PRESS_DOWN, landed: arriveAt + ARRIVE_GLIDE + ARRIVE_HANG + ARRIVE_FALL };
 }
 
 /** Capsule base height while it arrives: a glide down the tube that brakes in the glass, a short hang at the mouth, a fall into the cup and one small bounce. */
@@ -137,12 +145,14 @@ export function poseAt(job: Job, age: number): Pose {
   const s = scheduleOf(job);
   const { at, x } = s;
   const t = Math.max(0, age);
-  const step: Step = t < s.contact ? "in" : t < at.back ? "answered" : "sent";
+  const step: Step = t < s.landed ? "coming" : t < s.contact ? "in" : t < at.send ? "answered" : "sent";
   const seal = clamp((t - s.contact) / SEAL_IN);
   const base = { press: 0, seal, lamp: job.tube, step, done: t >= at.end };
   if (t < at.arrive) {
     const u = at.arrive > 0 ? t / at.arrive : 1;
-    return { ...base, carriage: job.from + (x - job.from) * ease(u), capsuleX: x, capsuleZ: HIDDEN_Z, phase: "travel" };
+    /** A carried-over speed: full at the start, braked away within about 0.2 s, and zero (with zero slope) by the end of the move. */
+    const carry = (job.v0 ?? 0) * t * Math.exp(-t / CARRY_TAU) * (1 - u) * (1 - u);
+    return { ...base, carriage: job.from + (x - job.from) * ease(u) + carry, capsuleX: x, capsuleZ: HIDDEN_Z, phase: "travel" };
   }
   if (t < at.carry) return { ...base, carriage: x, capsuleX: x, capsuleZ: arriving(t - at.arrive), phase: "arrive" };
   if (t < at.stamp) {
@@ -164,13 +174,33 @@ export function poseAt(job: Job, age: number): Pose {
 
 /** The still the server renders and reduced motion shows: a capsule on the desk, just answered. */
 export const STILL_CHANNEL = 1;
-export function stillJob(locale: Locale): Job {
-  return { tube: tubeOf(STILL_CHANNEL, locale), from: PRESS_X };
+export function stillJob(locale: Locale, channel = STILL_CHANNEL): Job {
+  return { tube: tubeOf(channel, locale), from: PRESS_X };
 }
 export function stillAge(job: Job) {
   const s = scheduleOf(job);
   return s.at.back - 0.001;
 }
+
+/** The carriage's speed at an instant of a job (units/s), for a take-over that keeps it moving smoothly. */
+export function rateAt(job: Job, age: number) {
+  const h = 0.004;
+  return (poseAt(job, age + h).carriage - poseAt(job, Math.max(0, age - h)).carriage) / (age + h - Math.max(0, age - h));
+}
+
+/**
+ * When the capsule is out of sight again on its way back up (its base above
+ * the sight glass). From then on the desk is clear and the next capsule can
+ * be called down; a reader's press hurries the running job to this moment.
+ */
+export function hiddenAt(job: Job) {
+  const { at } = scheduleOf(job);
+  const share = (GLASS_SPAN[1] - CUP_TOP) / (HIDDEN_Z - CUP_TOP);
+  return at.send + SEND * Math.pow(share, 1 / 2.2);
+}
+
+/** The capsule is in view (in the glass, falling, or on the desk). */
+export const inSight = (pose: Pose) => !pose.done && pose.capsuleZ < GLASS_SPAN[1];
 
 /** A step word that agrees with its channel's noun (Arabic), or one word for every channel. */
 export type Agree = string | { m: string; f: string };

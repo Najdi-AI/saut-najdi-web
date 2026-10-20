@@ -9,6 +9,11 @@
  * (types stripped by Node), so capture.mjs, drive.mjs and lines.mjs see what
  * the site serves. --audit runs the kit's geometry audit, plus a check of the
  * moving parts against every static part in every pose they pass through.
+ *
+ * Taking over from the tour is checked on the built page with the skill's
+ * drive.mjs and the two files beside this script (every line must say PASS):
+ *
+ *   node <anatomy>/scripts/drive.mjs <out>/omni-desk.html --actions scripts/anatomy/omni-desk/takeover.json --preload scripts/anatomy/omni-desk/takeover.js --height 1300
  */
 import { registerHooks, stripTypeScriptTypes } from "node:module";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";

@@ -28,10 +28,11 @@ const config: Config = {
          * the same hues raised in luminance, which is also exactly the ramp
          * the headline gradient uses on night, so the two stay in step.
          *
-         * The five-stop `--spectrum` (ring outlines, the header CTA) is a
-         * SEPARATE set of variables and is deliberately left at brand values:
-         * it paints solid fills and large areas, where the original weights
-         * still read correctly on dark.
+         * The five-stop `--spectrum` (ring outlines) is a SEPARATE set of
+         * variables and is deliberately left at brand values: it paints solid
+         * fills and large areas, where the original weights still read
+         * correctly on dark. The header CTA paints `--spectrum-btn`, a
+         * deepened day ramp that carries white type at 4.5:1 or better.
          */
         brand: {
           cyan: "rgb(var(--c-brand-cyan) / <alpha-value>)",
@@ -72,6 +73,20 @@ const config: Config = {
           surface: "#0F1730", // raised: cards, chips, bubbles
           hi: "#16203C", // hover / second raise
           line: "#232C49", // hairline on dark
+        },
+      },
+      /**
+       * Text-only override: `text-brand-blue` (and its hover/group variants)
+       * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
+       * blue link and step number clears 4.5:1 on white (5.96), the canvas
+       * (5.60), the blue 10% chip (4.97) and that chip inside a
+       * bg-brand-gradient-soft card (4.60 at worst).
+       * bg-, border-, ring- and outline-brand-blue keep the guideline value.
+       * Deep-merged into `colors.brand`, so the other hues are untouched.
+       */
+      textColor: {
+        brand: {
+          blue: "rgb(var(--c-brand-blue-text) / <alpha-value>)",
         },
       },
       fontFamily: {

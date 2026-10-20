@@ -1,0 +1,171 @@
+/*
+ * The knowledge press: figure-scoped styles over the vendored kit (iso.css).
+ *
+ * Theme. The site is light unless <html data-theme="dark"> (ThemeScript).
+ * The kit's light tokens sit on .iso[data-theme="light"], so the plate is
+ * rendered light by the server, inside an outer .iso that carries the kit's
+ * dark tokens. When the site is dark, every kit token on the plate inherits
+ * from that outer wrapper, so the plate follows the site with no script and
+ * no flash, and no token value is copied out of the kit.
+ */
+/*
+ * Night, frameless: without its card the press stands on the site's own night
+ * surfaces, so the outer wrapper takes the navy greys the other figures use
+ * (omni-desk.css) instead of the kit's neutral blacks, which read as a black
+ * patch on the navy page.
+ */
+html[data-theme="dark"] .iso.kbp-theme {
+  --anatomy-page: #080d1c;
+  --anatomy-card: #0f1730;
+  --anatomy-paper: #0f1730;
+  --anatomy-text: #aab3c7;
+  --anatomy-strong: #eef1f8;
+  --anatomy-muted: #838da3;
+  --anatomy-face: #172142;
+  --anatomy-top: #1a2444;
+  --anatomy-shade-0: #0a1126;
+  --anatomy-shade-1: #0d152d;
+  --anatomy-shade-2: #111a35;
+  --anatomy-shade-3: #151f3d;
+  --anatomy-lit-top: #26325a;
+  --anatomy-lit-shade: #1c284c;
+  --anatomy-hi: #dde3f0;
+  --anatomy-mid: #6c7795;
+  --anatomy-lo: #3c4766;
+  --anatomy-faint: #27324f;
+  --anatomy-lit: #ffffff;
+  --anatomy-halo: #02040b;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #e6eaf4;
+}
+
+html[data-theme="dark"] .kbp.iso[data-theme="light"] {
+  --anatomy-page: inherit;
+  --anatomy-card: inherit;
+  --anatomy-text: inherit;
+  --anatomy-strong: inherit;
+  --anatomy-muted: inherit;
+  --anatomy-paper: inherit;
+  --anatomy-face: inherit;
+  --anatomy-top: inherit;
+  --anatomy-shade-0: inherit;
+  --anatomy-shade-1: inherit;
+  --anatomy-shade-2: inherit;
+  --anatomy-shade-3: inherit;
+  --anatomy-lit-top: inherit;
+  --anatomy-lit-shade: inherit;
+  --anatomy-hi: inherit;
+  --anatomy-mid: inherit;
+  --anatomy-lo: inherit;
+  --anatomy-faint: inherit;
+  --anatomy-lit: inherit;
+  --anatomy-halo: inherit;
+  --anatomy-halo-opacity: inherit;
+  --anatomy-dot: inherit;
+  --anatomy-red: inherit;
+  --anatomy-green: inherit;
+  --anatomy-blue: inherit;
+  --anatomy-lift: inherit;
+}
+
+.kbp {
+  --kbp-font: var(--font-thmanyah), system-ui, "Segoe UI", sans-serif;
+  color: var(--anatomy-text);
+}
+
+/* Frameless (lazy/frameless.css): no card, corners or legend; the chips use the site's type. */
+.kbp .kbp-asks {
+  font-family: var(--kbp-font);
+}
+
+.kbp[dir="rtl"] .kbp-asks {
+  letter-spacing: 0;
+}
+
+/* The drawing. */
+.kbp-stage {
+  position: relative;
+  border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kbp-stage:focus {
+  outline: none;
+}
+
+.kbp-stage:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+
+.kbp .kb-slot {
+  fill: var(--anatomy-shade-0);
+  stroke: none;
+}
+
+.kbp [data-kb-drawer] {
+  cursor: pointer;
+}
+
+/* The question chips under the drawing, centred under the machine. */
+.kbp-asks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.kbp-asks-label {
+  flex-basis: 100%;
+  text-align: center;
+  color: var(--anatomy-muted);
+  font-size: 13px;
+}
+
+.kbp-ask {
+  appearance: none;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--anatomy-text);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.4;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--anatomy-ease),
+    color 160ms var(--anatomy-ease);
+}
+
+.kbp-ask:hover {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-strong);
+}
+
+.kbp-ask[aria-pressed="true"] {
+  border-color: var(--anatomy-lit);
+  color: var(--anatomy-strong);
+}
+
+.kbp-ask:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 3px;
+}
+
+.kbp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kbp-ask {
+    transition: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
@@ -24,6 +25,13 @@ const sectionIcons: IconName[] = ["doc", "database", "chat", "check", "shield", 
  * chat/text channels and the test chat, with no roadmap promise either. Do
  * not reintroduce live-call grounding. The OCR processing location is
  * disclosed here, not hidden.
+ *
+ * The answer capsule is drawn as the knowledge press (anatomy figure 1,
+ * NAJ-897): files in, cut into cards, filed in labelled drawers, and the one
+ * card that answers lifted out. The figure keeps the same claim boundary (it
+ * says text chat, never a live call). The route files pass it in as `figure`:
+ * lib/pageFactory.ts imports this module for `knowledgeBaseFaq`, so an import
+ * here would load the figure's client code and CSS on every page.
  */
 
 const t = {
@@ -213,7 +221,7 @@ const t = {
   },
 } as const;
 
-export function KnowledgeBasePage({ locale }: { locale: Locale }) {
+export function KnowledgeBasePage({ locale, figure }: { locale: Locale; figure?: ReactNode }) {
   const s = t[locale];
   return (
     <>
@@ -227,12 +235,14 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* Answer-first paragraph: the whole pipeline in one liftable capsule. */}
+      {/* Answer-first paragraph: the whole pipeline in one liftable capsule,
+          then the same pipeline as a machine you can ask. */}
       <section className="container py-16">
         <Reveal className="mx-auto max-w-3xl text-center">
           <h2 className="text-h2">{s.answer.heading}</h2>
           <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.answer.capsule}</p>
         </Reveal>
+        {figure && <div className="mx-auto mt-10 w-full max-w-[760px]">{figure}</div>}
       </section>
 
       <section className="bg-surface py-16">

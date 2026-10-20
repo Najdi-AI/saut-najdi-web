@@ -1,0 +1,237 @@
+/*
+ * The credit meter's own tokens and card styles, scoped to .cm.
+ *
+ * Theme: the kit reads `.iso` (dark) and `.iso[data-theme="light"]` (light).
+ * The wrapper is server-rendered as `.iso.cm[data-theme="light"]`, the site's
+ * own default, and the rule under `[data-theme="dark"] .cm.iso` re-declares
+ * the dark set whenever an ancestor carries the site's dark switch (html, or a
+ * dark section). CSS alone decides, so there is no flash before hydration and
+ * the figure follows the theme toggle live. Both sets are tuned to the site's
+ * surfaces (white / #0F1730) so the card reads as one of the site's cards.
+ */
+
+.cm.iso[data-theme="light"] {
+  --anatomy-page: #f7f8fa;
+  --anatomy-card: #ffffff;
+  --anatomy-text: #4b5468;
+  --anatomy-strong: #0d1326;
+  --anatomy-muted: #6c7484;
+  --anatomy-paper: #ffffff;
+  --anatomy-face: #ffffff;
+  --anatomy-top: #ffffff;
+  --anatomy-shade-0: #d7dae2;
+  --anatomy-shade-1: #e1e4ea;
+  --anatomy-shade-2: #eaecf1;
+  --anatomy-shade-3: #f3f4f7;
+  --anatomy-lit-top: #ffffff;
+  --anatomy-lit-shade: #eceef3;
+  --anatomy-hi: #222838;
+  --anatomy-mid: #868c9b;
+  --anatomy-lo: #b4b9c4;
+  --anatomy-faint: #d6d9e0;
+  --anatomy-lit: #0d1326;
+  --anatomy-halo: #7d8396;
+  --anatomy-halo-opacity: 0.3;
+  --anatomy-dot: #343a4a;
+  --cm-frame: rgb(13 19 38 / 0.09);
+  --cm-liquid: #a7b1c5;
+  --cm-liquid-top: #d0d6e2;
+  --cm-glass: #f1f3f7;
+  --cm-glint: #ffffff;
+  --cm-dial: #ffffff;
+  --cm-well: #222838;
+  --cm-digit: #f4f5f8;
+  --cm-drum-edge: #000000;
+  --cm-window: #eef0f4;
+  --cm-glare: #ffffff;
+  --cm-glare-opacity: 0.55;
+  --cm-dim: 0.38;
+}
+
+[data-theme="dark"] .cm.iso {
+  --anatomy-page: #080d1c;
+  --anatomy-card: #0f1730;
+  --anatomy-text: #aab3c7;
+  --anatomy-strong: #eef1f8;
+  --anatomy-muted: #838da3;
+  --anatomy-paper: #0f1730;
+  --anatomy-face: #172042;
+  --anatomy-top: #18213f;
+  --anatomy-shade-0: #0a1024;
+  --anatomy-shade-1: #0d142c;
+  --anatomy-shade-2: #101833;
+  --anatomy-shade-3: #131c3a;
+  --anatomy-lit-top: #1f2a50;
+  --anatomy-lit-shade: #182143;
+  --anatomy-hi: #d3d9e8;
+  --anatomy-mid: #6a7491;
+  --anatomy-lo: #3d4766;
+  --anatomy-faint: #27314f;
+  --anatomy-lit: #ffffff;
+  --anatomy-halo: #02050d;
+  --anatomy-halo-opacity: 0.9;
+  --anatomy-dot: #e6eaf3;
+  --cm-frame: rgb(255 255 255 / 0.09);
+  --cm-liquid: #34437a;
+  --cm-liquid-top: #4b5c96;
+  --cm-glass: #141d3b;
+  --cm-glint: #ffffff;
+  --cm-dial: #131c3a;
+  --cm-well: #050914;
+  --cm-digit: #e6eaf3;
+  --cm-drum-edge: #000000;
+  --cm-window: #0a1024;
+  --cm-glare: #ffffff;
+  --cm-glare-opacity: 0.06;
+  --cm-dim: 0.42;
+}
+
+/* Frameless (lazy/frameless.css): no card, corners or legend. */
+
+/* The stage: the drawing plus two hit areas sitting on the knob and the lever. */
+.cm-box {
+  position: relative;
+}
+
+.cm-hit {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.cm-hit:focus-visible {
+  outline: 1.5px solid var(--anatomy-muted);
+  outline-offset: 2px;
+}
+
+.cm-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Parts the kit has no class for. */
+.cm .cm-glass {
+  fill: var(--cm-glass);
+}
+
+.cm .cm-liquid {
+  fill: var(--cm-liquid);
+}
+
+.cm .cm-liquid-top {
+  fill: var(--cm-liquid-top);
+  stroke: var(--anatomy-mid);
+  stroke-width: 0.5;
+}
+
+.cm .cm-glint {
+  stroke: var(--cm-glint);
+  opacity: 0.7;
+}
+
+.cm .cm-dial {
+  fill: var(--cm-dial);
+}
+
+.cm .cm-drum-bezel {
+  fill: var(--anatomy-shade-1);
+}
+
+.cm .cm-drum-well {
+  fill: var(--cm-well);
+}
+
+.cm .cm-digit {
+  fill: var(--cm-digit);
+  font-family: var(--anatomy-mono);
+  font-size: 4.4px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-anchor: middle;
+}
+
+.cm .cm-drum-shade {
+  fill: url(#cm-drum-grad);
+  pointer-events: none;
+}
+
+.cm .cm-needle {
+  fill: var(--anatomy-lit);
+  stroke: var(--anatomy-lit);
+  stroke-width: 0.4;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.cm .cm-hub {
+  fill: var(--anatomy-hi);
+}
+
+.cm .cm-hub-cap {
+  fill: var(--anatomy-paper);
+}
+
+.cm .cm-glare {
+  fill: var(--cm-glare);
+  opacity: var(--cm-glare-opacity);
+  pointer-events: none;
+}
+
+.cm .cm-window {
+  fill: var(--cm-window);
+}
+
+.cm .cm-window-ring {
+  fill: var(--anatomy-top);
+}
+
+.cm .cm-blade {
+  fill: var(--anatomy-hi);
+  opacity: 0.85;
+}
+
+.cm .cm-rotor-hub {
+  fill: var(--anatomy-mid);
+}
+
+.cm .cm-knob-dot {
+  fill: var(--anatomy-hi);
+}
+
+.cm .iso-face-text.cm-engraved {
+  font-family: var(--font-thmanyah), system-ui, sans-serif;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.cm[lang="en"] .iso-face-text.cm-engraved {
+  font-family: var(--anatomy-mono);
+  letter-spacing: 0.06em;
+}
+
+/* The open outlet's ring reads at full strength; the other steps back. */
+.cm .cm-scale {
+  transition: opacity 420ms var(--anatomy-ease);
+}
+
+.cm [data-outlet="calls"] .cm-scale[data-scale="text"],
+.cm [data-outlet="text"] .cm-scale[data-scale="calls"] {
+  opacity: var(--cm-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm .cm-scale {
+    transition: none;
+  }
+}

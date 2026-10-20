@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { localePath, type Locale } from "@/lib/i18n";
@@ -46,12 +47,80 @@ const t = {
   },
 } as const;
 
+/**
+ * Art the launcher must never sit on. The homepage hero floats its chat
+ * bubbles and mic over the photo's physical left edge (HeroVisual), which is
+ * exactly where a phone's bottom corner lands in the first screen. Any other
+ * surface can opt in with a `data-fab-avoid` attribute.
+ */
+const AVOID = "[data-fab-avoid], .hero-photo";
+const AVOID_PAD = 8;
+
 export function ChatLauncher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion();
+  const slotRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const s = t[locale];
+
+  /**
+   * Tuck the launcher away while its corner overlaps the avoided art, and
+   * bring it back once the art scrolls past. It starts tucked so it never
+   * flashes over the hero before the first measurement; the slot itself is
+   * never transformed, so its rect is the launcher's resting place. It stays
+   * put while its panel is open or it holds focus.
+   *
+   * The launcher lives in the persistent locale layout, so it survives
+   * client-side navigation. A Link that lands at scrollY 0 fires no scroll
+   * event, so the measurement also re-runs on every route change (the
+   * pathname dep) and whenever the page or the avoided art changes size
+   * after mount (late images, fonts, streamed content).
+   */
+  const pathname = usePathname();
+  const [clear, setClear] = useState(false);
+  const [focusWithin, setFocusWithin] = useState(false);
+  useEffect(() => {
+    const slot = slotRef.current;
+    if (!slot) return;
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const f = slot.getBoundingClientRect();
+      const blocked = Array.from(document.querySelectorAll(AVOID)).some((el) => {
+        const a = el.getBoundingClientRect();
+        return (
+          a.left < f.right + AVOID_PAD &&
+          a.right > f.left - AVOID_PAD &&
+          a.top < f.bottom + AVOID_PAD &&
+          a.bottom > f.top - AVOID_PAD
+        );
+      });
+      setClear(!blocked);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    // Once more on the next frame: on a route change Next resets (or, on
+    // back/forward, restores) the scroll position after this commit.
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    const sizes =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
+    if (sizes) {
+      sizes.observe(document.body);
+      document.querySelectorAll(AVOID).forEach((el) => sizes.observe(el));
+    }
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      sizes?.disconnect();
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
+  const tucked = !clear && !open && !focusWithin;
 
   useEffect(() => {
     if (!open) return;
@@ -103,7 +172,18 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
   }, []);
 
   return (
-    <div className="fixed bottom-5 start-5 z-[90]">
+    /* Inline-END corner: bottom-left in Arabic, bottom-right in English. In
+       RTL the right edge is where every line starts, so the old start corner
+       covered the first words of cards and disclaimers; the end edge is the
+       ragged one. Lifted clear of the iOS home indicator where there is one. */
+    <div
+      ref={slotRef}
+      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] end-5 z-[90]"
+      onFocus={() => setFocusWithin(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
+      }}
+    >
       <AnimatePresence>
         {open && (
           <motion.div
@@ -118,7 +198,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                unlabelled group. */
             role="dialog"
             aria-label={s.title}
-            className="absolute bottom-[4.5rem] start-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
+            className="absolute bottom-[4.5rem] end-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
           >
             {/* Header ONLY for the fallback panel. The widget frame renders
                 its own — title, greeting and an X — so pairing it with ours
@@ -187,7 +267,9 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? s.close : s.open}
-        className="ring-spectrum relative flex h-14 w-14 items-center justify-center rounded-full text-brand-purple shadow-card-hover transition-transform hover:scale-105"
+        className={`ring-spectrum relative flex h-14 w-14 items-center justify-center rounded-full text-brand-purple shadow-card-hover transition-[opacity,transform,visibility] duration-300 hover:scale-105 ${
+          tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "visible translate-y-0 opacity-100"
+        }`}
       >
         {!reduced && !open && (
           <span aria-hidden className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40" />

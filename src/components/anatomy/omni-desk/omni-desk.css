@@ -1,0 +1,188 @@
+/*
+ * The one desk. Kit tokens retuned to the site's own surfaces, scoped to the
+ * figure (.od). The site keeps its theme on <html data-theme="dark">; the kit
+ * keys on the figure's own data-theme. The figure is server-rendered light
+ * (the site's default) and the controller follows <html>; until it has run,
+ * the html rule below already gives a dark visitor the dark tokens.
+ */
+.od.iso:not([data-theme="light"]),
+html[data-theme="dark"] .od.iso {
+  --anatomy-page: #080d1c;
+  --anatomy-card: #0f1730;
+  --anatomy-paper: #0f1730;
+  --anatomy-text: #aab3c7;
+  --anatomy-strong: #eef1f8;
+  --anatomy-muted: #838da3;
+  --anatomy-face: #172142;
+  --anatomy-top: #1a2444;
+  --anatomy-shade-0: #0a1126;
+  --anatomy-shade-1: #0d152d;
+  --anatomy-shade-2: #111a35;
+  --anatomy-shade-3: #151f3d;
+  --anatomy-lit-top: #26325a;
+  --anatomy-lit-shade: #1c284c;
+  --anatomy-hi: #dde3f0;
+  --anatomy-mid: #6c7795;
+  --anatomy-lo: #3c4766;
+  --anatomy-faint: #27324f;
+  --anatomy-lit: #ffffff;
+  --anatomy-halo: #02040b;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #e6eaf4;
+  --od-glass: #121c3a;
+  --od-lamp: #eef1f8;
+  --od-frame: #232c49;
+  --od-chip: #16203c;
+}
+
+.od.iso[data-theme="light"] {
+  --anatomy-page: #f7f8fa;
+  --anatomy-card: #ffffff;
+  --anatomy-paper: #ffffff;
+  --anatomy-text: #4b5468;
+  --anatomy-strong: #0d1326;
+  --anatomy-muted: #6c7484;
+  --anatomy-face: #ffffff;
+  --anatomy-top: #ffffff;
+  --anatomy-shade-0: #dde0e8;
+  --anatomy-shade-1: #e6e8ee;
+  --anatomy-shade-2: #eef0f4;
+  --anatomy-shade-3: #f5f6f9;
+  --anatomy-lit-top: #ffffff;
+  --anatomy-lit-shade: #eceef3;
+  --anatomy-hi: #1b2134;
+  --anatomy-mid: #878da0;
+  --anatomy-lo: #b5b9c6;
+  --anatomy-faint: #d6d9e1;
+  --anatomy-lit: #0d1326;
+  --anatomy-halo: #868ca3;
+  --anatomy-halo-opacity: 0.3;
+  --anatomy-dot: #343a4c;
+  --od-glass: #f1f3f8;
+  --od-lamp: #0d1326;
+  --od-frame: #e5e7eb;
+  --od-chip: #f1f3f9;
+}
+
+.od {
+  color: var(--anatomy-text);
+}
+
+/* Frameless (lazy/frameless.css): no card, corners or legend. The buttons and the note use the site's type. */
+.od .od-pick,
+.od .od-note {
+  font-family: inherit;
+}
+
+.od-stage {
+  cursor: pointer;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.od-art {
+  overflow: visible;
+}
+
+.od-glass {
+  fill: var(--od-glass);
+  stroke: none;
+}
+
+.od-shine {
+  opacity: 0.9;
+}
+
+.od-carriage-halo {
+  filter: blur(3px);
+  opacity: 0.7;
+  transform: translateY(1px);
+}
+
+/* The arrival lamp of the tube that is working. */
+.od-lamp[data-on] .od-lens > .iso-fill,
+.od-lamp[data-on] .od-lens > .iso-shade {
+  fill: var(--od-lamp);
+  stroke: var(--od-lamp);
+}
+
+.od-lamp[data-on] .od-lens > .iso-edge {
+  stroke: var(--od-lamp);
+}
+
+.od-jewel-glass {
+  fill: var(--anatomy-shade-1);
+  stroke: none;
+}
+
+.od-jewel[data-on] .od-jewel-glass {
+  fill: var(--od-lamp);
+}
+
+[data-od-badge][data-hover] .iso-line {
+  stroke: var(--anatomy-hi);
+}
+
+.od-picks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 8px;
+  margin-top: 14px;
+}
+
+.od-pick {
+  appearance: none;
+  border: 1px solid var(--anatomy-lo);
+  background: transparent;
+  color: var(--anatomy-text);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 160ms var(--anatomy-ease), color 160ms var(--anatomy-ease), background-color 160ms var(--anatomy-ease);
+}
+
+.od-pick:hover {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-strong);
+}
+
+.od-pick[aria-pressed="true"] {
+  border-color: var(--anatomy-hi);
+  background: var(--od-chip);
+  color: var(--anatomy-strong);
+}
+
+.od-pick:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 3px;
+}
+
+.od-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--anatomy-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.od-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .od * {
+    transition: none !important;
+  }
+}

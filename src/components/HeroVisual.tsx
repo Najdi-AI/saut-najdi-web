@@ -1,132 +1,35 @@
-"use client";
-
-import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
-import { AnimatedIcon } from "./icons";
+import { SwitchboardFigure } from "./anatomy/switchboard/figure";
 
 /**
- * The brand-guideline hero visual (p18): a Saudi professional at a laptop
- * carrying the Saut Najdi logo, with the mockup's floating conversation
- * rebuilt as live animated elements. The photo is official brand imagery
- * extracted from the guideline PDF; bubbles float over its blank zone
- * (physical left of the photo), so positions are physical, not logical.
+ * The hero visual: the Najdi switchboard (NAJ-897), a crafted isometric
+ * figure whose working is the product. A line lamp rings, the agent's plug
+ * answers, the dialect dial clicks to «سعودي», the stamp prints the booking
+ * card, and on every other call the patch cord moves to the jack engraved
+ * «موظفك» while a summary ticket comes out: the site's four steps.
+ *
+ * Centred stage (Sultan, 2026-10-20): the machine stands frameless under the
+ * headline and the CTAs, large, on the hero's own background. It fills most
+ * of the content width on desktop (up to 920 px) and the full width of a
+ * phone: below sm it steps out of the container's 1.25rem gutters, so a
+ * 390 px screen shows it edge to edge without scrolling sideways.
+ *
+ * W4's voice demo lives on the speaker's hub: the same play control
+ * (useVoiceClip, public/audio/home-hero.m4a + home-hero.json), the same
+ * labels and caption. While the clip plays the machine follows its turns.
+ *
+ * Server component: the drawing is server-rendered and only the motion
+ * ships to the client (anatomy/switchboard/live.tsx).
+ *
+ * `data-fab-avoid` keeps the chat launcher tucked away while it would sit on
+ * the machine (the speaker's play button and the dial), as it did over the
+ * old hero photo's bubbles and mic. The photo itself now lives in the
+ * «مو بس ذكاء… وراه ناس» section (HomePage.tsx).
  */
-
-const t = {
-  ar: {
-    alt: "موظف سعودي يبتسم أمام جهاز لابتوب يحمل شعار صوت نجدي",
-    agent: "هلا! كيف أقدر أساعدك؟",
-    caller: "أبغى أحجز موعد بكرة",
-  },
-  en: {
-    alt: "A smiling Saudi professional at a laptop carrying the Saut Najdi logo",
-    agent: "Hello! How can I help?",
-    caller: "I'd like to book for tomorrow",
-  },
-} as const;
-
 export function HeroVisual({ locale }: { locale: Locale }) {
-  const reduced = useReducedMotion();
-  const s = t[locale];
-
-  const float = (delay: number, duration: number) =>
-    reduced
-      ? {}
-      : {
-          animate: { y: [0, -7, 0] },
-          transition: { duration, delay, repeat: Infinity, ease: "easeInOut" as const },
-        };
-
-  const enter = (delay: number) =>
-    reduced
-      ? {}
-      : {
-          initial: { opacity: 0, scale: 0.85, y: 12 },
-          whileInView: { opacity: 1, scale: 1, y: 0 },
-          viewport: { once: true },
-          transition: { type: "spring" as const, stiffness: 220, damping: 20, delay },
-        };
-
   return (
-    <div className="relative mx-auto w-full max-w-[440px] lg:max-w-[520px]">
-      {/* Dark only: a pool of brand light under the subject. The cut-out is
-          transparent at the top but fully opaque across the desk, so on night
-          it would otherwise read as a lit photo pasted onto black. The glow
-          gives that light somewhere to come from; `.hero-photo` in globals.css
-          dissolves the hard bottom edge into the ground. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 hidden dark:block"
-        style={{
-          background:
-            "radial-gradient(52% 42% at 54% 52%, rgba(91,108,229,0.30) 0%, transparent 72%)",
-          filter: "blur(26px)",
-        }}
-      />
-      <Image
-        src="/brand/hero-man.webp"
-        alt={s.alt}
-        width={1100}
-        height={900}
-        priority
-        sizes="(min-width: 1024px) 40vw, 90vw"
-        className="hero-photo relative w-full"
-      />
-
-      {/* Agent voice-note bubble */}
-      <motion.div {...enter(0.3)} className="absolute left-[1%] top-[10%]">
-        <motion.div
-          {...float(0.3, 4.2)}
-          dir="rtl"
-          className="flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur"
-        >
-          <span className="ring-spectrum flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-brand-purple dark:text-brand-cyan">
-            <AnimatedIcon name="wave" size={16} delay={0.5} />
-          </span>
-          <span className="text-body font-medium text-ink" dir="auto">
-            {s.agent}
-          </span>
-        </motion.div>
-      </motion.div>
-
-      {/* Caller bubble. The two bubbles are a light/dark pair — that contrast
-          is what makes them read as two speakers — so on night the pair
-          inverts wholesale rather than both going dark and merging. */}
-      <motion.div {...enter(0.55)} className="absolute left-0 top-[41%]">
-        <motion.div
-          {...float(1.1, 4.8)}
-          dir="rtl"
-          className="flex items-center gap-2.5 rounded-2xl rounded-bl-md bg-ink px-4 py-2.5 shadow-card-hover"
-        >
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-canvas/15 text-canvas">
-            <AnimatedIcon name="human" size={16} delay={0.75} />
-          </span>
-          <span className="text-body font-medium text-canvas" dir="auto">
-            {s.caller}
-          </span>
-        </motion.div>
-      </motion.div>
-
-      {/* Pulsing mic — outline style: spectrum ring, stroke icon (no
-          gradient fill — owner rule) */}
-      <motion.div {...enter(0.8)} className="absolute left-[4%] top-[54%]">
-        <motion.div {...float(1.8, 5.4)} className="relative">
-          {!reduced && (
-            <>
-              <span aria-hidden className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40" />
-              <span
-                aria-hidden
-                className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-magenta/30"
-                style={{ animationDelay: "0.9s" }}
-              />
-            </>
-          )}
-          <span className="ring-spectrum relative flex h-16 w-16 items-center justify-center rounded-full text-brand-purple shadow-card-hover dark:text-brand-cyan">
-            <AnimatedIcon name="mic" size={26} delay={1} strokeWidth={1.8} />
-          </span>
-        </motion.div>
-      </motion.div>
+    <div data-fab-avoid="" className="relative -mx-5 w-[calc(100%+2.5rem)] sm:mx-auto sm:w-full sm:max-w-[760px] lg:max-w-[920px]">
+      <SwitchboardFigure locale={locale} />
     </div>
   );
 }

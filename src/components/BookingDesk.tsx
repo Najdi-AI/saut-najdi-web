@@ -68,6 +68,27 @@ const t = {
   },
 } as const;
 
+/**
+ * Keep each number on the same line as its unit («15 دقيقة», "15-minute").
+ * On a phone the quick-call line wrapped «15» onto one line and «دقيقة» onto
+ * the next. A nowrap span rather than a no-break space: it also holds the
+ * English "15-minute" together at its hyphen, and Thmanyah has no U+00A0
+ * glyph of its own.
+ */
+function keepNumbersWithUnits(text: string) {
+  return text
+    .split(/(\d+[ -][^\s؟?.,،]+)/)
+    .map((part, i) =>
+      i % 2 === 1 ? (
+        <span key={i} className="whitespace-nowrap">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
+    );
+}
+
 export function BookingDesk({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
@@ -126,7 +147,9 @@ export function BookingDesk({ locale }: { locale: Locale }) {
             variant="link"
             className="!text-body !text-brand-cyan"
           >
-            {s.quick}
+            {/* One wrapper span: the button is inline-flex, and loose text
+                plus spans would become separate flex items. */}
+            <span>{keepNumbersWithUnits(s.quick)}</span>
           </CalButton>
         </div>
       </aside>

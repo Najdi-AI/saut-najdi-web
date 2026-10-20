@@ -81,7 +81,9 @@ export function NewsletterSignup({ locale, source }: { locale: Locale; source: s
               {c.button}
             </button>
           </div>
-          <p className="mt-2 text-body-sm text-ink/55">
+          {/* ink/65 clears 4.5:1 on the tinted card (ink/55 was 4.11:1);
+              Arabic gets 14px, the floor for Arabic meta text. */}
+          <p className={`mt-2 text-ink/65 ${locale === "ar" ? "text-body" : "text-body-sm"}`}>
             {c.consent}{" "}
             <a href={privacyHref} className="underline hover:text-ink">
               {c.privacy}

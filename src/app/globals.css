@@ -35,8 +35,38 @@
   .card-hover {
     @apply hover:-translate-y-1 hover:shadow-card-hover;
   }
+  /* Gradient-clipped display text (blueprint §3: short headings only).
+     The stops come from --text-gradient-stops, which each theme sets below.
+
+     The padding is for Arabic. background-clip:text paints only inside the
+     element's padding box, and an inline box is just the font's ascent plus
+     descent (1.25em in Thmanyah), while its glyphs reach 0.26em above that
+     and 0.36em below it (head yMax 1255 / yMin -610 per 1000). Without room,
+     the dots under a final ي and under ب sit outside the box and are left
+     transparent: «اللي» read «اللى». Vertical padding on an inline box does
+     not move the line, and the matching negative margin keeps it that way
+     if the element is ever made a block. `clone` gives every wrapped line
+     its own padding and its own full sweep of the ramp. */
   .text-gradient {
-    @apply bg-brand-gradient bg-clip-text text-transparent;
+    --text-gradient-dir: 90deg;
+    @apply bg-clip-text;
+    background-image: linear-gradient(var(--text-gradient-dir), var(--text-gradient-stops));
+    padding-block: 0.3em 0.4em;
+    margin-block: -0.3em -0.4em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    /* Solid fallback where background-clip:text is unsupported. */
+    color: rgb(var(--c-brand-purple));
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-gradient {
+      color: transparent;
+    }
+  }
+  /* RTL: the phrase starts on the right, so the ramp does too and the brand
+     order (cyan to red) reads from the phrase's first word. */
+  [dir="rtl"] .text-gradient {
+    --text-gradient-dir: 270deg;
   }
   .eyebrow {
     @apply text-body-sm font-bold uppercase tracking-wide text-brand-purple;
@@ -71,6 +101,35 @@
   --c-brand-purple: 111 63 164;
   --c-brand-magenta: 226 12 58;
   --c-brand-red: 236 27 58;
+  /* Brand blue for TEXT only (tailwind.config.ts maps text-brand-blue here;
+     bg/border/ring keep the guideline #5B6CE5). #5B6CE5 is 4.45:1 on white,
+     4.19:1 on the canvas and 3.71:1 on its own 10% chip, all short of AA for
+     16px links. #4A57CC is the same hue deepened: 5.96:1 on white, 5.60:1 on
+     #F7F8FA, 4.97:1 on the 10% chip over the canvas. The worst case is the
+     step-number chip inside a bg-brand-gradient-soft card (WorkflowComparison),
+     where canvas + wash + 10% blue composites to about #D9E6F6 / #DFE2F7 /
+     #E6DFEF at the wash's 0/40/100% stops: 4.72 / 4.65 / 4.60:1. */
+  --c-brand-blue-text: 74 87 204;
+
+  /* Headline gradient (.text-gradient), light canvas. The guideline cyan
+     #2EC4E6 is 1.95:1 on #F7F8FA, so the first stop is the same hue deepened
+     to #1290AB. On #F7F8FA every stop now clears the 3:1 large-text floor:
+     3.53, 4.19, 6.76, 4.55, 4.13. */
+  --text-gradient-stops: #1290ab 0%, #5b6ce5 28%, #6f3fa4 52%, #e20c3a 78%,
+    #ec1b3a 100%;
+  /* .btn-spectrum carries white 15px text, so every stop must clear 4.5:1
+     against white: 5.12 (--cyan-ink's #10788F), 5.52 (#4E5CD4),
+     7.18, 4.83 and 4.60 (#E81136, the end red deepened). Points between
+     stops are never lighter than the lighter of their two stops, so the
+     whole ramp passes. */
+  --spectrum-btn: linear-gradient(
+    90deg,
+    #10788f 0%,
+    #4e5cd4 26%,
+    #6f3fa4 50%,
+    #e20c3a 82%,
+    #e81136 100%
+  );
 
   --cyan: #2ec4e6;
   --indigo: #5b6ce5;
@@ -131,6 +190,7 @@
   --c-brand-purple: 185 140 224;
   --c-brand-magenta: 255 92 122;
   --c-brand-red: 255 107 127;
+  --c-brand-blue-text: 139 153 245;
 
   /* The literal-hex twins of the five hues above. `--spectrum` is composed
      from THESE, which is what carries the lifted ramp into the two places
@@ -212,37 +272,38 @@
    barely separated from the ground. Lift every stop for dark; the hue order
    and the cyan-to-red sweep are unchanged, so it still reads as the brand.
 
-   Restated as literals rather than `var(--spectrum)` because this class is
-   `@apply bg-brand-gradient` in day mode, whose stops sit at 0/28/52/78/100
-   against --spectrum's 0/26/50/82/100; borrowing the variable here would
-   shift the headline's colour banding between themes. Same five hues as the
-   dark --cyan..--red block above — keep them in step. */
-[data-theme="dark"] .text-gradient {
-  background-image: linear-gradient(
-    90deg,
-    #5fd8f2 0%,
-    #8b99f5 28%,
-    #b98ce0 52%,
-    #ff5c7a 78%,
-    #ff6b7f 100%
-  );
+   Restated as literals rather than `var(--spectrum)` because the headline's
+   stops sit at 0/28/52/78/100 against --spectrum's 0/26/50/82/100; borrowing
+   the variable here would shift the headline's colour banding between
+   themes. Same five hues as the dark --cyan..--red block above — keep them
+   in step. The direction is .text-gradient's own (it flips under RTL).
+
+   The header CTA on night goes back to the lifted --spectrum: the deepened
+   day ramp in --spectrum-btn is for white type, and on night the button
+   carries dark type (see [data-theme="dark"] .btn-spectrum above). */
+[data-theme="dark"] {
+  --text-gradient-stops: #5fd8f2 0%, #8b99f5 28%, #b98ce0 52%, #ff5c7a 78%,
+    #ff6b7f 100%;
+  --spectrum-btn: var(--spectrum);
 }
 
-/* The hero cut-out is transparent around the subject's head but fully opaque
-   across the desk, and the desk runs off the frame — on white those cuts are
-   invisible, on night they are two hard light edges (the desk's front lip at
-   ~88% height, and the left frame boundary).
+/* The brand photo (public/brand/hero-man.webp) in the «مو بس ذكاء… وراه ناس»
+   section. The cut-out is transparent around the head but opaque across the
+   desk, and the desk, the arm and the chair all run off the frame: on night
+   those are hard light edges, and on the soft brand wash even white shows a
+   seam. So every side fades, in both themes, and nothing reads as cut.
 
-   Two gradients composited to an intersection: the vertical one sinks the
-   desk and the laptop BASE into the ground while stopping short of the lid,
-   which carries the logo and must stay crisp; the horizontal one softens both
-   side boundaries. Prefixed for Safari < 16.4 and its legacy composite
-   keyword. */
-[data-theme="dark"] .hero-photo {
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
+   Two gradients composited to an intersection. The vertical one barely
+   touches the top (the agal sits near it) and sinks the desk's front lip into
+   the ground below the laptop logo; the horizontal one dissolves the hand on
+   the physical left and the chair on the right. Physical, not logical: the
+   photo is never mirrored. Prefixed for Safari < 16.4 and its legacy
+   composite keyword. */
+.people-photo {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 88%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 90%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
@@ -279,7 +340,9 @@
   font-weight: 500;
   font-size: 0.95rem;
   border: 1px solid transparent;
-  background: var(--spectrum);
+  /* The deepened ramp, not --spectrum: white type on the guideline cyan is
+     2.07:1. See --spectrum-btn in :root. */
+  background: var(--spectrum-btn);
   color: #fff;
   background-size: 180% 100%;
   background-position: 0% 0%;
@@ -342,9 +405,11 @@
 .hdr[data-scrolled="true"] {
   padding-block: 10px;
 }
+/* 60px tall and 1100px wide (were 58 and 1040) so the 120px-minimum logo and
+   the full English row both fit inside the capsule. */
 .hdr[data-scrolled="true"] .hdr-in {
-  block-size: 58px;
-  max-inline-size: min(1040px, 100%);
+  block-size: 60px;
+  max-inline-size: min(1100px, 100%);
   padding-inline: clamp(14px, 1.6vw, 22px);
   border-radius: 999px;
   border-color: rgb(var(--line-rgb) / 0.07);
@@ -398,12 +463,37 @@
     box-shadow: 0 1px 0 rgb(var(--line-rgb) / 0.08);
   }
 }
+@media (max-width: 639.98px) {
+  .hdr-in,
+  .hdr[data-scrolled="true"] .hdr-in {
+    gap: 12px;
+  }
+}
+/* The logo artboard (792x612) is mostly empty canvas above and below the
+   mark. A 2.6:1 box with object-fit: cover keeps the full width and trims
+   only that canvas, so the artwork is ~89% of the box width: 136px boxes show
+   it at ~121px, the brand guide's 120px digital minimum. Below 640px the box
+   starts at 100px (artwork ~89px) and is the one item allowed to shrink, down
+   to 64px, so the booking pill, language and burger always fit. The link
+   itself keeps a 44px-tall tap target however short the image gets. */
 .hdr-logo {
-  flex: none;
+  display: flex;
+  align-items: center;
+  flex: 0 1 100px;
+  min-inline-size: 64px;
+  min-block-size: 44px;
+}
+@media (min-width: 640px) {
+  .hdr-logo {
+    flex-basis: 136px;
+  }
 }
 .hdr-logo img {
-  block-size: 42px;
-  inline-size: auto;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 2.6;
+  object-fit: cover;
+  object-position: center;
 }
 .hdr-nav {
   display: none;
@@ -413,12 +503,20 @@
   /* Centered between the logo and the actions (owner preference). */
   margin-inline: auto;
 }
-@media (min-width: 1060px) {
+/* 1140px, not 1060px: with the 136px logo and 44px targets the full English
+   row needs about 1010px of the bar. Between 640 and 1139px the burger sheet
+   carries the menus. */
+@media (min-width: 1140px) {
   .hdr-nav {
     display: flex;
   }
 }
 .hdr-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  min-inline-size: 44px;
   padding: 8px 11px;
   border-radius: 999px;
   font-size: 0.92rem;
@@ -432,23 +530,43 @@
 }
 .hdr-actions {
   display: flex;
+  flex: none;
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
   /* On mobile the nav is hidden, so the actions carry the auto margin. */
   margin-inline-start: auto;
 }
-@media (min-width: 1060px) {
+.hdr-actions > * {
+  flex: none;
+}
+@media (min-width: 1140px) {
   .hdr-actions {
     margin-inline-start: 0;
   }
 }
+/* The booking pill shows at every width; below 640px it goes compact. */
 .hdr-cta {
-  display: none;
+  min-block-size: 44px;
 }
-@media (min-width: 640px) {
+@media (max-width: 639.98px) {
   .hdr-cta {
-    display: inline-flex;
+    padding-inline: 14px;
+    font-size: 0.9rem;
+  }
+  .hdr-actions > .theme-toggle,
+  .hdr-login {
+    display: none;
+  }
+}
+.hdr-lang {
+  display: flex;
+}
+/* Under 360px there is no room for the language switch beside the pill; it
+   is also in the sheet's footer row. */
+@media (max-width: 359.98px) {
+  .hdr-lang {
+    display: none;
   }
 }
 
@@ -697,31 +815,21 @@ a.mega-item:hover .mega-ico {
 .mega-rail-cta:hover {
   background: rgb(var(--purple-rgb) / 0.18);
 }
-@media (max-width: 1059px) {
+@media (max-width: 1139.98px) {
   .mega-panel {
     display: none;
-  }
-}
-@media (max-width: 1100px) {
-  .mega-cols {
-    grid-template-columns: 1fr 1fr;
-  }
-  .mega-feat {
-    grid-column: 1 / -1;
-    border-inline-start: 0;
-    border-block-start: 1px solid rgb(var(--line-rgb) / 0.1);
   }
 }
 
 /* ---------- mobile nav ---------- */
 /* Theme switch — sized to match .burger so the actions row keeps its rhythm
-   whether or not the burger is showing. */
+   whether or not the burger is showing. Both are 44px touch targets. */
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 36px;
-  block-size: 36px;
+  inline-size: 44px;
+  block-size: 44px;
   flex: none;
   border-radius: 999px;
   border: 1px solid var(--line-hi);
@@ -741,8 +849,8 @@ a.mega-item:hover .mega-ico {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 40px;
-  block-size: 40px;
+  inline-size: 44px;
+  block-size: 44px;
   border-radius: 999px;
   border: 1px solid var(--line-hi);
   background: transparent;
@@ -751,37 +859,97 @@ a.mega-item:hover .mega-ico {
   color: var(--ink);
   cursor: pointer;
 }
-@media (min-width: 1060px) {
-  .burger {
+@media (min-width: 1140px) {
+  .burger,
+  .mobile-nav {
     display: none;
   }
 }
 .mobile-nav {
   border-block-start: 1px solid var(--line);
   background: #f7f8fa;
-  padding: 14px var(--gutter) 26px;
+  padding: 14px var(--gutter) 22px;
   max-block-size: 78vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* The booking CTA leads the sheet, full width, with login as a quiet link
+   beside it — never item 18 below the fold again. */
+.mnav-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mnav-cta {
+  flex: 1 1 auto;
+  min-block-size: 48px;
+}
+.mnav-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-block-size: 44px;
+  padding-inline: 14px;
+  border-radius: 999px;
+  color: var(--ink-2);
+  transition: color 0.22s var(--ease), background 0.22s var(--ease);
+}
+.mnav-login:hover {
+  color: var(--ink);
+  background: rgb(var(--line-rgb) / 0.06);
+}
+.mnav-group {
+  margin-block-start: 18px;
 }
 /* Group labels in the sheet are <p>, not <h3> — they are chrome, and a
    heading here would enter every page's outline ahead of the real content. */
-.mobile-nav > p {
+.mnav-label {
   font-size: 0.74rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 20px 0 8px;
+  color: var(--ink-2);
+  margin-block-end: 4px;
 }
-[dir="rtl"] .mobile-nav > p {
+[dir="rtl"] .mnav-label {
   letter-spacing: 0;
   text-transform: none;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
-.mobile-nav a {
-  display: block;
-  padding: 10px 0;
-  color: var(--ink-2);
+/* Two columns: the labels are short, and 17 links in one column were what
+   pushed the CTA past the panel. Rows stay 44px tall for touch. */
+.mnav-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+.mnav-links a {
+  display: flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-block: 6px;
+  color: var(--ink);
   border-block-end: 1px solid var(--line);
+  /* .hdr-in sets nowrap for the bar; a long label in a narrow column wraps. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  transition: color 0.22s var(--ease);
+}
+.mnav-links a:hover {
+  color: var(--purple);
+}
+/* Theme and language live here below 640px, where the bar has no room. */
+.mnav-utils {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 18px;
+}
+@media (min-width: 640px) {
+  .mnav-utils {
+    display: none;
+  }
 }
 
 @keyframes pulse-ring {

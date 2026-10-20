@@ -73,7 +73,10 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
   const D = data;
   const toRad = Math.PI / 180;
   const printed: Printed[] = [];
-  for (let line = D.firstLine; line > D.firstLine - 14; line--) printed.push({ line, role: ((line % 3) + 3) % 3, at: -(D.firstLine + 1 - line) * D.pitch });
+  /* Seed the whole tape, from the print row to the top of the strip (D.tapeLines), so the rest pose has no gap at the top;
+     keep two more than that, so a line is only dropped once it has left through the strip's top fade. */
+  const keep = D.tapeLines + 2;
+  for (let line = D.firstLine; line > D.firstLine - D.tapeLines; line--) printed.push({ line, role: ((line % 3) + 3) % 3, at: -(D.firstLine + 1 - line) * D.pitch });
 
   let base = D.wheelRest;
   let theta = D.wheelRest;
@@ -173,7 +176,7 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
       }
     });
     for (; slot < stripLines.length; slot++) stripLines[slot]!.setAttribute("d", "");
-    if (printed.length > 16) printed.length = 16;
+    if (printed.length > keep) printed.length = keep;
     older?.setAttribute("d", old);
     newest?.setAttribute("d", top);
   }

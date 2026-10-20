@@ -600,7 +600,28 @@ cheek("spool.cheek-right", CHEEK_R_X);
 
 /* The tape rises straight out of the housing slot and winds onto the front of the roll. */
 export const STRIP_TOP = SPOOL_Z;
-export const STRIP_LINES = 6;
+/**
+ * One path slot for every printed line the strip can show at once: lines sit
+ * a PITCH apart on the (STRIP_TOP − HOUSING_TOP + 1)-tall run the controller
+ * draws, plus one spare. That is 9 here, so a line only ever leaves through
+ * the fade at the top of the strip, never while it is still visible (it was
+ * 6, and the top line blinked out mid-strip).
+ */
+export const STRIP_LINES = Math.floor((STRIP_TOP - HOUSING_TOP + 1) / PITCH) + 2;
+/** How many lines the tape holds from the print row to the top of the strip: the rest pose seeds this many. */
+export const TAPE_LINES = Math.ceil((STRIP_TOP - PRINT_Z) / PITCH) + 1;
+
+/** The strip's lines in the rest pose, exactly as the controller draws them (controller.ts drawTape at rest). */
+function stripRest() {
+  const out: { d: string; opacity: number }[] = [];
+  for (let line = FIRST_LINE; line > FIRST_LINE - TAPE_LINES; line--) {
+    const z = PRINT_Z + (FIRST_LINE + 1 - line) * PITCH;
+    if (z <= WINDOW.z1 + 2 || z <= HOUSING_TOP - 1 || z >= STRIP_TOP) continue;
+    const fade = Math.min(1, Math.max(0, (STRIP_TOP - z) / 3.5));
+    out.push({ d: lineOf(restRole(line), z), opacity: Math.round(fade * fade * (3 - 2 * fade) * 100) / 100 });
+  }
+  return out;
+}
 {
   const poly: Flat[] = [
     [STRIP_Y, HOUSING_TOP],
@@ -611,7 +632,11 @@ export const STRIP_LINES = 6;
   const paths = G.prismOf(YZ, poly, TAPE_X[0], TAPE_X[1], P);
   const face = planeFront(STRIP_Y + 0.4);
   const rect = flatRect(TAPE_X[0], HOUSING_TOP, TAPE_X[1], STRIP_TOP, 0);
-  const slots = Array.from({ length: STRIP_LINES }, () => `<path class="iso-line vlt-lines" data-tone="mid" data-free="" data-part="strip-line" d=""/>`).join("");
+  const rest = stripRest();
+  const slots = Array.from({ length: STRIP_LINES }, (_, slot) => {
+    const line = rest[slot];
+    return `<path class="iso-line vlt-lines" data-tone="mid" data-free="" data-part="strip-line" d="${line?.d ?? ""}"${line ? ` opacity="${line.opacity}"` : ""}/>`;
+  }).join("");
   const lines = `<clipPath id="vlt-strip"><path transform="${face}" d="${rect}"/></clipPath><g clip-path="url(#vlt-strip)"><g transform="${face}">${slots}</g></g>`;
   put("spool.strip", [(TAPE_X[0] + TAPE_X[1]) / 2, STRIP_Y + 0.2, (HOUSING_TOP + STRIP_TOP) / 2], S(paths, { tone: "hi", crease: "lo" }) + lines, [prismShape("spool.strip", YZ, poly, TAPE_X[0], TAPE_X[1], { owner: "spool" })]);
 }
@@ -993,6 +1018,7 @@ export const LIVE = {
   firstLine: FIRST_LINE,
   stripFrom: HOUSING_TOP,
   stripTop: STRIP_TOP,
+  tapeLines: TAPE_LINES,
 };
 
 export type LiveData = typeof LIVE;

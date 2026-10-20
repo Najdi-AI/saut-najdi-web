@@ -63,29 +63,85 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   font-size: 13px;
 }
 
-.kbp[dir="rtl"] .iso-plate-corner[data-corner="fig"] {
-  left: auto;
-  right: 0;
+/*
+ * The four corners sit in a grid instead of the kit's absolute corners, so a
+ * long readout can never run under the hint: Fig and title share the top row,
+ * hint and readout the bottom row as two cells, and a readout too long for
+ * its cell wraps inside it. Grid columns follow dir, so Arabic mirrors (Fig
+ * and hint on the right) with no left/right overrides.
+ */
+.kbp {
+  container: kbp / inline-size;
 }
 
-.kbp[dir="rtl"] .iso-plate-corner[data-corner="title"] {
-  right: auto;
-  left: 0;
+.kbp .iso-plate-corners {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: 24px;
 }
 
-.kbp[dir="rtl"] .iso-plate-corner[data-corner="hint"] {
-  left: auto;
-  right: 0;
+.kbp .iso-plate-corner {
+  position: static;
 }
 
-.kbp[dir="rtl"] .iso-plate-corner[data-corner="readout"] {
-  right: auto;
-  left: 0;
+.kbp .iso-plate-corner[data-corner="fig"] {
+  grid-area: 1 / 1;
+  align-self: start;
+}
+
+.kbp .iso-plate-corner[data-corner="title"] {
+  grid-area: 1 / 2;
+  align-self: start;
+  justify-self: end;
+  text-align: end;
+}
+
+.kbp .iso-plate-corner[data-corner="hint"] {
+  grid-area: 3 / 1;
+  align-self: end;
 }
 
 .kbp .iso-plate-corner[data-corner="readout"] {
+  grid-area: 3 / 2;
+  align-self: end;
+  justify-self: end;
+  text-align: end;
+  white-space: normal;
   color: var(--anatomy-strong);
   font-variant-numeric: lining-nums tabular-nums;
+}
+
+/*
+ * A card narrower than the longest readout plus the hint (about 600 px for
+ * the English whitening answer): the hint takes its own row and the readout
+ * the row under it, with room kept for two lines, so the hint never moves.
+ */
+@container kbp (max-width: 679.98px) {
+  .kbp .iso-plate {
+    padding-bottom: 84px;
+  }
+
+  .kbp .iso-plate-corners {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    row-gap: 6px;
+  }
+
+  .kbp .iso-plate-corner[data-corner="title"] {
+    white-space: normal;
+  }
+
+  .kbp .iso-plate-corner[data-corner="hint"] {
+    grid-area: 3 / 1 / 4 / -1;
+    justify-self: start;
+  }
+
+  .kbp .iso-plate-corner[data-corner="readout"] {
+    grid-area: 4 / 1 / 5 / -1;
+    justify-self: stretch;
+    text-align: start;
+    min-height: 2.5em;
+  }
 }
 
 .kbp .iso-legend {
@@ -182,7 +238,7 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   }
 }
 
-/* Phones: let the bench fill the card, and give the readout its own row. */
+/* Phones: let the bench fill the card. */
 @media (max-width: 640px) {
   .kbp-stage {
     overflow: hidden;
@@ -191,16 +247,5 @@ html[data-theme="dark"] .kbp.iso[data-theme="light"] {
   .kbp .iso-plate .kbp-stage .iso-svg {
     width: 106%;
     margin: -2% -3% -2%;
-  }
-
-  .kbp .iso-plate-corner[data-corner="readout"] {
-    max-width: 100%;
-    white-space: normal;
-  }
-
-  .kbp .iso-plate-corner[data-corner="title"] {
-    max-width: 55%;
-    white-space: normal;
-    text-align: end;
   }
 }

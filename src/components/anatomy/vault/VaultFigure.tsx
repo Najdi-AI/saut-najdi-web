@@ -16,5 +16,5 @@ import { VaultLive } from "./VaultLive";
  * the homepage PDPL band and the /security hero.
  */
 export function VaultFigure({ locale, fig = 1, ground = "page" }: { locale: Locale; fig?: number; ground?: "page" | "navy" }) {
-  return <VaultLive locale={locale} ground={ground} data={LIVE} text={textFor(locale)} html={figureHtml(locale, fig)} />;
+  return <VaultLive locale={locale} ground={ground} data={LIVE} text={textFor(locale)} html={figureHtml(locale, fig, { uid: `${fig}${ground === "navy" ? "n" : "p"}` })} />;
 }

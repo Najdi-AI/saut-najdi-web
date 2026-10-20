@@ -51,7 +51,7 @@ export const TEXT = {
   en: {
     fig: "Fig 1",
     title: "The Najdi switchboard",
-    hint: "Press the speaker to hear the call",
+    hint: "Press the speaker to listen",
     label:
       "Illustration of a call switchboard: a jack panel with four incoming lines and their lamps, a jack for the agent and a jack engraved «موظفك» (your employee), a patch cord and a speaker. On the shelf sit the dialect dial, a stamp that prints the booking card and a printer for the summary ticket. It stands for Saut Najdi's steps: the customer calls, the agent answers and understands, books, and hands off to your employee when needed.",
     play: "Hear the Saut Najdi agent",

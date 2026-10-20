@@ -42,7 +42,8 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
     clapper: q("clapper"),
   };
   const glows = Object.fromEntries([...svg.querySelectorAll("[data-lamp]")].map((node) => [node.getAttribute("data-lamp"), node]));
-  const readout = root.closest(".iso-plate")?.querySelector("[data-readout]");
+  const plate = root.closest(".iso-plate");
+  const readout = plate?.querySelector("[data-readout]");
   const still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const tail = (jack, offset) => [data.jacks[jack] + offset[0], data.jackFace + data.plugLen + offset[1], data.jackZ + offset[2]];
@@ -377,6 +378,7 @@ export function mountSwitchboard(root, data, { locale = "ar", lines = [], onDial
         mode = "user";
         quietly();
       }
+      plate?.toggleAttribute("data-clip", clip.active);
       run();
     },
     /** The visitor turned the dial to one of the three words. */

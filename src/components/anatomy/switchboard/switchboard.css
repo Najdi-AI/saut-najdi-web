@@ -92,6 +92,29 @@ html[data-theme="dark"] .sb.iso[data-theme] {
   color: var(--anatomy-strong);
   font-weight: 500;
 }
+/* The bottom corners may wrap inside the card rather than run past it: the
+   clip's longest English line ("Sure! Tomorrow at 4:30 PM is open…") is wider
+   than a phone card. The readout sits on the right in both directions and grows
+   upward from the bottom edge, so its lines align right. */
+.sb .iso-plate-corner[data-corner="hint"],
+.sb .iso-plate-corner[data-corner="readout"] {
+  white-space: normal;
+}
+.sb .iso-plate-corner[data-corner="readout"] {
+  text-align: right;
+  text-wrap: balance;
+}
+.sb .iso-plate-corner[data-corner="hint"] {
+  text-align: left;
+  transition: opacity 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* While the call plays the hint has done its job: it steps aside, and the
+   readout (carrying each spoken line) has the whole bottom of the card. The
+   motion sets data-clip on the plate (motion.mjs, setClip). */
+.sb .sb-plate[data-clip] .iso-plate-corner[data-corner="hint"] {
+  opacity: 0;
+}
+
 .sb .iso-plate-corner[data-corner="title"] {
   color: var(--anatomy-strong);
 }

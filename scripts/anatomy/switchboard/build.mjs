@@ -3,8 +3,9 @@
 // standalone pages (dark and --light, ar and --en) for the anatomy checks:
 //   node scripts/anatomy/switchboard/build.mjs [--light] [--en] [--audit] [--out DIR]
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import * as A from "../../../src/components/iso/audit.mjs";
 import { P, WIDTH, HEIGHT } from "../../../src/components/anatomy/switchboard/view.mjs";
 import { POSES, REST, artOf, buildScene, liveData } from "../../../src/components/anatomy/switchboard/geometry.mjs";
@@ -17,7 +18,7 @@ const argv = process.argv.slice(2);
 const theme = argv.includes("--light") ? "light" : "dark";
 const locale = argv.includes("--en") ? "en" : "ar";
 const outAt = argv.indexOf("--out");
-const OUT = outAt >= 0 ? argv[outAt + 1] : "C:/Users/Asus/AppData/Local/Temp/claude/C--Users-Asus/5654639c-1df3-4753-827b-e43692e22d39/scratchpad/anatomy/switchboard";
+const OUT = outAt >= 0 ? argv[outAt + 1] : join(tmpdir(), "anatomy", "switchboard");
 mkdirSync(OUT, { recursive: true });
 
 // ------------------------------------------------------------------ audit every resting pose
@@ -68,6 +69,7 @@ const markup = `<figure class="sb iso" data-theme="light" dir="${locale === "ar"
 <span class="iso-caption">${esc(t.caption)}</span>
 <span class="sb-clip" id="sb-clip">${esc(t.clipCaption)}</span>
 </figcaption>
+<span class="sb-say" data-say="" aria-live="polite"></span>
 </figure>`;
 
 // inline the modules the motion imports, as namespaces (no file:// module loading in Chrome)
@@ -130,12 +132,18 @@ play.addEventListener("click", () => {
 ].join("\n");
 
 const css = readFileSync(join(SRC, "iso", "iso.css"), "utf8") + readFileSync(join(SRC, "anatomy", "switchboard", "switchboard.css"), "utf8");
+// The site's own typeface (src/app/fonts.ts), so a width check here matches the real
+// page: the corners inherit it, and Thmanyah sets wider than Segoe UI.
+const FONTS = join(ROOT, "src", "fonts");
+const face = (file, weight) => `@font-face{font-family:"Thmanyah Sans";src:url("${pathToFileURL(join(FONTS, file)).href}") format("woff2");font-weight:${weight};font-style:normal;font-display:block}`;
+const fontCss = face("thmanyahsans-Regular.woff2", "400") + face("thmanyahsans-Medium.woff2", "500") + face("thmanyahsans-Bold.woff2", "600 700");
 const pageCss = `
+${fontCss}
 *{box-sizing:border-box}
-:root{--c-ink:13 19 38;--c-canvas:247 248 250;--c-line:229 231 235;--c-surface:255 255 255;--shadow-rgb:13 19 38;--c-brand-magenta:226 12 58;color-scheme:light}
+:root{--font-thmanyah:"Thmanyah Sans";--c-ink:13 19 38;--c-canvas:247 248 250;--c-line:229 231 235;--c-surface:255 255 255;--shadow-rgb:13 19 38;--c-brand-magenta:226 12 58;color-scheme:light}
 html[data-theme="dark"]{--c-ink:238 241 248;--c-canvas:8 13 28;--c-line:35 44 73;--c-surface:15 23 48;--shadow-rgb:0 0 0;--c-brand-magenta:255 92 122;color-scheme:dark}
-body{margin:0;background:rgb(var(--c-canvas));color:rgb(var(--c-ink));font:14px/1.6 "Segoe UI",Tahoma,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-main{width:min(560px,100% - 32px);margin:48px auto 72px}
+body{margin:0;background:rgb(var(--c-canvas));color:rgb(var(--c-ink));font:14px/1.6 var(--font-thmanyah),system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main{width:min(560px,100% - 40px);margin:48px auto 72px}
 button{border:0;font:inherit}
 `;
 const html = `<!doctype html><html lang="${locale}" dir="${locale === "ar" ? "rtl" : "ltr"}"${theme === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Najdi switchboard</title><style>${css}${pageCss}</style></head><body><main>${markup}</main><script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;

@@ -52,7 +52,12 @@ export async function BlogTeaser({ locale }: { locale: Locale }) {
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-body-sm text-ink/55">
+                {/* Meta: ink/65 is 5.76:1 on the white card (ink/55 was
+                    4.11:1). Arabic gets 14px; at 12px its dots and joins
+                    blur together. */}
+                <div
+                  className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-ink/65 ${locale === "ar" ? "text-body" : "text-body-sm"}`}
+                >
                   <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
                   <span aria-hidden>·</span>
                   <span>{s.readTime(readingMinutes(c))}</span>

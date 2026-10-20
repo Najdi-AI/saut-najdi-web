@@ -1,43 +1,39 @@
 "use client";
 
-import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { memo, useCallback, useEffect, useId, useMemo, useRef } from "react";
 import type { Locale } from "@/lib/i18n";
 import { MediaGlyph, useVoiceClip, type ClipTimings } from "@/components/VoiceClip";
 import type { liveData } from "./geometry.mjs";
 import { mountSwitchboard } from "./motion.mjs";
-import { DIALECTS, DIALECT_WORDS, DIAL_HOME, TEXT, readoutOf } from "./model.mjs";
+import { TEXT, readoutOf } from "./model.mjs";
 
 type LiveData = ReturnType<typeof liveData>;
 type Board = ReturnType<typeof mountSwitchboard>;
-type Dialect = "saudi" | "arabic" | "english";
-
-/** The legend swatches, as the kit draws them. */
-function Swatch({ mark }: { mark: string }) {
-  return (
-    <svg className="iso-swatch" data-mark={mark} viewBox="0 0 16 10" aria-hidden="true" focusable="false">
-      <path d="M2 4.5 8 1.5 14 4.5 14 6 8 9 2 6Z" />
-      <path className="iso-swatch-crease" d="M2 4.5 8 7.5 14 4.5" />
-    </svg>
-  );
-}
 
 /**
  * The drawing. Memoised, with a stable innerHTML object: React 19 re-sets
  * innerHTML whenever the dangerouslySetInnerHTML object changes, which would
- * swap out the nodes the motion holds on every re-render of the card.
+ * swap out the nodes the motion holds on every re-render of the figure.
  * The art is built on the server from numbers and one fixed word
  * (geometry.mjs): no visitor input reaches it.
  */
-const Art = memo(function Art({ art, width, height, label }: { art: string; width: number; height: number; label: string }) {
+const Art = memo(function Art({ art, frame, label }: { art: string; frame: number[]; label: string }) {
   const html = useMemo(() => ({ __html: art }), [art]);
-  return <svg className="iso-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} focusable="false" dangerouslySetInnerHTML={html} />;
+  return <svg className="iso-svg" viewBox={frame.join(" ")} role="img" aria-label={label} focusable="false" dangerouslySetInnerHTML={html} />;
 });
 
 /**
- * The live switchboard card. The SVG art arrives as a finished string; this
- * component mounts the framework-free motion (motion.mjs) on it, drives the
- * play control on the speaker's hub with the hero clip (useVoiceClip), and
- * offers the dial's three words as a radio group.
+ * The live switchboard, frameless (Sultan, 2026-10-20): the machine stands on
+ * the hero's own background with its halo, under the headline. The SVG art
+ * arrives as a finished string; this component mounts the framework-free
+ * motion (motion.mjs) on it and drives the play control on the speaker's hub
+ * with the hero clip (useVoiceClip). The dial turns with the tour and the
+ * clip; the hero's one dialect line is the «سعودي · عربي · إنجليزي» line
+ * under the CTAs (HomePage), so the figure carries no second one.
+ *
+ * The readout the motion writes stays in the DOM off screen; `sb-say` is the
+ * polite live region for what the visitor causes. The one line under the
+ * machine is the clip's honest caption.
  */
 export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: string; data: LiveData }) {
   const t = TEXT[locale];
@@ -45,7 +41,6 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
   const board = useRef<Board | null>(null);
   const who = useRef<string[]>([]);
   const captionId = useId();
-  const [dial, setDial] = useState<Dialect>(DIAL_HOME as Dialect);
 
   // agent greeting, caller, agent answer: one span per spoken line, and who speaks it
   const toSpans = useCallback((timings: ClipTimings) => {
@@ -58,11 +53,7 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
   useEffect(() => {
     const node = stage.current;
     if (!node) return;
-    const mounted = mountSwitchboard(node, data, {
-      locale,
-      lines: [...t.lines],
-      onDial: (dialect: string) => setDial(dialect as Dialect),
-    });
+    const mounted = mountSwitchboard(node, data, { locale, lines: [...t.lines] });
     board.current = mounted;
     return () => {
       mounted.destroy();
@@ -78,42 +69,11 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
     board.current?.setClip({ active: live, speaking, turn: clip.speaking, status: clip.status });
   }, [live, speaking, clip.speaking, clip.status]);
 
-  const turn = (dialect: Dialect, focus: boolean, target?: HTMLElement | null) => {
-    setDial(dialect);
-    board.current?.setDial(dialect);
-    if (focus) target?.focus();
-  };
-  const onDialKey = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const forward = locale === "ar" ? "ArrowLeft" : "ArrowRight";
-    const backward = locale === "ar" ? "ArrowRight" : "ArrowLeft";
-    let next = -1;
-    if (event.key === forward || event.key === "ArrowDown") next = (index + 1) % DIALECTS.length;
-    if (event.key === backward || event.key === "ArrowUp") next = (index + DIALECTS.length - 1) % DIALECTS.length;
-    if (next < 0) return;
-    event.preventDefault();
-    const buttons = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>("[data-dialect]");
-    turn(DIALECTS[next] as Dialect, true, buttons?.[next]);
-  };
-
   return (
-    <figure className="iso-figure sb iso" data-theme="light" dir={locale === "ar" ? "rtl" : "ltr"} lang={locale}>
+    <figure className="iso-figure sb iso anx" data-theme="light" dir={locale === "ar" ? "rtl" : "ltr"} lang={locale}>
       <div className="iso-plate sb-plate">
-        <div className="iso-plate-corners" aria-hidden="true">
-          <span className="iso-plate-corner" data-corner="fig">
-            {t.fig}
-          </span>
-          <span className="iso-plate-corner" data-corner="title">
-            {t.title}
-          </span>
-          <span className="iso-plate-corner" data-corner="hint">
-            {t.hint}
-          </span>
-          <span className="iso-plate-corner" data-corner="readout" data-readout="">
-            {readoutOf(locale, "idle")}
-          </span>
-        </div>
         <div ref={stage} className="iso-stage sb-stage" dir="ltr">
-          <Art art={art} width={data.width} height={data.height} label={t.label} />
+          <Art art={art} frame={data.frame} label={t.label} />
           <button
             type="button"
             className="sb-play"
@@ -125,48 +85,22 @@ export function SwitchboardLive({ locale, art, data }: { locale: Locale; art: st
             aria-busy={clip.status === "loading"}
           >
             <span className="sb-play-chip">
-              <MediaGlyph name={clip.active ? "pause" : "play"} size={12} />
+              <MediaGlyph name={clip.active ? "pause" : "play"} size={14} />
             </span>
           </button>
         </div>
+        {/* written by the motion (phases, and each spoken line while the clip plays); off screen */}
+        <span className="anx-sr" data-readout="">
+          {readoutOf(locale, "idle")}
+        </span>
       </div>
-      <figcaption className="iso-legend sb-legend">
-        <span className="sb-dial" role="radiogroup" aria-label={t.dialGroup}>
-          <span className="sb-dial-name" aria-hidden="true">
-            {t.dialGroup}
-          </span>
-          {DIALECTS.map((dialect, index) => (
-            <button
-              key={dialect}
-              type="button"
-              role="radio"
-              data-dialect={dialect}
-              aria-checked={dial === dialect}
-              tabIndex={dial === dialect ? 0 : -1}
-              onClick={(event) => turn(dialect as Dialect, false, event.currentTarget)}
-              onKeyDown={(event) => onDialKey(event, index)}
-            >
-              {(DIALECT_WORDS[locale] as Record<string, string>)[dialect]}
-            </button>
-          ))}
-        </span>
-        <span className="iso-keys">
-          {t.keys.map((key) => (
-            <span className="iso-key" key={key.label}>
-              <Swatch mark={key.mark} />
-              {key.label}
-            </span>
-          ))}
-        </span>
-        <span className="iso-caption">{t.caption}</span>
-        <span className="sb-clip" id={captionId}>
-          {t.clipCaption}
-          <span role="status" className="sb-error">
-            {clip.status === "error" ? t.error : ""}
-          </span>
+      <figcaption className="sb-clip" id={captionId}>
+        {t.clipCaption}
+        <span role="status" className="sb-error">
+          {clip.status === "error" ? t.error : ""}
         </span>
       </figcaption>
-      {/* written by the motion when the visitor turns the dial, arrives, or the call ends */}
+      {/* written by the motion when the visitor plays the clip, arrives, or the call ends */}
       <span className="sb-say" data-say="" aria-live="polite" />
       <audio ref={clip.audioRef} src={clip.src} preload="none" />
     </figure>

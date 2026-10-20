@@ -99,3 +99,12 @@ export const P = fitProjection(
 );
 
 export const at = (point) => iso(point, P);
+
+/**
+ * The frameless hero's viewBox: the drawing's own extent (at rest and in every
+ * pose of the tour: plugs out, cord sagging, ticket out) with a few units for
+ * the halo, inside the 600 × 392 the projection was fitted to. Without a card
+ * the empty margin round the machine only made it smaller on the page. Parts
+ * and the halo may still run past it (the SVG is overflow: visible).
+ */
+export const FRAME = { x: 46, y: 12, width: 508, height: 368 };

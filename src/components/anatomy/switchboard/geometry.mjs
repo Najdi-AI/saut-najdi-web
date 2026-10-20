@@ -667,11 +667,86 @@ export function compactPath(d) {
   return out;
 }
 
-/** The static art in painter's order, with the live groups in their slots. */
+/**
+ * Thin a kit path for the page: drop repeated points, and points that sit
+ * within `tol` world units (TRIM, about 0.15 px at the hero's desktop size)
+ * of the straight run between their neighbours. Every subpath keeps its first
+ * and last point, so line ends stay exactly where the line check proved them.
+ */
+export const TRIM = 0.08;
+function thin(points, tol) {
+  if (points.length < 3) return points;
+  const keep = new Uint8Array(points.length);
+  keep[0] = keep[points.length - 1] = 1;
+  const stack = [[0, points.length - 1]];
+  while (stack.length) {
+    const [a, b] = stack.pop();
+    const [ax, ay] = points[a];
+    const dx = points[b][0] - ax;
+    const dy = points[b][1] - ay;
+    const span = Math.hypot(dx, dy);
+    let worst = -1;
+    let at = -1;
+    for (let i = a + 1; i < b; i++) {
+      const [px, py] = points[i];
+      const off = span < 1e-9 ? Math.hypot(px - ax, py - ay) : Math.abs(dx * (ay - py) - dy * (ax - px)) / span;
+      if (off > worst) (worst = off), (at = i);
+    }
+    if (worst > tol) {
+      keep[at] = 1;
+      stack.push([a, at], [at, b]);
+    }
+  }
+  return points.filter((_, i) => keep[i]);
+}
+export function trimPath(d, tol = TRIM) {
+  const tokens = d.match(/[MLZ]|-?\d*\.?\d+/g) ?? [];
+  const subs = [];
+  let sub = null;
+  for (let i = 0; i < tokens.length; ) {
+    const t = tokens[i];
+    if (t === "M") {
+      sub = { points: [[+tokens[i + 1], +tokens[i + 2]]], closed: false };
+      subs.push(sub);
+      i += 3;
+    } else if (t === "L") i++;
+    else if (t === "Z") {
+      if (sub) sub.closed = true;
+      i++;
+    } else {
+      sub?.points.push([+tokens[i], +tokens[i + 1]]);
+      i += 2;
+    }
+  }
+  return subs
+    .map(({ points, closed }) => {
+      let p = points.filter((q, k) => k === 0 || q[0] !== points[k - 1][0] || q[1] !== points[k - 1][1]);
+      if (closed && p.length > 3) {
+        // a ring: cut it at the point farthest from its start, and thin both halves
+        let far = 1;
+        for (let k = 2; k < p.length; k++) if (Math.hypot(p[k][0] - p[0][0], p[k][1] - p[0][1]) > Math.hypot(p[far][0] - p[0][0], p[far][1] - p[0][1])) far = k;
+        const one = thin(p.slice(0, far + 1), tol);
+        const two = thin([...p.slice(far), p[0]], tol);
+        p = [...one, ...two.slice(1, -1)];
+      } else p = thin(p, tol);
+      return `M${p.map((q) => `${q[0]} ${q[1]}`).join("L")}${closed ? "Z" : ""}`;
+    })
+    .join("");
+}
+
+/**
+ * The static art in painter's order, with the live groups in their slots.
+ * For the page it is thinned (trimPath), written as short relative moves
+ * (compactPath) and single-quoted: the hero is the one figure that ships
+ * inline, and React's server payload repeats it as a JSON string, where every
+ * double quote costs four bytes and a single quote one.
+ */
 export function artOf({ reuse = true, compact = true } = {}) {
   const { items, back } = buildScene(REST, { reuse });
   const art = back + items.map((item) => `<g class="it" data-name="${item.name}">${item.svg}</g>`).join("");
-  return compact ? art.replace(/ d="([MLZ0-9. -]*)"/g, (_, d) => ` d="${compactPath(d)}"`) : art;
+  if (!compact) return art;
+  if (art.includes("'")) throw new Error("switchboard art: a single quote in the markup would break single-quoted attributes");
+  return art.replace(/ d="([MLZ0-9. -]*)"/g, (_, d) => ` d="${compactPath(trimPath(d))}"`).replace(/="([^"]*)"/g, "='$1'");
 }
 
 /** Numbers the client motion needs (no geometry code ships). */
@@ -692,7 +767,8 @@ export function liveData() {
     dial: { x: V.DIAL.x, y: V.DIAL.y, z: V.DESK + 2.6 + V.DIAL.knobH, r: V.DIAL.knob - 0.6, skirt: V.DIAL.knob + 1.6, angles: V.DIAL_ANGLES },
     stampStroke: STAMP_STROKE,
     ticketOut: V.TICKET.out,
-    hub: [f2((hub[0] / V.WIDTH) * 100), f2((hub[1] / V.HEIGHT) * 100)],
-    hubR: f2(((5.6 * KS) / V.WIDTH) * 100),
+    frame: [V.FRAME.x, V.FRAME.y, V.FRAME.width, V.FRAME.height],
+    hub: [f2(((hub[0] - V.FRAME.x) / V.FRAME.width) * 100), f2(((hub[1] - V.FRAME.y) / V.FRAME.height) * 100)],
+    hubR: f2(((5.6 * KS) / V.FRAME.width) * 100),
   };
 }

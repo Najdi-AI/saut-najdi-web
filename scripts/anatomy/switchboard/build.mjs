@@ -9,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import * as A from "../../../src/components/iso/audit.mjs";
 import { P, WIDTH, HEIGHT } from "../../../src/components/anatomy/switchboard/view.mjs";
 import { POSES, REST, artOf, buildScene, liveData } from "../../../src/components/anatomy/switchboard/geometry.mjs";
-import { DIALECTS, DIALECT_WORDS, TEXT, readoutOf } from "../../../src/components/anatomy/switchboard/model.mjs";
+import { TEXT, readoutOf } from "../../../src/components/anatomy/switchboard/model.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
@@ -49,26 +49,18 @@ if (argv.includes("--audit")) {
 const t = TEXT[locale];
 const data = liveData();
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const swatch = (mark) =>
-  mark === "lit" || mark === "raised"
-    ? `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true"><path d="M2 4.5 8 1.5 14 4.5 14 6 8 9 2 6Z"/><path class="iso-swatch-crease" d="M2 4.5 8 7.5 14 4.5"/></svg>`
-    : `<svg class="iso-swatch" data-mark="${mark}" viewBox="0 0 16 10" aria-hidden="true"><path d="M1.5 5h13"/></svg>`;
 const PLAY = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.9v12.2a.9.9 0 0 0 1.37.77l9.6-6.1a.9.9 0 0 0 0-1.53l-9.6-6.1A.9.9 0 0 0 8 5.9Z" fill="currentColor"/></svg>`;
 const plain = argv.includes("--plain");
 const loose = argv.includes("--loose");
 const art = artOf({ reuse: !plain, compact: !loose });
-const markup = `<figure class="sb iso" data-theme="light" dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}">
+// the same frameless tree live.tsx renders: no corners, legend or dial chips; the readout off screen
+const markup = `<figure class="iso-figure sb iso anx" data-theme="light" dir="${locale === "ar" ? "rtl" : "ltr"}" lang="${locale}">
 <div class="iso-plate sb-plate">
-<div class="iso-plate-corners" aria-hidden="true"><span class="iso-plate-corner" data-corner="fig">${esc(t.fig)}</span><span class="iso-plate-corner" data-corner="title">${esc(t.title)}</span><span class="iso-plate-corner" data-corner="hint">${esc(t.hint)}</span><span class="iso-plate-corner" data-corner="readout" data-readout>${esc(readoutOf(locale, "idle"))}</span></div>
-<div class="iso-stage sb-stage" dir="ltr"><svg class="iso-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${esc(t.label)}">${art}</svg>
+<div class="iso-stage sb-stage" dir="ltr"><svg class="iso-svg" viewBox="${data.frame.join(" ")}" role="img" aria-label="${esc(t.label)}">${art}</svg>
 <button type="button" class="sb-play" style="left:${data.hub[0]}%;top:${data.hub[1]}%" aria-label="${esc(t.play)}" aria-pressed="false" aria-describedby="sb-clip"><span class="sb-play-chip">${PLAY}</span></button></div>
+<span class="anx-sr" data-readout>${esc(readoutOf(locale, "idle"))}</span>
 </div>
-<figcaption class="iso-legend sb-legend">
-<span class="sb-dial" role="radiogroup" aria-label="${esc(t.dialGroup)}"><span class="sb-dial-name" aria-hidden="true">${esc(t.dialGroup)}</span>${DIALECTS.map((d) => `<button type="button" role="radio" data-dialect="${d}" aria-checked="${d === "arabic"}" tabindex="${d === "arabic" ? 0 : -1}">${esc(DIALECT_WORDS[locale][d])}</button>`).join("")}</span>
-<span class="iso-keys">${t.keys.map((key) => `<span class="iso-key">${swatch(key.mark)}${esc(key.label)}</span>`).join("")}</span>
-<span class="iso-caption">${esc(t.caption)}</span>
-<span class="sb-clip" id="sb-clip">${esc(t.clipCaption)}</span>
-</figcaption>
+<figcaption class="sb-clip" id="sb-clip">${esc(t.clipCaption)}</figcaption>
 <span class="sb-say" data-say="" aria-live="polite"></span>
 </figure>`;
 
@@ -92,27 +84,8 @@ const script = [
   `const DATA = ${JSON.stringify(data)};
 const figure = document.querySelector(".sb");
 const stage = figure.querySelector(".sb-stage");
-const dialButtons = [...figure.querySelectorAll("[data-dialect]")];
-const showDial = (dialect) => dialButtons.forEach((b) => { const on = b.dataset.dialect === dialect; b.setAttribute("aria-checked", String(on)); b.tabIndex = on ? 0 : -1; });
-const board = MO.mountSwitchboard(stage, DATA, { locale: ${JSON.stringify(locale)}, lines: ${JSON.stringify(t.lines)}, onDial: showDial });
+const board = MO.mountSwitchboard(stage, DATA, { locale: ${JSON.stringify(locale)}, lines: ${JSON.stringify(t.lines)} });
 window.__board = board;
-// the dial's three words
-const pick = (button, focus) => {
-  showDial(button.dataset.dialect);
-  if (focus) button.focus();
-  board.setDial(button.dataset.dialect);
-};
-dialButtons.forEach((button, index) => {
-  button.addEventListener("click", () => pick(button, false));
-  button.addEventListener("keydown", (event) => {
-    const forward = ${locale === "ar" ? '"ArrowLeft"' : '"ArrowRight"'};
-    const backward = ${locale === "ar" ? '"ArrowRight"' : '"ArrowLeft"'};
-    let next = null;
-    if (event.key === forward || event.key === "ArrowDown") next = dialButtons[(index + 1) % dialButtons.length];
-    if (event.key === backward || event.key === "ArrowUp") next = dialButtons[(index + dialButtons.length - 1) % dialButtons.length];
-    if (next) { event.preventDefault(); pick(next, true); }
-  });
-});
 // the voice clip, simulated from the real turn timings (no audio on file://)
 const TURNS = ${readFileSync(join(ROOT, "public", "audio", "home-hero.json"), "utf8")}.turns.slice(0, 3);
 const play = figure.querySelector(".sb-play");
@@ -131,7 +104,7 @@ play.addEventListener("click", () => {
 `,
 ].join("\n");
 
-const css = readFileSync(join(SRC, "iso", "iso.css"), "utf8") + readFileSync(join(SRC, "anatomy", "switchboard", "switchboard.css"), "utf8");
+const css = readFileSync(join(SRC, "iso", "iso.css"), "utf8") + readFileSync(join(SRC, "anatomy", "lazy", "frameless.css"), "utf8") + readFileSync(join(SRC, "anatomy", "switchboard", "switchboard.css"), "utf8");
 // The site's own typeface (src/app/fonts.ts), so a width check here matches the real
 // page: the corners inherit it, and Thmanyah sets wider than Segoe UI.
 const FONTS = join(ROOT, "src", "fonts");
@@ -143,7 +116,7 @@ ${fontCss}
 :root{--font-thmanyah:"Thmanyah Sans";--c-ink:13 19 38;--c-canvas:247 248 250;--c-line:229 231 235;--c-surface:255 255 255;--shadow-rgb:13 19 38;--c-brand-magenta:226 12 58;color-scheme:light}
 html[data-theme="dark"]{--c-ink:238 241 248;--c-canvas:8 13 28;--c-line:35 44 73;--c-surface:15 23 48;--shadow-rgb:0 0 0;--c-brand-magenta:255 92 122;color-scheme:dark}
 body{margin:0;background:rgb(var(--c-canvas));color:rgb(var(--c-ink));font:14px/1.6 var(--font-thmanyah),system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-main{width:min(560px,100% - 40px);margin:48px auto 72px}
+main{width:min(920px,100%);margin:48px auto 72px}
 button{border:0;font:inherit}
 `;
 const html = `<!doctype html><html lang="${locale}" dir="${locale === "ar" ? "rtl" : "ltr"}"${theme === "dark" ? ' data-theme="dark"' : ""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Najdi switchboard</title><style>${css}${pageCss}</style></head><body><main>${markup}</main><script type="module">${script.replace(/<\/(script)/gi, "<\\/$1")}</script></body></html>`;

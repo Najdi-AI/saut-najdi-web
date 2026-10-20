@@ -40,11 +40,13 @@ import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
  * Still deliberately absent: the product-screenshot section, until demo-tenant
  * screenshots actually exist (never fabricate one — §2.2).
  *
- * Anatomy figures (NAJ-897), numbered in page order: 1 the hero switchboard,
- * 2 the omnichannel desk (OmniChannels), 3 the knowledge press beside the
+ * Anatomy figures (NAJ-897), in page order: 1 the hero switchboard, 2 the
+ * omnichannel desk (OmniChannels), 3 the knowledge press beside the
  * knowledge-base capability, 4 the Gulf vault in the PDPL band, 5 the credit
- * meter in the plans strip (HomePlansStrip). Each is server-rendered art with
- * a small client part; renumber here and in those props together.
+ * meter in the plans strip (HomePlansStrip). All five are frameless (no card,
+ * no «شكل n» label), so the `fig` props are kept only for the components' API.
+ * Only the hero ships its drawing inline; the other four fetch a static,
+ * cached SVG when they come near the viewport (anatomy/lazy/useLazyArt.ts).
  */
 
 const t = {
@@ -235,9 +237,11 @@ export function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* 1 · Hero — the Najdi switchboard (anatomy figure 1, HeroVisual), with
-          the voice demo on its speaker. The brand photo that used to stand
-          here moved to the hybrid section below. The evaluation-only
+      {/* 1 · Hero — a centred stage: the headline, the sub-line and the two
+          CTAs on top, then the hero's one dialect line, then the Najdi
+          switchboard (anatomy figure 1, HeroVisual), frameless and large,
+          with the voice demo on its speaker. The brand photo that used to
+          stand here moved to the hybrid section below. The evaluation-only
           `data-theme="dark"` that used to sit on this section is gone: the
           attribute now lives on <html>, so the `dark:` classes below answer
           to the visitor's choice instead of being hard-on. */}
@@ -252,28 +256,29 @@ export function HomePage({ locale }: { locale: Locale }) {
               "radial-gradient(70% 55% at 18% 8%, rgba(46,196,230,0.22) 0%, transparent 60%), radial-gradient(60% 50% at 88% 22%, rgba(226,12,58,0.16) 0%, transparent 62%), radial-gradient(80% 60% at 55% 100%, rgba(111,63,164,0.20) 0%, transparent 65%)",
           }}
         />
-        <div className="container relative grid items-center gap-10 pb-6 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:pb-2">
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
-            <h1 className="max-w-3xl text-h2 sm:text-h1">
-              {s.h1a}
-              <span className="text-gradient">{s.h1b}</span>
-            </h1>
-            <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70 dark:text-white/70">
-              {s.positioning}
-            </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <DemoLink locale={locale}>
-                {s.ctaPrimary}
-              </DemoLink>
-              <Link href={localePath(locale, "how-it-works")} className="btn-secondary">
-                {s.ctaSecondary}
-              </Link>
-            </div>
-            <div className="mt-8">
-              <DialectChips locale={locale} className="justify-center lg:justify-start" />
-            </div>
+        <div className="container relative flex flex-col items-center pb-4 pt-12 text-center sm:pt-14">
+          <h1 className="max-w-4xl text-h2 sm:text-h1">
+            {s.h1a}
+            <span className="text-gradient">{s.h1b}</span>
+          </h1>
+          <p className="mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70 dark:text-white/70">
+            {s.positioning}
+          </p>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <DemoLink locale={locale}>
+              {s.ctaPrimary}
+            </DemoLink>
+            <Link href={localePath(locale, "how-it-works")} className="btn-secondary">
+              {s.ctaSecondary}
+            </Link>
           </div>
-          <HeroVisual locale={locale} />
+          {/* the hero's one dialect line: the switchboard carries no second one */}
+          <div className="mt-6">
+            <DialectChips locale={locale} className="justify-center" />
+          </div>
+          <div className="mt-4 w-full sm:mt-2">
+            <HeroVisual locale={locale} />
+          </div>
         </div>
         <Waveform bars={64} maxHeight={44} className="container pb-8" />
       </section>

@@ -1,5 +1,7 @@
 // The Najdi switchboard: the pure model. No DOM and no kit imports, so the
-// client motion can ship it. Every word on the card lives here, in both locales.
+// client motion can ship it. Every word the figure says lives here, in both locales:
+// it is frameless (no corners, legend or caption), so that is its label, the play
+// control, the clip's one honest line and the readout the motion writes.
 //
 // What it shows is the site's own four steps (HomePage "how" steps):
 //   يتصل العميل → يرد ويفهم → ينفذ → يحوّل إذا لزم
@@ -18,24 +20,14 @@ export const CALL_DIALECT = "saudi";
 
 export const TEXT = {
   ar: {
-    fig: "شكل 1",
-    title: "السنترال النجدي",
-    hint: "اضغط السماعة وتسمع المكالمة",
     label:
       "رسم توضيحي لسنترال مكالمات: لوحة مقابس فيها أربعة خطوط واردة بلمباتها، ومقبس للوكيل ومقبس محفور عليه «موظفك»، وسلك تحويل، وسماعة. على الرف قرص اللهجة، وختم يطبع بطاقة الحجز، وطابعة ورقة الملخص. يمثّل خطوات صوت نجدي: يتصل العميل، يرد الوكيل ويفهم، ينفذ الحجز، ويحوّل لموظفك إذا لزم.",
     play: "اسمع وكيل صوت نجدي",
     pause: "إيقاف الصوت",
     clipCaption: "حوار توضيحي بصوت وكيل صوت نجدي",
     error: "ما قدرنا نشغّل الصوت — جرّب مرة ثانية",
-    dialGroup: "قرص اللهجة",
     // the hero clip's three lines (HeroVisual's bubbles), shown on the readout as they are spoken
     lines: ["هلا! كيف أقدر أساعدك؟", "أبغى أحجز موعد بكرة", "أبشر! بكرة عندنا الساعة 4:30 العصر، يناسبك؟"],
-    keys: [
-      { mark: "lit", label: "اللمبة: خط يدق أو صوت يتكلم" },
-      { mark: "raised", label: "سلك التحويل: من الوكيل إلى «موظفك»" },
-    ],
-    caption:
-      "مكالمة توضيحية: يدق الخط، يرد الوكيل بالسعودي ويحجز بكرة 4:30 العصر. وإذا لزم، ينتقل السلك لمقبس «موظفك» وتطلع ورقة الملخص.",
     readout: {
       idle: "بانتظار مكالمة",
       ring: "مكالمة واردة · الخط 2",
@@ -49,23 +41,13 @@ export const TEXT = {
     },
   },
   en: {
-    fig: "Fig 1",
-    title: "The Najdi switchboard",
-    hint: "Press the speaker to listen",
     label:
       "Illustration of a call switchboard: a jack panel with four incoming lines and their lamps, a jack for the agent and a jack engraved «موظفك» (your employee), a patch cord and a speaker. On the shelf sit the dialect dial, a stamp that prints the booking card and a printer for the summary ticket. It stands for Saut Najdi's steps: the customer calls, the agent answers and understands, books, and hands off to your employee when needed.",
     play: "Hear the Saut Najdi agent",
     pause: "Pause the audio",
     clipCaption: "An illustrative call in the Saut Najdi agent's voice, in Arabic",
     error: "The audio could not play. Try again.",
-    dialGroup: "Dialect dial",
     lines: ["Hello! How can I help?", "I'd like to book for tomorrow", "Sure! Tomorrow at 4:30 PM is open. Does that suit you?"],
-    keys: [
-      { mark: "lit", label: "Lamp: a line ringing, or a voice speaking" },
-      { mark: "raised", label: "Patch cord: from the agent to «موظفك», your employee" },
-    ],
-    caption:
-      "An illustrative call: the line rings, the agent answers in Saudi Arabic and books tomorrow at 4:30 PM. When needed, the cord moves to your employee's jack and a summary ticket comes out.",
     readout: {
       idle: "Waiting for a call",
       ring: "Call coming in · line 2",

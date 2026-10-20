@@ -44,11 +44,10 @@ export const KEYS: Record<string, number> = {
   "spool.cheek-right": 80.654,
   "spool.strip": 67.939,
   "ratchet.hub": 82.805,
-  "ratchet.wheel": 83.64,
-  "ratchet.pawl": 91.302,
-  "ratchet.pin": 90.194,
-  "ratchet.pin-head": 92.07,
-  "ratchet.boss": 84.758,
-  "ratchet.crank": 85.309,
-  "ratchet.knob": 85.76
+  "ratchet.wheel": 89.003,
+  "ratchet.pin": 88.983,
+  "ratchet.pin-head": 90.858,
+  "ratchet.boss": 89.023,
+  "ratchet.crank": 90.878,
+  "ratchet.knob": 90.898
 };

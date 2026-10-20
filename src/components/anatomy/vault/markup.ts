@@ -1,5 +1,5 @@
 import { HEIGHT, WIDTH } from "./view";
-import { bodyFor } from "./geometry";
+import { bodyFor, type Item } from "./geometry";
 import { FIRST_LINE, WORDS, type Locale } from "./model";
 
 const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -18,9 +18,11 @@ function swatch(mark: Mark) {
 /**
  * The whole card as server-rendered HTML: corners, the drawing, the legend
  * and caption. The same string is used by the site and by the standalone
- * verification page, so what the checks see is what the site ships.
+ * verification page, so what the checks see is what the site ships. `uid`
+ * keeps the drawing's clipPath ids unique on the page; `list` lets the
+ * verification build draw the items it has just settled.
  */
-export function figureHtml(locale: Locale, fig: number) {
+export function figureHtml(locale: Locale, fig: number, { uid = "", list }: { uid?: string; list?: Item[] } = {}) {
   const w = WORDS[locale];
   const corner = (name: string, text: string, extra = "") => `<span class="iso-plate-corner" data-corner="${name}"${extra}>${escape(text)}</span>`;
   const keys: [Mark, string][] = [
@@ -29,7 +31,7 @@ export function figureHtml(locale: Locale, fig: number) {
     ["edge", w.keys.edge],
     ["flat", w.keys.flat],
   ];
-  const svg = `<svg class="iso-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${escape(w.label)}" focusable="false">${bodyFor(locale)}</svg>`;
+  const svg = `<svg class="iso-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${escape(w.label)}" focusable="false">${bodyFor(locale, list, uid)}</svg>`;
   return (
     `<figure class="iso-figure vlt-figure"><div class="iso-plate">` +
     `<div class="iso-plate-corners" aria-hidden="true">${corner("fig", w.fig(fig))}${corner("title", w.title)}${corner("hint", w.hint)}${corner("readout", w.rest(FIRST_LINE), " data-readout")}</div>` +

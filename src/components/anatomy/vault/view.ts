@@ -66,11 +66,27 @@ export const HUB: [number, number] = [13.7, 14.6];
 export const WHEEL: [number, number] = [14.6, 16.6];
 export const WHEEL_ROOT = 7.8;
 export const WHEEL_TIP = 10.4;
-export const PAWL_PIVOT: Flat = [-1.6, -12.6];
+/**
+ * The pawl, in the side plane's local coordinates (u = −y, v = −z, wheel
+ * centre at the origin, angles in degrees from +u toward +v). It hangs on a
+ * pin straight above the wheel, inside the cheek's flat top; its hub clears
+ * the tooth tips (12.3 − 1.6 = 10.7 > 10.4), its arm runs round the wheel
+ * between radii 11 and 12.9, and its nose drops to the root at −50°.
+ */
+export const PAWL_PIVOT_AT = -90;
+export const PAWL_PIVOT_R = 12.3;
+export const PAWL_PIVOT: Flat = [PAWL_PIVOT_R * Math.cos((PAWL_PIVOT_AT * Math.PI) / 180), PAWL_PIVOT_R * Math.sin((PAWL_PIVOT_AT * Math.PI) / 180)];
+export const PAWL_HUB = 1.6;
+export const PAWL_IN = 11;
+export const PAWL_OUT = 12.9;
+export const PAWL_NOSE = 9.9;
 export const PAWL_TIP_AT = -50;
-export const CRANK: [number, number] = [17, 18.4];
+export const PIN_R = 1.1;
+export const PIN_HEAD_R = 1.4;
+/** The crank sits 0.4 proud of the pawl pin's head (16.6–17.0), so its arm sweeps past it. */
+export const CRANK: [number, number] = [17.4, 18.8];
 export const CRANK_R = 11;
-export const KNOB: [number, number] = [18.4, 23.4];
+export const KNOB: [number, number] = [18.8, 23.8];
 export const KNOB_R = 1.7;
 export const CRANK_REST = 118;
 

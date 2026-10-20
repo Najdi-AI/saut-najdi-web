@@ -52,8 +52,16 @@ import {
   P,
   PANEL,
   PANEL_Z,
+  PAWL_HUB,
+  PAWL_IN,
+  PAWL_NOSE,
+  PAWL_OUT,
   PAWL_PIVOT,
+  PAWL_PIVOT_AT,
+  PAWL_PIVOT_R,
   PAWL_TIP_AT,
+  PIN_HEAD_R,
+  PIN_R,
   PBASE,
   PBASE_TOP,
   PLATE,
@@ -121,10 +129,11 @@ const Dots = (points: Flat[], size = 0.5, tone: Tone = "mid") => k.dotsSvg(point
 const r1 = (value: number) => Math.round(value * 1000) / 1000;
 
 const items: Item[] = [];
-let current: Shape[] = [];
+
+const make = (name: string, ref: Point3, svg: string, shapes: Shape[], bias = 0): Item => ({ name, at: ref, bias, key: dot3(ref, V) + bias, svg, shapes });
 
 function put(name: string, ref: Point3, svg: string, shapes: Shape[], bias = 0) {
-  items.push({ name, at: ref, bias, key: dot3(ref, V) + bias, svg, shapes });
+  items.push(make(name, ref, svg, shapes, bias));
 }
 
 const slabShape = (name: string, plan: Plan, z: number, h: number, steps = 8, meta: Partial<Meta> = {}): Shape => ({ kind: "slab", plan, z, h, steps, meta: { name, ...meta } });
@@ -352,19 +361,31 @@ KEY_Y.forEach((y, i) => {
     discShape(`keys.plug-${i}`, lockF, PLUG[0], PLUG[1], PLUG_R, { owner: `keys.lock-${i}` }),
   ]);
 
+  items.push(bowItem(i, 0));
+});
+
+/**
+ * Key `i`'s bow turned `deg` about the lock axis (x): its stacked layers in
+ * that pose and its true shape there. The page draws it at 0° and the live
+ * controller writes the same matrices; the verification build records the
+ * turned poses too, so the painter's order holds while a key turns.
+ */
+export function bowItem(i: number, deg: number): Item {
+  const y = KEY_Y[i]!;
   const bow = bowShape(i);
   const layers = KEY_LAYERS.map((w, layer) => {
     const front = layer === KEY_LAYERS.length - 1;
     const back = layer === 0;
     const fill = front ? `class="vlt-face iso-shade" data-shade="${FRONT_TONE}"` : `class="iso-shade" data-shade="${Math.max(0, FRONT_TONE - 1)}"`;
     const stroke = front ? `<path class="iso-line vlt-bow-edge" data-tone="hi" d="${bow.path}"/><path class="vlt-hole" d="${bow.hole}"/><path class="iso-line" data-tone="lo" d="${bow.hole}"/>` : back ? `<path class="iso-line" data-tone="lo" d="${bow.path}"/>` : "";
-    return `<g data-layer="${w}" transform="${keyMatrix(i, 0, w)}"><path ${fill} d="${bow.path}" fill-rule="nonzero"/>${stroke}</g>`;
+    return `<g data-layer="${w}" transform="${keyMatrix(i, deg, w)}"><path ${fill} d="${bow.path}" fill-rule="nonzero"/>${stroke}</g>`;
   });
-  const keyF: Frame = { o: [KEY_FACE, y, KEY_Z], a: [0, 1, 0], u: [1, 0, 0], v: [0, 0, 1] };
-  put(`keys.bow-${i}`, [KEY_FACE + 6, y, KEY_Z], `<g class="vlt-bow" data-part="bow" data-key="${i}">${layers.join("")}</g>`, [
+  const a = (deg * Math.PI) / 180;
+  const keyF: Frame = { o: [KEY_FACE, y, KEY_Z], a: [0, Math.cos(a), -Math.sin(a)], u: [1, 0, 0], v: [0, Math.sin(a), Math.cos(a)] };
+  return make(`keys.bow-${i}`, [KEY_FACE + 6, y, KEY_Z], `<g class="vlt-bow" data-part="bow" data-key="${i}">${layers.join("")}</g>`, [
     prismShape(`keys.bow-${i}`, keyF, bow.hull, -KEY_T / 2, KEY_T / 2, { owner: `keys.lock-${i}` }),
   ]);
-});
+}
 
 /** The plane matrix of key `i` turned by `deg`, offset `w` along its visible normal. */
 export function keyMatrix(i: number, deg: number, w: number) {
@@ -611,39 +632,177 @@ function polar(r: number, deg: number): Flat {
   const a = (deg * Math.PI) / 180;
   return [r * Math.cos(a), r * Math.sin(a)];
 }
-
-const wheelPath = (() => {
-  const pts: Flat[] = [];
-  for (let i = 0; i < TEETH; i++) {
-    const start = i * TOOTH;
-    pts.push(polar(WHEEL_ROOT, start), polar(WHEEL_TIP, start));
+/** Turn a side-plane point by `deg` about `centre`, as SVG rotate(deg cx cy) does. */
+function turn([x, y]: Flat, deg: number, [cx, cy]: Flat = [0, 0]): Flat {
+  const a = (deg * Math.PI) / 180;
+  const c = Math.cos(a);
+  const s = Math.sin(a);
+  return [cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c];
+}
+const angleOf = ([x, y]: Flat) => (Math.atan2(y, x) * 180) / Math.PI;
+const mod = (value: number, by: number) => ((value % by) + by) % by;
+function densify(poly: Flat[], spacing: number): Flat[] {
+  return poly.flatMap((p, i) => {
+    const q = poly[(i + 1) % poly.length]!;
+    const n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / spacing));
+    return Array.from({ length: n }, (_, j) => [p[0] + ((q[0] - p[0]) * j) / n, p[1] + ((q[1] - p[1]) * j) / n] as Flat);
+  });
+}
+/** How far `p` lies inside `poly` (distance to its outline), or 0 when it is outside or on it. */
+function depthIn(poly: Flat[], [x, y]: Flat) {
+  let inside = false;
+  let best = Infinity;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [x0, y0] = poly[j]!;
+    const [x1, y1] = poly[i]!;
+    if (y0 > y !== y1 > y && x < x0 + ((y - y0) * (x1 - x0)) / (y1 - y0 || 1e-12)) inside = !inside;
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const t = Math.max(0, Math.min(1, ((x - x0) * dx + (y - y0) * dy) / (dx * dx + dy * dy || 1e-12)));
+    best = Math.min(best, Math.hypot(x - x0 - dx * t, y - y0 - dy * t));
   }
-  return k.pathOf(pts, true);
-})();
+  return inside ? best : 0;
+}
+
+/** The wheel in its own coordinates: per tooth a steep radial face (root to tip), then a straight slope down to the next root. */
+const WHEEL_POLY: Flat[] = Array.from({ length: TEETH }, (_, i) => [polar(WHEEL_ROOT, i * TOOTH), polar(WHEEL_TIP, i * TOOTH)]).flat();
+const wheelPath = k.pathOf(WHEEL_POLY, true);
 const wheelHoles = Array.from({ length: 4 }, (_, i) => circlePath(...polar(4.3, i * 90 + 45), 1.15, 14)).join("");
 
-/** The pawl at rest: it hangs from a pivot above the wheel, its tip in a tooth root. */
+/**
+ * The pawl: a curved arm round the wheel, hung on its pin, with a hooked nose.
+ * The nose's face toward the next tooth is radial, so a steep face meets it
+ * flush and pushes it deeper (the pin sits where that push turns the pawl
+ * in); its other side climbs steeper than a tooth's slope, so a turning
+ * wheel lifts it. The arm runs between radii 11 and 12.9, clear of the tips.
+ */
 export const PAWL_TIP: Flat = polar(WHEEL_ROOT + 0.06, PAWL_TIP_AT);
-const pawlPath = (() => {
-  const [qx, qy] = PAWL_PIVOT;
-  const [tx, ty] = PAWL_TIP;
-  const len = Math.hypot(tx - qx, ty - qy);
-  const dir: Flat = [(tx - qx) / len, (ty - qy) / len];
-  const nrm: Flat = [-dir[1], dir[0]];
-  const p = (along: number, across: number): Flat => [qx + dir[0] * along + nrm[0] * across, qy + dir[1] * along + nrm[1] * across];
-  const radial = polar(1, PAWL_TIP_AT);
-  const tipBack: Flat = [tx - radial[0] * 1.7 - dir[0] * 0.4, ty - radial[1] * 1.7 - dir[1] * 0.4];
-  return k.pathOf([p(0, 2.3), p(len - 2.6, 1.5), [tx, ty], tipBack, p(len - 3.8, -1.6), p(0, -2.3), p(-2.6, -1.3), p(-2.6, 1.3)], true) + circlePath(qx, qy, 2.5, 24);
+const PAWL_POLY: Flat[] = (() => {
+  const a = PAWL_TIP_AT;
+  const meet = (r: number) => (Math.acos((r * r + PAWL_PIVOT_R * PAWL_PIVOT_R - PAWL_HUB * PAWL_HUB) / (2 * r * PAWL_PIVOT_R)) * 180) / Math.PI;
+  const outerEnd = PAWL_PIVOT_AT + meet(PAWL_OUT);
+  const innerEnd = PAWL_PIVOT_AT + meet(PAWL_IN);
+  const pts: Flat[] = [PAWL_TIP, polar(PAWL_NOSE, a), polar(PAWL_OUT - 0.6, a - 1)];
+  for (let phi = a - 2.5; phi > outerEnd + 0.5; phi -= 2.5) pts.push(polar(PAWL_OUT, phi));
+  const hubAt = (deg: number): Flat => [PAWL_PIVOT[0] + PAWL_HUB * Math.cos((deg * Math.PI) / 180), PAWL_PIVOT[1] + PAWL_HUB * Math.sin((deg * Math.PI) / 180)];
+  const psi = (p: Flat) => angleOf([p[0] - PAWL_PIVOT[0], p[1] - PAWL_PIVOT[1]]);
+  const from = psi(polar(PAWL_OUT, outerEnd));
+  const to = psi(polar(PAWL_IN, innerEnd));
+  /* Round the far side of the hub, away from the arm. */
+  const down = to < from ? to : to - 360;
+  const up = to > from ? to : to + 360;
+  const reach = (end: number) => {
+    const m = hubAt((from + end) / 2);
+    return Math.hypot(m[0] - PAWL_TIP[0], m[1] - PAWL_TIP[1]);
+  };
+  const end = reach(down) > reach(up) ? down : up;
+  const n = Math.ceil(Math.abs(end - from) / 8);
+  for (let j = 0; j <= n; j++) pts.push(hubAt(from + ((end - from) * j) / n));
+  for (let phi = innerEnd + 2.5; phi < a - 5; phi += 2.5) pts.push(polar(PAWL_IN, phi));
+  pts.push(polar(PAWL_IN, a - 4.5));
+  return pts;
+})();
+const pawlPath = k.pathOf(PAWL_POLY, true);
+const PAWL_EDGE = densify(PAWL_POLY, 0.08);
+/** Only the nose region can reach the teeth: the arm and hub stay outside radius 10.7 in every lift. */
+const PAWL_NEAR = PAWL_EDGE.filter(([x, y]) => Math.hypot(x, y) < WHEEL_TIP + 1.5);
+const WHEEL_EDGE = densify(WHEEL_POLY, 0.08);
+/** The sense of rotation that lifts the nose off the wheel. */
+const LIFT_OUT = Math.hypot(...turn(PAWL_TIP, 1, PAWL_PIVOT)) > Math.hypot(...PAWL_TIP) ? 1 : -1;
+
+/** True when the pawl, turned `lift` about its pin, nowhere enters the wheel turned `theta` (contact allowed). */
+function clearOf(theta: number, lift: number, points = PAWL_NEAR) {
+  for (const p of points) {
+    const q = turn(p, lift, PAWL_PIVOT);
+    const r = Math.hypot(q[0], q[1]);
+    if (r < WHEEL_TIP && r < profileAt(angleOf(q) - theta) - 0.004) return false;
+  }
+  for (const c of WHEEL_POLY) if (depthIn(PAWL_POLY, turn(turn(c, theta), -lift, PAWL_PIVOT)) > 0.004) return false;
+  return true;
+}
+
+/** Where the pawl rests on a wheel at `theta`: the least lift that keeps it out of the teeth. */
+function liftAt(theta: number) {
+  if (clearOf(theta, 0)) return 0;
+  for (let d = 0.5; d <= 40; d += 0.5) {
+    if (!clearOf(theta, LIFT_OUT * d)) continue;
+    let lo = d - 0.5;
+    let hi = d;
+    for (let i = 0; i < 16; i++) {
+      const mid = (lo + hi) / 2;
+      if (clearOf(theta, LIFT_OUT * mid)) hi = mid;
+      else lo = mid;
+    }
+    return LIFT_OUT * hi;
+  }
+  throw new Error(`vault: the pawl jams at wheel angle ${theta}`);
+}
+
+/**
+ * The click: the wheel angle (mod one tooth) where a tooth's tip passes the
+ * nose and the pawl drops into the next gap. Turning back, that same angle is
+ * where the steep face meets the nose: nothing can pass it.
+ */
+const CLICK = (() => {
+  const n = 144;
+  const lifts = Array.from({ length: n + 1 }, (_, i) => Math.abs(liftAt((i * TOOTH) / n)));
+  let drop = 1;
+  for (let i = 1; i <= n; i++) if (lifts[i - 1]! - lifts[i]! > lifts[drop - 1]! - lifts[drop]!) drop = i;
+  let lo = ((drop - 1) * TOOTH) / n;
+  let hi = (drop * TOOTH) / n;
+  const split = (lifts[drop - 1]! + lifts[drop]!) / 2;
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2;
+    if (Math.abs(liftAt(mid)) > split) lo = mid;
+    else hi = mid;
+  }
+  return hi;
 })();
 
-/** The wheel angle at rest: the pawl tip sits PLAY degrees short of the next steep face. */
-export const WHEEL_REST = (((PAWL_TIP_AT - TOOTH + PLAY) % TOOTH) + TOOTH) % TOOTH;
+/** The wheel angle at rest: each feed stops PLAY degrees past the click. */
+export const WHEEL_REST = mod(CLICK + PLAY, TOOTH);
+/** How far the wheel can turn back from rest before a steep face meets the nose (kept 0.15° short of contact). */
+export const HOLD = PLAY - 0.15;
+/** The pawl's lift over one tooth from rest, sampled every TOOTH/160 degrees: the page and the audit read the same table. */
+export const LIFT_STEP = TOOTH / 160;
+export const LIFT_CLICK = mod(CLICK - WHEEL_REST, TOOTH);
+export const LIFT: number[] = Array.from({ length: 161 }, (_, j) => {
+  const u = j * LIFT_STEP;
+  return r1(liftAt(WHEEL_REST + (Math.abs(u - LIFT_CLICK) < 1e-6 ? u + 1e-4 : u)));
+});
+/** The pawl's lift at wheel angle `theta`, from the table, never blended across the click (the controller does the same). */
+export function liftOf(theta: number) {
+  const u = mod(theta - WHEEL_REST, TOOTH);
+  const f = u / LIFT_STEP;
+  const i = Math.min(LIFT.length - 2, Math.floor(f));
+  const a = LIFT[i]!;
+  const b = LIFT[i + 1]!;
+  if (i * LIFT_STEP < LIFT_CLICK && LIFT_CLICK <= (i + 1) * LIFT_STEP) return u < LIFT_CLICK ? a : b;
+  return a + (b - a) * (f - i);
+}
+
+/** Deepest overlap of the pawl and the wheel in one pose, checked over both outlines (0 when they only touch). */
+export function meshOverlap(theta: number, lift: number) {
+  let worst = 0;
+  for (const p of PAWL_EDGE) {
+    const q = turn(p, lift, PAWL_PIVOT);
+    const r = Math.hypot(q[0], q[1]);
+    if (r < WHEEL_TIP) worst = Math.max(worst, profileAt(angleOf(q) - theta) - r);
+  }
+  for (const c of WHEEL_EDGE) {
+    const w = turn(turn(c, theta), -lift, PAWL_PIVOT);
+    if (w[0] < PAWL_BOX[0] || w[0] > PAWL_BOX[2] || w[1] < PAWL_BOX[1] || w[1] > PAWL_BOX[3]) continue;
+    worst = Math.max(worst, depthIn(PAWL_POLY, w));
+  }
+  return worst;
+}
+const PAWL_BOX = [Math.min(...PAWL_POLY.map((p) => p[0])), Math.min(...PAWL_POLY.map((p) => p[1])), Math.max(...PAWL_POLY.map((p) => p[0])), Math.max(...PAWL_POLY.map((p) => p[1]))];
 
 /**
  * A flat part in the side plane (wheel, pawl, crank), drawn as stacked copies through its thickness:
  * its machined face takes the light top tone so it reads against the darker cheek behind it.
  */
-function layered(name: string, x0: number, x1: number, d: string, extra: string, part: string, rot: number, pivot: Flat = [0, 0], bands = 4, edge: Tone = "mid", face = "iso-top", rim = 1) {
+function layers(x0: number, x1: number, d: string, extra: string, rot: number, pivot: Flat = [0, 0], bands = 4, edge: Tone = "mid", face = "iso-top", rim = 1) {
   const out: string[] = [];
   for (let i = 0; i < bands; i++) {
     const x = x0 + ((x1 - x0) * i) / (bands - 1);
@@ -653,35 +812,45 @@ function layered(name: string, x0: number, x1: number, d: string, extra: string,
     const lines = front ? `<path class="iso-line" data-tone="${edge}" d="${d}"/>${extra}` : back ? `<path class="iso-line" data-tone="lo" d="${d}"/>` : "";
     out.push(`<g transform="${planeSide(x, SPOOL_Y, SPOOL_Z)}"><g data-rot="" transform="rotate(${r1(rot)} ${pivot[0]} ${pivot[1]})"><path ${fill} d="${d}"/>${lines}</g></g>`);
   }
-  return `<g data-part="${part}">${out.join("")}</g>`;
+  return out;
+}
+function layered(x0: number, x1: number, d: string, extra: string, part: string, rot: number, pivot: Flat = [0, 0], bands = 4, edge: Tone = "mid", face = "iso-top", rim = 1) {
+  return `<g data-part="${part}">${layers(x0, x1, d, extra, rot, pivot, bands, edge, face, rim).join("")}</g>`;
 }
 
-{
-  const F = XF(SPOOL_Y, SPOOL_Z);
-  put("ratchet.hub", [HUB[0] + 0.4, SPOOL_Y, SPOOL_Z], S(G.disc(HUB[0], HUB[1], 3, F, P), { tone: "mid" }), [discShape("ratchet.hub", F, HUB[0], HUB[1], 3, { owner: "ratchet" })]);
+const AXIS_F = XF(SPOOL_Y, SPOOL_Z);
+
+/**
+ * The wheel turned to `theta` and the pawl resting on it, as one item. They
+ * lie in one slab (x 14.6–16.6) with the nose down between two teeth, so
+ * each is in front of the other somewhere on screen and no painter's key can
+ * order them as two items. Drawn as one, slice by slice through the slab
+ * (wheel then pawl in each slice, back slice first), they occlude exactly.
+ * Both true outlines are recorded.
+ */
+export function ratchetItem(theta: number): Item {
+  const lift = liftOf(theta);
   const extra = `<path class="vlt-hole" d="${wheelHoles}"/><path class="iso-line" data-tone="lo" d="${wheelHoles}"/><path class="iso-line" data-tone="faint" d="${circlePath(0, 0, WHEEL_ROOT - 1.1, 40)}"/>`;
-  put("ratchet.wheel", [(WHEEL[0] + WHEEL[1]) / 2, SPOOL_Y, SPOOL_Z], layered("ratchet.wheel", WHEEL[0], WHEEL[1], wheelPath, extra, "wheel", WHEEL_REST), [
-    discShape("ratchet.wheel", F, WHEEL[0], WHEEL[1], WHEEL_TIP, { owner: "ratchet" }),
+  const wheel = layers(WHEEL[0], WHEEL[1], wheelPath, extra, theta);
+  const pawl = layers(WHEEL[0], WHEEL[1], pawlPath, "", lift, PAWL_PIVOT, 4, "hi");
+  const svg = wheel.map((slice, i) => `<g data-part="wheel">${slice}</g><g data-part="pawl">${pawl[i]}</g>`).join("");
+  return make("ratchet.wheel", [(WHEEL[0] + WHEEL[1]) / 2, SPOOL_Y, SPOOL_Z], svg, [
+    prismShape("ratchet.wheel", SIDE_F(SPOOL_Y, SPOOL_Z), WHEEL_POLY.map((p) => turn(p, theta)), WHEEL[0], WHEEL[1], { owner: "ratchet" }),
+    prismShape("ratchet.pawl", SIDE_F(SPOOL_Y, SPOOL_Z), PAWL_POLY.map((p) => turn(p, lift, PAWL_PIVOT)), WHEEL[0], WHEEL[1], { owner: "ratchet" }),
   ]);
-  const pawlHull = G.hullOf([...pawlOutline()].map(([u, v]) => [u, v, 0])).map(([u, v]: number[]) => [u, v] as Flat);
-  put("ratchet.pawl", [(WHEEL[0] + WHEEL[1]) / 2, SPOOL_Y - PAWL_PIVOT[0], SPOOL_Z - PAWL_PIVOT[1]], layered("ratchet.pawl", WHEEL[0], WHEEL[1], pawlPath, "", "pawl", 0, PAWL_PIVOT, 4, "hi"), [
-    prismShape("ratchet.pawl", SIDE_F(SPOOL_Y, SPOOL_Z), pawlHull, WHEEL[0], WHEEL[1], { owner: "ratchet" }),
-  ], 0.3);
+}
+
+put("ratchet.hub", [HUB[0] + 0.4, SPOOL_Y, SPOOL_Z], S(G.disc(HUB[0], HUB[1], 3, AXIS_F, P), { tone: "mid" }), [discShape("ratchet.hub", AXIS_F, HUB[0], HUB[1], 3, { owner: "ratchet" })]);
+items.push(ratchetItem(WHEEL_REST));
+{
   const pinF = XF(SPOOL_Y - PAWL_PIVOT[0], SPOOL_Z - PAWL_PIVOT[1]);
   const pinAt: Point3 = [0, SPOOL_Y - PAWL_PIVOT[0], SPOOL_Z - PAWL_PIVOT[1]];
-  put("ratchet.pin", [(CHEEK_R_X[1] + WHEEL[0]) / 2, pinAt[1], pinAt[2]], S(G.disc(CHEEK_R_X[1], WHEEL[0], 1.1, pinF, P), { tone: "mid" }), [
-    discShape("ratchet.pin", pinF, CHEEK_R_X[1], WHEEL[0], 1.1, { owner: "ratchet" }),
+  put("ratchet.pin", [(CHEEK_R_X[1] + WHEEL[0]) / 2, pinAt[1], pinAt[2]], S(G.disc(CHEEK_R_X[1], WHEEL[0], PIN_R, pinF, P), { tone: "mid" }), [
+    discShape("ratchet.pin", pinF, CHEEK_R_X[1], WHEEL[0], PIN_R, { owner: "ratchet" }),
   ]);
-  put("ratchet.pin-head", [WHEEL[1] + 0.2, pinAt[1], pinAt[2]], S(G.disc(WHEEL[1], WHEEL[1] + 0.4, 1.5, pinF, P, { bevel: 0.2 }), { tone: "mid" }) + Dots([at([WHEEL[1] + 0.4, pinAt[1], pinAt[2]])], 0.35, "lo"), [
-    discShape("ratchet.pin-head", pinF, WHEEL[1], WHEEL[1] + 0.4, 1.5, { owner: "ratchet" }),
+  put("ratchet.pin-head", [WHEEL[1] + 0.2, pinAt[1], pinAt[2]], S(G.disc(WHEEL[1], WHEEL[1] + 0.4, PIN_HEAD_R, pinF, P, { bevel: 0.2 }), { tone: "mid" }) + Dots([at([WHEEL[1] + 0.4, pinAt[1], pinAt[2]])], 0.35, "lo"), [
+    discShape("ratchet.pin-head", pinF, WHEEL[1], WHEEL[1] + 0.4, PIN_HEAD_R, { owner: "ratchet" }),
   ], 0.4);
-}
-
-function pawlOutline(): Flat[] {
-  const nums = pawlPath.match(/-?\d+(\.\d+)?/g)!.map(Number);
-  const pts: Flat[] = [];
-  for (let i = 0; i + 1 < nums.length; i += 2) pts.push([nums[i]!, nums[i + 1]!]);
-  return pts;
 }
 
 /* The crank: an arm keyed to the wheel and a knob on a pin. */
@@ -701,24 +870,70 @@ const crankArm = (() => {
   return { d: k.pathOf(pts, true), end: [CRANK_R * dir[0], CRANK_R * dir[1]] as Flat, hull: pts };
 })();
 
-{
-  const F0 = XF(SPOOL_Y, SPOOL_Z);
-  put("ratchet.boss", [(WHEEL[1] + CRANK[0]) / 2, SPOOL_Y, SPOOL_Z], S(G.disc(WHEEL[1], CRANK[0], 2.6, F0, P), { tone: "mid" }), [discShape("ratchet.boss", F0, WHEEL[1], CRANK[0], 2.6, { owner: "ratchet" })], 0.45);
+/** The crank arm turned `spin` degrees with the wheel it is keyed to. */
+export function crankItem(spin: number): Item {
   const extra = `<path class="iso-line" data-tone="lo" d="${circlePath(0, 0, 1.4, 16)}"/>`;
-  put("ratchet.crank", [(CRANK[0] + CRANK[1]) / 2, SPOOL_Y, SPOOL_Z], layered("ratchet.crank", CRANK[0], CRANK[1], crankArm.d, extra, "crank", 0, [0, 0], 3, "mid", "iso-shade vlt-arm"), [
-    prismShape("ratchet.crank", SIDE_F(SPOOL_Y, SPOOL_Z), crankArm.hull, CRANK[0], CRANK[1], { owner: "ratchet" }),
+  return make("ratchet.crank", [(CRANK[0] + CRANK[1]) / 2, SPOOL_Y, SPOOL_Z], layered(CRANK[0], CRANK[1], crankArm.d, extra, "crank", spin, [0, 0], 3, "mid", "iso-shade vlt-arm"), [
+    prismShape("ratchet.crank", SIDE_F(SPOOL_Y, SPOOL_Z), crankArm.hull.map((p) => turn(p, spin)), CRANK[0], CRANK[1], { owner: "ratchet" }),
   ], 0.5);
-  const [eu, ev] = crankArm.end;
+}
+
+/** The knob on the crank's end, carried round `spin` degrees (the page translates the same drawing). */
+export function knobItem(spin: number): Item {
+  const [eu, ev] = polar(CRANK_R, CRANK_REST + spin);
   const F = XF(SPOOL_Y - eu, SPOOL_Z - ev);
   const knob = S(G.disc(KNOB[0], KNOB[1], KNOB_R, F, P, { bevel: 0.3 }), { tone: "mid" }) + k.fadedSvg(ribsOf(F, KNOB[0] + 0.8, KNOB[1] - 0.8, KNOB_R, 18, P, { fade: [0.1, 0.55], seams: true }), { tone: "lo" });
-  put("ratchet.knob", [(KNOB[0] + KNOB[1]) / 2, SPOOL_Y - eu, SPOOL_Z - ev], `<g data-part="knob">${knob}</g>`, [discShape("ratchet.knob", F, KNOB[0], KNOB[1], KNOB_R, { owner: "ratchet" })], 0.6);
+  return make("ratchet.knob", [(KNOB[0] + KNOB[1]) / 2, SPOOL_Y - eu, SPOOL_Z - ev], `<g data-part="knob">${knob}</g>`, [discShape("ratchet.knob", F, KNOB[0], KNOB[1], KNOB_R, { owner: "ratchet" })], 0.6);
 }
+
+put("ratchet.boss", [(WHEEL[1] + CRANK[0]) / 2, SPOOL_Y, SPOOL_Z], S(G.disc(WHEEL[1], CRANK[0], 2.6, AXIS_F, P), { tone: "mid" }), [discShape("ratchet.boss", AXIS_F, WHEEL[1], CRANK[0], 2.6, { owner: "ratchet" })], 0.45);
+items.push(crankItem(0), knobItem(0));
 
 /* ------------------------------------------------------------------ order */
 
 const settled = SETTLED as Record<string, number>;
 export const ITEMS: Item[] = items.map((item) => ({ ...item, key: settled[item.name] ?? item.key }));
 const ordered = () => [...ITEMS].sort((a, b) => a.key - b.key);
+
+/** Every item the page moves. */
+export const MOVING = ["ratchet.wheel", "ratchet.crank", "ratchet.knob", "keys.bow-0", "keys.bow-1", "keys.bow-2"];
+
+export interface Pose {
+  label: string;
+  theta: number;
+  keys: number[];
+}
+
+/**
+ * The poses the page can show, for the verification build to settle the
+ * painter's keys over and audit: the wheel every quarter tooth round a full
+ * turn (the crank rests in 20 places), each click from both sides, each hold
+ * against the pawl, and each key a third, two thirds and all the way turned.
+ */
+export const POSES: Pose[] = [
+  ...Array.from({ length: TEETH * 4 }, (_, j) => ({ label: `wheel +${r1((j * TOOTH) / 4)}°`, theta: WHEEL_REST + (j * TOOTH) / 4, keys: [0, 0, 0] })),
+  ...Array.from({ length: TEETH }, (_, i) => [
+    { label: `tooth ${i + 1} just before the click`, theta: WHEEL_REST + i * TOOTH + LIFT_CLICK - 0.05, keys: [0, 0, 0] },
+    { label: `tooth ${i + 1} just after the click`, theta: WHEEL_REST + i * TOOTH + LIFT_CLICK + 0.05, keys: [0, 0, 0] },
+    { label: `rest ${i} held against the pawl`, theta: WHEEL_REST + i * TOOTH - HOLD, keys: [0, 0, 0] },
+  ]).flat(),
+  ...[0, 1, 2].flatMap((key) => [30, 60, 90].map((deg) => ({ label: `key ${key} turned ${deg}°`, theta: WHEEL_REST, keys: [0, 1, 2].map((i) => (i === key ? deg : 0)) }))),
+];
+
+/** The item list in one pose: the moving parts rebuilt there, every key as settled. */
+export function itemsAt(pose: Pose): Item[] {
+  const spin = pose.theta - WHEEL_REST;
+  const posed = new Map<string, Item>([
+    ["ratchet.wheel", ratchetItem(pose.theta)],
+    ["ratchet.crank", crankItem(spin)],
+    ["ratchet.knob", knobItem(spin)],
+    ...pose.keys.map((deg, i) => [`keys.bow-${i}`, bowItem(i, deg)] as [string, Item]),
+  ]);
+  return ITEMS.map((item) => {
+    const moved = posed.get(item.name);
+    return moved ? { ...moved, key: item.key } : item;
+  });
+}
 
 /** Invisible hit targets over the keys and the crank, drawn above everything. */
 const HITS = [
@@ -732,9 +947,14 @@ const HITS = [
   })(),
 ].join("");
 
-export function bodyFor(locale: Locale, list: Item[] = ordered()) {
+/**
+ * The drawing's markup in painter's order. `uid` suffixes the two clipPath
+ * ids, so two vault figures on one page never share an id.
+ */
+export function bodyFor(locale: Locale, list: Item[] = ordered(), uid = "") {
   const engraved = locale === "ar" ? "الدوحة" : "DOHA";
-  return list.map((item) => `<g data-item="${item.name}">${item.svg}</g>`).join("").replace(ENGRAVED, engraved) + `<g class="vlt-hits">${HITS}</g>`;
+  const body = list.map((item) => `<g data-item="${item.name}">${item.svg}</g>`).join("").replace(ENGRAVED, engraved) + `<g class="vlt-hits">${HITS}</g>`;
+  return uid ? body.replace(/(id="|url\(#)vlt-(window|strip)/g, `$1vlt-$2-${uid}`) : body;
 }
 
 /** What the live controller needs: numbers only, no geometry code ships. */
@@ -754,14 +974,13 @@ export const LIVE = {
   keyLayers: KEY_LAYERS,
   origin: at([0, 0, 0]),
   side: { u: [-EY[0], -EY[1]] as Flat, v: [-EZ[0], -EZ[1]] as Flat },
-  teeth: TEETH,
   tooth: TOOTH,
-  root: WHEEL_ROOT,
-  tip: WHEEL_TIP,
   pivot: PAWL_PIVOT,
-  pawlTip: PAWL_TIP,
   wheelRest: WHEEL_REST,
-  play: PLAY,
+  lift: LIFT,
+  liftStep: LIFT_STEP,
+  liftClick: LIFT_CLICK,
+  hold: HOLD,
   crankR: CRANK_R,
   crankRest: CRANK_REST,
   rollR: ROLL_R,

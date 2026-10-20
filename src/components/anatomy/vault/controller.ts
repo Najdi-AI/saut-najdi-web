@@ -9,7 +9,6 @@
 import type { LiveData } from "./geometry";
 import type { VaultText } from "./model";
 
-type Flat = [number, number];
 type Vec = [number, number, number];
 
 interface Printed {
@@ -62,7 +61,7 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
   const wheelRot = [...svg.querySelectorAll<SVGGElement>('[data-part="wheel"] [data-rot]')];
   const pawlRot = [...svg.querySelectorAll<SVGGElement>('[data-part="pawl"] [data-rot]')];
   const crankRot = [...svg.querySelectorAll<SVGGElement>('[data-part="crank"] [data-rot]')];
-  const pawl = svg.querySelector<SVGGElement>('[data-part="pawl"]');
+  const pawls = [...svg.querySelectorAll<SVGGElement>('[data-part="pawl"]')];
   const knob = svg.querySelector<SVGGElement>('[data-part="knob"]');
   const head = svg.querySelector<SVGGElement>('[data-part="head"]');
   const older = svg.querySelector<SVGPathElement>('[data-part="older"]');
@@ -104,43 +103,19 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
     if (status) status.textContent = line;
   }
 
-  function profileAt(phi: number) {
-    const t = (((phi % D.tooth) + D.tooth) % D.tooth) / D.tooth;
-    const start = (phi - t * D.tooth) * toRad;
-    const end = start + D.tooth * toRad;
-    const A: Flat = [D.tip * Math.cos(start), D.tip * Math.sin(start)];
-    const B: Flat = [D.root * Math.cos(end), D.root * Math.sin(end)];
-    const d: Flat = [Math.cos(phi * toRad), Math.sin(phi * toRad)];
-    const e: Flat = [B[0] - A[0], B[1] - A[1]];
-    return (A[0] * e[1] - A[1] * e[0]) / (d[0] * e[1] - d[1] * e[0]);
-  }
-
-  /** The pawl's lift (degrees about its pivot) so that its tip rides the tooth under it. */
+  /**
+   * The pawl's lift (degrees about its pin) on a wheel at `wheel`, read from
+   * the table the server solved from the drawn teeth and pawl (geometry.ts
+   * liftOf does the same), never blended across the click.
+   */
   function pawlLift(wheel: number) {
-    const [qx, qy] = D.pivot;
-    const [tx, ty] = D.pawlTip;
-    const tipAt = (deg: number): Flat => {
-      const a = deg * toRad;
-      const dx = tx - qx;
-      const dy = ty - qy;
-      return [qx + dx * Math.cos(a) - dy * Math.sin(a), qy + dx * Math.sin(a) + dy * Math.cos(a)];
-    };
-    const gap = (deg: number) => {
-      const [x, y] = tipAt(deg);
-      const r = Math.hypot(x, y);
-      const phi = Math.atan2(y, x) / toRad - wheel;
-      return r - profileAt(phi);
-    };
-    const out = gap(1) > gap(0) ? 1 : -1;
-    if (gap(0) >= 0) return 0;
-    let lo = 0;
-    let hi = 30 * out;
-    for (let i = 0; i < 22; i++) {
-      const mid = (lo + hi) / 2;
-      if (gap(mid) >= 0) hi = mid;
-      else lo = mid;
-    }
-    return hi;
+    const u = (((wheel - D.wheelRest) % D.tooth) + D.tooth) % D.tooth;
+    const f = u / D.liftStep;
+    const i = Math.min(D.lift.length - 2, Math.floor(f));
+    const a = D.lift[i]!;
+    const b = D.lift[i + 1]!;
+    if (i * D.liftStep < D.liftClick && D.liftClick <= (i + 1) * D.liftStep) return u < D.liftClick ? a : b;
+    return a + (b - a) * (f - i);
   }
 
   function keyMatrix(i: number, deg: number, w: number) {
@@ -251,7 +226,7 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
 
   function setFocus(on: "line" | "key" | "pawl") {
     root.setAttribute("data-focus", on);
-    pawl?.toggleAttribute("data-lit", on === "pawl");
+    pawls.forEach((slice) => slice.toggleAttribute("data-lit", on === "pawl"));
   }
 
   function begin(next: Action) {
@@ -329,11 +304,12 @@ export function mountVault(root: HTMLElement, data: LiveData, text: VaultText): 
         finish();
       }
     } else {
-      const stop = D.play * 0.85;
+      /* The wheel turns back until a steep face meets the pawl, rebounds off it (never into it) and is held. */
+      const stop = D.hold;
       if (t < BACK.hit) theta = base - stop * Math.pow(t / BACK.hit, 2);
       else if (t < BACK.hold) {
         const since = t - BACK.hit;
-        theta = base - stop + stop * 0.18 * Math.exp(-since * 14) * Math.sin(since * 40);
+        theta = base - stop + stop * 0.18 * Math.exp(-since * 14) * Math.abs(Math.sin(since * 40));
         if (a.said === 0) {
           a.said = 1;
           say(text.held);

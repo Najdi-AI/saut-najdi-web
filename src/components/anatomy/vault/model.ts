@@ -16,15 +16,24 @@
 
 export type Locale = "ar" | "en";
 
-/** Ratchet: 10 teeth, so one printed line turns the take-up spool 36°. */
-export const TEETH = 10;
+/** Ratchet: 20 teeth, so one printed line turns the take-up spool 18°. */
+export const TEETH = 20;
 export const TOOTH = 360 / TEETH;
 /** Radius of the paper wound on the take-up spool, world units. */
 export const ROLL_R = 7;
-/** Tape advance per line = roll radius × one tooth (arc length). */
-export const PITCH = (ROLL_R * Math.PI) / TEETH;
-/** Free play before a tooth's steep face meets the pawl, degrees. */
-export const PLAY = 1.6;
+/**
+ * Tape advance per line: the arc the roll's surface travels in one tooth,
+ * ROLL_R × TOOTH in radians (2π·ROLL_R / TEETH ≈ 2.2). The tape at rest, the
+ * seeded lines and every feed all use this one number.
+ */
+export const PITCH = (ROLL_R * TOOTH * Math.PI) / 180;
+/**
+ * How far past the click (the pawl dropping off a tooth) one feed carries the
+ * wheel, degrees. Turning back, the wheel travels about this far before the
+ * next steep face meets the pawl (the exact angle, HOLD, is measured from the
+ * drawn teeth and pawl in geometry.ts).
+ */
+export const PLAY = 5;
 /** Lines already on the tape when the page opens (the drawing's own state). */
 export const FIRST_LINE = 12;
 
@@ -69,7 +78,7 @@ export const WORDS: Record<Locale, Words> = {
     turning: (role) => `مفتاح ${WORDS.ar.roles[role]} يلف`,
     ready: (role) => `مفتاح ${WORDS.ar.roles[role]} جاهز`,
     printed: (line, role) => `سطر جديد ${line} · ${WORDS.ar.roles[role]}`,
-    pushing: "تحاول ترجّع الورق…",
+    pushing: "محاولة ترجيع الورق…",
     held: "السقّاطة ماسكته · ما يرجع للخلف",
     label:
       "خزنة صناديق أمانات على قاعدة، مكتوب على لوحتها الدوحة، وفوقها طابعة سجل التدقيق. على جنب الخزنة ثلاثة مفاتيح، مفتاح لكل دور: النشر، والمسودة، والمشاهدة. إذا لفّ أي مفتاح تطبع الطابعة سطر جديد، ويلتف الورق على بكرة فيها عجلة مسننة وسقّاطة تمنعها ترجع للخلف، فما ينعدل سطر ولا ينحذف. وقدام الخزنة بطاقة الإفصاح عن أماكن المعالجة.",

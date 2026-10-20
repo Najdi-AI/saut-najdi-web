@@ -1,0 +1,1 @@
+export { VaultFigure } from "./VaultFigure";

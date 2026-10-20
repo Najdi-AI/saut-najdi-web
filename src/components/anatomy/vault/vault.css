@@ -1,0 +1,240 @@
+/*
+ * The Gulf vault, scoped to .vlt. The kit's tokens (iso.css) are re-tuned
+ * here to the site's grounds:
+ *   data-ground="page"  follows the site theme: white card on light, the
+ *                       night surface (#0F1730) on dark.
+ *   data-ground="navy"  always dark, its paper the navy band itself, so the
+ *                       card sits on the PDPL band without a patch.
+ * Before hydration the wrapper is rendered data-theme="light"; the
+ * :root[data-theme="dark"] rule keeps dark visitors dark until the client
+ * mirrors the site attribute onto the wrapper.
+ */
+
+.vlt {
+  font-family: var(--font-thmanyah, system-ui), system-ui, sans-serif;
+  --vlt-hit: transparent;
+}
+
+/* Night: the site's dark surface, navy-leaning greys. */
+.vlt.iso:not([data-theme="light"]),
+:root[data-theme="dark"] .vlt.iso[data-ground="page"] {
+  --anatomy-page: #080d1c;
+  --anatomy-card: #0f1730;
+  --anatomy-text: #aab3c7;
+  --anatomy-strong: #eef1f8;
+  --anatomy-muted: #838da3;
+  --anatomy-paper: #0f1730;
+  --anatomy-face: #18233f;
+  --anatomy-top: #1a2644;
+  --anatomy-shade-0: #0b1227;
+  --anatomy-shade-1: #0e162e;
+  --anatomy-shade-2: #111a35;
+  --anatomy-shade-3: #141e3b;
+  --anatomy-lit-top: #22305a;
+  --anatomy-lit-shade: #1a274a;
+  --anatomy-hi: #d9e0ef;
+  --anatomy-mid: #6f7b9a;
+  --anatomy-lo: #3d4868;
+  --anatomy-faint: #27314f;
+  --anatomy-lit: #ffffff;
+  --anatomy-halo: #02040b;
+  --anatomy-halo-opacity: 0.9;
+  --anatomy-dot: #e6ebf6;
+  --vlt-rule: #232c49;
+  --vlt-hole: #050913;
+  --vlt-paper: #1b2747;
+  --vlt-well: #070c1a;
+}
+
+/* The navy band: the card is the band (rgb(var(--c-navy))) in both site themes. */
+.vlt.iso[data-ground="navy"],
+:root[data-theme="dark"] .vlt.iso[data-ground="navy"] {
+  --anatomy-card: rgb(var(--c-navy, 17 32 70));
+  --anatomy-paper: rgb(var(--c-navy, 17 32 70));
+  --anatomy-face: #1c2d5c;
+  --anatomy-top: #1e3060;
+  --anatomy-shade-0: #0b1734;
+  --anatomy-shade-1: #0f1b3d;
+  --anatomy-shade-2: #132045;
+  --anatomy-shade-3: #17254d;
+  --anatomy-lit-top: #26396e;
+  --anatomy-lit-shade: #1d2e5c;
+  --anatomy-hi: #e3e9f7;
+  --anatomy-mid: #7e8cb3;
+  --anatomy-lo: #47567f;
+  --anatomy-faint: #2c3b66;
+  --anatomy-text: #c3cbe0;
+  --anatomy-muted: #93a0c2;
+  --vlt-rule: rgb(255 255 255 / 0.1);
+  --vlt-hole: #050b1d;
+  --vlt-paper: #21325f;
+  --vlt-well: #08112a;
+}
+
+/* Day: the site's white surface with a cool ink. */
+.vlt.iso[data-theme="light"][data-ground="page"] {
+  --anatomy-page: #f7f8fa;
+  --anatomy-card: #ffffff;
+  --anatomy-text: #4b5266;
+  --anatomy-strong: #0d1326;
+  --anatomy-muted: #7c8396;
+  --anatomy-paper: #ffffff;
+  --anatomy-face: #ffffff;
+  --anatomy-top: #ffffff;
+  --anatomy-shade-0: #d9dce4;
+  --anatomy-shade-1: #e3e6ed;
+  --anatomy-shade-2: #ebedf2;
+  --anatomy-shade-3: #f3f4f7;
+  --anatomy-lit-top: #ffffff;
+  --anatomy-lit-shade: #eceef4;
+  --anatomy-hi: #1d2438;
+  --anatomy-mid: #858ca1;
+  --anatomy-lo: #b2b7c6;
+  --anatomy-faint: #d4d7e0;
+  --anatomy-lit: #0d1326;
+  --anatomy-halo: #7d8396;
+  --anatomy-halo-opacity: 0.3;
+  --anatomy-dot: #2c3346;
+  --vlt-rule: #e5e7eb;
+  --vlt-hole: #3a4155;
+  --vlt-paper: #fbfbf8;
+  --vlt-well: #c9cdd8;
+}
+
+.vlt .iso-figure {
+  margin: 0;
+}
+.vlt .iso-plate {
+  border-radius: 14px;
+  box-shadow: 0 0 0 1px var(--vlt-rule);
+}
+.vlt .iso-legend {
+  color: var(--anatomy-muted);
+}
+
+/* Arabic: the site's typeface, never letter-spaced, never upper-cased. */
+.vlt[dir="rtl"] .iso-plate-corner,
+.vlt[dir="rtl"] .iso-legend {
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.vlt[dir="rtl"] .iso-plate-corner {
+  font-size: 12px;
+}
+.vlt[dir="rtl"] .iso-plate-corner[data-corner="fig"],
+.vlt[dir="rtl"] .iso-plate-corner[data-corner="hint"] {
+  left: auto;
+  right: 0;
+}
+.vlt[dir="rtl"] .iso-plate-corner[data-corner="title"],
+.vlt[dir="rtl"] .iso-plate-corner[data-corner="readout"] {
+  right: auto;
+  left: 0;
+}
+.vlt[dir="rtl"] .vlt-engraved {
+  font-family: inherit;
+  letter-spacing: 0;
+  direction: rtl;
+  font-weight: 700;
+}
+.vlt .iso-plate-corner[data-corner="readout"] {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Parts. */
+.vlt-hole {
+  fill: var(--vlt-hole);
+  stroke: none;
+}
+.vlt-well {
+  fill: var(--vlt-well);
+  stroke: none;
+}
+.vlt-paper {
+  fill: var(--vlt-paper);
+  stroke: none;
+}
+.vlt-ink {
+  fill: var(--anatomy-hi);
+  stroke: none;
+}
+.vlt-glass {
+  fill: var(--anatomy-lit);
+  stroke: none;
+  opacity: 0.045;
+}
+.vlt-lines {
+  stroke-width: 0.9px;
+}
+.vlt-newest {
+  stroke-width: 1px;
+}
+.vlt-bow[data-lit] .vlt-face {
+  fill: var(--anatomy-lit-top);
+}
+.vlt-bow[data-lit] .vlt-bow-edge {
+  stroke: var(--anatomy-lit);
+}
+.vlt [data-part="pawl"][data-lit] .iso-line[data-tone="hi"] {
+  stroke: var(--anatomy-lit);
+}
+.vlt [data-part="pawl"][data-lit] .iso-top {
+  fill: var(--anatomy-lit-top);
+}
+.vlt .vlt-arm {
+  fill: var(--anatomy-shade-3);
+}
+.vlt[data-focus="key"] .vlt-newest,
+.vlt[data-focus="pawl"] .vlt-newest {
+  stroke: var(--anatomy-hi);
+}
+.vlt-dots circle {
+  transition: opacity 240ms var(--anatomy-ease);
+}
+.vlt-dots:not([data-on]) circle {
+  opacity: 0.3;
+}
+.vlt-hit {
+  fill: var(--vlt-hit);
+  stroke: none;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.vlt-stage {
+  touch-action: pan-y;
+  border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+.vlt-stage:focus {
+  outline: none;
+}
+.vlt-stage:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+.vlt-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .vlt .iso-plate {
+    overflow: hidden;
+  }
+  .vlt .iso-plate .iso-svg {
+    width: 112%;
+    margin: -2% -6% -1%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vlt * {
+    transition: none !important;
+  }
+}

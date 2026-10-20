@@ -14,8 +14,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { BookingDesk } from "@/components/BookingDesk";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { OmniChannels } from "@/components/OmniChannels";
-import { PricingOverview } from "@/components/PricingOverview";
-import { WorkflowComparison } from "@/components/WorkflowComparison";
+import { HomePlansStrip } from "@/components/HomePlansStrip";
 import { homeFaq } from "@/content/faq";
 
 /**
@@ -411,8 +410,9 @@ export function HomePage({ locale }: { locale: Locale }) {
         <p className="mt-5 text-center text-body text-ink/60">{s.sectors.note}</p>
       </section>
 
-      <PricingOverview locale={locale} />
-      <WorkflowComparison locale={locale} />
+      {/* 8b · Plans: a compact strip with one «احجز عرضاً». The full matrix
+          and its footnotes live on /pricing. */}
+      <HomePlansStrip locale={locale} />
 
       {/* 8 · Data & governance (7 · screenshot pending demo-tenant assets) */}
       <section className="bg-navy py-16 text-white">

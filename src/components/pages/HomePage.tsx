@@ -16,6 +16,7 @@ import { BlogTeaser } from "@/components/BlogTeaser";
 import { OmniChannels } from "@/components/OmniChannels";
 import { HomePlansStrip } from "@/components/HomePlansStrip";
 import { homeFaq } from "@/content/faq";
+import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
 
 /**
  * Homepage per blueprint §6.1. Wave 2 gave every capability card and every
@@ -104,9 +105,10 @@ const t = {
       note: "اضغط على قطاعك وشوف وش يتكفل فيه الوكيل ووش يروح لموظفك.",
     },
     governance: {
-      heading: "بياناتك تحكمها قواعد وصلاحيات، مو بس محفوظة",
+      // Led by the canonical §2.5 line, word for word. The PDPL short label
+      // is no longer repeated as a bullet: the lead already says it.
+      lead: PDPL_LINE_AR,
       bullets: [
-        "مصمّم بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL)",
         "التخزين في منطقة الخليج (الدوحة)",
         "سجل تدقيق ما ينعدل ولا ينحذف",
         "صلاحيات وأدوار لكل موظف",
@@ -187,9 +189,8 @@ const t = {
       note: "Open your sector to see exactly what the agent handles and what reaches your staff.",
     },
     governance: {
-      heading: "Your data is governed, not just stored",
+      lead: PDPL_LINE_EN,
       bullets: [
-        "Designed to comply with the Saudi Personal Data Protection Law (PDPL)",
         "Storage in the Gulf region (Doha)",
         "An audit log that can't be edited or deleted",
         "Roles and permissions for every employee",
@@ -435,22 +436,34 @@ export function HomePage({ locale }: { locale: Locale }) {
         <p className="mt-5 text-center text-body text-ink/60">{s.sectors.note}</p>
       </section>
 
-      {/* 8b · Plans: a compact strip with one «احجز عرضاً». The full matrix
-          and its footnotes live on /pricing. */}
-      <HomePlansStrip locale={locale} />
+      {/* 7 · From the blog, with its newsletter signup. Kept before the
+          closing sequence on purpose (blueprint §2.4): from the governance
+          band down to the booking desk the only action offered is
+          «احجز عرضاً», so a «اشترك» button no longer sits right above the
+          calendar. The dated posts still tell a visitor the site is
+          actively maintained. */}
+      <section className="bg-surface py-16">
+        <div className="container">
+          <Reveal>
+            <BlogTeaser locale={locale} />
+          </Reveal>
+        </div>
+      </section>
 
-      {/* 8 · Data & governance (7 · screenshot pending demo-tenant assets) */}
+      {/* 8 · Data & governance (the screenshot section waits for demo-tenant
+          assets). Before the plans, so the reassurance comes before the
+          money ask. */}
       <section className="bg-navy py-16 text-white">
         <div className="container">
           <Reveal>
-            <h2 className="text-center text-h2">{s.governance.heading}</h2>
+            <h2 className="mx-auto max-w-3xl text-center text-h4 sm:text-h3">{s.governance.lead}</h2>
           </Reveal>
-          <ul className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
+          <ul className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
             {s.governance.bullets.map((b, i) => (
               <li key={b} className="flex items-start gap-3 rounded-xl bg-white/5 p-4 text-body-lg text-white/85">
                 <span className="mt-0.5 shrink-0 text-brand-cyan">
                   <AnimatedIcon
-                    name={(["shield", "database", "lock", "badge"] as IconName[])[i]}
+                    name={(["database", "lock", "badge"] as IconName[])[i]}
                     size={20}
                     delay={i * 0.12}
                   />
@@ -470,6 +483,10 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
+      {/* 8b · Plans: a compact strip with one «احجز عرضاً». The full matrix
+          and its footnotes live on /pricing. */}
+      <HomePlansStrip locale={locale} />
+
       {/* 9 · FAQ */}
       <section className="container py-16">
         <Reveal>
@@ -488,19 +505,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* 10 · From the blog. Between the FAQ and the booking desk on purpose:
-          a visitor who read the FAQ and is not ready to book gets somewhere to
-          go that is not the exit, and the dated posts are the page's only
-          evidence that the site is actively maintained. */}
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal>
-            <BlogTeaser locale={locale} />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 11 · Close on the booking desk itself, not a button that opens one.
+      {/* 10 · Close on the booking desk itself, not a button that opens one.
           This is the same component /demo uses. The calendar is the last
           thing on the page rather than one more click away, and because
           CalInline only mounts the iframe when the section nears the

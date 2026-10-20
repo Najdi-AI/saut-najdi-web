@@ -757,16 +757,6 @@ a.mega-item:hover .mega-ico {
     display: none;
   }
 }
-@media (max-width: 1100px) {
-  .mega-cols {
-    grid-template-columns: 1fr 1fr;
-  }
-  .mega-feat {
-    grid-column: 1 / -1;
-    border-inline-start: 0;
-    border-block-start: 1px solid rgb(var(--line-rgb) / 0.1);
-  }
-}
 
 /* ---------- mobile nav ---------- */
 /* Theme switch — sized to match .burger so the actions row keeps its rhythm

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
@@ -18,6 +19,15 @@ const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", 
  * never "everything inside Saudi Arabia" (§2.2). Every section heading is a
  * question with its answer directly underneath, kept short — the disclosure
  * stays complete, the prose around it does not.
+ *
+ * The hero carries the Gulf vault (anatomy figure 1, NAJ-897) on the navy
+ * band itself (ground="navy"): storage in Doha, one key per role, and an
+ * audit-log printer whose ratchet only rolls forward. Beside the heading
+ * from lg up; under the intro on smaller screens.
+ *
+ * The route files pass it in as `figure` instead of this module importing
+ * it: lib/pageFactory.ts imports this module for `securityFaq`, so anything
+ * imported here (the vault's client code and CSS) would load on every page.
  */
 
 const t = {
@@ -155,15 +165,28 @@ const t = {
   },
 } as const;
 
-export function SecurityPage({ locale }: { locale: Locale }) {
+export function SecurityPage({ locale, figure }: { locale: Locale; figure?: ReactNode }) {
   const s = t[locale];
   return (
     <>
       <section className="bg-navy py-14 text-white">
-        <div className="container text-center">
-          <h1 className="text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-brand-cyan">{s.lead}</p>
-          <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-white/75">{s.intro}</p>
+        <div
+          className={
+            figure
+              ? "container grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12"
+              : "container"
+          }
+        >
+          <div className={figure ? "text-center lg:text-start" : "text-center"}>
+            <h1 className="text-h1">{s.h1}</h1>
+            <p className={`mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-brand-cyan${figure ? " lg:mx-0" : ""}`}>
+              {s.lead}
+            </p>
+            <p className={`mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-white/75${figure ? " lg:mx-0" : ""}`}>
+              {s.intro}
+            </p>
+          </div>
+          {figure && <div className="mx-auto w-full max-w-[640px]">{figure}</div>}
         </div>
       </section>
 

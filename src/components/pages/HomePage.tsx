@@ -76,7 +76,6 @@ const t = {
       rows: [
         ["العميل يبدأ", "قائمة: اضغط 1، اضغط 2", "يقول اللي يبغاه بلهجته"],
         ["إذا قاطع", "القائمة تكمل", "يسكت ويسمع"],
-        ["سؤال عن نشاطك", "رسالة مسجلة، وإلا موظف يدوّر بالملفات ويسأل زملاءه", "يجاوب من ملفات منشأتك واللي تضيفه له"],
         ["طلب مو في القائمة", "يعلق أو ينتظر موظف", "يتصرف، وإلا يحوّل لموظفك"],
         ["حجز موعد", "يحوّلك لموظف", "يحجز داخل نفس المكالمة"],
         ["يحتاج إنسان", "يبدأ من الصفر", "يستلم ومعه النص والملخص"],
@@ -160,7 +159,6 @@ const t = {
       rows: [
         ["The caller starts", "A menu: press 1, press 2", "They say what they want"],
         ["The caller interrupts", "The menu carries on", "It stops and listens"],
-        ["A question about your business", "A recorded message, or staff digging through files and asking colleagues", "It answers from your documents and the details you give it"],
         ["The request isn't on the menu", "Stuck, or waiting for a person", "It acts, or hands off to your team"],
         ["Booking an appointment", "Transferred to a person", "Booked inside the call"],
         ["A human is needed", "Your employee starts from zero", "They inherit transcript and summary"],
@@ -324,9 +322,12 @@ export function HomePage({ locale }: { locale: Locale }) {
         soup. Below sm the same rows render as stacked blocks instead, because
         a three-column table on a phone pushed the «صوت نجدي» answers
         off-screen. Only one of the two is ever displayed, so assistive tech
-        reads the rows once. It also carries the two rows the removed
-        workflow comparison had that this table lacked: knowledge and
-        follow-up.
+        reads the rows once. It also carries the follow-up row («بعد
+        المكالمة») from the removed workflow comparison. Its knowledge row is
+        deliberately NOT folded in: in a voice-vs-IVR table it reads as a
+        live-call "answers from your documents" claim, which blueprint §2.3 /
+        §10.8 forbid until VOICE_KB_RETRIEVAL is confirmed on in production
+        (see KnowledgeBasePage.tsx). Do not add it back before that gate.
       */}
       <section className="container py-16">
         <Reveal>

@@ -662,8 +662,10 @@ export function carriageSlot(items: Item[] = ITEMS, after: string[] = CARRIAGE_A
 
 const MASK_ID = "od-capsule-mask";
 
-/** The whole drawing as one SVG string for a locale and a pose's lamp. */
-export function svgOf(locale: Locale, label: string, { lamp = -1 }: { lamp?: number } = {}) {
+/** The whole drawing as one SVG string for a locale and a pose's lamp; `uid` keeps its mask and clip ids apart from another copy on the page. */
+export function svgOf(locale: Locale, label: string, { lamp = -1, uid = locale }: { lamp?: number; uid?: string } = {}) {
+  const maskId = `${MASK_ID}-${uid}`;
+  const clipId = `od-stem-clip-${uid}`;
   const slot = carriageSlot();
   const badgeSvg = (item: Item) => {
     const tube = Number(/beam\.badge(\d)/.exec(item.name)?.[1]);
@@ -674,9 +676,9 @@ export function svgOf(locale: Locale, label: string, { lamp = -1 }: { lamp?: num
     const own = item.name.startsWith("beam.badge") ? badgeSvg(item) : item.svg.replace(/\{\{(lamp|jewel)(\d)\}\}/g, (_: string, kind: string, tube: string) => (Number(tube) === lamp ? (kind === "lamp" ? ` data-on=""` : "") : "")).replace(/data-od-jewel="(\d)"/g, (m: string, tube: string) => (Number(tube) === lamp ? `${m} data-on=""` : m));
     return (index === slot ? `<g class="od-carriage" data-od="carriage">${CARRIAGE}</g>` : "") + own;
   }).join("");
-  const mask = `<mask id="${MASK_ID}" maskUnits="userSpaceOnUse" x="0" y="0" width="${WIDTH}" height="${HEIGHT}"><rect width="${WIDTH}" height="${HEIGHT}" fill="#fff"/><path fill="#000" d="${MASK_BLACK.join("")}"/><path fill="#fff" d="${MASK_WHITE.join("")}"/></mask><clipPath id="od-stem-clip"><path d="${STEM_CLIP}"/></clipPath>`;
-  const capsule = `<g mask="url(#${MASK_ID})"><g data-od="capsule">${CAPSULE}<g data-od="seal">${SEAL}</g></g></g>`;
-  const late = `${capsule}<g class="od-glass-front">${GLASS_FRONT.join("")}</g><g data-od="plunger">${PLUNGER}</g>${MOVING.head.svg}<g clip-path="url(#od-stem-clip)"><g data-od="knob">${KNOB}</g></g>`;
+  const mask = `<mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${WIDTH}" height="${HEIGHT}"><rect width="${WIDTH}" height="${HEIGHT}" fill="#fff"/><path fill="#000" d="${MASK_BLACK.join("")}"/><path fill="#fff" d="${MASK_WHITE.join("")}"/></mask><clipPath id="${clipId}"><path d="${STEM_CLIP}"/></clipPath>`;
+  const capsule = `<g mask="url(#${maskId})"><g data-od="capsule">${CAPSULE}<g data-od="seal">${SEAL}</g></g></g>`;
+  const late = `${capsule}<g class="od-glass-front">${GLASS_FRONT.join("")}</g><g data-od="plunger">${PLUNGER}</g>${MOVING.head.svg}<g clip-path="url(#${clipId})"><g data-od="knob">${KNOB}</g></g>`;
   return `<svg class="iso-svg od-svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-label="${label.replace(/"/g, "&quot;")}" focusable="false"><defs>${mask}</defs>${HALO}${sorted}${late}</svg>`;
 }
 

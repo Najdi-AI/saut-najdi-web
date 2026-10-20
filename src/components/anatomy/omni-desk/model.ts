@@ -52,6 +52,7 @@ export const channelOf = tubeOf;
 
 export type Phase = "travel" | "arrive" | "carry" | "stamp" | "back" | "send" | "rest";
 export type Step = "in" | "answered" | "sent";
+export const STEPS: readonly Step[] = ["in", "answered", "sent"];
 
 export interface Job {
   tube: number;
@@ -171,28 +172,32 @@ export function stillAge(job: Job) {
   return s.at.back - 0.001;
 }
 
+/** A step word that agrees with its channel's noun (Arabic), or one word for every channel. */
+export type Agree = string | { m: string; f: string };
+export type Gender = "m" | "f";
+
 export interface Words {
   /** Short channel names in the site's order. */
   names: readonly string[];
-  in: string;
-  answered: string;
-  sent: string;
+  /** The grammatical gender of each short name, for step words that agree with it. */
+  genders: readonly Gender[];
+  /** What follows the name at each step. */
+  steps: Record<Step, readonly Agree[]>;
 }
 
 const SEP = " · ";
 
 export function readoutOf(channel: number, step: Step, words: Words) {
   const name = words.names[channel] ?? "";
-  if (step === "in") return [name, words.in].join(SEP);
-  if (step === "answered") return [name, words.in, words.answered].join(SEP);
-  return [name, words.answered, words.sent].join(SEP);
+  const gender = words.genders[channel] ?? "m";
+  return [name, ...words.steps[step].map((word) => (typeof word === "string" ? word : word[gender]))].join(SEP);
 }
 
 /** The widest readout any channel can show, for sizing checks. */
 export function widestReadout(words: Words) {
   let widest = "";
   for (let channel = 0; channel < COUNT; channel++)
-    for (const step of ["in", "answered", "sent"] as const) {
+    for (const step of STEPS) {
       const text = readoutOf(channel, step, words);
       if (text.length > widest.length) widest = text;
     }

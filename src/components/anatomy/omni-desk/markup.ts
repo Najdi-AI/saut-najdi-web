@@ -38,10 +38,10 @@ export function partsOf(locale: Locale, fig = 5): Parts {
   const readout = readoutOf(STILL_CHANNEL, "answered", copy.words);
   const corner = (name: string, text: string, extra = "") => `<span class="iso-plate-corner" data-corner="${name}"${extra}>${escape(text)}</span>`;
   const corners = corner("fig", `${copy.fig} ${fig}`) + corner("title", copy.title) + corner("hint", copy.hint) + corner("readout", readout, ` data-readout=""`);
-  const svg = svgOf(locale, copy.label, { lamp: tubeOf(STILL_CHANNEL, locale) });
+  const svg = svgOf(locale, copy.label, { lamp: tubeOf(STILL_CHANNEL, locale), uid: `${locale}-${fig}` });
   const picks =
     copy.channels
-      .map((name, channel) => `<button type="button" class="od-pick" data-od-pick="${channel}" aria-pressed="${channel === STILL_CHANNEL ? "true" : "false"}" aria-label="${escape(`${copy.pick} ${name}`)}">${escape(name)}</button>`)
+      .map((name, channel) => `<button type="button" class="od-pick" data-od-pick="${channel}" aria-pressed="${channel === STILL_CHANNEL ? "true" : "false"}">${escape(name)}</button>`)
       .join("");
   const legend =
     `<span class="iso-keys">${copy.keys.map((key) => `<span class="iso-key">${SWATCH[key.mark]}${escape(key.label)}</span>`).join("")}</span>` +

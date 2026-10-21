@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, type Transition } from "framer-motion";
 import { AnimatedIcon, type IconName } from "./icons";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -20,6 +21,10 @@ import type { Locale } from "@/lib/i18n";
  * Putting the line beside the text removes the axis they were fighting over,
  * and it matches the /how-it-works JourneySteps timeline the visitor meets
  * one click later.
+ *
+ * Under reduced motion it hydrates the server's hidden frame, then lands on
+ * the end state at once: every transition is instant and the handoff pulse
+ * is dropped (after hydration, so the trees still match).
  */
 
 const STEP_ICONS: IconName[] = ["phone", "chat", "calendar", "human"];
@@ -32,14 +37,16 @@ export function ProcessSteps({
   steps: readonly { title: string; body: string }[];
   locale: Locale;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionAfterHydration();
+  const at = (transition: Transition): Transition => (reduced ? { duration: 0 } : transition);
 
   return (
     <motion.ol
       /* Mobile: no row gap — each step's own pb-8 makes the spacing, so the
          connector can run unbroken from one node to the next. */
       className="relative mt-12 grid gap-0 md:grid-cols-4 md:gap-6"
-      initial={reduced ? undefined : "hidden"}
+      initial={reduced ? false : "hidden"}
+      animate={reduced ? "show" : undefined}
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
     >
@@ -58,7 +65,7 @@ export function ProcessSteps({
                 hidden: { scaleX: 0 },
                 show: {
                   scaleX: 1,
-                  transition: { duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" },
+                  transition: at({ duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" }),
                 },
               }}
             />
@@ -75,7 +82,7 @@ export function ProcessSteps({
                 show: {
                   scale: 1,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 260, damping: 18, delay: STAGE * i },
+                  transition: at({ type: "spring", stiffness: 260, damping: 18, delay: STAGE * i }),
                 },
               }}
             >
@@ -104,7 +111,7 @@ export function ProcessSteps({
                   hidden: { scaleY: 0 },
                   show: {
                     scaleY: 1,
-                    transition: { duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" },
+                    transition: at({ duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" }),
                   },
                 }}
               />
@@ -118,7 +125,7 @@ export function ProcessSteps({
               show: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.4, delay: STAGE * i + 0.2 },
+                transition: at({ duration: 0.4, delay: STAGE * i + 0.2 }),
               },
             }}
           >

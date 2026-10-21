@@ -270,8 +270,14 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
           tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "visible translate-y-0 opacity-100"
         }`}
       >
-        {!reduced && !open && (
-          <span aria-hidden className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40" />
+        {/* Hidden by CSS under reduced motion, not by a `reduced` branch: the
+            server cannot know the preference, so a branch here rendered a
+            different tree while hydrating (React #418). */}
+        {!open && (
+          <span
+            aria-hidden
+            className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40 motion-reduce:hidden"
+          />
         )}
         <AnimatedIcon name="chat" size={24} />
       </button>

@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { ThemeScript } from "@/components/ThemeScript";
+import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { SITE_URL } from "@/lib/site";
 
 /** English mirror of the Arabic root metadata — see (ar)/layout.tsx for why. */
@@ -43,6 +44,7 @@ export default function EnglishRootLayout({
     <html lang="en" dir="ltr" className={thmanyah.variable} suppressHydrationWarning>
       <head>
         <ThemeScript />
+        <NoScriptReveal />
       </head>
       <body className="font-sans">
         {/* First child of <body>, per Google's install instructions. */}

@@ -24,7 +24,9 @@ import type { Locale } from "@/lib/i18n";
  *
  * Under reduced motion it hydrates the server's hidden frame, then lands on
  * the end state at once: every transition is instant and the handoff pulse
- * is dropped (after hydration, so the trees still match).
+ * is dropped (after hydration, so the trees still match). Every node with a
+ * hidden first frame carries data-reveal, which the no-JavaScript sheet shows
+ * at rest (NoScriptReveal); the pulse ring rests invisible, so it does not.
  */
 
 const STEP_ICONS: IconName[] = ["phone", "chat", "calendar", "human"];
@@ -59,6 +61,7 @@ export function ProcessSteps({
           {i < steps.length - 1 && (
             <motion.span
               aria-hidden
+              data-reveal=""
               className="absolute top-7 hidden h-0.5 w-full origin-left rounded-full bg-brand-gradient rtl:origin-right md:block"
               style={{ insetInlineStart: "50%" }}
               variants={{
@@ -76,6 +79,7 @@ export function ProcessSteps({
               node however tall this step's copy runs. */}
           <div className="flex shrink-0 flex-col items-center md:contents">
             <motion.span
+              data-reveal=""
               className="ring-spectrum relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-brand-purple shadow-card"
               variants={{
                 hidden: { scale: 0.6, opacity: 0 },
@@ -106,6 +110,7 @@ export function ProcessSteps({
             {i < steps.length - 1 && (
               <motion.span
                 aria-hidden
+                data-reveal=""
                 className="mt-2 w-0.5 flex-1 origin-top rounded-full bg-brand-gradient md:hidden"
                 variants={{
                   hidden: { scaleY: 0 },
@@ -119,6 +124,7 @@ export function ProcessSteps({
           </div>
 
           <motion.div
+            data-reveal=""
             className="min-w-0 flex-1 pb-8 md:mt-4 md:max-w-[240px] md:flex-none md:pb-0"
             variants={{
               hidden: { opacity: 0, y: 10 },

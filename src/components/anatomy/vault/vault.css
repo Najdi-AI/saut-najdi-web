@@ -159,7 +159,11 @@
 .vlt-dots circle {
   transition: opacity 240ms var(--anatomy-ease);
 }
-.vlt-dots:not([data-on]) circle {
+/* The off dots sit inside the kit's .iso-dots[data-tone="hi"] group, whose
+   0.85 rule (iso.css) has the same specificity as a bare
+   .vlt-dots:not([data-on]) circle, so production CSS chunk order used to
+   decide. The .vlt scope wins either way. */
+.vlt .vlt-dots:not([data-on]) circle {
   opacity: 0.3;
 }
 .vlt-hit {

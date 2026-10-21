@@ -10,6 +10,7 @@ import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration
  * respects prefers-reduced-motion: it hydrates the server's hidden frame,
  * then lands at its end state at once. It stays one motion.div either way,
  * so the children are never remounted (a lazy figure keeps its drawing).
+ * data-reveal lets the no-JavaScript sheet show it (NoScriptReveal).
  */
 export function Reveal({
   children,
@@ -24,6 +25,7 @@ export function Reveal({
   return (
     <motion.div
       className={className}
+      data-reveal=""
       initial={reduced ? false : { opacity: 0, y: 18 }}
       animate={reduced ? { opacity: 1, y: 0 } : undefined}
       whileInView={{ opacity: 1, y: 0 }}

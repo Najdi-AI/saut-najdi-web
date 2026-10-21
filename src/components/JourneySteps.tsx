@@ -14,7 +14,9 @@ import type { Locale } from "@/lib/i18n";
  *
  * Under reduced motion it hydrates the server's hidden frame, then lands on
  * the end state at once: every transition is instant and the handoff pulse
- * is dropped (after hydration, so the trees still match).
+ * is dropped (after hydration, so the trees still match). Every node with a
+ * hidden first frame carries data-reveal, which the no-JavaScript sheet shows
+ * at rest (NoScriptReveal); the pulse ring rests invisible, so it does not.
  */
 
 const STEP_ICONS: IconName[] = ["phone", "wave", "chat", "mic", "calendar", "human", "chart"];
@@ -46,6 +48,7 @@ export function JourneySteps({
           {/* Node + connector column */}
           <div className="flex flex-col items-center">
             <motion.span
+              data-reveal=""
               className="ring-spectrum relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-brand-purple shadow-card"
               variants={{
                 hidden: { scale: 0.6, opacity: 0 },
@@ -75,6 +78,7 @@ export function JourneySteps({
             {i < steps.length - 1 && (
               <motion.span
                 aria-hidden
+                data-reveal=""
                 className="w-0.5 flex-1 origin-top rounded-full bg-brand-gradient"
                 variants={{
                   hidden: { scaleY: 0 },
@@ -89,6 +93,7 @@ export function JourneySteps({
 
           {/* Step card */}
           <motion.div
+            data-reveal=""
             className={`card min-w-0 flex-1 ${i < steps.length - 1 ? "mb-6" : ""}`}
             variants={{
               hidden: { opacity: 0, y: 16 },

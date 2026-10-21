@@ -20,6 +20,8 @@ import { MediaGlyph, useVoiceClip, type ClipTimings, type Span } from "./VoiceCl
  *
  * Under reduced motion the bubbles hydrate the server's hidden frame, then
  * land in place at once; following the voice only fades their opacity.
+ * Each bubble carries data-reveal, so without JavaScript the no-JavaScript
+ * sheet shows the whole call at rest (NoScriptReveal).
  */
 
 type Turn =
@@ -209,6 +211,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
             variants,
             initial: reduced ? false : ("hidden" as const),
             animate: stateOf(i),
+            "data-reveal": "",
           };
           const speaking = clip.speaking === i;
           if (turn.who === "handoff") {

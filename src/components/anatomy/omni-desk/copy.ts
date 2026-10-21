@@ -13,7 +13,6 @@ import type { Locale, Words } from "./model";
  * الرد رجع) are plain strings.
  */
 export interface Copy {
-  fig: string;
   title: string;
   hint: string;
   label: string;
@@ -28,7 +27,6 @@ export interface Copy {
 }
 
 const AR: Copy = {
-  fig: "شكل",
   title: "مكتب واحد",
   hint: "اختار قناة",
   label:
@@ -57,7 +55,6 @@ const AR: Copy = {
 };
 
 const EN: Copy = {
-  fig: "Fig",
   title: "One desk",
   hint: "Pick a channel",
   label:

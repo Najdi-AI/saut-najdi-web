@@ -50,7 +50,6 @@ export const ROLES: Role[] = [
 ];
 
 interface Words {
-  fig: (n: number) => string;
   title: string;
   hint: string;
   roles: string[];
@@ -70,7 +69,6 @@ interface Words {
 
 export const WORDS: Record<Locale, Words> = {
   ar: {
-    fig: (n) => `شكل ${n}`,
     title: "خزنة الخليج",
     hint: "لفّ مفتاح · جرّب ترجّع الورق",
     roles: ["النشر", "المسودة", "المشاهدة"],
@@ -98,7 +96,6 @@ export const WORDS: Record<Locale, Words> = {
     },
   },
   en: {
-    fig: (n) => `Fig ${n}`,
     title: "The Gulf vault",
     hint: "Turn a key · try to roll it back",
     roles: ["publish", "draft", "view-only"],

@@ -7,7 +7,6 @@ import { PER_CONVERSATION, PER_MINUTE, READINGS, grouped, readoutOf, type Locale
 const [ESSENTIAL, GROWTH, EXPANSION] = READINGS as [(typeof READINGS)[number], (typeof READINGS)[number], (typeof READINGS)[number]];
 
 export interface MeterCopy {
-  fig: (n: number) => string;
   title: string;
   hint: string;
   readout: string;
@@ -26,7 +25,6 @@ const g = grouped;
 
 export const COPY: Record<Locale, MeterCopy> = {
   ar: {
-    fig: (n) => `شكل ${n}`,
     title: "عدّاد النقاط",
     hint: "لفّ المفتاح · حرّك الذراع",
     readout: readoutOf(GROWTH, "calls", "ar"),
@@ -46,7 +44,6 @@ export const COPY: Record<Locale, MeterCopy> = {
     caption: `كل باقة لها حصة نقاط شهرية وحدة: دقيقة المكالمة تاخذ ${PER_MINUTE} نقاط والمحادثة النصية ${PER_CONVERSATION} نقاط، عشان كذا خط المكالمات أعرض. ${ESSENTIAL.name.ar} من ${g(ESSENTIAL.monthlySar)} ر.س شهرياً بحصة ${g(ESSENTIAL.credits)} نقطة، و${GROWTH.name.ar} من ${g(GROWTH.monthlySar)} ر.س بحصة ${g(GROWTH.credits)}، و${EXPANSION.name.ar} من ${g(EXPANSION.monthlySar)} ر.س بحصة ${g(EXPANSION.credits)}، والأسعار قبل الضريبة. كل رقم يفترض إنك تصرف الحصة كلها على نوع واحد، ولو خلطت بينهم ينحسب حسب النقاط اللي صرفتها فعلاً.`,
   },
   en: {
-    fig: (n) => `Fig ${n}`,
     title: "The credit meter",
     hint: "Turn the knob · flip the lever",
     readout: readoutOf(GROWTH, "calls", "en"),

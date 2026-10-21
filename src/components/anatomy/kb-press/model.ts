@@ -59,7 +59,6 @@ export const MOTION = {
 };
 
 interface Words {
-  fig: string;
   title: string;
   hint: string;
   ready: string;
@@ -80,7 +79,6 @@ interface Words {
 }
 
 const AR: Words = {
-  fig: "شكل",
   title: "مكبس المعرفة",
   hint: "اختر سؤالاً من تحت",
   ready: "جاهز للسؤال",
@@ -107,7 +105,6 @@ const AR: Words = {
 };
 
 const EN: Words = {
-  fig: "Fig",
   title: "The knowledge press",
   hint: "Pick a question below",
   ready: "Ready for a question",

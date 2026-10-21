@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <PageJsonLd locale="en" kind="product/knowledge-base" />
-      <KnowledgeBasePage locale="en" figure={<KbPressFigure locale="en" fig={1} />} />
+      <KnowledgeBasePage locale="en" figure={<KbPressFigure locale="en" />} />
     </>
   );
 }

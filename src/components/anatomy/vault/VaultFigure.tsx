@@ -20,9 +20,8 @@ import { VaultLive } from "./VaultLive";
  * loads after it (VaultLive).
  *
  * ground="page" follows the site theme; ground="navy" is always dark, on the
- * navy band of the homepage PDPL section and the /security hero. `fig` is
- * kept for the mount points' API; the frameless figure prints no number.
+ * navy band of the homepage PDPL section and the /security hero.
  */
-export function VaultFigure({ locale, ground = "page" }: { locale: Locale; fig?: number; ground?: "page" | "navy" }) {
+export function VaultFigure({ locale, ground = "page" }: { locale: Locale; ground?: "page" | "navy" }) {
   return <VaultLive locale={locale} ground={ground} data={LIVE} text={textFor(locale)} words={shellWords(locale)} src={FIGURE_ART.vault[locale]} width={WIDTH} height={HEIGHT} />;
 }

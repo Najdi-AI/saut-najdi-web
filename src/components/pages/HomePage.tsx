@@ -44,7 +44,7 @@ import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
  * omnichannel desk (OmniChannels), 3 the knowledge press beside the
  * knowledge-base capability, 4 the Gulf vault in the PDPL band, 5 the credit
  * meter in the plans strip (HomePlansStrip). All five are frameless (no card,
- * no «شكل n» label), so the `fig` props are kept only for the components' API.
+ * no «شكل n» label).
  * Only the hero ships its drawing inline; the other four fetch a static,
  * cached SVG when they come near the viewport (anatomy/lazy/useLazyArt.ts).
  */
@@ -443,7 +443,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       {/* 4c · Omnichannel — every channel, one inbox, one agent. Shared with the product pages. */}
-      <OmniChannels locale={locale} figure={<OmniDeskFigure locale={locale} fig={2} />} />
+      <OmniChannels locale={locale} figure={<OmniDeskFigure locale={locale} />} />
 
       {/* 5 · Capabilities — five cards, each now a real page (Wave 2) */}
       <section className="bg-surface py-16">
@@ -487,7 +487,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               </Link>
             </Reveal>
             <div className="mx-auto w-full max-w-[720px]">
-              <KbPressFigure locale={locale} fig={3} />
+              <KbPressFigure locale={locale} />
             </div>
           </div>
         </div>
@@ -571,7 +571,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             </div>
           </div>
           <div className="mx-auto w-full max-w-[640px]">
-            <VaultFigure locale={locale} fig={4} ground="navy" />
+            <VaultFigure locale={locale} ground="navy" />
           </div>
         </div>
       </section>

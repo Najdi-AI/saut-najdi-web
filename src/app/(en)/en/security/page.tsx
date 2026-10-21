@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <PageJsonLd locale="en" kind="security" />
-      <SecurityPage locale="en" figure={<VaultFigure locale="en" fig={1} ground="navy" />} />
+      <SecurityPage locale="en" figure={<VaultFigure locale="en" ground="navy" />} />
     </>
   );
 }

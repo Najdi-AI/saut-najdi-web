@@ -176,7 +176,7 @@ export function HomePlansStrip({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mx-auto mt-10 w-full max-w-[640px]">
-          <CreditMeterFigure locale={locale} fig={5} />
+          <CreditMeterFigure locale={locale} />
         </div>
       </div>
     </section>

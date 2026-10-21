@@ -10,8 +10,7 @@
  * selector and the valve) and the off-screen readout. The drawing is
  * public/figures/credit-meter.<hash>.svg (scripts/anatomy/export.mjs),
  * fetched near the viewport; controller.ts loads after it. Follows the site
- * theme through CSS (credit-meter.css). `fig` is kept for the mount point's
- * API; nothing prints it.
+ * theme through CSS (credit-meter.css).
  */
 import "@/components/iso/iso.css";
 import "../lazy/frameless.css";
@@ -20,7 +19,7 @@ import { CreditMeterArt } from "./art";
 import { COPY } from "./copy";
 import type { Locale } from "./model";
 
-export function CreditMeterFigure({ locale }: { locale: Locale; fig?: number }) {
+export function CreditMeterFigure({ locale }: { locale: Locale }) {
   const copy = COPY[locale];
   return (
     <div className="iso cm anx" data-theme="light" dir={locale === "ar" ? "rtl" : "ltr"} lang={locale}>

@@ -26,7 +26,7 @@ const check = (ok, label) => {
 
 for (const locale of ["ar", "en"]) {
   for (const ground of ["page", "navy"]) {
-    const html = renderToString(React.createElement(VaultFigure, { locale, fig: 7, ground }));
+    const html = renderToString(React.createElement(VaultFigure, { locale, ground }));
     const tag = html.slice(0, 200);
     check(tag.includes('class="iso vlt anx"'), `${locale}/${ground} wrapper has class "iso vlt anx" (frameless)`);
     check(tag.includes(`dir="${locale === "ar" ? "rtl" : "ltr"}"`) && tag.includes(`lang="${locale}"`), `${locale}/${ground} lang and dir`);

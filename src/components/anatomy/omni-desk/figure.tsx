@@ -21,10 +21,9 @@ import "./omni-desk.css";
  *
  *   <OmniDeskFigure locale={locale} />
  *
- * It follows the site theme by itself (it reads <html data-theme>). `fig` is
- * kept for the mount points' API; nothing prints it.
+ * It follows the site theme by itself (it reads <html data-theme>).
  */
-export function OmniDeskFigure({ locale, className }: { locale: Locale; fig?: number; className?: string }) {
+export function OmniDeskFigure({ locale, className }: { locale: Locale; className?: string }) {
   const parts = partsOf(locale);
   return (
     <div className={className ? `iso od anx ${className}` : "iso od anx"} dir={parts.dir} lang={locale} data-theme="light" data-od-sync="">

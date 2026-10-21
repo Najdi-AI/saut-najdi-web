@@ -63,7 +63,7 @@ const check = (label, ok) => {
 };
 
 for (const locale of ["ar", "en"]) {
-  const html = renderToString(React.createElement(KbPressFigure, { locale, fig: 3 }));
+  const html = renderToString(React.createElement(KbPressFigure, { locale }));
   const W = M.WORDS[locale];
   const attr = (text) => text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
   console.log(`\n${locale}: ${(Buffer.byteLength(html) / 1024).toFixed(1)} KB HTML (${(gzipSync(html).length / 1024).toFixed(1)} KB gzip)`);

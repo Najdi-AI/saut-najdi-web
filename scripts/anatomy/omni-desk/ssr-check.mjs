@@ -63,7 +63,7 @@ const check = (ok, line) => {
 };
 
 for (const locale of ["ar", "en"]) {
-  const html = renderToString(React.createElement(OmniDeskFigure, { locale, fig: 5 }));
+  const html = renderToString(React.createElement(OmniDeskFigure, { locale }));
   const art = readFileSync(join(ROOT, "public", FIGURE_ART["omni-desk"][locale]), "utf8").split("\r\n").join("\n");
   check(art === `${markup.artOf(locale, "ANXUID")}\n`, `${locale}: the lazy art ${FIGURE_ART["omni-desk"][locale]} is the drawing the standalone page verifies (${(art.length / 1024).toFixed(1)} KB)`);
   check(!html.includes("<path") && !html.includes("data-od="), `${locale}: lazy: no drawing in the server HTML`);

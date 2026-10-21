@@ -21,9 +21,9 @@ import { QUESTIONS, WORDS, type Locale } from "./model";
  *   <KbPressFigure locale={locale} />
  *
  * It reads the site theme from <html data-theme> and sets its own dir and
- * lang. `fig` is kept for the mount points' API; nothing prints it.
+ * lang.
  */
-export function KbPressFigure({ locale }: { locale: Locale; fig?: number | string }) {
+export function KbPressFigure({ locale }: { locale: Locale }) {
   const W = WORDS[locale];
   return (
     <div className="iso kbp-theme">

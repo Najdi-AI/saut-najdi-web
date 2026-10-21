@@ -27,6 +27,9 @@ export const viewport: Viewport = {
   ],
 };
 
+/** Vercel-only insights — see (ar)/layout.tsx for why. */
+const ON_VERCEL = process.env.VERCEL === "1";
+
 /**
  * English root layout — English is a separate piece of writing under /en,
  * never a machine translation (blueprint §2.1).
@@ -49,17 +52,9 @@ export default function EnglishRootLayout({
         <main id="main">{children}</main>
         <Footer locale="en" />
         <ChatLauncher locale="en" />
-        {/* Web Analytics was already provisioned and recording; Speed Insights
-
-            was provisioned too but sat at hasData:false because nothing ever
-
-            reported to it. This is the half that was missing — it is what turns
-
-            real visitors into actual Core Web Vitals instead of lab guesses. */}
-
-        <Analytics />
-
-        <SpeedInsights />
+        {/* Vercel-only, as in (ar)/layout.tsx: see ON_VERCEL. */}
+        {ON_VERCEL && <Analytics />}
+        {ON_VERCEL && <SpeedInsights />}
       </body>
     </html>
   );

@@ -27,9 +27,18 @@ import type { LegalDoc } from "@/content/legal";
  * Swap (plan v2 §6, activation step 3, after counsel's edits): replace each
  * `current` literal with its `replacement` in src/content/legal.ts, asserting
  * exactly one hit each; add the notice to the privacy policy; then drop the
- * draft markers. The "(Doha)" platform clause is kept as it reads today: if the
- * Dammam platform cutover lands first, its own copy change updates that clause,
- * and the sentence added here for the improvement store stays.
+ * draft markers. The "(Doha)" platform clause is kept as it reads today, but
+ * activation step 4 needs the Dammam platform cutover accepted first, so that
+ * clause will be stale at swap time: the cutover's own copy change must land
+ * before this swap or together with it, and the sentence added here for the
+ * improvement store stays.
+ *
+ * Other lines in src/content/legal.ts (origin/main cc254c9) that counsel should
+ * revisit at activation, since they describe the call service only: privacy
+ * §1 purpose (AR l.41 / EN l.164, processing to operate the service), privacy
+ * §4 retention (AR l.65-66 / EN l.188-189), privacy §5 rights (AR l.73 /
+ * EN l.196, requests go to the business as controller) and the DPA Roles line
+ * (AR l.134 / EN l.257, Saut Najdi only a processor).
  *
  * Drafting rules: the basis is the notice at the start of each call, never the
  * caller's agreement; the clinic's part is its opt-in under its contract
@@ -42,6 +51,20 @@ import type { LegalDoc } from "@/content/legal";
  * transcription, retention, the controller, rights); holding audio with no
  * current use; withdrawal by email only; when each retention period starts;
  * controller registration and a data protection officer.
+ * - Withdrawal is per business: the coded reference is derived from the
+ *   business and the calling number (plan v2 mission 4(c)), and a withdrawal
+ *   blocks capture only for that reference (mission 9(c)-(d)). The copy
+ *   promises no cross-business withdrawal; counsel decides whether a caller
+ *   must be able to withdraw from every business at once, and how.
+ * - Minimal records kept after deletion, with no call content: deleted items
+ *   are tombstoned, keeping the call reference, coded reference, notice
+ *   version and time, opt-in reference and deletion reason and time (missions
+ *   2 and 9(a)); withdrawal and opt-in records are append-only. No end date is
+ *   set for them, and counsel decides how long they may be kept and whether a
+ *   destruction request may leave them.
+ * - Correction: section 8 lists a right to correction, but the plan has no
+ *   way to correct a stored transcript; counsel decides whether to keep it
+ *   (with a mechanism) or to answer correction requests by deletion.
  */
 
 export const IMPROVEMENT_DRAFT_MARKER: Record<Locale, string> = {
@@ -79,7 +102,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
           {
             kind: "unordered",
             items: [
-              "أن تكون المكالمة واردةً إلى منشأة اشتركت في هذا الاستخدام بموجب عقدها مع صوت نجدي، وأن يكون اشتراكها سارياً وقت المكالمة.",
+              "أن تكون المكالمة واردةً إلى منشأة اشتركت في هذا الاستخدام بموجب عقدها مع صوت نجدي، وأن يكون هذا الاشتراك سارياً وقت المكالمة.",
               "أن يكون الإشعار قد قُدِّم كاملاً؛ فإذا انتهت المكالمة قبل اكتماله، لم يُحتفظ بشيء منها لهذا الغرض.",
             ],
           },
@@ -102,7 +125,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
           },
           {
             kind: "paragraph",
-            text: "ولا يشمل هذا الاستخدام مكالمات أي منشأة إلا باشتراكها فيه بموجب العقد، ولها أن تُنهي اشتراكها في أي وقت (انظر البند 8).",
+            text: "ولا يشمل هذا الاستخدام مكالمات أي منشأة إلا باشتراكها فيه بموجب العقد، ولها أن تُنهي هذا الاشتراك في أي وقت (انظر البند 8).",
           },
         ],
       },
@@ -118,7 +141,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
             items: [
               "نصوص المكالمات: النص المكتوب للمكالمة بدءاً من الإشعار.",
               "التسجيلات الصوتية: تسجيل المكالمة بدءاً من الإشعار.",
-              "سجلات مساندة: إصدار الإشعار الذي قُدِّم ووقت تقديمه، ومرجع اشتراك المنشأة، ومعرّف مرمَّز مشتق من رقم المتصل لا يُستخدم إلا للوصول إلى سجلاته عند تقديمه طلباً.",
+              "سجلات مساندة لا تتضمن شيئاً من محتوى المكالمات: إصدار الإشعار الذي قُدِّم ووقت تقديمه، ومرجع اشتراك المنشأة في هذا الاستخدام، ومعرّف مرمَّز مشتق من رقم المتصل والمنشأة التي اتصل بها، لا يُستخدم إلا للوصول إلى سجلاته عند تقديمه طلباً، ولاستبعاد مكالماته اللاحقة بعد طلبه الاستبعاد.",
             ],
           },
           {
@@ -144,7 +167,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
             items: [
               "النصوص: تُزال المعرّفات الشخصية منها وفق قواعد محددة سلفاً، ثم يراجع موظف مخوَّل كل نص قبل أي استخدام له، ويُحذف النص الذي لا يجتاز المراجعة.",
               "قد يظل النص بعد إزالة المعرّفات منه بيانات شخصية، ولذا يبقى هذا الإشعار وما يتضمنه من حقوق سارياً عليه.",
-              "التسجيلات الصوتية: لا تُستخدم في المرحلة الحالية لأي غرض؛ إذ تُحفظ معزولةً، فلا تُزال منها المعرّفات ولا تُراجَع ولا تُشارَك، وتُحذف بانتهاء مدة الاحتفاظ بها، أو قبل ذلك عند طلب المتصل استبعاد مكالماته أو إنهاء المنشأة اشتراكها.",
+              "التسجيلات الصوتية: لا تُستخدم في المرحلة الحالية لأي غرض؛ إذ تُحفظ معزولةً، فلا تُزال منها المعرّفات ولا تُراجَع ولا تُشارَك، وتُحذف بانتهاء مدة الاحتفاظ بها، أو قبل ذلك عند طلب المتصل استبعاد مكالماته أو إنهاء المنشأة اشتراكها في هذا الاستخدام.",
               "لا يُنقل شيء من هذه البيانات إلى مزوّدين خارجيين لتدريب نماذج الذكاء الاصطناعي أو تحسينها.",
             ],
           },
@@ -162,7 +185,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
           },
           {
             kind: "paragraph",
-            text: "ويشمل الحذف جميع نسخ النصوص والتسجيلات المحفوظة في مخزن التحسين، ويُعجَّل به عند طلب المتصل استبعاد مكالماته أو إنهاء المنشأة اشتراكها (البند 8). ولا يغيّر ذلك مدد الاحتفاظ بتسجيلات المكالمات ونصوصها لتشغيل الخدمة، المبيّنة في سياسة الخصوصية.",
+            text: "ويشمل الحذف جميع نسخ النصوص والتسجيلات المحفوظة في مخزن التحسين، ويُعجَّل به عند طلب المتصل استبعاد مكالماته أو إنهاء المنشأة اشتراكها في هذا الاستخدام (البند 8). وتبقى بعد الحذف السجلات المساندة المبيّنة في البند 4، وهي لا تتضمن شيئاً من محتوى المكالمات، لتوثيق الحذف. ولا يغيّر ذلك مدد الاحتفاظ بتسجيلات المكالمات ونصوصها لتشغيل الخدمة، المبيّنة في سياسة الخصوصية.",
           },
         ],
       },
@@ -171,19 +194,19 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
         blocks: [
           {
             kind: "paragraph",
-            text: "يحق لك بصفتك متصلاً أن تطلب الاطلاع على بياناتك المحفوظة في مخزن التحسين، أو الحصول على نسخة منها، أو تصحيحها، أو إتلافها، ولك أن تطلب في أي وقت استبعاد مكالماتك من هذا الاستخدام، دون أن يؤثر ذلك في الخدمة التي تتلقاها.",
+            text: "يحق لك بصفتك متصلاً أن تطلب الاطلاع على بياناتك المحفوظة في مخزن التحسين، أو الحصول على نسخة منها، أو تصحيحها، أو إتلافها، ولك أن تطلب في أي وقت استبعاد مكالماتك إلى منشأة معيّنة من هذا الاستخدام، دون أن يؤثر ذلك في الخدمة التي تتلقاها. ويسري الاستبعاد على المنشأة أو المنشآت التي تحدّدها في طلبك.",
           },
           {
             kind: "paragraph",
-            text: "وعند الاستبعاد تُحذف سجلاتك من مخزن التحسين، ولا يُحتفظ لهذا الغرض بمكالماتك اللاحقة من الرقم ذاته.",
+            text: "وعند الاستبعاد تُحذف من مخزن التحسين نصوص مكالماتك إلى تلك المنشأة وتسجيلاتها الصوتية، ولا يُحتفظ لهذا الغرض بمكالماتك اللاحقة من الرقم ذاته إلى المنشأة ذاتها. ولاستبعاد تلك المكالمات، يُحتفظ بسجلٍّ لطلب الاستبعاد وتاريخه مع المعرّف المرمَّز المبيّن في البند 4، دون شيء من محتوى المكالمات.",
           },
           {
             kind: "paragraph",
-            text: "لتقديم أي طلب، راسلنا على ai@sautnajdi.ai مع ذكر الرقم الذي اتصلت منه وتاريخ المكالمة التقريبي. وقد نتحقق من أن الطلب صادر عنك قبل تنفيذه، ونجيب عن الطلبات خلال 30 يوماً.",
+            text: "لتقديم أي طلب، راسلنا على ai@sautnajdi.ai مع ذكر اسم المنشأة التي اتصلت بها، والرقم الذي اتصلت منه، وتاريخ المكالمة التقريبي. وقد نتحقق من أن الطلب صادر عنك قبل تنفيذه، ونجيب عن الطلبات خلال 30 يوماً.",
           },
           {
             kind: "paragraph",
-            text: "وللمنشأة المشتركة أن تُنهي اشتراكها في هذا الاستخدام في أي وقت بإشعار صوت نجدي وفق عقدها، فتُحذف سجلات مكالماتها من مخزن التحسين، ويُجاب عن طلبها خلال 30 يوماً.",
+            text: "وللمنشأة المشتركة أن تُنهي اشتراكها في هذا الاستخدام في أي وقت بإشعار صوت نجدي وفق عقدها، فتُحذف من مخزن التحسين نصوص مكالماتها وتسجيلاتها الصوتية، ويُحتفظ بسجلٍّ لاشتراكها وإنهائه دون شيء من محتوى المكالمات، ويُجاب عن طلبها خلال 30 يوماً.",
           },
           {
             kind: "paragraph",
@@ -261,7 +284,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
             items: [
               "Call transcripts: the written text of the call, from the notice onwards.",
               "Call audio: the recording of the call, from the notice onwards.",
-              "Supporting records: the version of the notice that was played and when, a reference to the business's opt-in, and a coded reference derived from the calling number, used only to find a caller's records when they make a request.",
+              "Supporting records, with no call content: the version of the notice that was played and when, a reference to the business's opt-in, and a coded reference derived from the calling number and the business called, used only to find a caller's records when they make a request and to exclude their later calls after they ask to withdraw.",
             ],
           },
           {
@@ -305,7 +328,7 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
           },
           {
             kind: "paragraph",
-            text: "Deletion covers every copy of the transcripts and audio held in the improvement store, and happens sooner if the caller withdraws their calls or the business ends its opt-in (section 8). This does not change how long call recordings and transcripts are kept to operate the service, as set out in the privacy policy.",
+            text: "Deletion covers every copy of the transcripts and audio held in the improvement store, and happens sooner if the caller withdraws their calls or the business ends its opt-in (section 8). The supporting records described in section 4, which contain no call content, remain after deletion to record it. This does not change how long call recordings and transcripts are kept to operate the service, as set out in the privacy policy.",
           },
         ],
       },
@@ -314,19 +337,19 @@ export const improvementNoticeDraft: Record<Locale, LegalDoc> = {
         blocks: [
           {
             kind: "paragraph",
-            text: "As a caller, you can ask to access your data in the improvement store, to receive a copy, to have it corrected or to have it destroyed, and you can ask at any time for your calls to be withdrawn from this use, without any effect on the service you receive.",
+            text: "As a caller, you can ask to access your data in the improvement store, to receive a copy, to have it corrected or to have it destroyed, and you can ask at any time for your calls to a particular business to be withdrawn from this use, without any effect on the service you receive. A withdrawal applies to the business or businesses you name in your request.",
           },
           {
             kind: "paragraph",
-            text: "On withdrawal, your records are deleted from the improvement store, and later calls from the same number are not kept for this purpose.",
+            text: "On withdrawal, the transcripts and audio of your calls to that business are deleted from the improvement store, and later calls from the same number to that business are not kept for this purpose. To exclude those calls, a record of the withdrawal and its date is kept with the coded reference described in section 4, with no call content.",
           },
           {
             kind: "paragraph",
-            text: "To make any request, email ai@sautnajdi.ai with the number you called from and the approximate date of the call. We may check that the request comes from you before acting on it, and we answer requests within 30 days.",
+            text: "To make any request, email ai@sautnajdi.ai with the name of the business you called, the number you called from and the approximate date of the call. We may check that the request comes from you before acting on it, and we answer requests within 30 days.",
           },
           {
             kind: "paragraph",
-            text: "A subscribed business can end its opt-in to this use at any time by notifying Saut Najdi under its contract; the records of its calls are then deleted from the improvement store, and its request is answered within 30 days.",
+            text: "A subscribed business can end its opt-in to this use at any time by notifying Saut Najdi under its contract; the transcripts and audio of its calls are then deleted from the improvement store, a record of its opt-in and of its end is kept with no call content, and its request is answered within 30 days.",
           },
           {
             kind: "paragraph",

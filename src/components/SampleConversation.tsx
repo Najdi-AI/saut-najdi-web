@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import type { Locale } from "@/lib/i18n";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 import { MediaGlyph, useVoiceClip, type ClipTimings, type Span } from "./VoiceClip";
 
 /**
@@ -16,6 +17,9 @@ import { MediaGlyph, useVoiceClip, type ClipTimings, type Span } from "./VoiceCl
  * and the bubbles follow it — each one sharpens into focus as its line is
  * spoken, and the escalation card lands on the chime. Without playing, the
  * scroll reveal is unchanged. The audio is Arabic on both locales.
+ *
+ * Under reduced motion the bubbles hydrate the server's hidden frame, then
+ * land in place at once; following the voice only fades their opacity.
  */
 
 type Turn =
@@ -95,7 +99,7 @@ const callSpans = (timings: ClipTimings): Span[] => {
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 export function SampleConversation({ locale }: { locale: Locale }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useReducedMotionAfterHydration();
   const s = script[locale];
   const listRef = useRef<HTMLDivElement>(null);
   const inView = useInView(listRef, { once: true, margin: "-40px" });
@@ -128,11 +132,15 @@ export function SampleConversation({ locale }: { locale: Locale }) {
   // timings could not be read (then the audio plays over the full call).
   const following = clip.status !== "idle" && clip.status !== "error" && clip.sync !== "failed";
 
+  // Reduced: in place and sharp in every state (the hidden frame hydrates
+  // offset, so the transform is settled too, at once); only opacity fades.
+  const still = { y: 0, scale: 1, filter: "blur(0px)" };
+  const fade = { duration: 0, opacity: { duration: 0.2 } };
   const variants: Variants = {
-    hidden: reduced ? { opacity: 1 } : { opacity: 0, y: 14, scale: 0.98, filter: "blur(0px)" },
+    hidden: reduced ? { opacity: 1, ...still, transition: { duration: 0 } } : { opacity: 0, y: 14, scale: 0.98, filter: "blur(0px)" },
     shown: (i: number) =>
       reduced
-        ? { opacity: 1, transition: { duration: 0.2 } }
+        ? { opacity: 1, ...still, transition: fade }
         : {
             opacity: 1,
             y: 0,
@@ -144,7 +152,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
           },
     // Not yet spoken: still there, out of focus, so the call keeps its shape.
     pending: reduced
-      ? { opacity: 0.2, transition: { duration: 0.2 } }
+      ? { opacity: 0.2, ...still, transition: fade }
       : { opacity: 0.16, y: 0, scale: 1, filter: "blur(3px)", transition: { duration: 0.25, ease: "easeOut" } },
   };
 

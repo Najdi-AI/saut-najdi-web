@@ -1,7 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 
 /**
  * The site-wide animated icon system: consistent 24×24 stroke icons whose
@@ -152,27 +152,6 @@ const ICONS: Record<string, string[]> = {
 };
 
 export type IconName = keyof typeof ICONS;
-
-const STILLNESS = "(prefers-reduced-motion: reduce)";
-const watchStillness = (changed: () => void) => {
-  const query = window.matchMedia(STILLNESS);
-  query.addEventListener("change", changed);
-  return () => query.removeEventListener("change", changed);
-};
-const readStillness = () => window.matchMedia(STILLNESS).matches;
-const serverStillness = () => false;
-
-/**
- * prefers-reduced-motion, safe to branch on in a server-rendered component.
- * framer-motion's useReducedMotion() is null on the server but already true
- * on the client's first render, so the two drew different icons and the
- * hydration under reduced motion failed (React #418). This answers false
- * while hydrating, as the server did, then re-renders with the real value;
- * a component mounted after hydration reads it at once.
- */
-function useReducedMotionAfterHydration() {
-  return useSyncExternalStore(watchStillness, readStillness, serverStillness);
-}
 
 export function AnimatedIcon({
   name,

@@ -48,12 +48,11 @@ const t = {
 } as const;
 
 /**
- * Art the launcher must never sit on. The homepage hero floats its chat
- * bubbles and mic over the photo's physical left edge (HeroVisual), which is
- * exactly where a phone's bottom corner lands in the first screen. Any other
- * surface can opt in with a `data-fab-avoid` attribute.
+ * Art the launcher must never sit on: any surface that opts in with a
+ * `data-fab-avoid` attribute. The homepage hero's switchboard does
+ * (HeroVisual), since a phone's bottom corner lands on it in the first screen.
  */
-const AVOID = "[data-fab-avoid], .hero-photo";
+const AVOID = "[data-fab-avoid]";
 const AVOID_PAD = 8;
 
 export function ChatLauncher({ locale }: { locale: Locale }) {

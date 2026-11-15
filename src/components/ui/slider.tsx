@@ -11,6 +11,12 @@ import { cn } from "@/lib/utils";
  * insets from the 16px padding box inside the 2px border: 16 + 2 × 14).
  * Focus lands on the thumb's hidden range input, so the outline keys off
  * :has().
+ *
+ * Pass `dir={locale === "ar" ? "rtl" : "ltr"}`. With it the server HTML is
+ * direction-correct and Base UI's prehydration script ("edge") places the
+ * thumb before React loads. Without it PageDirection only learns the page's
+ * dir after hydration, so the thumb waits for that ("edge-client-only")
+ * rather than flash at the left-to-right position on an Arabic page.
  */
 function Slider({
   className,
@@ -21,7 +27,15 @@ function Slider({
   dir,
   ...props
 }: SliderPrimitive.Root.Props) {
-  const _values = Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max];
+  // One thumb per value: a single number, or no value at all, is one thumb.
+  const _values = Array.isArray(value)
+    ? value
+    : value !== undefined
+      ? [value]
+      : Array.isArray(defaultValue)
+        ? defaultValue
+        : [defaultValue ?? min];
+  const explicitDir = dir === "rtl" || dir === "ltr";
 
   return (
     <PageDirection dir={dir}>
@@ -33,7 +47,7 @@ function Slider({
         min={min}
         max={max}
         dir={dir}
-        thumbAlignment="edge"
+        thumbAlignment={explicitDir ? "edge" : "edge-client-only"}
         {...props}
       >
         <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-horizontal:min-h-11 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:min-w-11 data-vertical:flex-col">

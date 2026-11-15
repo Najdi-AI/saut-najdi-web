@@ -22,7 +22,9 @@ const ToggleGroupContext = React.createContext<
 });
 
 /**
- * Arrow keys move focus in visual order on Arabic pages too (PageDirection).
+ * Pass `dir={locale === "ar" ? "rtl" : "ltr"}` so arrow keys move focus in
+ * visual order from the first keypress, also in an LTR island on an Arabic
+ * page; PageDirection falls back to the page's dir after hydration.
  * The default 6px gap is the mockups' picker gap; items wrap rather than
  * overflow a 390px screen. spacing={0} joins them into one segmented bar.
  */
@@ -48,6 +50,7 @@ function ToggleGroup({
         data-size={size}
         data-spacing={spacing}
         data-orientation={orientation}
+        orientation={orientation}
         dir={dir}
         style={{ "--gap": spacing } as React.CSSProperties}
         className={cn(

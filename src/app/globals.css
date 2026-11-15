@@ -39,8 +39,8 @@
    * #6F3FA4 and #5B6CE5 disappear into a #080D1C ground. Dark mode uses
    * the same hues raised in luminance.
    *
-   * The five-stop `--spectrum` (ring outlines) is a SEPARATE set of
-   * variables, the literal-hex twins in :root.
+   * `--spectrum` and its literal-hex twins in :root are a SEPARATE set,
+   * unread since the icon rings went flat.
    *
    * Opacity modifiers (text-ink/70) compile to color-mix() over these, so
    * the --c-* triplets no longer need the v3 <alpha-value> placeholder.
@@ -421,11 +421,8 @@
   --c-brand-red: 255 107 127;
   --c-brand-blue-text: 139 153 245;
 
-  /* The literal-hex twins of the five hues above. `--spectrum` is composed
-     from THESE, which carries the lifted ramp into the ring outlines
-     (.ring-spectrum): the #6F3FA4 stop measured 2.7:1 against the ground,
-     so a ring visibly faded out through its own middle; every stop now
-     clears 6.5:1. Keep them in step with the --c-brand-* triplets above. */
+  /* The literal-hex twins of the five hues above, which `--spectrum` is
+     composed from; unread since the icon rings went flat. */
   --cyan: #5fd8f2;
   --indigo: #8b99f5;
   --purple: #b98ce0;
@@ -475,13 +472,13 @@
 }
 
 /* Outline chip ring — the site's ONLY icon-container treatment: solid
-   ground, spectrum border, stroke icon. Gradient FILLS on icons are
-   banned (owner rule, 2026-07-30). The ground follows the theme so the
-   chip reads as a hole punched in the surface, not a white sticker. */
+   ground, a flat 1px border (no spectrum since the rebrand), stroke icon.
+   The border is --border (Silver Gray, #3A4566 inside .on-dark); the ground
+   is --surface, which .on-dark/.on-light set and the dark BookingDesk card
+   pins, so the chip still reads as a hole punched in its surface. */
 .ring-spectrum {
-  border: 2px solid transparent;
-  background: linear-gradient(var(--surface), var(--surface)) padding-box,
-    var(--spectrum) border-box;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
 }
 
 /* Now the same solid red button as btn-primary. Still unlayered, as it
@@ -1128,10 +1125,37 @@ a.mega-item:focus-visible {
        Off-White range: 4.5:1 on Charcoal, 3.9:1 to each of those. */
     --input: #737d99;
     --ring: var(--color-cyan);
+    --surface: var(--color-soft-navy); /* .ring-spectrum's ground */
     background-color: var(--background);
     color: var(--foreground);
   }
-  .on-dark :focus-visible {
+  /* A light product fragment inside a dark band (a hero UI card, receipt
+     paper): the same tokens back at their light values from :root above
+     (keep the two in step), and the ink. The fragment paints its own
+     ground. */
+  .on-light {
+    color-scheme: light;
+    --background: var(--color-off-white);
+    --foreground: var(--color-charcoal);
+    --card: #ffffff;
+    --card-foreground: var(--color-charcoal);
+    --popover: #ffffff;
+    --popover-foreground: var(--color-charcoal);
+    --secondary: var(--color-silver-gray);
+    --secondary-foreground: var(--color-charcoal);
+    --muted: var(--color-silver-gray);
+    --muted-foreground: #525a6e;
+    --accent: var(--color-silver-gray);
+    --accent-foreground: var(--color-charcoal);
+    --border: var(--color-silver-gray);
+    --input: #c9ced7;
+    --ring: var(--color-blue);
+    --surface: #ffffff;
+    color: var(--foreground);
+  }
+  /* --ring comes from the nearest band, so nesting either way works. */
+  .on-dark :focus-visible,
+  .on-light :focus-visible {
     outline-color: var(--ring);
   }
 }

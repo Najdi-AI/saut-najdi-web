@@ -7,7 +7,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
-import { ThemeScript } from "@/components/ThemeScript";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { SITE_URL } from "@/lib/site";
 
@@ -33,12 +32,12 @@ export const metadata: Metadata = {
   // noindex. The per-page policy lives in pageMetadata() (src/lib/seo.ts).
 };
 
-/** Next 15 wants theme-color on `viewport`, not `metadata`. */
+/**
+ * Next 15 wants theme-color on `viewport`, not `metadata`. The public site
+ * is light only, so one value: the header bar's Off-White.
+ */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#5B6CE5" },
-    { media: "(prefers-color-scheme: dark)", color: "#080D1C" },
-  ],
+  themeColor: "#F7F8FA",
 };
 
 /**
@@ -61,9 +60,8 @@ export default function ArabicRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`}>
       <head>
-        <ThemeScript />
         <NoScriptReveal />
       </head>
       <body className="font-sans">

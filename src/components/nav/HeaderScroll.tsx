@@ -1,29 +1,39 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 /**
- * Flags the header once the page has moved so it can contract into the
- * floating glass capsule. Renders nothing; JS-off leaves the tall bar.
- * (Ported from the haroon911 reference.)
+ * Hands the header back to its light tone once a dark hero has scrolled out
+ * from under it. Renders nothing.
  *
- * This briefly also measured whether the header sat over a dark section, back
- * when only the hero was dark and the header — a sibling of the content, not
- * a child — could not inherit the theme from it. Now the theme lives on
- * <html>, so the header is inside it like everything else and the navbar's
- * variables invert on their own. Scroll position is all this needs to know.
+ * The on-dark tone itself is pure CSS (globals.css: main's first child,
+ * JSON-LD scripts aside, with data-hero="dark"), so it is right before
+ * hydration and with JS off; this only adds data-past-hero="true" while the
+ * hero's bottom edge is above the bar's. The header lives in the layout and
+ * survives client navigation, so the hero is looked up again on every path
+ * change.
  */
+const HERO = 'main > [data-hero="dark"]:not(:not(script) ~ *)';
+
 export function HeaderScroll() {
+  const pathname = usePathname();
+
   useEffect(() => {
-    const el = document.querySelector(".hdr");
-    if (!el) return;
+    const hdr = document.querySelector<HTMLElement>(".hdr");
+    if (!hdr) return;
+    const hero = document.querySelector<HTMLElement>(HERO);
+    if (!hero) {
+      hdr.removeAttribute("data-past-hero");
+      return;
+    }
 
     let frame = 0;
     const apply = () => {
       frame = 0;
-      const on = window.scrollY > 12;
-      if ((el.getAttribute("data-scrolled") === "true") !== on) {
-        el.setAttribute("data-scrolled", String(on));
+      const past = hero.getBoundingClientRect().bottom <= hdr.getBoundingClientRect().bottom;
+      if ((hdr.getAttribute("data-past-hero") === "true") !== past) {
+        hdr.setAttribute("data-past-hero", String(past));
       }
     };
     const onScroll = () => {
@@ -32,11 +42,13 @@ export function HeaderScroll() {
 
     apply();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

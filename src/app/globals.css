@@ -7,11 +7,10 @@
  * (see ../website-research.md §1). Tailwind v4 reads them from the @theme
  * blocks below; there is no tailwind.config.ts any more.
  *
- * The dark theme is opted into per-subtree, not per-visitor: `dark:` applies
- * to anything inside an element carrying `data-theme="dark"`. That is what
- * lets the homepage hero be dark while the rest of the page stays light
- * during the evaluation — and, once the rollout lands, moving the attribute
- * up to <html> turns the same utilities on site-wide with no rewrite.
+ * The dark variant applies to anything inside an element carrying
+ * `data-theme="dark"`. Only the admin console sets it now (ThemeScript and
+ * its toggle); the public site is light only, and its dark bands are
+ * section-scoped styles on the rebrand tokens, never this attribute.
  */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -38,14 +37,10 @@
    * Brand hues, variable-backed so they LIGHTEN on night. The guideline
    * values are tuned for ink on white; at icon weight — a 1.8px stroke —
    * #6F3FA4 and #5B6CE5 disappear into a #080D1C ground. Dark mode uses
-   * the same hues raised in luminance, which is also exactly the ramp
-   * the headline gradient uses on night, so the two stay in step.
+   * the same hues raised in luminance.
    *
-   * The five-stop `--spectrum` (ring outlines) is a SEPARATE set of
-   * variables and is deliberately left at brand values: it paints solid
-   * fills and large areas, where the original weights still read
-   * correctly on dark. The header CTA paints `--spectrum-btn`, a
-   * deepened day ramp that carries white type at 4.5:1 or better.
+   * `--spectrum` and its literal-hex twins in :root are a SEPARATE set,
+   * unread since the icon rings went flat.
    *
    * Opacity modifiers (text-ink/70) compile to color-mix() over these, so
    * the --c-* triplets no longer need the v3 <alpha-value> placeholder.
@@ -126,33 +121,13 @@
   --text-body-sm: 0.75rem;
   --text-body-sm--line-height: 1.125rem;
 
-  /* The five-stop brand gradient, cyan → red */
-  --background-image-brand-gradient: linear-gradient(
-    90deg,
-    #2ec4e6 0%,
-    #5b6ce5 28%,
-    #6f3fa4 52%,
-    #e20c3a 78%,
-    #ec1b3a 100%
-  );
-  --background-image-brand-gradient-soft: linear-gradient(
-    135deg,
-    rgba(46, 196, 230, 0.08) 0%,
-    rgba(91, 108, 229, 0.06) 40%,
-    rgba(226, 12, 58, 0.05) 100%
-  );
-
   --animate-wave-bar: wave-bar 1.6s ease-in-out infinite;
   --animate-fade-rise: fade-rise 0.5s ease-out both;
 
-  /* Driven by --shadow-rgb so shadows go black on night instead of
-     staying navy, where they read as a smudge. Light values unchanged. */
-  --shadow-card:
-    0 1px 2px rgb(var(--shadow-rgb) / 0.04),
-    0 8px 24px -12px rgb(var(--shadow-rgb) / 0.1);
-  --shadow-card-hover:
-    0 2px 4px rgb(var(--shadow-rgb) / 0.06),
-    0 16px 40px -12px rgb(var(--shadow-rgb) / 0.16);
+  /* Flat since the rebrand: no resting or hover shadows. The names stay
+     so the existing call sites compile; they now draw nothing. */
+  --shadow-card: 0 0 #0000;
+  --shadow-card-hover: 0 0 #0000;
 
   @keyframes wave-bar {
     0%,
@@ -224,55 +199,105 @@
   }
 }
 
+/* The one button shape (Try 1 mockups, `.btn`): square, flat, Najdi Red.
+   White on #EC1B3A is 4.39:1, which passes only as large text, so the label
+   stays 700 at 20px (large bold starts at 18.66px). Don't shrink it. */
 @utility btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-block-size: 52px;
+  padding: 8px 28px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-najdi-red);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition:
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease;
+  &:active {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--color-najdi-red-press);
+    }
+  }
+  @media (max-width: 640px) {
+    min-block-size: 46px;
+    padding-inline: 18px;
+  }
 }
 
+/* Same box as btn-primary, outlined in the ink; hover fills it solid. */
 @utility btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-surface px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-block-size: 52px;
+  padding: 8px 28px;
+  border: 1px solid rgb(var(--c-ink));
+  border-radius: 0;
+  background-color: transparent;
+  color: rgb(var(--c-ink));
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition:
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease;
+  &:active {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--color-silver-gray);
+    }
+  }
+  @media (max-width: 640px) {
+    min-block-size: 46px;
+    padding-inline: 18px;
+  }
 }
 
+/* Square, like the mockups' marketing panels, and no shadow. */
 @utility card {
-  @apply rounded-2xl border border-line bg-surface p-6 shadow-card transition-all duration-300;
+  @apply rounded-none border border-line bg-surface p-6 transition-colors duration-200;
 }
 
+/* A solid fill instead of the old lift and shadow, for the keyboard too:
+   on the card itself or on a link inside it. */
 @utility card-hover {
-  @apply hover:-translate-y-1 hover:shadow-card-hover;
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-silver-gray);
+    }
+  }
+  &:focus-visible,
+  &:has(:focus-visible) {
+    background-color: var(--color-silver-gray);
+  }
 }
 
+/* Solid ink since the rebrand; it was gradient-clipped headline text. */
 @utility text-gradient {
-  /* Gradient-clipped display text (blueprint §3: short headings only).
-     The stops come from --text-gradient-stops, which each theme sets below.
+  color: rgb(var(--c-ink));
+}
 
-     The padding is for Arabic. background-clip:text paints only inside the
-     element's padding box, and an inline box is just the font's ascent plus
-     descent (1.25em in Thmanyah), while its glyphs reach 0.26em above that
-     and 0.36em below it (head yMax 1255 / yMin -610 per 1000). Without room,
-     the dots under a final ي and under ب sit outside the box and are left
-     transparent: «اللي» read «اللى». Vertical padding on an inline box does
-     not move the line, and the matching negative margin keeps it that way
-     if the element is ever made a block. `clone` gives every wrapped line
-     its own padding and its own full sweep of the ramp. */
-  --text-gradient-dir: 90deg;
-  @apply bg-clip-text;
-  background-image: linear-gradient(
-    var(--text-gradient-dir),
-    var(--text-gradient-stops)
-  );
-  padding-block: 0.3em 0.4em;
-  margin-block: -0.3em -0.4em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  /* Solid fallback where background-clip:text is unsupported. */
-  color: rgb(var(--c-brand-purple));
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    color: transparent;
-  }
-  /* RTL: the phrase starts on the right, so the ramp does too and the brand
-     order (cyan to red) reads from the phrase's first word. */
-  [dir="rtl"] & {
-    --text-gradient-dir: 270deg;
-  }
+/* The brand-gradient strokes (step connectors, plan stripe) drawn flat in
+   the ink, and the soft wash dropped. The names stay for the call sites. */
+@utility bg-brand-gradient {
+  background-color: rgb(var(--c-ink));
+}
+@utility bg-brand-gradient-soft {
+  background-image: none;
 }
 
 @utility eyebrow {
@@ -337,41 +362,15 @@
      #E6DFEF at the wash's 0/40/100% stops: 4.72 / 4.65 / 4.60:1. */
   --c-brand-blue-text: 74 87 204;
 
-  /* Headline gradient (.text-gradient), light canvas. The guideline cyan
-     #2EC4E6 is 1.95:1 on #F7F8FA, so the first stop is the same hue deepened
-     to #1290AB. On #F7F8FA every stop now clears the 3:1 large-text floor:
-     3.53, 4.19, 6.76, 4.55, 4.13. */
-  --text-gradient-stops: #1290ab 0%, #5b6ce5 28%, #6f3fa4 52%, #e20c3a 78%,
-    #ec1b3a 100%;
-  /* .btn-spectrum carries white 15px text, so every stop must clear 4.5:1
-     against white: 5.12 (--cyan-ink's #10788F), 5.52 (#4E5CD4),
-     7.18, 4.83 and 4.60 (#E81136, the end red deepened). Points between
-     stops are never lighter than the lighter of their two stops, so the
-     whole ramp passes. */
-  --spectrum-btn: linear-gradient(
-    90deg,
-    #10788f 0%,
-    #4e5cd4 26%,
-    #6f3fa4 50%,
-    #e20c3a 82%,
-    #e81136 100%
-  );
-
   --cyan: #2ec4e6;
   --indigo: #5b6ce5;
   --purple: #6f3fa4;
   --crimson: #e20c3a;
   --red: #ec1b3a;
-  --cyan-rgb: 46 196 230;
-  --purple-rgb: 111 63 164;
-  --crimson-rgb: 226 12 58;
   --ink: #0d1326;
   --ink-2: #4b5468;
   --ink-3: #6c7484;
-  --cyan-ink: #10788f;
   --line-rgb: 13 19 38;
-  --scrim-rgb: 255 255 255;
-  --shadow-rgb: 13 19 38;
   --line: rgb(var(--line-rgb) / 0.09);
   --line-hi: rgb(var(--line-rgb) / 0.18);
   --surface: #ffffff;
@@ -384,19 +383,24 @@
     var(--crimson) 82%,
     var(--red) 100%
   );
-  --e2: 0 4px 10px -2px rgb(var(--shadow-rgb) / 0.06),
-    0 12px 24px -8px rgb(var(--shadow-rgb) / 0.09);
   --shell: 1200px;
   --gutter: clamp(20px, 4vw, 40px);
-  --r-lg: 22px;
+  /* The header's full height, its bottom rule included (.hdr below), for
+     anything that has to sit under or clear the sticky bar. */
+  --header-h: 76px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@media (max-width: 640px) {
+  :root {
+    --header-h: 64px;
+  }
 }
 
 /* ============================================================
    DARK THEME
-   Set on <html> by ThemeScript/ThemeToggle. Everything below is a
-   redefinition of variables that already existed — the navbar block above
-   is driven end to end by them, so no navbar rule is duplicated here.
+   Set on <html> by ThemeScript/ThemeToggle, which only the admin console
+   renders now. Everything below is a redefinition of variables that
+   already existed.
    ============================================================ */
 [data-theme="dark"] {
   /* Semantic roles. `navy` LIFTS instead of inverting: the bands built on
@@ -408,8 +412,7 @@
   --c-line: 35 44 73;
   --c-surface: 15 23 48;
 
-  /* Same hues, raised in luminance so stroke icons read on night. Matches
-     the dark .text-gradient ramp below, so icons and headline agree. */
+  /* Same hues, raised in luminance so stroke icons read on night. */
   --c-brand-cyan: 95 216 242;
   --c-ok: 95 216 242;
   --c-brand-blue: 139 153 245;
@@ -418,60 +421,20 @@
   --c-brand-red: 255 107 127;
   --c-brand-blue-text: 139 153 245;
 
-  /* The literal-hex twins of the five hues above. `--spectrum` is composed
-     from THESE, which is what carries the lifted ramp into the two places
-     that still painted at full brand weight on night: the ring outlines
-     (.ring-spectrum) and the header CTA (.btn-spectrum). The #6F3FA4 stop
-     measured 2.7:1 against the ground, so a ring visibly faded out through
-     its own middle; every stop now clears 6.5:1.
-
-     Same values as the --c-brand-* triplets above and the dark
-     .text-gradient ramp below — those three must stay in step. */
+  /* The literal-hex twins of the five hues above, which `--spectrum` is
+     composed from; unread since the icon rings went flat. */
   --cyan: #5fd8f2;
   --indigo: #8b99f5;
   --purple: #b98ce0;
   --crimson: #ff5c7a;
   --red: #ff6b7f;
-  /* Tint/glow triplets follow the same lift, so the washes built on them
-     (.mega-feat-art, the .btn-spectrum hover bloom) stay in the same key.
-     --purple-rgb also backs `.mega-ico`'s colour, which was #6F3FA4 on a
-     dark ground — 2.7:1, and invisible until you opened the mega menu. */
-  --cyan-rgb: 95 216 242;
-  --purple-rgb: 185 140 224;
-  --crimson-rgb: 255 92 122;
 
   --ink: #eef1f8;
   --ink-2: #aab3c7;
   --ink-3: #838da3;
-  --cyan-ink: #5fd8f2; /* the light-background cyan is unreadable on night */
   --line-rgb: 255 255 255;
-  --scrim-rgb: 15 23 48; /* glass capsule ground */
-  --shadow-rgb: 0 0 0;
   --surface: #0f1730;
   --surface-hi: #16203c;
-  --e2: 0 4px 10px -2px rgb(0 0 0 / 0.5), 0 12px 28px -8px rgb(0 0 0 / 0.6);
-}
-
-/* Shared components. `.card` and the buttons already resolve through the
-   semantic tokens, so only the pieces whose light form used a LITERAL white
-   need restating. */
-[data-theme="dark"] .btn-primary {
-  /* bg-ink would be near-white with near-white text; the primary button on
-     night is a light slab with dark type. */
-  @apply bg-white text-navy hover:bg-white/90;
-}
-[data-theme="dark"] .btn-secondary {
-  @apply border-white/20 bg-white/6 text-white hover:border-brand-cyan hover:text-brand-cyan;
-}
-[data-theme="dark"] .btn-spectrum {
-  /* The lifted spectrum is a LIGHT slab, so the white type it carries in
-     day mode collapses to 1.7-3.0:1 on it. Dark type instead — 6.5:1 at the
-     worst stop, 11.6:1 at the cyan end — which is the same inversion
-     .btn-primary makes directly above. */
-  color: rgb(var(--c-canvas));
-}
-[data-theme="dark"] .mobile-nav {
-  background: var(--surface);
 }
 
 /* Applied by ThemeToggle for one frame around the swap — see the note there.
@@ -481,36 +444,6 @@
 .theme-switching *::before,
 .theme-switching *::after {
   transition: none !important;
-}
-
-/* The soft brand wash is tuned to sit on white — at 5-8% alpha it vanishes
-   against night. Same hues, enough alpha to register. */
-[data-theme="dark"] .bg-brand-gradient-soft {
-  background-image: linear-gradient(
-    135deg,
-    rgba(46, 196, 230, 0.14) 0%,
-    rgba(91, 108, 229, 0.12) 40%,
-    rgba(226, 12, 58, 0.1) 100%
-  );
-}
-
-/* The five-stop brand gradient bottoms out around #6F3FA4, which on night is
-   barely separated from the ground. Lift every stop for dark; the hue order
-   and the cyan-to-red sweep are unchanged, so it still reads as the brand.
-
-   Restated as literals rather than `var(--spectrum)` because the headline's
-   stops sit at 0/28/52/78/100 against --spectrum's 0/26/50/82/100; borrowing
-   the variable here would shift the headline's colour banding between
-   themes. Same five hues as the dark --cyan..--red block above — keep them
-   in step. The direction is .text-gradient's own (it flips under RTL).
-
-   The header CTA on night goes back to the lifted --spectrum: the deepened
-   day ramp in --spectrum-btn is for white type, and on night the button
-   carries dark type (see [data-theme="dark"] .btn-spectrum above). */
-[data-theme="dark"] {
-  --text-gradient-stops: #5fd8f2 0%, #8b99f5 28%, #b98ce0 52%, #ff5c7a 78%,
-    #ff6b7f 100%;
-  --spectrum-btn: var(--spectrum);
 }
 
 /* The hero cut-out is transparent around the subject's head but fully opaque
@@ -533,79 +466,85 @@
 }
 
 /* The wordmark is live <text> with a fixed dark fill, so it cannot follow
-   currentColor — ship both cuts and swap. */
+   currentColor — ship both cuts and swap (the header's on-dark tone). */
 .logo-inverse {
   display: none;
 }
-[data-theme="dark"] .logo-default {
-  display: none;
-}
-[data-theme="dark"] .logo-inverse {
-  display: block;
-}
 
 /* Outline chip ring — the site's ONLY icon-container treatment: solid
-   ground, spectrum border, stroke icon. Gradient FILLS on icons are
-   banned (owner rule, 2026-07-30). The ground follows the theme so the
-   chip reads as a hole punched in the surface, not a white sticker. */
+   ground, a flat 1px border (no spectrum since the rebrand), stroke icon.
+   The border is --border (Silver Gray, #3A4566 inside .on-dark); the ground
+   is --surface, which .on-dark/.on-light set and the dark BookingDesk card
+   pins, so the chip still reads as a hole punched in its surface. */
 .ring-spectrum {
-  border: 2px solid transparent;
-  background: linear-gradient(var(--surface), var(--surface)) padding-box,
-    var(--spectrum) border-box;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
 }
 
-.btn-spectrum {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 999px;
-  padding: 9px 18px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  border: 1px solid transparent;
-  /* The deepened ramp, not --spectrum: white type on the guideline cyan is
-     2.07:1. See --spectrum-btn in :root. */
-  background: var(--spectrum-btn);
-  color: #fff;
-  background-size: 180% 100%;
-  background-position: 0% 0%;
-  background-origin: border-box;
-  background-clip: border-box;
-  background-repeat: no-repeat;
-  transition: background-position 0.4s var(--ease), transform 0.22s var(--ease),
-    box-shadow 0.22s var(--ease);
-}
-.btn-spectrum:hover {
-  background-position: 100% 0%;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px -9px rgb(var(--purple-rgb) / 0.45);
+/* btn-primary's button, in the components layer so the padding, radius and
+   type utilities its call sites pass win (the admin's compact table-row
+   buttons). The min-height goes too (this follows the applied one at every
+   width). Those labels are small, so it rests on the pressed red (white
+   5.79:1, where #EC1B3A gives 4.39) and goes darker on hover/press (7.91). */
+@layer components {
+  .btn-spectrum {
+    @apply btn-primary;
+    min-block-size: 0;
+    background-color: var(--color-najdi-red-press);
+    &:hover,
+    &:active {
+      background-color: #a30f26;
+    }
+  }
 }
 
 /* ---------- header ---------- */
+/* A solid bar, as in the Try 1 and Try 3 mockups: no glass, blur, capsule
+   or progress line. Its colours are variables so the on-dark tone below
+   swaps them in one place. Its full height is --header-h (:root). */
 .hdr {
+  --hdr-bg: var(--color-off-white);
+  --hdr-fg: var(--color-charcoal);
+  --hdr-rule: var(--color-silver-gray);
+  --hdr-control: #c9ced7;
+  --hdr-focus: var(--color-blue);
   position: sticky;
   top: 0;
   z-index: 100;
-  padding-block: 0;
-  transition: padding-block 0.42s var(--ease);
+  background-color: var(--hdr-bg);
+  color: var(--hdr-fg);
+  border-block-end: 1px solid var(--hdr-rule);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
-.hdr::before {
-  content: "";
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
-  block-size: 2px;
-  z-index: 1;
-  background: var(--spectrum);
-  transform: scaleX(var(--read, 0));
-  pointer-events: none;
+/* On-dark tone for a page that opens on a dark hero, marked by
+   data-hero="dark" on main's first child. Every page's main starts with its
+   JSON-LD <script>s, so "first" means no non-script sibling before it. CSS
+   alone picks the tone before paint; HeaderScroll sets data-past-hero once
+   the hero has scrolled out from under the bar, back to the light tone. */
+:root:has(main > [data-hero="dark"]:not(:not(script) ~ *)) .hdr:not([data-past-hero="true"]) {
+  --hdr-bg: var(--color-charcoal);
+  --hdr-fg: var(--color-off-white);
+  --hdr-rule: var(--color-charcoal);
+  --hdr-control: rgb(247 248 250 / 0.35);
+  --hdr-focus: var(--color-cyan);
+  .logo-default {
+    display: none;
+  }
+  .logo-inverse {
+    display: block;
+  }
 }
-[dir="rtl"] .hdr::before {
-  transform-origin: right center;
+.hdr :focus-visible {
+  outline-color: var(--hdr-focus);
 }
-[dir="ltr"] .hdr::before {
-  transform-origin: left center;
+/* The mega panel and the mobile sheet are light in either tone. */
+.mega-panel,
+.mobile-nav {
+  --hdr-fg: var(--color-charcoal);
+  --hdr-control: #c9ced7;
+  --hdr-focus: var(--color-blue);
 }
 .hdr-in {
   position: relative;
@@ -614,82 +553,13 @@
   flex-wrap: nowrap;
   white-space: nowrap;
   gap: 18px;
-  block-size: 76px;
+  block-size: calc(var(--header-h) - 1px);
   max-inline-size: var(--shell);
   margin-inline: auto;
   padding-inline: var(--gutter);
-  border-radius: 0;
-  border: 1px solid transparent;
-  box-shadow: none;
-  transition: block-size 0.42s var(--ease), max-inline-size 0.42s var(--ease),
-    padding-inline 0.42s var(--ease), border-radius 0.42s var(--ease),
-    background-color 0.42s var(--ease), box-shadow 0.42s var(--ease),
-    border-color 0.42s var(--ease), backdrop-filter 0.42s var(--ease);
-}
-.hdr[data-scrolled="true"] {
-  padding-block: 10px;
-}
-/* 60px tall and 1100px wide (were 58 and 1040) so the 120px-minimum logo and
-   the full English row both fit inside the capsule. */
-.hdr[data-scrolled="true"] .hdr-in {
-  block-size: 60px;
-  max-inline-size: min(1100px, 100%);
-  padding-inline: clamp(14px, 1.6vw, 22px);
-  border-radius: 999px;
-  border-color: rgb(var(--line-rgb) / 0.07);
-  box-shadow: 0 6px 24px -10px rgb(var(--shadow-rgb) / 0.16),
-    0 1px 2px rgb(var(--shadow-rgb) / 0.05),
-    inset 0 1px 0 rgb(255 255 255 / 0.5);
-}
-.hdr-in::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: transparent;
-  /* No transition on this background, deliberately. It is written as
-     rgb(var(--scrim-rgb) / .72), and Chrome does not reliably restart a
-     running background-color transition when the custom property under it is
-     swapped — flipping the theme mid-capsule left the scrim latched at a
-     stale colour and alpha, grey over a white page. The capsule still
-     animates its size, radius and shadow, which is what reads as motion; the
-     scrim snapping in is imperceptible next to that. */
-}
-.hdr[data-scrolled="true"] .hdr-in::before {
-  --glass-blur: blur(18px) saturate(180%);
-  background: rgb(var(--scrim-rgb) / 0.72);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .hdr[data-scrolled="true"] .hdr-in::before {
-    background: var(--surface);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hdr,
-  .hdr-in {
-    transition: none;
-  }
-}
-@media (max-width: 640px) {
-  .hdr[data-scrolled="true"] {
-    padding-block: 0;
-  }
-  .hdr-in,
-  .hdr[data-scrolled="true"] .hdr-in {
-    block-size: 64px;
-    max-inline-size: 100%;
-    border-radius: 0;
-    border-inline-color: transparent;
-    border-block-start-color: transparent;
-    box-shadow: 0 1px 0 rgb(var(--line-rgb) / 0.08);
-  }
 }
 @media (max-width: 639.98px) {
-  .hdr-in,
-  .hdr[data-scrolled="true"] .hdr-in {
+  .hdr-in {
     gap: 12px;
   }
 }
@@ -742,15 +612,17 @@
   min-block-size: 44px;
   min-inline-size: 44px;
   padding: 8px 11px;
-  border-radius: 999px;
-  font-size: 0.92rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
   white-space: nowrap;
-  color: var(--ink-2);
-  transition: color 0.22s var(--ease), background 0.22s var(--ease);
+  color: var(--hdr-fg);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
 }
-.hdr-link:hover {
-  color: var(--ink);
-  background: rgb(var(--line-rgb) / 0.06);
+@media (hover: hover) and (pointer: fine) {
+  .hdr-link:hover {
+    text-decoration-line: underline;
+  }
 }
 .hdr-actions {
   display: flex;
@@ -769,43 +641,22 @@
     margin-inline-start: 0;
   }
 }
-/* The booking pill shows at every width; below 640px it goes compact. */
-.hdr-cta {
-  min-block-size: 44px;
-}
-@media (max-width: 639.98px) {
-  .hdr-cta {
-    padding-inline: 14px;
-    font-size: 0.9rem;
-  }
-  .hdr-actions > .theme-toggle,
-  .hdr-login {
-    display: none;
-  }
-}
 .hdr-lang {
   display: flex;
 }
-/* Under 360px there is no room for the language switch beside the pill; it
-   is also in the sheet's footer row. */
-@media (max-width: 359.98px) {
+/* Below 640px the bar keeps the logo, the booking button and the burger, as
+   the mockups' phone bar does; login and language move into the sheet. */
+@media (max-width: 639.98px) {
+  .hdr-login,
   .hdr-lang {
     display: none;
   }
 }
-
-/* ---------- glass ---------- */
-.glass {
-  --glass-blur: blur(26px) saturate(170%);
-  background: rgb(var(--scrim-rgb) / 0.84);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid rgb(var(--line-rgb) / 0.12);
-  box-shadow: var(--e2), inset 0 1px 0 rgb(255 255 255 / 0.55);
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass {
-    background: var(--surface);
+/* The booking button shows at every width. Under 360px it gives up padding,
+   never type size: its label has to stay large text on the red. */
+@media (max-width: 359.98px) {
+  .hdr-cta {
+    padding-inline: 12px;
   }
 }
 
@@ -825,18 +676,22 @@
   transition: transform 0.24s var(--ease);
 }
 .mega-btn[aria-expanded="true"] {
-  color: var(--ink);
-  background: rgb(var(--purple-rgb) / 0.1);
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
 }
 .mega-btn[aria-expanded="true"] svg {
   transform: rotate(180deg);
 }
+/* Hangs flush under the bar's bottom rule: a solid panel with a hairline,
+   no radius, blur or shadow. */
 .mega-panel {
   position: absolute;
-  inset-block-start: calc(100% + 14px);
+  inset-block-start: calc(100% + 1px);
   inset-inline-start: 0;
   inline-size: min(920px, 100%);
-  border-radius: var(--r-lg);
+  border: 1px solid var(--color-silver-gray);
+  background: var(--popover);
+  color: var(--color-charcoal);
   overflow: hidden;
   z-index: 60;
   white-space: normal;
@@ -892,9 +747,6 @@
   text-transform: none;
   font-size: 0.78rem;
 }
-.mega-heading--accent {
-  color: var(--cyan-ink);
-}
 .mega-item {
   display: flex;
   gap: 11px;
@@ -917,12 +769,8 @@ a.mega-item:focus-visible {
   block-size: 32px;
   flex: none;
   border-radius: 9px;
-  background: rgb(var(--purple-rgb) / 0.1);
-  color: var(--purple);
-  transition: background 0.18s var(--ease);
-}
-a.mega-item:hover .mega-ico {
-  background: rgb(var(--purple-rgb) / 0.18);
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
 }
 .mega-ico svg {
   inline-size: 18px;
@@ -953,8 +801,8 @@ a.mega-item:hover .mega-ico {
   font-weight: 600;
   padding: 2px 7px;
   border-radius: 999px;
-  background: rgb(var(--cyan-rgb) / 0.14);
-  color: var(--cyan-ink);
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
   flex: none;
 }
 .mega-feat {
@@ -972,12 +820,7 @@ a.mega-item:hover .mega-ico {
   margin-block-end: 14px;
   border-radius: 10px;
   overflow: hidden;
-  background: linear-gradient(
-    140deg,
-    rgb(var(--cyan-rgb) / 0.1),
-    rgb(var(--purple-rgb) / 0.1) 55%,
-    rgb(var(--crimson-rgb) / 0.1)
-  );
+  background: var(--color-silver-gray);
   padding: 10px 12px;
 }
 .mega-feat b {
@@ -998,8 +841,8 @@ a.mega-item:hover .mega-ico {
   display: inline-block;
   margin-block-start: 12px;
   font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--cyan-ink);
+  font-weight: 700;
+  color: var(--color-charcoal);
 }
 .mega-feat:hover .mega-feat-cta {
   text-decoration: underline;
@@ -1031,13 +874,12 @@ a.mega-item:hover .mega-ico {
   font-size: 0.82rem;
   font-weight: 600;
   padding: 7px 15px;
-  border-radius: 999px;
-  background: rgb(var(--purple-rgb) / 0.1);
+  background: var(--color-silver-gray);
   color: var(--ink);
   transition: background 0.18s var(--ease);
 }
 .mega-rail-cta:hover {
-  background: rgb(var(--purple-rgb) / 0.18);
+  background: #d6dae1;
 }
 @media (max-width: 1139.98px) {
   .mega-panel {
@@ -1075,12 +917,10 @@ a.mega-item:hover .mega-ico {
   justify-content: center;
   inline-size: 44px;
   block-size: 44px;
-  border-radius: 999px;
-  border: 1px solid var(--line-hi);
+  border: 1px solid var(--hdr-control);
   background: transparent;
-  /* The bars are currentColor. Without this they inherit the body's ink and
-     stay dark when the header inverts over a dark hero. */
-  color: var(--ink);
+  /* The bars are currentColor, so they follow the bar's tone. */
+  color: var(--hdr-fg);
   cursor: pointer;
 }
 @media (min-width: 1140px) {
@@ -1090,10 +930,11 @@ a.mega-item:hover .mega-ico {
   }
 }
 .mobile-nav {
-  border-block-start: 1px solid var(--line);
-  background: #f7f8fa;
+  border-block: 1px solid var(--color-silver-gray);
+  background: var(--color-off-white);
+  color: var(--color-charcoal);
   padding: 14px var(--gutter) 22px;
-  max-block-size: 78vh;
+  max-block-size: calc(100dvh - var(--header-h));
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -1115,13 +956,12 @@ a.mega-item:hover .mega-ico {
   flex: none;
   min-block-size: 44px;
   padding-inline: 14px;
-  border-radius: 999px;
   color: var(--ink-2);
-  transition: color 0.22s var(--ease), background 0.22s var(--ease);
+  text-underline-offset: 0.3em;
 }
 .mnav-login:hover {
   color: var(--ink);
-  background: rgb(var(--line-rgb) / 0.06);
+  text-decoration-line: underline;
 }
 .mnav-group {
   margin-block-start: 18px;
@@ -1158,12 +998,12 @@ a.mega-item:hover .mega-ico {
   /* .hdr-in sets nowrap for the bar; a long label in a narrow column wraps. */
   white-space: normal;
   overflow-wrap: anywhere;
-  transition: color 0.22s var(--ease);
+  text-underline-offset: 0.3em;
 }
 .mnav-links a:hover {
-  color: var(--purple);
+  text-decoration-line: underline;
 }
-/* Theme and language live here below 640px, where the bar has no room. */
+/* The language switch lives here below 640px, where the bar has no room. */
 .mnav-utils {
   display: flex;
   align-items: center;
@@ -1265,6 +1105,69 @@ a.mega-item:hover .mega-ico {
   --sidebar-accent-foreground: var(--color-charcoal);
   --sidebar-border: var(--color-silver-gray);
   --sidebar-ring: var(--color-blue);
+}
+
+/* Dark bands (hero, #board, the #day night moments, DemoCta/PageHero):
+   one section-scoped class, never data-theme. Charcoal ground, Off-White
+   text, and the tokens above remapped so the ui/ primitives read right
+   inside with no className overrides. On Charcoal: Off-White 17.4:1,
+   --muted-foreground 8.0:1, the cyan ring 8.9:1. In the components layer
+   so a utility (bg-soft-navy, a fragment's own ring) still wins. */
+@layer components {
+  .on-dark {
+    color-scheme: dark;
+    --background: var(--color-charcoal);
+    --foreground: var(--color-off-white);
+    /* Soft Navy: the mockups' chips, rows and panels on dark. */
+    --card: var(--color-soft-navy);
+    --card-foreground: var(--color-off-white);
+    --popover: var(--color-soft-navy);
+    --popover-foreground: var(--color-off-white);
+    /* One step above Soft Navy (try-3's --navy-up): fills and hovers. */
+    --secondary: #1c2c5c;
+    --secondary-foreground: var(--color-off-white);
+    --muted: #1c2c5c;
+    --muted-foreground: #a3abbd;
+    --accent: #1c2c5c;
+    --accent-foreground: var(--color-off-white);
+    --border: #3a4566;
+    /* The off track and outline under a Soft Navy thumb and beside an
+       Off-White range: 4.5:1 on Charcoal, 3.9:1 to each of those. */
+    --input: #737d99;
+    --ring: var(--color-cyan);
+    --surface: var(--color-soft-navy); /* .ring-spectrum's ground */
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  /* A light product fragment inside a dark band (a hero UI card, receipt
+     paper): the same tokens back at their light values from :root above
+     (keep the two in step), and the ink. The fragment paints its own
+     ground. */
+  .on-light {
+    color-scheme: light;
+    --background: var(--color-off-white);
+    --foreground: var(--color-charcoal);
+    --card: #ffffff;
+    --card-foreground: var(--color-charcoal);
+    --popover: #ffffff;
+    --popover-foreground: var(--color-charcoal);
+    --secondary: var(--color-silver-gray);
+    --secondary-foreground: var(--color-charcoal);
+    --muted: var(--color-silver-gray);
+    --muted-foreground: #525a6e;
+    --accent: var(--color-silver-gray);
+    --accent-foreground: var(--color-charcoal);
+    --border: var(--color-silver-gray);
+    --input: #c9ced7;
+    --ring: var(--color-blue);
+    --surface: #ffffff;
+    color: var(--foreground);
+  }
+  /* --ring comes from the nearest band, so nesting either way works. */
+  .on-dark :focus-visible,
+  .on-light :focus-visible {
+    outline-color: var(--ring);
+  }
 }
 
 @theme inline {

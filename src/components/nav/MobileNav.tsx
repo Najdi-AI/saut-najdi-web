@@ -7,7 +7,6 @@ import { APP_URL } from "@/lib/site";
 import { DemoLink } from "@/components/DemoLink";
 import { chrome } from "@/content/chrome";
 import { LangSwitch } from "./LangSwitch";
-import { ThemeToggle } from "./ThemeToggle";
 
 /* Logical inset only — insetInline covers both RTL and LTR, and
    insetBlockStart is the block-axis equivalent of `top`. */
@@ -46,30 +45,13 @@ function groupOf(path: string): GroupKey {
 }
 
 /**
- * ThemeToggle reads the theme once, on mount. There are two of them now — the
- * header's (640px and up) and the sheet's (below 640px) — so whichever copy is
- * off screen re-mounts on every theme change and is current when it next
- * shows. The visible copy never re-mounts, so it keeps keyboard focus.
- */
-export function SyncedThemeToggle({ locale, hiddenWhen }: { locale: Locale; hiddenWhen: string }) {
-  const [epoch, setEpoch] = useState(0);
-  useEffect(() => {
-    const root = document.documentElement;
-    const mq = window.matchMedia(hiddenWhen);
-    const onTheme = () => {
-      if (mq.matches) setEpoch((n) => n + 1);
-    };
-    root.addEventListener("themechange", onTheme);
-    return () => root.removeEventListener("themechange", onTheme);
-  }, [hiddenWhen]);
-  return <ThemeToggle key={epoch} locale={locale} />;
-}
-
-/**
- * Mobile sheet (ported): burger chip + full-width sheet under the bar.
+ * Mobile sheet (ported): burger + full-width sheet under the bar.
  * The booking CTA leads the sheet, then three short labelled groups; the
- * theme switch and language sit at the foot (they leave the header below
- * 640px to make room for the CTA pill).
+ * language switch sits at the foot (it leaves the bar below 640px to make
+ * room for the booking button).
+ *
+ * While open, Tab and Shift+Tab cycle through the burger and the sheet only,
+ * and Escape closes it and puts focus back on the burger.
  */
 export function MobileNav({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -82,15 +64,56 @@ export function MobileNav({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      // The sheet goes inert on close, so focus inside it would be dropped
-      // on <body>; hand it back to the burger that opened it.
-      const within = sheet.current?.contains(document.activeElement);
-      setOpen(false);
-      if (within) burger.current?.focus();
+      if (e.key === "Escape") {
+        // The sheet goes inert on close, so focus inside it would be dropped
+        // on <body>; hand it back to the burger that opened it.
+        const within = sheet.current?.contains(document.activeElement);
+        setOpen(false);
+        if (within) burger.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !burger.current || !sheet.current) return;
+      // The burger comes right before the sheet in the DOM, so only the two
+      // ends need wrapping. Links hidden at this width (offsetParent null,
+      // e.g. the language row at 640px and up) are skipped.
+      const ring = [
+        burger.current,
+        ...sheet.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+      ].filter((el) => el.offsetParent !== null);
+      // Nothing on screen to trap into (the burger and sheet are hidden at
+      // 1140px and up): leave Tab alone.
+      if (!ring.length) return;
+      const first = ring[0];
+      const last = ring[ring.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || !ring.includes(active)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // The burger and sheet hide at 1140px, so widening (resize, rotate, zoom
+  // out) past it closes the sheet and hands any focus in it to the logo.
+  useEffect(() => {
+    if (!open) return;
+    const wide = window.matchMedia("(min-width: 1140px)");
+    const onChange = () => {
+      if (!wide.matches) return;
+      if ([burger.current, sheet.current].some((el) => el?.contains(document.activeElement))) document.querySelector<HTMLElement>(".hdr-logo")?.focus();
+      setOpen(false);
+    };
+    onChange();
+    wide.addEventListener("change", onChange);
+    return () => wide.removeEventListener("change", onChange);
   }, [open]);
 
   const groups: Record<GroupKey, { label: string; path: string }[]> = {
@@ -146,7 +169,7 @@ export function MobileNav({ locale }: { locale: Locale }) {
         }}
       >
         <div className="mnav-top">
-          <DemoLink locale={locale} variant="spectrum" className="mnav-cta">
+          <DemoLink locale={locale} className="mnav-cta">
             {t.cta}
           </DemoLink>
           <a href={APP_URL} className="mnav-login">
@@ -173,7 +196,6 @@ export function MobileNav({ locale }: { locale: Locale }) {
         ))}
 
         <div className="mnav-utils">
-          <SyncedThemeToggle locale={locale} hiddenWhen="(min-width: 640px)" />
           <LangSwitch locale={locale} />
         </div>
       </nav>

@@ -6,15 +6,16 @@ import { APP_URL } from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { megaMenus } from "@/content/nav";
 import { HeaderScroll } from "./nav/HeaderScroll";
-import { ScrollProgress } from "./nav/ScrollProgress";
 import { NavMenu } from "./nav/NavMenu";
-import { MobileNav, SyncedThemeToggle } from "./nav/MobileNav";
+import { MobileNav } from "./nav/MobileNav";
 import { LangSwitch } from "./nav/LangSwitch";
 
 /**
- * Header ported from the haroon911 reference: a resting full-width bar
- * that contracts into a floating glass capsule on scroll, with a reading
- * progress bar, two mega menus, and the mobile sheet.
+ * A solid sticky bar (rebrand Try 1 and Try 3 headers) with two mega menus
+ * and the mobile sheet. Light by default; on a page whose main opens (after
+ * its JSON-LD scripts) with data-hero="dark" it takes the on-dark tone until
+ * the hero scrolls away (globals.css, HeaderScroll). Its height is
+ * --header-h.
  */
 /**
  * The top-row destinations. «القطاعات»/"Industries" rather than
@@ -35,10 +36,9 @@ export function Header({ locale }: { locale: Locale }) {
   return (
     <header className="hdr">
       <HeaderScroll />
-      <ScrollProgress />
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:inset-s-4 focus:top-4 focus:z-110 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:inset-s-4 focus:top-4 focus:z-110 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
       >
         {t.skipToContent}
       </a>
@@ -48,11 +48,12 @@ export function Header({ locale }: { locale: Locale }) {
           className="hdr-logo"
           aria-label={locale === "ar" ? "صوت نجدي — الرئيسية" : "Saut Najdi — home"}
         >
-          {/* Two cuts, CSS-swapped on [data-theme="dark"]. The wordmark inside
-              the SVG is live <text> with a baked dark fill, so it cannot
-              follow currentColor and a filter would wreck the gradient mark.
-              Only one is ever displayed; the second carries no alt text so
-              screen readers hear the logo once.
+          {/* Two cuts, CSS-swapped by the bar's on-dark tone. The wordmark
+              inside the SVG is live <text> with a baked dark fill, so it
+              cannot follow currentColor and a filter would wreck the gradient
+              mark. Only one is ever displayed; the second carries no alt text
+              so screen readers hear the logo once, and loads eagerly so the
+              on-dark tone never paints without a logo.
               The artboard is mostly empty canvas above and below the mark, so
               .hdr-logo crops that canvas (object-fit) rather than shrinking
               the mark: 136px boxes show the artwork at ~121px wide, the brand
@@ -71,6 +72,7 @@ export function Header({ locale }: { locale: Locale }) {
             aria-hidden
             width={136}
             height={52}
+            loading="eager"
             className="logo-inverse"
           />
         </Link>
@@ -89,18 +91,17 @@ export function Header({ locale }: { locale: Locale }) {
           </Link>
         </nav>
 
-        {/* Below 640px the bar keeps logo, the booking pill, language and
-            the burger; the theme switch and login move into the sheet. The
-            pill is never hidden — it is the page's one conversion action. */}
+        {/* Below 640px the bar keeps the logo, the booking button and the
+            burger; language and login move into the sheet. The button is
+            never hidden — it is the page's one conversion action. */}
         <div className="hdr-actions">
-          <SyncedThemeToggle locale={locale} hiddenWhen="(max-width: 639.98px)" />
           <span className="hdr-lang">
             <LangSwitch locale={locale} />
           </span>
           <a href={APP_URL} className="hdr-link hdr-login">
             {t.login}
           </a>
-          <DemoLink locale={locale} variant="spectrum" className="hdr-cta">
+          <DemoLink locale={locale} className="hdr-cta">
             {t.cta}
           </DemoLink>
           <MobileNav locale={locale} />

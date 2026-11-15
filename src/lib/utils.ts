@@ -17,8 +17,9 @@ const twMerge = extendTailwindMerge<"text-gradient">({
       animate: ["wave-bar", "fade-rise"],
     },
     classGroups: {
+      // Flat since the rebrand (@utility in globals.css), but still kept
+      // apart from the bg and text colours so existing pairs survive cn().
       "bg-image": [{ bg: ["brand-gradient", "brand-gradient-soft"] }],
-      // @utility text-gradient (background-clip text), not a text colour.
       "text-gradient": ["text-gradient"],
     },
   },

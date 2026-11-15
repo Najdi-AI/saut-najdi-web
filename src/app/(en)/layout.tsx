@@ -7,7 +7,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
-import { ThemeScript } from "@/components/ThemeScript";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { SITE_URL } from "@/lib/site";
 
@@ -21,11 +20,9 @@ export const metadata: Metadata = {
   // See (ar)/layout.tsx — robots policy is per-page in pageMetadata().
 };
 
+/** Light only, as in (ar)/layout.tsx. */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#5B6CE5" },
-    { media: "(prefers-color-scheme: dark)", color: "#080D1C" },
-  ],
+  themeColor: "#F7F8FA",
 };
 
 /** Vercel-only insights — see (ar)/layout.tsx for why. */
@@ -41,9 +38,8 @@ export default function EnglishRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`} suppressHydrationWarning>
+    <html lang="en" dir="ltr" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`}>
       <head>
-        <ThemeScript />
         <NoScriptReveal />
       </head>
       <body className="font-sans">

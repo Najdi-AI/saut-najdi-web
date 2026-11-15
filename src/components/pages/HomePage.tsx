@@ -215,7 +215,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           section is gone: the attribute now lives on <html>, so the `dark:`
           classes below answer to the visitor's choice instead of being
           hard-on. */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-surface to-canvas dark:from-[#0C1326] dark:to-night">
+      <section className="relative overflow-hidden bg-linear-to-b/srgb from-surface to-canvas dark:from-[#0C1326] dark:to-night">
         {/* Brand aurora — a soft spectrum wash so the ground is not flat
             black. Dark only; it would muddy the white hero. */}
         <div
@@ -354,7 +354,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           ))}
         </ul>
         <div className="mx-auto mt-8 hidden max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card sm:block">
-          <table className="w-full min-w-[36rem] border-collapse text-body-lg">
+          <table className="w-full min-w-xl border-collapse text-body-lg">
             <thead>
               <tr className="border-b border-line">
                 {s.vsIvr.cols.map((c, i) => (

@@ -14,7 +14,7 @@ function linkedContact(text: string) {
 export function LegalPage({ doc }: { doc: LegalDoc }) {
   return (
     <>
-      <section className="bg-gradient-to-b from-surface to-canvas">
+      <section className="bg-linear-to-b/srgb from-surface to-canvas">
         <div className="container py-12 sm:py-16">
           <div className="mx-auto max-w-3xl">
             <h1 className="text-center text-h2 sm:text-h1">{doc.title}</h1>

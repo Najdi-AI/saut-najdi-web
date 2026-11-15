@@ -507,7 +507,7 @@ export function RetailPage({ locale }: { locale: Locale }) {
           no store or courier integration exists, so no live order lookup. */}
       <section className="bg-navy py-14 text-white">
         <Reveal className="container mx-auto max-w-3xl text-center">
-          <p className="eyebrow !text-brand-cyan">{s.boundary.eyebrow}</p>
+          <p className="eyebrow text-brand-cyan!">{s.boundary.eyebrow}</p>
           <h2 className="mt-2 text-h3">{s.boundary.heading}</h2>
           <p className="mt-4 text-body-lg leading-relaxed text-white/80">{s.boundary.body}</p>
           <p className="mt-3 text-body-lg leading-relaxed text-white/80">{s.boundary.body2}</p>

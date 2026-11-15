@@ -39,8 +39,8 @@ export function WorkflowComparison({ locale }: { locale: Locale }) {
       <div className="mx-auto mt-9 grid max-w-6xl gap-6 md:grid-cols-2">
         {([false, true] as const).map(withSaut => <article key={String(withSaut)} className={`flex min-w-0 flex-col rounded-3xl border p-5 shadow-card sm:p-8 ${withSaut ? "border-brand-blue/50 bg-brand-gradient-soft" : "border-line bg-surface"}`}>
           <h3 className={`text-center text-h3 ${withSaut ? "text-brand-blue" : "text-ink/70"}`}>{withSaut ? t.saut : t.traditional}</h3>
-          <ol className="mt-6 flex-1 divide-y divide-line">
-            {t.rows.map(([topic, before, after], index) => <li key={topic} className="py-5 md:min-h-40">
+          <ol className="mt-6 flex-1">
+            {t.rows.map(([topic, before, after], index) => <li key={topic} className="border-line py-5 not-first:border-t md:min-h-40">
               <h4 className="flex items-start gap-3 text-body-lg font-semibold"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-body text-brand-blue">{index + 1}</span>{topic}</h4>
               <p className="mt-3 text-body leading-relaxed text-ink/70">{withSaut ? after : before}</p>
             </li>)}

@@ -35,7 +35,7 @@ export async function BlogIndexPage({ locale }: { locale: Locale }) {
               >
                 {/* Fixed 40:21 box with object-cover, so a future cover of a
                     different aspect cannot make one card taller than its row. */}
-                <div className="-mx-5 -mt-5 mb-4 aspect-[40/21] overflow-hidden border-b border-line">
+                <div className="-mx-5 -mt-5 mb-4 aspect-40/21 overflow-hidden border-b border-line">
                   <Image
                     src={postImage(post)}
                     alt=""

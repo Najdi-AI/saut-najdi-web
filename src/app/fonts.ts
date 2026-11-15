@@ -6,7 +6,7 @@ import localFont from "next/font/local";
  *
  * Only the weights the site actually renders are registered here. An audit of
  * src/ found: `font-medium` (500) and `font-bold` (700) as the only weight
- * utilities, tailwind.config.ts type scale uses 500/700, globals.css uses
+ * utilities, the @theme type scale uses 500/700, the rest of globals.css uses
  * 500/600/700, and body copy inherits 400. Light (300) and Black (900) were
  * never referenced, so registering them only cost ~475 KB of preloaded,
  * never-painted glyphs. Dropping them is visually a no-op.
@@ -48,4 +48,32 @@ export const thmanyah = localFont({
   // adjustFontFallback is left at its default ('Arial'), which makes Next emit
   // a metric-overridden fallback face ahead of the list above and keeps CLS
   // near zero during the swap. Do not set it to false.
+});
+
+/**
+ * Thmanyah Serif Display — the rebrand's display face, for H1 and H2 only
+ * (2026-11-15 mockups). Exposed as --font-serif-display and the `font-display`
+ * utility (globals.css @theme); no current heading uses it yet.
+ *
+ * Medium (500) is the only weight the mockups set in this face, so it is the
+ * only file registered. WOFF2 from the same licensed bundle as the sans.
+ *
+ * preload is off while nothing paints it: a preloaded face no page uses is
+ * 82 KB fetched on every first visit for nothing. Turn it on with the PR
+ * that puts it on a heading above the fold.
+ *
+ * adjustFontFallback is off on purpose, unlike the sans above. The Arial-
+ * metric fallback face Next would emit sits FIRST in the variable's stack,
+ * so while this face loads Arabic headings would flash in Arial's Arabic.
+ * Without it, the `font-display` stack falls through to Thmanyah Sans,
+ * which is already preloaded — the order the mockups specify.
+ */
+export const thmanyahSerifDisplay = localFont({
+  src: [
+    { path: "../fonts/thmanyahserifdisplay-Medium.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-serif-display",
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
 });

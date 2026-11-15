@@ -133,7 +133,7 @@ export function DemoPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-gradient-to-b from-surface to-canvas">
+      <section className="bg-linear-to-b/srgb from-surface to-canvas">
         <div className="container py-12 text-center">
           <h1 className="text-h1">
             {s.h1} <span className="text-ink/40">{s.h1Tail}</span>

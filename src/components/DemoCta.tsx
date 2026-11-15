@@ -35,10 +35,10 @@ export function DemoCta({ locale }: { locale: Locale }) {
         <h2 className="text-h2">{s.heading}</h2>
         <p className="mx-auto mt-3 max-w-xl text-body-lg text-white/80">{s.line}</p>
         <div className="mt-7 flex flex-col items-center gap-4">
-          <DemoLink locale={locale} className="!bg-white !text-navy hover:!bg-white/90">
+          <DemoLink locale={locale} className="bg-white! text-navy! hover:bg-white/90!">
             {s.cta}
           </DemoLink>
-          <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="link" className="!text-white/80 hover:!text-white">
+          <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="link" className="text-white/80! hover:text-white!">
             {s.quick}
           </CalButton>
         </div>

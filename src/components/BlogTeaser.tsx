@@ -39,7 +39,7 @@ export async function BlogTeaser({ locale }: { locale: Locale }) {
                 href={localePath(locale, `blog/${post.slug}`)}
                 className="card group flex w-full flex-col overflow-hidden transition-shadow hover:shadow-card-hover"
               >
-                <div className="-mx-5 -mt-5 mb-4 aspect-[40/21] overflow-hidden border-b border-line">
+                <div className="-mx-5 -mt-5 mb-4 aspect-40/21 overflow-hidden border-b border-line">
                   {/* alt="" — the card's own link text is the title, and a
                       duplicate here would make a screen reader announce the
                       same words twice for one control. */}

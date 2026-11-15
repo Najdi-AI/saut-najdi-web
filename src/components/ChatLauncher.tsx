@@ -178,7 +178,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
        ragged one. Lifted clear of the iOS home indicator where there is one. */
     <div
       ref={slotRef}
-      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] end-5 z-[90]"
+      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] inset-e-5 z-90"
       onFocus={() => setFocusWithin(true)}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
@@ -198,7 +198,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                unlabelled group. */
             role="dialog"
             aria-label={s.title}
-            className="absolute bottom-[4.5rem] end-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
+            className="absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
           >
             {/* Header ONLY for the fallback panel. The widget frame renders
                 its own — title, greeting and an X — so pairing it with ours
@@ -267,7 +267,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? s.close : s.open}
-        className={`ring-spectrum relative flex h-14 w-14 items-center justify-center rounded-full text-brand-purple shadow-card-hover transition-[opacity,transform,visibility] duration-300 hover:scale-105 ${
+        className={`ring-spectrum relative flex h-14 w-14 items-center justify-center rounded-full text-brand-purple shadow-card-hover transition-[opacity,transform,translate,scale,visibility] duration-300 hover:scale-105 ${
           tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "visible translate-y-0 opacity-100"
         }`}
       >

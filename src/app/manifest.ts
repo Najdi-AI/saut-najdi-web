@@ -5,7 +5,7 @@ import { SITE_NAME_AR, SITE_NAME_EN } from "@/lib/site";
  * Web app manifest. Arabic is the primary language, so name/lang/dir and
  * start_url all describe the Arabic root — an installed shortcut must not
  * land a Saudi user on /en. Colours are the Off-White canvas and brand Blue
- * from tailwind.config.ts; the site is light-theme only, so no dark variant.
+ * from the globals.css theme; the site is light-theme only, so no dark variant.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {

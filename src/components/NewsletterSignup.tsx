@@ -72,7 +72,7 @@ export function NewsletterSignup({ locale, source }: { locale: Locale; source: s
               placeholder={c.placeholder}
               autoComplete="email"
               dir="ltr"
-              className="w-full rounded-full border border-line bg-surface px-4 py-2.5 text-body text-ink outline-none transition focus:border-brand-purple placeholder:text-ink/40"
+              className="w-full rounded-full border border-line bg-surface px-4 py-2.5 text-body text-ink outline-hidden transition focus:border-brand-purple placeholder:text-ink/40"
             />
             <button
               type="submit"

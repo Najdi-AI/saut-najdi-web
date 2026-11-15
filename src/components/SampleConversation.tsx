@@ -196,7 +196,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
               onClick={clip.restart}
               aria-label={s.restart}
               title={s.restart}
-              className="absolute start-full top-1/2 ms-2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-ink/75 transition-colors duration-200 hover:bg-surface hover:text-brand-blue"
+              className="absolute inset-s-full top-1/2 ms-2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-ink/75 transition-colors duration-200 hover:bg-surface hover:text-brand-blue"
             >
               <MediaGlyph name="replay" size={18} />
             </button>

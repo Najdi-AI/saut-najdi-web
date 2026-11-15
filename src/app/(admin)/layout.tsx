@@ -56,7 +56,7 @@ export default async function AdminRootLayout({ children }: { children: React.Re
         <ThemeScript />
       </head>
       <body className="min-h-screen bg-canvas font-sans text-ink">
-        <header className="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur-sm">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
             <a href="/admin/blog" className="flex items-center gap-2.5">
               {/* Miniature brand waveform, drawn inline so the shell has zero

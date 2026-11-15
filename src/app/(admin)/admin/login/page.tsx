@@ -61,7 +61,7 @@ export default async function Page({
             autoComplete="current-password"
             autoFocus
             required
-            className="mt-1.5 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-body text-ink outline-none transition focus:border-brand-purple placeholder:text-ink/30"
+            className="mt-1.5 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-body text-ink outline-hidden transition focus:border-brand-purple placeholder:text-ink/30"
           />
           {failed && (
             <div className="mt-4 rounded-xl border border-brand-red/40 bg-brand-red/10 p-3 text-body text-brand-red">

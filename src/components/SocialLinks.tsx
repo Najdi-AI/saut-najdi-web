@@ -31,7 +31,7 @@ export function SocialLinks({ heading }: { heading: string }) {
               rel="me noopener noreferrer"
               aria-label={s.label}
               title={s.label}
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink/60 transition-colors hover:text-brand-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink/60 transition-colors hover:text-brand-blue focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-blue"
             >
               <svg
                 width="20"

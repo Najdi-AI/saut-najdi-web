@@ -1,6 +1,253 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/**
+ * Saut Najdi design tokens — from the official brand guideline
+ * (see ../website-research.md §1). Tailwind v4 reads them from the @theme
+ * block below; there is no tailwind.config.ts any more.
+ *
+ * The dark theme is opted into per-subtree, not per-visitor: `dark:` applies
+ * to anything inside an element carrying `data-theme="dark"`. That is what
+ * lets the homepage hero be dark while the rest of the page stays light
+ * during the evaluation — and, once the rollout lands, moving the attribute
+ * up to <html> turns the same utilities on site-wide with no rewrite.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* v3 `container: { center, padding: 1.25rem, screens: { 2xl: 1200px } }`.
+   v4's built-in container steps through every breakpoint, so the sm rule
+   cancels those and only the 1200px cap remains. */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1200px) {
+    max-width: 1200px;
+  }
+}
+
+@theme {
+  /**
+   * Brand hues, variable-backed so they LIGHTEN on night. The guideline
+   * values are tuned for ink on white; at icon weight — a 1.8px stroke —
+   * #6F3FA4 and #5B6CE5 disappear into a #080D1C ground. Dark mode uses
+   * the same hues raised in luminance, which is also exactly the ramp
+   * the headline gradient uses on night, so the two stay in step.
+   *
+   * The five-stop `--spectrum` (ring outlines) is a SEPARATE set of
+   * variables and is deliberately left at brand values: it paints solid
+   * fills and large areas, where the original weights still read
+   * correctly on dark. The header CTA paints `--spectrum-btn`, a
+   * deepened day ramp that carries white type at 4.5:1 or better.
+   *
+   * Opacity modifiers (text-ink/70) compile to color-mix() over these, so
+   * the --c-* triplets no longer need the v3 <alpha-value> placeholder.
+   */
+  --color-brand-cyan: rgb(var(--c-brand-cyan));
+  --color-brand-blue: rgb(var(--c-brand-blue));
+  --color-brand-purple: rgb(var(--c-brand-purple));
+  --color-brand-magenta: rgb(var(--c-brand-magenta));
+  --color-brand-red: rgb(var(--c-brand-red));
+
+  /**
+   * SEMANTIC, NOT LITERAL. These four carry the brand's light values in
+   * :root and invert under [data-theme="dark"], which is what lets ~230
+   * existing utilities (text-ink/70, border-line, bg-canvas) flip with
+   * no edit at the call site. Read them by ROLE, not colour:
+   *   ink     = foreground text        (dark on light, light on dark)
+   *   canvas  = page ground            (the recessive layer)
+   *   surface = raised panel           (cards, chips, bubbles)
+   *   navy    = deep contrast band     (stays dark in BOTH themes)
+   * `navy` is the odd one: bands built on it are dark-on-purpose in
+   * light mode, so in dark mode it lifts to a raised panel rather than
+   * inverting — inverting would turn the site's contrast bands white.
+   */
+  --color-ink: rgb(var(--c-ink));
+  --color-navy: rgb(var(--c-navy));
+  --color-canvas: rgb(var(--c-canvas));
+  --color-line: rgb(var(--c-line));
+  --color-surface: rgb(var(--c-surface));
+  /* Admin console "live/healthy" accent — see --c-ok below. */
+  --color-ok: rgb(var(--c-ok));
+
+  /**
+   * Dark-theme ground. Navy-leaning rather than neutral black, so the
+   * brand gradient still reads as the warm thing in the frame.
+   * `night-surface` is deliberately the same value the Cal booker card
+   * already uses (lib/bookerTheme.ts) — the two must not drift.
+   */
+  --color-night: #080d1c; /* page ground, the recessive layer */
+  --color-night-surface: #0f1730; /* raised: cards, chips, bubbles */
+  --color-night-hi: #16203c; /* hover / second raise */
+  --color-night-line: #232c49; /* hairline on dark */
+
+  /**
+   * Text-only override: `text-brand-blue` (and its hover/group variants)
+   * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
+   * blue link and step number clears 4.5:1 on white (5.96), the canvas
+   * (5.60), the blue 10% chip (4.97) and that chip inside a
+   * bg-brand-gradient-soft card (4.60 at worst).
+   * bg-, border-, ring- and outline-brand-blue keep the guideline value.
+   */
+  --text-color-brand-blue: rgb(var(--c-brand-blue-text));
+
+  --font-sans: var(--font-thmanyah), system-ui, sans-serif;
+
+  /* Guideline p9 type scale — same for both scripts */
+  --text-h1: 3rem;
+  --text-h1--line-height: 3.5rem;
+  --text-h1--font-weight: 700;
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 2.75rem;
+  --text-h2--font-weight: 700;
+  --text-h3: 1.75rem;
+  --text-h3--line-height: 2.25rem;
+  --text-h3--font-weight: 700;
+  --text-h4: 1.375rem;
+  --text-h4--line-height: 1.75rem;
+  --text-h4--font-weight: 700;
+  --text-h5: 1.125rem;
+  --text-h5--line-height: 1.5rem;
+  --text-h5--font-weight: 700;
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.5rem;
+  --text-body-lg--font-weight: 500;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.25rem;
+  --text-body-sm: 0.75rem;
+  --text-body-sm--line-height: 1.125rem;
+
+  /* The five-stop brand gradient, cyan → red */
+  --background-image-brand-gradient: linear-gradient(
+    90deg,
+    #2ec4e6 0%,
+    #5b6ce5 28%,
+    #6f3fa4 52%,
+    #e20c3a 78%,
+    #ec1b3a 100%
+  );
+  --background-image-brand-gradient-soft: linear-gradient(
+    135deg,
+    rgba(46, 196, 230, 0.08) 0%,
+    rgba(91, 108, 229, 0.06) 40%,
+    rgba(226, 12, 58, 0.05) 100%
+  );
+
+  --animate-wave-bar: wave-bar 1.6s ease-in-out infinite;
+  --animate-fade-rise: fade-rise 0.5s ease-out both;
+
+  /* Driven by --shadow-rgb so shadows go black on night instead of
+     staying navy, where they read as a smudge. Light values unchanged. */
+  --shadow-card:
+    0 1px 2px rgb(var(--shadow-rgb) / 0.04),
+    0 8px 24px -12px rgb(var(--shadow-rgb) / 0.1);
+  --shadow-card-hover:
+    0 2px 4px rgb(var(--shadow-rgb) / 0.06),
+    0 16px 40px -12px rgb(var(--shadow-rgb) / 0.16);
+
+  @keyframes wave-bar {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes fade-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+  /* v4's preflight dropped the pointer cursor on buttons; keep v3's. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
+}
+
+@utility btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-surface px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
+}
+
+@utility card {
+  @apply rounded-2xl border border-line bg-surface p-6 shadow-card transition-all duration-300;
+}
+
+@utility card-hover {
+  @apply hover:-translate-y-1 hover:shadow-card-hover;
+}
+
+@utility text-gradient {
+  /* Gradient-clipped display text (blueprint §3: short headings only).
+     The stops come from --text-gradient-stops, which each theme sets below.
+
+     The padding is for Arabic. background-clip:text paints only inside the
+     element's padding box, and an inline box is just the font's ascent plus
+     descent (1.25em in Thmanyah), while its glyphs reach 0.26em above that
+     and 0.36em below it (head yMax 1255 / yMin -610 per 1000). Without room,
+     the dots under a final ي and under ب sit outside the box and are left
+     transparent: «اللي» read «اللى». Vertical padding on an inline box does
+     not move the line, and the matching negative margin keeps it that way
+     if the element is ever made a block. `clone` gives every wrapped line
+     its own padding and its own full sweep of the ramp. */
+  --text-gradient-dir: 90deg;
+  @apply bg-clip-text;
+  background-image: linear-gradient(
+    var(--text-gradient-dir),
+    var(--text-gradient-stops)
+  );
+  padding-block: 0.3em 0.4em;
+  margin-block: -0.3em -0.4em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  /* Solid fallback where background-clip:text is unsupported. */
+  color: rgb(var(--c-brand-purple));
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    color: transparent;
+  }
+  /* RTL: the phrase starts on the right, so the ramp does too and the brand
+     order (cyan to red) reads from the phrase's first word. */
+  [dir="rtl"] & {
+    --text-gradient-dir: 270deg;
+  }
+}
+
+@utility eyebrow {
+  @apply text-body-sm font-bold uppercase tracking-wide text-brand-purple;
+  /* Letter-spacing must never apply to connected Arabic script */
+  html[lang="ar"] & {
+    letter-spacing: 0;
+  }
+}
 
 @layer base {
   html {
@@ -22,68 +269,13 @@
   }
 }
 
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
-  }
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-surface px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
-  }
-  .card {
-    @apply rounded-2xl border border-line bg-surface p-6 shadow-card transition-all duration-300;
-  }
-  .card-hover {
-    @apply hover:-translate-y-1 hover:shadow-card-hover;
-  }
-  /* Gradient-clipped display text (blueprint §3: short headings only).
-     The stops come from --text-gradient-stops, which each theme sets below.
-
-     The padding is for Arabic. background-clip:text paints only inside the
-     element's padding box, and an inline box is just the font's ascent plus
-     descent (1.25em in Thmanyah), while its glyphs reach 0.26em above that
-     and 0.36em below it (head yMax 1255 / yMin -610 per 1000). Without room,
-     the dots under a final ي and under ب sit outside the box and are left
-     transparent: «اللي» read «اللى». Vertical padding on an inline box does
-     not move the line, and the matching negative margin keeps it that way
-     if the element is ever made a block. `clone` gives every wrapped line
-     its own padding and its own full sweep of the ramp. */
-  .text-gradient {
-    --text-gradient-dir: 90deg;
-    @apply bg-clip-text;
-    background-image: linear-gradient(var(--text-gradient-dir), var(--text-gradient-stops));
-    padding-block: 0.3em 0.4em;
-    margin-block: -0.3em -0.4em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-    /* Solid fallback where background-clip:text is unsupported. */
-    color: rgb(var(--c-brand-purple));
-  }
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .text-gradient {
-      color: transparent;
-    }
-  }
-  /* RTL: the phrase starts on the right, so the ramp does too and the brand
-     order (cyan to red) reads from the phrase's first word. */
-  [dir="rtl"] .text-gradient {
-    --text-gradient-dir: 270deg;
-  }
-  .eyebrow {
-    @apply text-body-sm font-bold uppercase tracking-wide text-brand-purple;
-  }
-  /* Letter-spacing must never apply to connected Arabic script */
-  html[lang="ar"] .eyebrow {
-    letter-spacing: 0;
-  }
-}
-
 /* ============================================================
    Navbar system ported from haroon911/najdi-marketing-site
    (adapted: light theme only, mapped to this site's palette)
    ============================================================ */
 :root {
-  /* Semantic colour roles — see tailwind.config.ts. Space-separated triplets
-     so Tailwind's <alpha-value> works (text-ink/70 and friends). */
+  /* Semantic colour roles — see the @theme block above. Space-separated
+     triplets, read as rgb(var(--c-ink)) there and in the raw rules below. */
   --c-ink: 13 19 38;
   --c-navy: 17 32 70;
   --c-canvas: 247 248 250;
@@ -101,7 +293,7 @@
   --c-brand-purple: 111 63 164;
   --c-brand-magenta: 226 12 58;
   --c-brand-red: 236 27 58;
-  /* Brand blue for TEXT only (tailwind.config.ts maps text-brand-blue here;
+  /* Brand blue for TEXT only (@theme maps text-brand-blue here;
      bg/border/ring keep the guideline #5B6CE5). #5B6CE5 is 4.45:1 on white,
      4.19:1 on the canvas and 3.71:1 on its own 10% chip, all short of AA for
      16px links. #4A57CC is the same hue deepened: 5.96:1 on white, 5.60:1 on
@@ -235,7 +427,7 @@
   @apply bg-white text-navy hover:bg-white/90;
 }
 [data-theme="dark"] .btn-secondary {
-  @apply border-white/20 bg-white/[0.06] text-white hover:border-brand-cyan hover:text-brand-cyan;
+  @apply border-white/20 bg-white/6 text-white hover:border-brand-cyan hover:text-brand-cyan;
 }
 [data-theme="dark"] .btn-spectrum {
   /* The lifted spectrum is a LIGHT slab, so the white type it carries in

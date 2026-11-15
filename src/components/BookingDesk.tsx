@@ -145,7 +145,7 @@ export function BookingDesk({ locale }: { locale: Locale }) {
             calLink={CAL_LINK_QUICK}
             locale={locale}
             variant="link"
-            className="!text-body !text-brand-cyan"
+            className="text-body! text-brand-cyan!"
           >
             {/* One wrapper span: the button is inline-flex, and loose text
                 plus spans would become separate flex items. */}

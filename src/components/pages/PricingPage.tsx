@@ -135,7 +135,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
   ];
   const renderRow = (row: PricingRow, prominent: boolean) => (
     <tr key={row.key} className="border-t border-line">
-      <th scope="row" className="sticky start-0 z-10 border-t border-line bg-surface px-5 py-4 text-start text-body font-medium text-ink">
+      <th scope="row" className="sticky inset-s-0 z-10 border-t border-line bg-surface px-5 py-4 text-start text-body font-medium text-ink">
         <PricingTooltip id={`price-help-table-${row.key}`} explanation={row.detail}>{row.label}</PricingTooltip>
       </th>
       {columns.map((p) => <td key={p.key} className={`border-t border-line px-4 py-4 text-center text-ink ${p.key === "growth" ? "bg-brand-purple/5" : "bg-surface"} ${prominent ? "text-body-lg font-semibold" : "text-body"}`}>{row.value(p)}</td>)}
@@ -147,8 +147,8 @@ export function PricingPage({ locale }: { locale: Locale }) {
       <section className="border-b border-line bg-brand-gradient-soft">
         <div className="container py-7 text-center sm:py-10">
           <p className="eyebrow">{t.eyebrow}</p>
-          <h1 className="mx-auto mt-3 max-w-4xl text-3xl font-bold leading-tight sm:text-h1">{t.title}</h1>
-          <p className="mx-auto mt-3 max-w-3xl text-body leading-relaxed text-ink/75 sm:text-body-lg">{t.intro}</p>
+          <h1 className="mx-auto mt-3 max-w-4xl text-3xl font-bold max-sm:leading-tight sm:text-h1">{t.title}</h1>
+          <p className="mx-auto mt-3 max-w-3xl text-body max-sm:leading-relaxed text-ink/75 sm:text-body-lg">{t.intro}</p>
           <Waveform bars={28} animate={false} maxHeight={26} className="mt-3" />
           <a href="#plan-comparison" className="mt-5 inline-flex rounded-full border border-line bg-surface px-6 py-3 text-body font-medium hover:border-brand-blue">{t.fullDetails} ↓</a>
         </div>
@@ -171,7 +171,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
           <table className="w-full min-w-[1010px] border-separate border-spacing-0 text-start" aria-label={t.tableLabel}>
             <thead>
               <tr className="bg-navy text-white">
-                <th scope="col" className="sticky start-0 z-20 w-[225px] bg-navy px-5 py-6 text-start align-top text-body-lg">{t.plan}</th>
+                <th scope="col" className="sticky inset-s-0 z-20 w-[225px] bg-navy px-5 py-6 text-start align-top text-body-lg">{t.plan}</th>
                 {columns.map((p) => <th key={p.key} scope="col" className={`min-w-[195px] px-4 py-5 text-center align-top ${p.key === "growth" ? "bg-brand-purple/30" : ""}`}>
                   <div className="flex min-h-[205px] flex-col items-center justify-between gap-3">
                     <div>

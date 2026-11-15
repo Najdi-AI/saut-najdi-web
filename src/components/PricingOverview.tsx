@@ -183,7 +183,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
                         vertical padding replaces the details' top padding and the
                         first note's top margin, so the text sits where it did. */}
                     <details className="group mt-5 border-t border-line pt-1.5">
-                      <summary className="min-h-11 cursor-pointer py-2.5 font-semibold text-brand-blue underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-brand-blue">{t.rates}</summary>
+                      <summary className="min-h-11 cursor-pointer py-2.5 font-semibold text-brand-blue underline-offset-4 hover:underline focus-visible:rounded-xs focus-visible:outline-brand-blue">{t.rates}</summary>
                       <p className="mt-0.5 text-body leading-relaxed text-ink/65">{t.ratesNote}</p><p className="mt-3 text-body leading-relaxed text-ink/65">{isolatePercents(terms.zero)}</p>
                       <dl className="mt-3 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
                         <div><dt className="text-ink/65">{t.withinVoice}</dt><dd className="mt-1 font-semibold text-ink">{rate(plan.withinVoiceSar, t.perMinute)}</dd></div>

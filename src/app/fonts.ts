@@ -6,7 +6,7 @@ import localFont from "next/font/local";
  *
  * Only the weights the site actually renders are registered here. An audit of
  * src/ found: `font-medium` (500) and `font-bold` (700) as the only weight
- * utilities, tailwind.config.ts type scale uses 500/700, globals.css uses
+ * utilities, the @theme type scale uses 500/700, the rest of globals.css uses
  * 500/600/700, and body copy inherits 400. Light (300) and Black (900) were
  * never referenced, so registering them only cost ~475 KB of preloaded,
  * never-painted glyphs. Dropping them is visually a no-op.

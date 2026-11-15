@@ -38,7 +38,7 @@ export function Header({ locale }: { locale: Locale }) {
       <ScrollProgress />
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-[110] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:inset-s-4 focus:top-4 focus:z-110 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
       >
         {t.skipToContent}
       </a>

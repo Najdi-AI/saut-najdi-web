@@ -68,7 +68,7 @@ export default async function Page({
   }
 
   const input =
-    "mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-body text-ink outline-none transition focus:border-brand-purple placeholder:text-ink/30";
+    "mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-body text-ink outline-hidden transition focus:border-brand-purple placeholder:text-ink/30";
   const label = "mt-4 block text-body-sm text-ink/45";
 
   return (
@@ -250,7 +250,7 @@ export default async function Page({
           </div>
         </div>
 
-        <div className="sticky bottom-0 z-10 mt-8 rounded-2xl border border-line bg-surface/95 p-4 backdrop-blur">
+        <div className="sticky bottom-0 z-10 mt-8 rounded-2xl border border-line bg-surface/95 p-4 backdrop-blur-sm">
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="submit"

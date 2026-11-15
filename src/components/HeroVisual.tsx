@@ -106,7 +106,7 @@ export function HeroVisual({ locale }: { locale: Locale }) {
           <motion.div
             {...float(0.3, 4.2)}
             dir="rtl"
-            className={`flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur transition-shadow duration-200 ${speakingRing(0)}`}
+            className={`flex items-center gap-2.5 rounded-2xl rounded-br-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur-sm transition-shadow duration-200 ${speakingRing(0)}`}
           >
             <span className="ring-spectrum flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-brand-purple dark:text-brand-cyan">
               <AnimatedIcon name="wave" size={16} delay={0.5} />
@@ -185,7 +185,7 @@ export function HeroVisual({ locale }: { locale: Locale }) {
               style={{ transformOrigin: "left center" }}
               // Capped by the viewport too: on a 320px phone the bubble must end
               // inside the container (gutter + mic + gap is about 8.5rem).
-              className={`pointer-events-none flex max-w-[min(15rem,calc(100vw-8.5rem))] items-center gap-2.5 rounded-2xl rounded-bl-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur transition-shadow duration-200 sm:max-w-[17rem] ${speakingRing(2)}`}
+              className={`pointer-events-none flex max-w-[min(15rem,calc(100vw-8.5rem))] items-center gap-2.5 rounded-2xl rounded-bl-md border border-line bg-surface/95 px-4 py-2.5 shadow-card-hover backdrop-blur-sm transition-shadow duration-200 sm:max-w-68 ${speakingRing(2)}`}
             >
               <span className="ring-spectrum flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-brand-purple dark:text-brand-cyan">
                 <AnimatedIcon name="wave" size={16} />

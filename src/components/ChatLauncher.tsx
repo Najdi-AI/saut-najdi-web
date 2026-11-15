@@ -18,7 +18,7 @@ import { CalButton } from "./CalButton";
 /**
  * Floating AI-chat launcher. With a widget key configured it embeds the
  * platform's own web-chat frame (the same agent tech the site sells —
- * app.najdiai.com/widget/frame). Without a key it opens an honest
+ * app.sautnajdi.ai/widget/frame). Without a key it opens an honest
  * contact panel instead — never a dead chat box.
  */
 

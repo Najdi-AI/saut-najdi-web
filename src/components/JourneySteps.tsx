@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, type Transition } from "framer-motion";
 import { AnimatedIcon, type IconName } from "./icons";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -10,6 +11,12 @@ import type { Locale } from "@/lib/i18n";
  * node pops in as it scrolls into view, its icon draws itself, a handoff
  * pulse fires, and the connector fills down to the next stage. Outline
  * icons only — no gradient fills (owner rule).
+ *
+ * Under reduced motion it hydrates the server's hidden frame, then lands on
+ * the end state at once: every transition is instant and the handoff pulse
+ * is dropped (after hydration, so the trees still match). Every node with a
+ * hidden first frame carries data-reveal, which the no-JavaScript sheet shows
+ * at rest (NoScriptReveal); the pulse ring rests invisible, so it does not.
  */
 
 const STEP_ICONS: IconName[] = ["phone", "wave", "chat", "mic", "calendar", "human", "chart"];
@@ -21,7 +28,8 @@ export function JourneySteps({
   steps: readonly { title: string; body: string }[];
   locale: Locale;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionAfterHydration();
+  const at = (transition: Transition): Transition => (reduced ? { duration: 0 } : transition);
 
   return (
     <ol className="mx-auto max-w-2xl">
@@ -32,20 +40,22 @@ export function JourneySteps({
              to exist; scroll-mt clears the sticky header when it lands. */
           id={`step-${i + 1}`}
           className="relative flex scroll-mt-28 gap-5"
-          initial={reduced ? undefined : "hidden"}
+          initial={reduced ? false : "hidden"}
+          animate={reduced ? "show" : undefined}
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
         >
           {/* Node + connector column */}
           <div className="flex flex-col items-center">
             <motion.span
+              data-reveal=""
               className="ring-spectrum relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-brand-purple shadow-card"
               variants={{
                 hidden: { scale: 0.6, opacity: 0 },
                 show: {
                   scale: 1,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 260, damping: 18 },
+                  transition: at({ type: "spring", stiffness: 260, damping: 18 }),
                 },
               }}
             >
@@ -68,12 +78,13 @@ export function JourneySteps({
             {i < steps.length - 1 && (
               <motion.span
                 aria-hidden
+                data-reveal=""
                 className="w-0.5 flex-1 origin-top rounded-full bg-brand-gradient"
                 variants={{
                   hidden: { scaleY: 0 },
                   show: {
                     scaleY: 1,
-                    transition: { duration: 0.6, delay: 0.35, ease: "easeInOut" },
+                    transition: at({ duration: 0.6, delay: 0.35, ease: "easeInOut" }),
                   },
                 }}
               />
@@ -82,10 +93,11 @@ export function JourneySteps({
 
           {/* Step card */}
           <motion.div
+            data-reveal=""
             className={`card min-w-0 flex-1 ${i < steps.length - 1 ? "mb-6" : ""}`}
             variants={{
               hidden: { opacity: 0, y: 16 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.45, delay: 0.15 } },
+              show: { opacity: 1, y: 0, transition: at({ duration: 0.45, delay: 0.15 }) },
             }}
           >
             <h2 className="text-h4">{step.title}</h2>

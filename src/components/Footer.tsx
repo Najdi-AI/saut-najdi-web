@@ -26,11 +26,22 @@ export function Footer({ locale }: { locale: Locale }) {
       <div className="container py-12">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
+            {/* Same two-cut swap as the header: the light-background file's
+                wordmark is baked dark and vanished on the navy footer. */}
             <Image
               src="/brand/logo-full.svg"
               alt={locale === "ar" ? "شعار صوت نجدي" : "Saut Najdi logo"}
               width={140}
               height={47}
+              className="logo-default"
+            />
+            <Image
+              src="/brand/logo-full-inverse.svg"
+              alt=""
+              aria-hidden
+              width={140}
+              height={47}
+              className="logo-inverse"
             />
             <p className="mt-4 max-w-xs text-body text-ink/60">{pdpl}</p>
             {/* Under the brand column rather than in the link grid: these are
@@ -70,7 +81,10 @@ export function Footer({ locale }: { locale: Locale }) {
               every animation on the page, this one included. */}
           <Waveform bars={36} maxHeight={20} className="opacity-60" />
           <div className="mt-4 flex flex-col items-center justify-between gap-3 text-body text-ink/65 sm:flex-row">
-            <span>{t.madeIn} 🇸🇦</span>
+            {/* Text only. The 🇸🇦 emoji rendered as the letters "SA" on
+                Windows, and a hand-drawn flag would have to redraw the
+                Shahada, which is not ours to approximate. */}
+            <span>{t.madeIn}</span>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
               className="inline-block py-2.5 transition-colors hover:text-brand-blue"

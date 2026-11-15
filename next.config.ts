@@ -86,7 +86,7 @@ const nextConfig: NextConfig = {
    * surfaces exactly those origins in the browser console with nothing
    * blocked. Once the four flows below have been exercised with a clean
    * console, move this value onto the enforced header and delete the split:
-   *   1. open the chat widget and send a message (app.najdiai.com frame)
+   *   1. open the chat widget and send a message (app.sautnajdi.ai frame)
    *   2. open /demo and let the Cal booker render (app.cal.com frame)
    *   3. click a "book a meeting" CTA that opens the Cal modal
    *   4. toggle the theme (ThemeScript is a blocking inline script)
@@ -108,7 +108,7 @@ const nextConfig: NextConfig = {
      * own `allow="microphone"` cannot grant what the top document withholds.
      * Denying it here would silently kill the mic button inside the chat.
      */
-    const WIDGET_ORIGIN = "https://app.najdiai.com";
+    const WIDGET_ORIGIN = "https://app.sautnajdi.ai";
     const CAL = ["https://app.cal.com", "https://cal.com"];
     const GTM = "https://www.googletagmanager.com";
 

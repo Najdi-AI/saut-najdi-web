@@ -14,9 +14,9 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { BookingDesk } from "@/components/BookingDesk";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { OmniChannels } from "@/components/OmniChannels";
-import { PricingOverview } from "@/components/PricingOverview";
-import { WorkflowComparison } from "@/components/WorkflowComparison";
+import { HomePlansStrip } from "@/components/HomePlansStrip";
 import { homeFaq } from "@/content/faq";
+import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
 
 /**
  * Homepage per blueprint §6.1. Wave 2 gave every capability card and every
@@ -59,7 +59,7 @@ const t = {
         { title: "يتصل العميل", body: "على رقمك، بأي وقت." },
         { title: "يرد ويفهم", body: "بلهجة عميلك، ويقدر يقاطعه." },
         { title: "ينفذ", body: "يحجز، يجاوب، يسجل." },
-        { title: "يصعّد إذا لزم", body: "موظفك يستلم بكامل السياق." },
+        { title: "يحوّل إذا لزم", body: "موظفك يستلم بكامل السياق." },
       ],
       link: "اقرأ رحلة المكالمة كاملة",
     },
@@ -67,7 +67,7 @@ const t = {
       eyebrow: "الفرق الهجين",
       heading: "مو بس ذكاء… وراه ناس",
       body: "الذكاء الاصطناعي ياخذ الروتيني، وموظفك للحظات اللي تحتاج إنسان — ويستلم وهو فاهم كل شي.",
-      link: "شوف صفحة التصعيد للموظف البشري",
+      link: "شوف صفحة التحويل لموظفك",
     },
     vsIvr: {
       heading: "وش الفرق بين الوكيل الصوتي الذكي والرد الآلي القديم (IVR)؟",
@@ -76,16 +76,17 @@ const t = {
       rows: [
         ["العميل يبدأ", "قائمة: اضغط 1، اضغط 2", "يقول اللي يبغاه بلهجته"],
         ["إذا قاطع", "القائمة تكمل", "يسكت ويسمع"],
-        ["طلب مو في القائمة", "يعلق أو ينتظر موظف", "يتصرف، وإلا يصعّد"],
+        ["طلب مو في القائمة", "يعلق أو ينتظر موظف", "يتصرف، وإلا يحوّل لموظفك"],
         ["حجز موعد", "يحوّلك لموظف", "يحجز داخل نفس المكالمة"],
         ["يحتاج إنسان", "يبدأ من الصفر", "يستلم ومعه النص والملخص"],
+        ["بعد المكالمة", "تجمع التسجيلات والملاحظات من كذا أداة", "تسجيل ونص وملخص قدامك في لوحة التحكم، حسب سياسة الاحتفاظ"],
       ],
     },
     capabilities: {
       heading: "وش يقدم لك؟",
       cards: [
         { title: "الوكيل الصوتي", body: "يرد بلهجة عملائك، ويقاطعونه ويكمل معهم طبيعي.", path: "product/voice-agent" },
-        { title: "التصعيد للموظف البشري", body: "موظفك يستلم بكامل السياق، ويسمع المكالمة وهي شغالة.", path: "product/human-handoff" },
+        { title: "التحويل لموظفك", body: "موظفك يستلم بكامل السياق، ويسمع المكالمة وهي شغالة.", path: "product/human-handoff" },
         { title: "قاعدة المعرفة العربية", body: "ملفاتك PDF وWord، حتى الممسوحة ضوئياً — ووكيلك يجاوب منها.", path: "product/knowledge-base" },
         { title: "بناء الوكيل", body: "سوّ وكيلك بقوالب جاهزة لقطاعك، بدون كود.", path: "product/agent-builder" },
         { title: "لوحة التحكم", body: "كل مكالمة: نص وتسجيل وملخص، وأرقامك محسوبة من مكالماتك. ومنها فريقك يبدأ مكالمة صادرة والوكيل يمسك الحوار.", path: "product/dashboard" },
@@ -103,9 +104,10 @@ const t = {
       note: "اضغط على قطاعك وشوف وش يتكفل فيه الوكيل ووش يروح لموظفك.",
     },
     governance: {
-      heading: "بياناتك تحكمها قواعد وصلاحيات، مو بس محفوظة",
+      // Led by the canonical §2.5 line, word for word. The PDPL short label
+      // is no longer repeated as a bullet: the lead already says it.
+      lead: PDPL_LINE_AR,
       bullets: [
-        "مصمّم بما يتوافق مع نظام حماية البيانات الشخصية السعودي (PDPL)",
         "التخزين في منطقة الخليج (الدوحة)",
         "سجل تدقيق ما ينعدل ولا ينحذف",
         "صلاحيات وأدوار لكل موظف",
@@ -140,7 +142,7 @@ const t = {
         { title: "The customer calls", body: "Your dedicated line, any hour." },
         { title: "It answers and understands", body: "In their dialect — and they can interrupt it." },
         { title: "It acts", body: "Books, answers, logs the details." },
-        { title: "It escalates when needed", body: "Your employee takes over in full context." },
+        { title: "It hands off when needed", body: "Your employee takes over in full context." },
       ],
       link: "Read the full journey of a call",
     },
@@ -157,9 +159,10 @@ const t = {
       rows: [
         ["The caller starts", "A menu: press 1, press 2", "They say what they want"],
         ["The caller interrupts", "The menu carries on", "It stops and listens"],
-        ["The request isn't on the menu", "Stuck, or waiting for a person", "It acts, or escalates"],
+        ["The request isn't on the menu", "Stuck, or waiting for a person", "It acts, or hands off to your team"],
         ["Booking an appointment", "Transferred to a person", "Booked inside the call"],
         ["A human is needed", "Your employee starts from zero", "They inherit transcript and summary"],
+        ["After the call", "Recordings and notes gathered from several tools", "Recording, transcript and summary in your dashboard, subject to retention terms"],
       ],
     },
     capabilities: {
@@ -184,9 +187,8 @@ const t = {
       note: "Open your sector to see exactly what the agent handles and what reaches your staff.",
     },
     governance: {
-      heading: "Your data is governed, not just stored",
+      lead: PDPL_LINE_EN,
       bullets: [
-        "Designed to comply with the Saudi Personal Data Protection Law (PDPL)",
         "Storage in the Gulf region (Doha)",
         "An audit log that can't be edited or deleted",
         "Roles and permissions for every employee",
@@ -315,10 +317,17 @@ export function HomePage({ locale }: { locale: Locale }) {
 
       {/*
         4b · IVR comparison — the first question-shaped H2 on the page. Real
-        <table> markup, not a div grid: row/column structure is what answer
-        engines extract, and a grid of divs extracts as prose soup. The
-        overflow wrapper keeps the min-width table scrolling inside itself so
-        the RTL page body never gains a horizontal scrollbar.
+        <table> markup from sm up, not a div grid: row/column structure is
+        what answer engines extract, and a grid of divs extracts as prose
+        soup. Below sm the same rows render as stacked blocks instead, because
+        a three-column table on a phone pushed the «صوت نجدي» answers
+        off-screen. Only one of the two is ever displayed, so assistive tech
+        reads the rows once. It also carries the follow-up row («بعد
+        المكالمة») from the removed workflow comparison. Its knowledge row is
+        deliberately NOT folded in: in a voice-vs-IVR table it reads as a
+        live-call "answers from your documents" claim, which blueprint §2.3 /
+        §10.8 forbid until VOICE_KB_RETRIEVAL is confirmed on in production
+        (see KnowledgeBasePage.tsx). Do not add it back before that gate.
       */}
       <section className="container py-16">
         <Reveal>
@@ -327,8 +336,25 @@ export function HomePage({ locale }: { locale: Locale }) {
             {s.vsIvr.answer}
           </p>
         </Reveal>
-        <div className="mx-auto mt-8 max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
-          <table className="w-full min-w-[640px] border-collapse text-body-lg">
+        <ul className="mx-auto mt-8 max-w-4xl divide-y divide-line rounded-2xl border border-line bg-surface shadow-card sm:hidden">
+          {s.vsIvr.rows.map((r) => (
+            <li key={r[0]} className="p-4">
+              <p className="text-body-lg font-bold text-ink">{r[0]}</p>
+              <dl className="mt-3 grid gap-3">
+                <div>
+                  <dt className="text-body font-medium text-ink/65">{s.vsIvr.cols[1]}</dt>
+                  <dd className="mt-0.5 text-body-lg text-ink/60">{r[1]}</dd>
+                </div>
+                <div>
+                  <dt className="text-body font-bold text-brand-blue">{s.vsIvr.cols[2]}</dt>
+                  <dd className="mt-0.5 text-body-lg text-ink/85">{r[2]}</dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ul>
+        <div className="mx-auto mt-8 hidden max-w-4xl overflow-x-auto rounded-2xl border border-line bg-surface shadow-card sm:block">
+          <table className="w-full min-w-[36rem] border-collapse text-body-lg">
             <thead>
               <tr className="border-b border-line">
                 {s.vsIvr.cols.map((c, i) => (
@@ -411,21 +437,34 @@ export function HomePage({ locale }: { locale: Locale }) {
         <p className="mt-5 text-center text-body text-ink/60">{s.sectors.note}</p>
       </section>
 
-      <PricingOverview locale={locale} />
-      <WorkflowComparison locale={locale} />
+      {/* 7 · From the blog, with its newsletter signup. Kept before the
+          closing sequence on purpose (blueprint §2.4): from the governance
+          band down to the booking desk the only action offered is
+          «احجز عرضاً», so a «اشترك» button no longer sits right above the
+          calendar. The dated posts still tell a visitor the site is
+          actively maintained. */}
+      <section className="bg-surface py-16">
+        <div className="container">
+          <Reveal>
+            <BlogTeaser locale={locale} />
+          </Reveal>
+        </div>
+      </section>
 
-      {/* 8 · Data & governance (7 · screenshot pending demo-tenant assets) */}
+      {/* 8 · Data & governance (the screenshot section waits for demo-tenant
+          assets). Before the plans, so the reassurance comes before the
+          money ask. */}
       <section className="bg-navy py-16 text-white">
         <div className="container">
           <Reveal>
-            <h2 className="text-center text-h2">{s.governance.heading}</h2>
+            <h2 className="mx-auto max-w-3xl text-center text-h4 sm:text-h3">{s.governance.lead}</h2>
           </Reveal>
-          <ul className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
+          <ul className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
             {s.governance.bullets.map((b, i) => (
               <li key={b} className="flex items-start gap-3 rounded-xl bg-white/5 p-4 text-body-lg text-white/85">
                 <span className="mt-0.5 shrink-0 text-brand-cyan">
                   <AnimatedIcon
-                    name={(["shield", "database", "lock", "badge"] as IconName[])[i]}
+                    name={(["database", "lock", "badge"] as IconName[])[i]}
                     size={20}
                     delay={i * 0.12}
                   />
@@ -445,6 +484,10 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
+      {/* 8b · Plans: a compact strip with one «احجز عرضاً». The full matrix
+          and its footnotes live on /pricing. */}
+      <HomePlansStrip locale={locale} />
+
       {/* 9 · FAQ */}
       <section className="container py-16">
         <Reveal>
@@ -463,19 +506,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      {/* 10 · From the blog. Between the FAQ and the booking desk on purpose:
-          a visitor who read the FAQ and is not ready to book gets somewhere to
-          go that is not the exit, and the dated posts are the page's only
-          evidence that the site is actively maintained. */}
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal>
-            <BlogTeaser locale={locale} />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 11 · Close on the booking desk itself, not a button that opens one.
+      {/* 10 · Close on the booking desk itself, not a button that opens one.
           This is the same component /demo uses. The calendar is the last
           thing on the page rather than one more click away, and because
           CalInline only mounts the iframe when the section nears the

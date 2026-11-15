@@ -1,11 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 
 /**
  * The site-wide animated icon system: consistent 24×24 stroke icons whose
  * paths draw themselves on first view (framer-motion pathLength), matching
  * the brand's line-icon language. Static under prefers-reduced-motion.
+ * Each drawn path carries data-reveal, so without JavaScript the
+ * no-JavaScript sheet shows it whole (NoScriptReveal).
  */
 
 const ICONS: Record<string, string[]> = {
@@ -165,7 +168,7 @@ export function AnimatedIcon({
   delay?: number;
   strokeWidth?: number;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionAfterHydration();
   const paths = ICONS[name] ?? ICONS.wave;
   if (reduced) {
     return (
@@ -191,6 +194,7 @@ export function AnimatedIcon({
       {paths.map((d, i) => (
         <motion.path
           key={i}
+          data-reveal=""
           d={d}
           stroke="currentColor"
           strokeWidth={strokeWidth}

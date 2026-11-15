@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { ThemeScript } from "@/components/ThemeScript";
+import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "صوت نجدي", template: "%s — صوت نجدي" },
   applicationName: "صوت نجدي",
-  publisher: "Najdi AI",
+  publisher: "Najd Business Solutions",
   // No phone number exists yet, so stop iOS from linkifying digit runs
   // (order numbers, dates) into dead tel: links.
   formatDetection: { telephone: false },
@@ -41,6 +42,16 @@ export const viewport: Viewport = {
 };
 
 /**
+ * Vercel sets VERCEL=1 for the build and at run time. Web Analytics and
+ * Speed Insights fetch /_vercel/insights/script.js and
+ * /_vercel/speed-insights/script.js, which exist only on Vercel's edge, so a
+ * local `next start` would log two 404s on every page. Read on the server
+ * (this layout is a server component), so prerendered pages bake it in at
+ * build time and on-demand ones read the function's environment.
+ */
+const ON_VERCEL = process.env.VERCEL === "1";
+
+/**
  * Arabic root layout — Arabic is the default language and lives at the
  * root (blueprint §2.1). lang/dir are in the server-rendered HTML.
  */
@@ -53,6 +64,7 @@ export default function ArabicRootLayout({
     <html lang="ar" dir="rtl" className={thmanyah.variable} suppressHydrationWarning>
       <head>
         <ThemeScript />
+        <NoScriptReveal />
       </head>
       <body className="font-sans">
         {/* First child of <body>, per Google's install instructions. */}
@@ -63,16 +75,13 @@ export default function ArabicRootLayout({
         <Footer locale="ar" />
         <ChatLauncher locale="ar" />
         {/* Web Analytics was already provisioned and recording; Speed Insights
-
             was provisioned too but sat at hasData:false because nothing ever
-
             reported to it. This is the half that was missing — it is what turns
-
-            real visitors into actual Core Web Vitals instead of lab guesses. */}
-
-        <Analytics />
-
-        <SpeedInsights />
+            real visitors into actual Core Web Vitals instead of lab guesses.
+            Both load their scripts from /_vercel/*, which only Vercel serves,
+            so they render only there (see ON_VERCEL). */}
+        {ON_VERCEL && <Analytics />}
+        {ON_VERCEL && <SpeedInsights />}
       </body>
     </html>
   );

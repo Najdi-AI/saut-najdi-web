@@ -18,7 +18,7 @@ export const SELLER_ADDRESS_EN =
   "Building 3848, Abdullah Al-Anqari St., Al Woroud District, Riyadh 12254, Additional No. 7427, Saudi Arabia";
 export const BILLING_EMAIL = "billing@sautnajdi.ai";
 export const VAT_NUMBER = "314931940900003";
-export const APP_URL = "https://app.najdiai.com";
+export const APP_URL = "https://app.sautnajdi.ai";
 
 /**
  * The public support mailbox, confirmed by the owner (2026-08-09) alongside

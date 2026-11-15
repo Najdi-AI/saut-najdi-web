@@ -1,6 +1,19 @@
 import type { Locale } from "./i18n";
 
 /**
+ * «N دقائق قراءة» with Arabic number agreement: دقيقة for 1, دقيقتين for 2
+ * (the dual carries the number, so no digit), دقائق when the last two
+ * digits are 3-10, and دقيقة again from 11 (11-99, 100, 101-102...).
+ * Digits stay Latin (blueprint §2.1).
+ */
+function arReadTime(m: number): string {
+  if (m === 1) return "دقيقة قراءة";
+  if (m === 2) return "دقيقتين قراءة";
+  const lastTwo = m % 100;
+  return `${m} ${lastTwo >= 3 && lastTwo <= 10 ? "دقائق" : "دقيقة"} قراءة`;
+}
+
+/**
  * Blog chrome strings and date formatting. Separate from content/blog.ts so
  * the posts file stays purely content, and separate from content/chrome.ts
  * because these are section-scoped rather than site-wide.
@@ -10,12 +23,12 @@ export const blogStrings = {
     h1: "المدونة",
     lead:
       "مقالات عن الرد الآلي على المكالمات، وحماية البيانات، واللهجات السعودية في أنظمة الصوت — مكتوبة لمن يقيّم حلاً فعلياً، لا لمحركات البحث.",
-    readTime: (m: number) => `${m} دقائق قراءة`,
+    readTime: arReadTime,
     backToBlog: "كل المقالات",
     published: "نُشر في",
     ctaTitle: "تبي تشوف هذا الكلام على أرض الواقع؟",
     ctaBody:
-      "احجز عرضاً تعريفياً مدته ٣٠ دقيقة، وجرّب الوكيل بلهجة عملائك وبأسئلتك أنت.",
+      "احجز عرضاً تعريفياً مدته 30 دقيقة، وجرّب الوكيل بلهجة عملائك وبأسئلتك أنت.",
     ctaButton: "احجز عرضاً تعريفياً",
     related: "اقرأ أيضاً",
     homeHeading: "من المدونة",
@@ -46,7 +59,9 @@ export const blogStrings = {
  * `ar-SA` alone resolves to the Islamic calendar in most runtimes, which would
  * print a Hijri date next to an ISO `datetime` attribute holding a Gregorian
  * one — two different dates on the same element. `-u-ca-gregory` pins the
- * calendar so the visible text and the machine-readable value agree.
+ * calendar so the visible text and the machine-readable value agree, and
+ * `-nu-latn` pins Latin digits: `ar-SA` defaults to Arabic-Indic (١٨ أغسطس
+ * ٢٠٢٦), which breaks blueprint §2.1 and sat next to the Latin read time.
  */
 /**
  * Cover art, DERIVED from the slug rather than stored per post.
@@ -68,7 +83,7 @@ export function postImage(post: { slug: string; cover?: string }): string {
 
 export function formatPostDate(iso: string, locale: Locale): string {
   const d = new Date(`${iso}T00:00:00Z`);
-  return new Intl.DateTimeFormat(locale === "ar" ? "ar-SA-u-ca-gregory" : "en-GB", {
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",

@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, type Transition } from "framer-motion";
 import { AnimatedIcon, type IconName } from "./icons";
+import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -20,6 +21,12 @@ import type { Locale } from "@/lib/i18n";
  * Putting the line beside the text removes the axis they were fighting over,
  * and it matches the /how-it-works JourneySteps timeline the visitor meets
  * one click later.
+ *
+ * Under reduced motion it hydrates the server's hidden frame, then lands on
+ * the end state at once: every transition is instant and the handoff pulse
+ * is dropped (after hydration, so the trees still match). Every node with a
+ * hidden first frame carries data-reveal, which the no-JavaScript sheet shows
+ * at rest (NoScriptReveal); the pulse ring rests invisible, so it does not.
  */
 
 const STEP_ICONS: IconName[] = ["phone", "chat", "calendar", "human"];
@@ -32,14 +39,16 @@ export function ProcessSteps({
   steps: readonly { title: string; body: string }[];
   locale: Locale;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionAfterHydration();
+  const at = (transition: Transition): Transition => (reduced ? { duration: 0 } : transition);
 
   return (
     <motion.ol
       /* Mobile: no row gap — each step's own pb-8 makes the spacing, so the
          connector can run unbroken from one node to the next. */
       className="relative mt-12 grid gap-0 md:grid-cols-4 md:gap-6"
-      initial={reduced ? undefined : "hidden"}
+      initial={reduced ? false : "hidden"}
+      animate={reduced ? "show" : undefined}
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
     >
@@ -52,13 +61,14 @@ export function ProcessSteps({
           {i < steps.length - 1 && (
             <motion.span
               aria-hidden
+              data-reveal=""
               className="absolute top-7 hidden h-0.5 w-full origin-left rounded-full bg-brand-gradient rtl:origin-right md:block"
               style={{ insetInlineStart: "50%" }}
               variants={{
                 hidden: { scaleX: 0 },
                 show: {
                   scaleX: 1,
-                  transition: { duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" },
+                  transition: at({ duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" }),
                 },
               }}
             />
@@ -69,13 +79,14 @@ export function ProcessSteps({
               node however tall this step's copy runs. */}
           <div className="flex shrink-0 flex-col items-center md:contents">
             <motion.span
+              data-reveal=""
               className="ring-spectrum relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-brand-purple shadow-card"
               variants={{
                 hidden: { scale: 0.6, opacity: 0 },
                 show: {
                   scale: 1,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 260, damping: 18, delay: STAGE * i },
+                  transition: at({ type: "spring", stiffness: 260, damping: 18, delay: STAGE * i }),
                 },
               }}
             >
@@ -99,12 +110,13 @@ export function ProcessSteps({
             {i < steps.length - 1 && (
               <motion.span
                 aria-hidden
+                data-reveal=""
                 className="mt-2 w-0.5 flex-1 origin-top rounded-full bg-brand-gradient md:hidden"
                 variants={{
                   hidden: { scaleY: 0 },
                   show: {
                     scaleY: 1,
-                    transition: { duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" },
+                    transition: at({ duration: 0.5, delay: STAGE * i + 0.45, ease: "easeInOut" }),
                   },
                 }}
               />
@@ -112,13 +124,14 @@ export function ProcessSteps({
           </div>
 
           <motion.div
+            data-reveal=""
             className="min-w-0 flex-1 pb-8 md:mt-4 md:max-w-[240px] md:flex-none md:pb-0"
             variants={{
               hidden: { opacity: 0, y: 10 },
               show: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.4, delay: STAGE * i + 0.2 },
+                transition: at({ duration: 0.4, delay: STAGE * i + 0.2 }),
               },
             }}
           >

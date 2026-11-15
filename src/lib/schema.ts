@@ -104,12 +104,12 @@ export function organization(locale: Locale): JsonLd {
       addressCountry: "SA",
     },
     areaServed: { "@type": "Country", name: "Saudi Arabia" },
-    // najdiai.com is the PARENT company's own site — referenced as an entity
+    // najdbs.com is the PARENT company's own site (Najd Business Solutions) — referenced as an entity
     // relationship only. Never redirected, never treated as a mirror.
     parentOrganization: {
       "@type": "Organization",
-      name: "Najdi AI",
-      url: "https://najdiai.com",
+      name: "Najd Business Solutions",
+      url: "https://najdbs.com",
     },
     // Email only. `telephone` stays out until a real number exists.
     contactPoint: [

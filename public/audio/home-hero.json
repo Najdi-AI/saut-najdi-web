@@ -1,0 +1,21 @@
+{
+  "src": "/audio/home-hero.m4a",
+  "durationMs": 8634,
+  "turns": [
+    {
+      "who": "agent",
+      "startMs": 150,
+      "endMs": 2076
+    },
+    {
+      "who": "caller",
+      "startMs": 2526,
+      "endMs": 3889
+    },
+    {
+      "who": "agent",
+      "startMs": 4209,
+      "endMs": 8334
+    }
+  ]
+}

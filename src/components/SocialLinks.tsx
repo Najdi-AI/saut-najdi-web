@@ -1,4 +1,5 @@
 import { SOCIAL } from "@/content/social";
+import s from "./Footer.module.css";
 
 /**
  * The footer's social row. Data comes from content/social.ts, which is the
@@ -6,9 +7,10 @@ import { SOCIAL } from "@/content/social";
  * visitor can click and what the knowledge graph claims are the same set by
  * construction.
  *
- * Each link is a 44×44 hit area around a 20px mark. That is the floor from the
- * responsiveness pass, and icon-only controls are exactly where it gets missed
- * — the glyph looks like the target, so the padding is what has to carry it.
+ * Each link is a 44×44 Silver Gray tile around an 18px mark (Try 3). That is
+ * also the floor from the responsiveness pass, and icon-only controls are
+ * exactly where it gets missed — the glyph looks like the target, so the tile
+ * is what has to carry it. On a phone the row becomes a 4-column grid.
  *
  * `rel="me"` is the half of the identity handshake this side of the link can
  * assert: it declares the profile as another endpoint of the same entity, and
@@ -17,30 +19,20 @@ import { SOCIAL } from "@/content/social";
  */
 export function SocialLinks({ heading }: { heading: string }) {
   return (
-    <div>
-      <p className="text-h5 text-ink">{heading}</p>
-      {/* -ms-2.5 pulls the first icon's padding back so the row optically
-          aligns with the column heading above it instead of sitting indented
-          by its own hit area. Logical property — correct in RTL and LTR. */}
-      <ul className="-ms-2.5 mt-2 flex flex-wrap items-center">
-        {SOCIAL.map((s) => (
-          <li key={s.key}>
+    <div className={s.follow}>
+      <p className={s.label}>{heading}</p>
+      <ul className={s.social}>
+        {SOCIAL.map((p) => (
+          <li key={p.key}>
             <a
-              href={s.url}
+              href={p.url}
               target="_blank"
               rel="me noopener noreferrer"
-              aria-label={s.label}
-              title={s.label}
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink/60 transition-colors hover:text-brand-blue focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-blue"
+              aria-label={p.label}
+              title={p.label}
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden
-              >
-                <path d={s.path} />
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d={p.path} />
               </svg>
             </a>
           </li>

@@ -481,11 +481,21 @@
   background-color: var(--surface);
 }
 
-/* Now the same solid red button as btn-primary. Still unlayered, as it
-   always was, so it keeps outranking the padding, radius and type utilities
-   its call sites pass: the label can't drop below large-text size. */
-.btn-spectrum {
-  @apply btn-primary;
+/* btn-primary's button, in the components layer so the padding, radius and
+   type utilities its call sites pass win (the admin's compact table-row
+   buttons). The min-height goes too (this follows the applied one at every
+   width). Those labels are small, so it rests on the pressed red (white
+   5.79:1, where #EC1B3A gives 4.39) and goes darker on hover/press (7.91). */
+@layer components {
+  .btn-spectrum {
+    @apply btn-primary;
+    min-block-size: 0;
+    background-color: var(--color-najdi-red-press);
+    &:hover,
+    &:active {
+      background-color: #a30f26;
+    }
+  }
 }
 
 /* ---------- header ---------- */

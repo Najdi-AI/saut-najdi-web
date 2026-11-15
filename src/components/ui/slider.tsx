@@ -17,6 +17,11 @@ import { cn } from "@/lib/utils";
  * thumb before React loads. Without it PageDirection only learns the page's
  * dir after hydration, so the thumb waits for that ("edge-client-only")
  * rather than flash at the left-to-right position on an Arabic page.
+ *
+ * With JavaScript off the thumb and the filled range stay hidden either way
+ * (Base UI only places them from script): never at a wrong position, but not
+ * shown. So the values must also be readable without the slider: render each
+ * one as text next to it (an <output>), server-rendered.
  */
 function Slider({
   className,

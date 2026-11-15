@@ -247,7 +247,9 @@
   }
   .legalIn {
     flex-direction: column;
-    gap: 10px;
+    /* The mockup's 10px, plus room for the billing link's hit area below
+       (12px, see the tap targets): at 10px the next row covered its edge. */
+    gap: 14px;
   }
   .seller {
     flex-direction: column;

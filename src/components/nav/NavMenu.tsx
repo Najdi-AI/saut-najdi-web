@@ -166,7 +166,7 @@ export function NavMenu({
           order and off the a11y tree, and the inline closed-state style also
           kills the mega-in animation so it replays on each open. */}
       <div
-        className="mega-panel glass"
+        className="mega-panel"
         id={panelId}
         data-open={open ? "true" : "false"}
         role="group"
@@ -220,7 +220,7 @@ export function NavMenu({
                   decorative bars while it is actually on screen. */}
               <Waveform bars={18} maxHeight={34} animate={open} />
             </span>
-            <span className="mega-heading mega-heading--accent">{menu.featured.eyebrow}</span>
+            <span className="mega-heading">{menu.featured.eyebrow}</span>
             <b>{menu.featured.title}</b>
             <small>{menu.featured.body}</small>
             <span className="mega-feat-cta">{menu.featured.cta}</span>

@@ -24,15 +24,10 @@ export function DemoLink({
 }: {
   locale: Locale;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "spectrum";
+  variant?: "primary" | "secondary";
   className?: string;
 }) {
-  const base =
-    variant === "primary"
-      ? "btn-primary"
-      : variant === "secondary"
-        ? "btn-secondary"
-        : "btn-spectrum";
+  const base = variant === "secondary" ? "btn-secondary" : "btn-primary";
   return (
     <Link href={localePath(locale, "demo")} className={`${base} ${className}`}>
       {children}

@@ -1100,6 +1100,42 @@ a.mega-item:focus-visible {
   --sidebar-ring: var(--color-blue);
 }
 
+/* Dark bands (hero, #board, the #day night moments, DemoCta/PageHero):
+   one section-scoped class, never data-theme. Charcoal ground, Off-White
+   text, and the tokens above remapped so the ui/ primitives read right
+   inside with no className overrides. On Charcoal: Off-White 17.4:1,
+   --muted-foreground 8.0:1, the cyan ring 8.9:1. In the components layer
+   so a utility (bg-soft-navy, a fragment's own ring) still wins. */
+@layer components {
+  .on-dark {
+    color-scheme: dark;
+    --background: var(--color-charcoal);
+    --foreground: var(--color-off-white);
+    /* Soft Navy: the mockups' chips, rows and panels on dark. */
+    --card: var(--color-soft-navy);
+    --card-foreground: var(--color-off-white);
+    --popover: var(--color-soft-navy);
+    --popover-foreground: var(--color-off-white);
+    /* One step above Soft Navy (try-3's --navy-up): fills and hovers. */
+    --secondary: #1c2c5c;
+    --secondary-foreground: var(--color-off-white);
+    --muted: #1c2c5c;
+    --muted-foreground: #a3abbd;
+    --accent: #1c2c5c;
+    --accent-foreground: var(--color-off-white);
+    --border: #3a4566;
+    /* The off track and outline under a Soft Navy thumb and beside an
+       Off-White range: 4.5:1 on Charcoal, 3.9:1 to each of those. */
+    --input: #737d99;
+    --ring: var(--color-cyan);
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--ring);
+  }
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);

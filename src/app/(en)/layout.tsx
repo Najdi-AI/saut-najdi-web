@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "Saut Najdi", template: "%s — Saut Najdi" },
   applicationName: "Saut Najdi",
-  publisher: "Najdi AI",
+  publisher: "Najd Business Solutions",
   formatDetection: { telephone: false },
   // See (ar)/layout.tsx — robots policy is per-page in pageMetadata().
 };

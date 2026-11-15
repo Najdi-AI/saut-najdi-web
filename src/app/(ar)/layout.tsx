@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "صوت نجدي", template: "%s — صوت نجدي" },
   applicationName: "صوت نجدي",
-  publisher: "Najdi AI",
+  publisher: "Najd Business Solutions",
   // No phone number exists yet, so stop iOS from linkifying digit runs
   // (order numbers, dates) into dead tel: links.
   formatDetection: { telephone: false },

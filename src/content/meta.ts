@@ -112,7 +112,7 @@ export const meta: Record<
     about: {
       title: "من نحن — فريق سعودي بنى وكيلاً يفهم عميلك",
       description:
-        "صوت نجدي منتج من Najdi AI — فريق سعودي في الرياض بنى وكيلاً صوتياً على اللهجات السعودية، وهجيناً بالتصميم: الذكاء يرد، وموظفك موجود دايماً.",
+        "صوت نجدي منتج من نجد لحلول الأعمال (Najd Business Solutions) — فريق سعودي في الرياض بنى وكيلاً صوتياً على اللهجات السعودية، وهجيناً بالتصميم: الذكاء يرد، وموظفك موجود دايماً.",
     },
     blog: {
       title: "المدونة — الرد الآلي والبيانات واللهجات السعودية",
@@ -235,7 +235,7 @@ export const meta: Record<
     about: {
       title: "About us — the Saudi team behind the agent",
       description:
-        "Saut Najdi is a product of Najdi AI — a Saudi team in Riyadh that built a voice agent on Saudi dialects, hybrid by design: AI answers, your employee is there.",
+        "Saut Najdi is a product of Najd Business Solutions — a Saudi team in Riyadh that built a voice agent on Saudi dialects, hybrid by design: AI answers, your employee is there.",
     },
     blog: {
       // Titles here are measured WITH the layout's " — Saut Najdi" suffix

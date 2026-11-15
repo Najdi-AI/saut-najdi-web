@@ -126,33 +126,13 @@
   --text-body-sm: 0.75rem;
   --text-body-sm--line-height: 1.125rem;
 
-  /* The five-stop brand gradient, cyan → red */
-  --background-image-brand-gradient: linear-gradient(
-    90deg,
-    #2ec4e6 0%,
-    #5b6ce5 28%,
-    #6f3fa4 52%,
-    #e20c3a 78%,
-    #ec1b3a 100%
-  );
-  --background-image-brand-gradient-soft: linear-gradient(
-    135deg,
-    rgba(46, 196, 230, 0.08) 0%,
-    rgba(91, 108, 229, 0.06) 40%,
-    rgba(226, 12, 58, 0.05) 100%
-  );
-
   --animate-wave-bar: wave-bar 1.6s ease-in-out infinite;
   --animate-fade-rise: fade-rise 0.5s ease-out both;
 
-  /* Driven by --shadow-rgb so shadows go black on night instead of
-     staying navy, where they read as a smudge. Light values unchanged. */
-  --shadow-card:
-    0 1px 2px rgb(var(--shadow-rgb) / 0.04),
-    0 8px 24px -12px rgb(var(--shadow-rgb) / 0.1);
-  --shadow-card-hover:
-    0 2px 4px rgb(var(--shadow-rgb) / 0.06),
-    0 16px 40px -12px rgb(var(--shadow-rgb) / 0.16);
+  /* Flat since the rebrand: no resting or hover shadows. The names stay
+     so the existing call sites compile; they now draw nothing. */
+  --shadow-card: 0 0 #0000;
+  --shadow-card-hover: 0 0 #0000;
 
   @keyframes wave-bar {
     0%,
@@ -224,55 +204,105 @@
   }
 }
 
+/* The one button shape (Try 1 mockups, `.btn`): square, flat, Najdi Red.
+   White on #EC1B3A is 4.39:1, which passes only as large text, so the label
+   stays 700 at 20px (large bold starts at 18.66px). Don't shrink it. */
 @utility btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-body-lg font-medium text-white transition-all duration-300 hover:bg-navy hover:shadow-card-hover focus-visible:outline-brand-blue;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-block-size: 52px;
+  padding: 8px 28px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-najdi-red);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition:
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease;
+  &:active {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--color-najdi-red-press);
+    }
+  }
+  @media (max-width: 640px) {
+    min-block-size: 46px;
+    padding-inline: 18px;
+  }
 }
 
+/* Same box as btn-primary, outlined in the ink; hover fills it solid. */
 @utility btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20 bg-surface px-6 py-3 text-body-lg font-medium text-ink transition-all duration-300 hover:border-brand-blue hover:text-brand-blue;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-block-size: 52px;
+  padding: 8px 28px;
+  border: 1px solid rgb(var(--c-ink));
+  border-radius: 0;
+  background-color: transparent;
+  color: rgb(var(--c-ink));
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition:
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease;
+  &:active {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--color-silver-gray);
+    }
+  }
+  @media (max-width: 640px) {
+    min-block-size: 46px;
+    padding-inline: 18px;
+  }
 }
 
+/* One radius (the shadcn --radius, the mockups' --ui-r) and no shadow. */
 @utility card {
-  @apply rounded-2xl border border-line bg-surface p-6 shadow-card transition-all duration-300;
+  @apply rounded-(--radius) border border-line bg-surface p-6 transition-colors duration-200;
 }
 
+/* A solid fill instead of the old lift and shadow, for the keyboard too:
+   on the card itself or on a link inside it. */
 @utility card-hover {
-  @apply hover:-translate-y-1 hover:shadow-card-hover;
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-silver-gray);
+    }
+  }
+  &:focus-visible,
+  &:has(:focus-visible) {
+    background-color: var(--color-silver-gray);
+  }
 }
 
+/* Solid ink since the rebrand; it was gradient-clipped headline text. */
 @utility text-gradient {
-  /* Gradient-clipped display text (blueprint §3: short headings only).
-     The stops come from --text-gradient-stops, which each theme sets below.
+  color: rgb(var(--c-ink));
+}
 
-     The padding is for Arabic. background-clip:text paints only inside the
-     element's padding box, and an inline box is just the font's ascent plus
-     descent (1.25em in Thmanyah), while its glyphs reach 0.26em above that
-     and 0.36em below it (head yMax 1255 / yMin -610 per 1000). Without room,
-     the dots under a final ي and under ب sit outside the box and are left
-     transparent: «اللي» read «اللى». Vertical padding on an inline box does
-     not move the line, and the matching negative margin keeps it that way
-     if the element is ever made a block. `clone` gives every wrapped line
-     its own padding and its own full sweep of the ramp. */
-  --text-gradient-dir: 90deg;
-  @apply bg-clip-text;
-  background-image: linear-gradient(
-    var(--text-gradient-dir),
-    var(--text-gradient-stops)
-  );
-  padding-block: 0.3em 0.4em;
-  margin-block: -0.3em -0.4em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  /* Solid fallback where background-clip:text is unsupported. */
-  color: rgb(var(--c-brand-purple));
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    color: transparent;
-  }
-  /* RTL: the phrase starts on the right, so the ramp does too and the brand
-     order (cyan to red) reads from the phrase's first word. */
-  [dir="rtl"] & {
-    --text-gradient-dir: 270deg;
-  }
+/* The brand-gradient strokes (step connectors, plan stripe) drawn flat in
+   the ink, and the soft wash dropped. The names stay for the call sites. */
+@utility bg-brand-gradient {
+  background-color: rgb(var(--c-ink));
+}
+@utility bg-brand-gradient-soft {
+  background-image: none;
 }
 
 @utility eyebrow {
@@ -336,26 +366,6 @@
      where canvas + wash + 10% blue composites to about #D9E6F6 / #DFE2F7 /
      #E6DFEF at the wash's 0/40/100% stops: 4.72 / 4.65 / 4.60:1. */
   --c-brand-blue-text: 74 87 204;
-
-  /* Headline gradient (.text-gradient), light canvas. The guideline cyan
-     #2EC4E6 is 1.95:1 on #F7F8FA, so the first stop is the same hue deepened
-     to #1290AB. On #F7F8FA every stop now clears the 3:1 large-text floor:
-     3.53, 4.19, 6.76, 4.55, 4.13. */
-  --text-gradient-stops: #1290ab 0%, #5b6ce5 28%, #6f3fa4 52%, #e20c3a 78%,
-    #ec1b3a 100%;
-  /* .btn-spectrum carries white 15px text, so every stop must clear 4.5:1
-     against white: 5.12 (--cyan-ink's #10788F), 5.52 (#4E5CD4),
-     7.18, 4.83 and 4.60 (#E81136, the end red deepened). Points between
-     stops are never lighter than the lighter of their two stops, so the
-     whole ramp passes. */
-  --spectrum-btn: linear-gradient(
-    90deg,
-    #10788f 0%,
-    #4e5cd4 26%,
-    #6f3fa4 50%,
-    #e20c3a 82%,
-    #e81136 100%
-  );
 
   --cyan: #2ec4e6;
   --indigo: #5b6ce5;
@@ -452,24 +462,9 @@
   --e2: 0 4px 10px -2px rgb(0 0 0 / 0.5), 0 12px 28px -8px rgb(0 0 0 / 0.6);
 }
 
-/* Shared components. `.card` and the buttons already resolve through the
-   semantic tokens, so only the pieces whose light form used a LITERAL white
-   need restating. */
-[data-theme="dark"] .btn-primary {
-  /* bg-ink would be near-white with near-white text; the primary button on
-     night is a light slab with dark type. */
-  @apply bg-white text-navy hover:bg-white/90;
-}
-[data-theme="dark"] .btn-secondary {
-  @apply border-white/20 bg-white/6 text-white hover:border-brand-cyan hover:text-brand-cyan;
-}
-[data-theme="dark"] .btn-spectrum {
-  /* The lifted spectrum is a LIGHT slab, so the white type it carries in
-     day mode collapses to 1.7-3.0:1 on it. Dark type instead — 6.5:1 at the
-     worst stop, 11.6:1 at the cyan end — which is the same inversion
-     .btn-primary makes directly above. */
-  color: rgb(var(--c-canvas));
-}
+/* Shared components. `.card` and the buttons resolve through the semantic
+   tokens or stay Najdi Red in both themes, so only the pieces whose light
+   form used a LITERAL colour need restating. */
 [data-theme="dark"] .mobile-nav {
   background: var(--surface);
 }
@@ -481,36 +476,6 @@
 .theme-switching *::before,
 .theme-switching *::after {
   transition: none !important;
-}
-
-/* The soft brand wash is tuned to sit on white — at 5-8% alpha it vanishes
-   against night. Same hues, enough alpha to register. */
-[data-theme="dark"] .bg-brand-gradient-soft {
-  background-image: linear-gradient(
-    135deg,
-    rgba(46, 196, 230, 0.14) 0%,
-    rgba(91, 108, 229, 0.12) 40%,
-    rgba(226, 12, 58, 0.1) 100%
-  );
-}
-
-/* The five-stop brand gradient bottoms out around #6F3FA4, which on night is
-   barely separated from the ground. Lift every stop for dark; the hue order
-   and the cyan-to-red sweep are unchanged, so it still reads as the brand.
-
-   Restated as literals rather than `var(--spectrum)` because the headline's
-   stops sit at 0/28/52/78/100 against --spectrum's 0/26/50/82/100; borrowing
-   the variable here would shift the headline's colour banding between
-   themes. Same five hues as the dark --cyan..--red block above — keep them
-   in step. The direction is .text-gradient's own (it flips under RTL).
-
-   The header CTA on night goes back to the lifted --spectrum: the deepened
-   day ramp in --spectrum-btn is for white type, and on night the button
-   carries dark type (see [data-theme="dark"] .btn-spectrum above). */
-[data-theme="dark"] {
-  --text-gradient-stops: #5fd8f2 0%, #8b99f5 28%, #b98ce0 52%, #ff5c7a 78%,
-    #ff6b7f 100%;
-  --spectrum-btn: var(--spectrum);
 }
 
 /* The hero cut-out is transparent around the subject's head but fully opaque
@@ -554,32 +519,11 @@
     var(--spectrum) border-box;
 }
 
+/* Now the same solid red button as btn-primary. Still unlayered, as it
+   always was, so it keeps outranking the padding, radius and type utilities
+   its call sites pass: the label can't drop below large-text size. */
 .btn-spectrum {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 999px;
-  padding: 9px 18px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  border: 1px solid transparent;
-  /* The deepened ramp, not --spectrum: white type on the guideline cyan is
-     2.07:1. See --spectrum-btn in :root. */
-  background: var(--spectrum-btn);
-  color: #fff;
-  background-size: 180% 100%;
-  background-position: 0% 0%;
-  background-origin: border-box;
-  background-clip: border-box;
-  background-repeat: no-repeat;
-  transition: background-position 0.4s var(--ease), transform 0.22s var(--ease),
-    box-shadow 0.22s var(--ease);
-}
-.btn-spectrum:hover {
-  background-position: 100% 0%;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px -9px rgb(var(--purple-rgb) / 0.45);
+  @apply btn-primary;
 }
 
 /* ---------- header ---------- */

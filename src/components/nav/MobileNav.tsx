@@ -102,12 +102,14 @@ export function MobileNav({ locale }: { locale: Locale }) {
   }, [open]);
 
   // The burger and sheet hide at 1140px, so widening (resize, rotate, zoom
-  // out) past it closes the sheet rather than leaving it open unseen.
+  // out) past it closes the sheet and hands any focus in it to the logo.
   useEffect(() => {
     if (!open) return;
     const wide = window.matchMedia("(min-width: 1140px)");
     const onChange = () => {
-      if (wide.matches) setOpen(false);
+      if (!wide.matches) return;
+      if ([burger.current, sheet.current].some((el) => el?.contains(document.activeElement))) document.querySelector<HTMLElement>(".hdr-logo")?.focus();
+      setOpen(false);
     };
     onChange();
     wide.addEventListener("change", onChange);

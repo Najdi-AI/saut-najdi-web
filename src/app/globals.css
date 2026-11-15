@@ -267,9 +267,9 @@
   }
 }
 
-/* One radius (the shadcn --radius, the mockups' --ui-r) and no shadow. */
+/* Square, like the mockups' marketing panels, and no shadow. */
 @utility card {
-  @apply rounded-(--radius) border border-line bg-surface p-6 transition-colors duration-200;
+  @apply rounded-none border border-line bg-surface p-6 transition-colors duration-200;
 }
 
 /* A solid fill instead of the old lift and shadow, for the keyboard too:

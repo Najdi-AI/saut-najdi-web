@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 /**
  * The mockups' one button shape: flat, no resting shadow, Najdi Red on the
  * primary variant only (every other variant is ink on Off-White or Silver).
- * Corners read the single --radius token, so a section that sets
- * `--radius: 0` squares every primitive at once (marketing panels are square,
- * product fragments keep 10px). Keyboard focus is a 3px --ring outline.
+ * Square, like the mockups' .btn; only the sm size, the control inside
+ * product fragments (.ui-btn), takes the --radius corners. Keyboard focus is
+ * a 3px --ring outline.
  *
  * Non-link actions only: a link that looks like a button stays DemoLink.
  */
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center gap-2.5 rounded-(--radius) border border-transparent font-bold whitespace-nowrap transition-[background-color,border-color,color,scale] duration-150 ease-out select-none focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring active:not-aria-[haspopup]:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center gap-2.5 rounded-none border border-transparent font-bold whitespace-nowrap transition-[background-color,border-color,color,scale] duration-150 ease-out select-none focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring active:not-aria-[haspopup]:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -31,7 +31,7 @@ const buttonVariants = cva(
         default:
           "min-h-13 px-7 text-[1.25rem] leading-none max-sm:min-h-11.5 max-sm:px-4.5 has-data-[icon=inline-end]:pe-6 has-data-[icon=inline-start]:ps-6",
         // Controls inside product fragments: the 44px tap target, 15px type.
-        sm: "min-h-11 gap-1.5 px-3.5 text-[0.9375rem] has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3",
+        sm: "min-h-11 gap-1.5 rounded-(--radius) px-3.5 text-[0.9375rem] has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3",
         icon: "size-11",
       },
     },

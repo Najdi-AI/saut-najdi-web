@@ -5,7 +5,7 @@
 /**
  * Saut Najdi design tokens — from the official brand guideline
  * (see ../website-research.md §1). Tailwind v4 reads them from the @theme
- * block below; there is no tailwind.config.ts any more.
+ * blocks below; there is no tailwind.config.ts any more.
  *
  * The dark theme is opted into per-subtree, not per-visitor: `dark:` applies
  * to anything inside an element carrying `data-theme="dark"`. That is what
@@ -29,7 +29,11 @@
   }
 }
 
-@theme {
+/* `inline` because these are variable-backed: utilities then emit
+   rgb(var(--c-ink)) and resolve it on each element, as v3 did. In a plain
+   @theme the value is computed once on :root and inherited already
+   resolved, so a [data-theme="dark"] subtree would not flip them. */
+@theme inline {
   /**
    * Brand hues, variable-backed so they LIGHTEN on night. The guideline
    * values are tuned for ink on white; at icon weight — a 1.8px stroke —
@@ -74,6 +78,18 @@
   --color-ok: rgb(var(--c-ok));
 
   /**
+   * Text-only override: `text-brand-blue` (and its hover/group variants)
+   * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
+   * blue link and step number clears 4.5:1 on white (5.96), the canvas
+   * (5.60), the blue 10% chip (4.97) and that chip inside a
+   * bg-brand-gradient-soft card (4.60 at worst).
+   * bg-, border-, ring- and outline-brand-blue keep the guideline value.
+   */
+  --text-color-brand-blue: rgb(var(--c-brand-blue-text));
+}
+
+@theme {
+  /**
    * Dark-theme ground. Navy-leaning rather than neutral black, so the
    * brand gradient still reads as the warm thing in the frame.
    * `night-surface` is deliberately the same value the Cal booker card
@@ -83,16 +99,6 @@
   --color-night-surface: #0f1730; /* raised: cards, chips, bubbles */
   --color-night-hi: #16203c; /* hover / second raise */
   --color-night-line: #232c49; /* hairline on dark */
-
-  /**
-   * Text-only override: `text-brand-blue` (and its hover/group variants)
-   * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
-   * blue link and step number clears 4.5:1 on white (5.96), the canvas
-   * (5.60), the blue 10% chip (4.97) and that chip inside a
-   * bg-brand-gradient-soft card (4.60 at worst).
-   * bg-, border-, ring- and outline-brand-blue keep the guideline value.
-   */
-  --text-color-brand-blue: rgb(var(--c-brand-blue-text));
 
   --font-sans: var(--font-thmanyah), system-ui, sans-serif;
 

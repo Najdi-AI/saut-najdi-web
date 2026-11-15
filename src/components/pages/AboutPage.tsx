@@ -26,7 +26,7 @@ const t = {
       },
       {
         h: "مين وراء صوت نجدي؟",
-        p: "صوت نجدي من إنتاج نجدي AI (Najdi AI)، فريق سعودي مقره الرياض. بنيناه للسوق السعودي من أول سطر كود — مو منتج أجنبي عرّبناه.",
+        p: "صوت نجدي من إنتاج نجد لحلول الأعمال (Najd Business Solutions)، شركة سعودية مقرها الرياض. بنيناه للسوق السعودي من أول سطر كود — مو منتج أجنبي عرّبناه.",
       },
       {
         h: "ليش هجين — ذكاء وبشر — مو ذكاء بس؟",
@@ -54,7 +54,7 @@ const t = {
       },
       {
         h: "Who is behind Saut Najdi?",
-        p: "Saut Najdi is a product of Najdi AI, a Saudi team based in Riyadh. We built it for the Saudi market from the first line of code — not a foreign product with an Arabic layer bolted on.",
+        p: "Saut Najdi is a product of Najd Business Solutions, a Saudi company based in Riyadh. We built it for the Saudi market from the first line of code — not a foreign product with an Arabic layer bolted on.",
       },
       {
         h: "Why hybrid — AI plus humans — rather than AI alone?",

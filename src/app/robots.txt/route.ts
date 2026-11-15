@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-static";
 
 const BODY = `# robots.txt — sautnajdi.ai
-# Saut Najdi — a Saudi AI voice agent. A product of Najdi AI, Riyadh.
+# Saut Najdi — a Saudi AI voice agent. A product of Najd Business Solutions, Riyadh.
 # Plain-language brief for AI assistants:
 #   English: ${SITE_URL}/llms.txt
 #   العربية: ${SITE_URL}/llms-ar.txt

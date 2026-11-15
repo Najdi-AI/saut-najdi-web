@@ -1,5 +1,5 @@
 import { metaFor, PageJsonLd } from "@/lib/pageFactory";
-import { HomePage } from "@/components/pages/HomePage";
+import { Home } from "@/components/home/Home";
 
 export const metadata = metaFor("ar", "home");
 
@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <>
       <PageJsonLd locale="ar" kind="home" />
-      <HomePage locale="ar" />
+      <Home locale="ar" />
     </>
   );
 }

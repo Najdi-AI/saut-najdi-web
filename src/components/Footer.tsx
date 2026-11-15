@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { localePath, type Locale } from "@/lib/i18n";
 import {
   BILLING_EMAIL,
@@ -18,41 +15,9 @@ import {
 } from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { SOCIAL_HEADING } from "@/content/social";
+import { FooterLangSwitch } from "./FooterLangSwitch";
 import { SocialLinks } from "./SocialLinks";
 import s from "./Footer.module.css";
-
-/** Each language's own name: the same in both locales. */
-const LANG_NAME: Record<Locale, string> = { ar: "العربية", en: "English" };
-
-/**
- * Both languages, the current one marked; each links to the SAME page in
- * that language (blueprint §4.1), like the header switch.
- */
-function FooterLangSwitch({ locale, label }: { locale: Locale; label: string }) {
-  const pathname = usePathname() ?? "/";
-  const arPath =
-    locale === "ar" ? pathname : pathname.replace(/^\/en(?=\/|$)/, "") || "/";
-  const href: Record<Locale, string> = {
-    ar: arPath,
-    en: arPath === "/" ? "/en" : `/en${arPath}`,
-  };
-
-  return (
-    <div className={s.langsw} role="group" aria-label={label}>
-      {(["ar", "en"] as const).map((l) => (
-        <Link
-          key={l}
-          href={href[l]}
-          lang={l}
-          hrefLang={l}
-          aria-current={l === locale ? "page" : undefined}
-        >
-          {LANG_NAME[l]}
-        </Link>
-      ))}
-    </div>
-  );
-}
 
 /**
  * The site footer: Try 3's colophon (decision 184). Brand and PDPL line,

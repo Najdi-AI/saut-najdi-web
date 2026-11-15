@@ -1,0 +1,27 @@
+{
+  "src": "/audio/clinic-call.m4a",
+  "durationMs": 20183,
+  "turns": [
+    {
+      "who": "caller",
+      "startMs": 150,
+      "endMs": 2984
+    },
+    {
+      "who": "agent",
+      "startMs": 3304,
+      "endMs": 8917
+    },
+    {
+      "who": "caller",
+      "startMs": 9367,
+      "endMs": 13290
+    },
+    {
+      "who": "ahmed",
+      "startMs": 14790,
+      "endMs": 19883
+    }
+  ],
+  "escalationMs": 13640
+}

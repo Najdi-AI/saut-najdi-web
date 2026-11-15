@@ -1,10 +1,11 @@
-// Builds the homepage voice clips: the hero's short exchange (HeroVisual) and the clinic call (SampleConversation),
-// spoken by Saut Najdi's own agent voice (Raed, the platform's engine voice) with two other Cartesia voices for the
-// caller and for «أحمد», the clinic's human employee. Adapted from the booth video's tooling
+// Builds the homepage voice clips: the hero's short exchange (HeroVisual) and the clinic call (SampleConversation).
+// The AI agent speaks in Majed (ElevenLabs), the caller in Raed (Cartesia) and «أحمد», the clinic's human employee,
+// in Tariq (Cartesia), so the three sound clearly different (Sultan, 2026-11-15). Adapted from the booth video's tooling
 // (booth-video-ghe-2026/scripts: voice-lines.mjs for the Cartesia request, voice-post.mjs for trimming, levelling and
 // the peak limiter, wav.mjs for WAV files and BS.1770 loudness). No dependencies beyond Node and an ffmpeg binary.
 //
-//   CARTESIA_API_KEY="$(gcloud secrets versions access latest --secret=cartesia-api-key --project=najdiai)" \
+//   CARTESIA_API_KEY="$(gcloud secrets versions access latest --secret=cartesia-api-key --project=sautnajdi-prod)" \
+//   ELEVENLABS_API_KEY="$(gcloud secrets versions access latest --secret=elevenlabs-api-key --project=sautnajdi-prod)" \
 //     node scripts/make-home-voice.mjs                 synthesise (or reuse cached takes), mix, encode, write public/audio
 //   CARTESIA_API_KEY=... node scripts/make-home-voice.mjs --list-voices    Cartesia's Arabic voices: id, gender, name
 //   node scripts/make-home-voice.mjs --offline         rebuild from cached takes only (no key, no network)
@@ -13,7 +14,7 @@
 // whose text or voice changed; --fresh ignores it. FFMPEG=<path> picks the encoder (it needs AAC and the loudnorm
 // filter); by default the script uses Remotion's bundled ffmpeg from the booth video repo next to this one.
 //
-// The key is read from the environment only. It is never printed, logged or written anywhere; a failed request prints
+// The keys are read from the environment only. It is never printed, logged or written anywhere; a failed request prints
 // its HTTP status and nothing else. Exit codes: 0 done, 1 failed, 2 no key (and a take was not cached).
 //
 // Outputs, all in public/audio: <clip>.m4a (AAC-LC mono 48 kHz, about -16 LUFS integrated, true peak <= -1 dBTP,
@@ -38,13 +39,21 @@ const CARTESIA = {
   version: '2026-08-14',
 };
 
+// ElevenLabs settings. The clips are rendered ahead of time, so latency doesn't matter: the first model the API
+// accepts wins, most natural first. `eleven_turbo_v2_5` is the platform's current live model.
+const ELEVENLABS = {
+  base: 'https://api.elevenlabs.io',
+  models: ['eleven_v4_turbo', 'eleven_v3', 'eleven_turbo_v2_5'],
+};
+
 // Voice ids are public identifiers, not secrets. The caller is a man on purpose: both scripts answer him with «أبشر»
 // and «يناسبك», which in Najdi speech address a man (a woman would hear «أبشري»), and the bubbles are not changed.
 export const VOICES = {
-  agent: {id: 'f9f9f472-6247-4403-9abe-616f7c407c63', name: 'Raed'}, // the product's engine voice
-  caller: {id: 'e3087ad8-7018-4154-9a87-11577f916cd4', name: 'Omar'},
-  ahmed: {id: 'db873303-3a70-4d9d-867a-0d70a6377195', name: 'Tariq'},
+  agent: {provider: 'elevenlabs', id: 'oJCdZCYaJobw2GlrIQm5', name: 'Majed'}, // the AI agent
+  caller: {provider: 'cartesia', id: 'f9f9f472-6247-4403-9abe-616f7c407c63', name: 'Raed'},
+  ahmed: {provider: 'cartesia', id: 'db873303-3a70-4d9d-867a-0d70a6377195', name: 'Tariq'},
 };
+const VOICE_ID = {cartesia: /^[0-9a-f-]{36}$/, elevenlabs: /^[A-Za-z0-9]{20}$/};
 
 // The bubbles show digits; the voices must say the words. [as written on screen, as spoken].
 const SPOKEN_FORMS = [['4:30', 'أربع ونص']];
@@ -298,6 +307,40 @@ async function synthesise(transcript, voiceId, apiKey) {
   return new Int16Array(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length));
 }
 
+// ---------------------------------------------------------------------------------------------------- ElevenLabs
+
+// PCM at RATE when the plan allows it; otherwise 44.1 kHz, resampled to RATE by ffmpeg. Tries ELEVENLABS.models in
+// order and remembers the first one the API accepts.
+let elevenModel = null;
+async function synthesiseEleven(transcript, voiceId, apiKey, workDir) {
+  for (const model of elevenModel ? [elevenModel] : ELEVENLABS.models) {
+    for (const rate of [RATE, 44100]) {
+      let res;
+      try {
+        res = await request(`${ELEVENLABS.base}/v1/text-to-speech/${voiceId}?output_format=pcm_${rate}`, {
+          method: 'POST',
+          headers: {'xi-api-key': apiKey, 'Content-Type': 'application/json', Accept: 'audio/*'},
+          body: JSON.stringify({text: transcript, model_id: model, language_code: 'ar'}),
+        }, `tts ${model} pcm_${rate}`);
+      } catch (err) {
+        if (/HTTP (400|403|404|422)/.test(err.message)) { console.log(`  ${err.message}; trying the next option`); continue; }
+        throw err;
+      }
+      elevenModel = model;
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (buf.length < 2 || buf.length % 2) throw new Error(`tts: ${buf.length} bytes is not 16-bit PCM`);
+      if (rate === RATE) return new Int16Array(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length));
+      const src = path.join(workDir, `resample-${process.pid}.pcm`), dst = `${src}.${RATE}.pcm`;
+      writeFileSync(src, buf);
+      const r = await ff(['-y', '-f', 's16le', '-ar', String(rate), '-ac', '1', '-i', src, '-ar', String(RATE), '-f', 's16le', dst]);
+      if (r.code !== 0) throw new Error(`resample: ffmpeg exit ${r.code}`);
+      const out = readFileSync(dst);
+      return new Int16Array(out.buffer.slice(out.byteOffset, out.byteOffset + out.length));
+    }
+  }
+  throw new Error('tts: ElevenLabs accepted none of the models');
+}
+
 async function listVoices(apiKey) {
   const all = [];
   let after;
@@ -339,6 +382,7 @@ function ffmpegPath() {
 function childEnv() {
   const env = {...process.env};
   delete env.CARTESIA_API_KEY;
+  delete env.ELEVENLABS_API_KEY;
   return env;
 }
 
@@ -380,6 +424,7 @@ function arg(argv, name) {
 
 async function main(argv) {
   const apiKey = (process.env.CARTESIA_API_KEY ?? '').trim();
+  const elevenKey = (process.env.ELEVENLABS_API_KEY ?? '').trim();
   const offline = argv.includes('--offline'), fresh = argv.includes('--fresh');
   const cacheDir = path.resolve(arg(argv, '--cache') ?? path.join(os.tmpdir(), 'saut-najdi-home-voice'));
 
@@ -389,12 +434,13 @@ async function main(argv) {
     return 0;
   }
 
-  const unset = Object.entries(VOICES).filter(([, v]) => !/^[0-9a-f-]{36}$/.test(v.id)).map(([k]) => k);
+  const unset = Object.entries(VOICES).filter(([, v]) => !VOICE_ID[v.provider]?.test(v.id)).map(([k]) => k);
   if (unset.length) throw new Error(`pick a voice id for: ${unset.join(', ')} (run with --list-voices)`);
 
   mkdirSync(cacheDir, {recursive: true});
   mkdirSync(OUT_DIR, {recursive: true});
-  let charsSent = 0, cached = 0;
+  const charsSent = {cartesia: 0, elevenlabs: 0};
+  let cached = 0;
 
   for (const clip of CLIPS) {
     checkAgainstSource(clip);
@@ -403,7 +449,8 @@ async function main(argv) {
       if (part.chime) { sounds.push(makeChime()); continue; }
       const voice = VOICES[part.who === 'ahmed' ? 'ahmed' : part.who];
       const transcript = spokenForm(part.text);
-      const key = createHash('sha256').update([CARTESIA.model, CARTESIA.version, voice.id, RATE, transcript].join('\n')).digest('hex').slice(0, 24);
+      const engine = voice.provider === 'elevenlabs' ? ['elevenlabs', ...ELEVENLABS.models] : [CARTESIA.model, CARTESIA.version];
+      const key = createHash('sha256').update([...engine, voice.id, RATE, transcript].join('\n')).digest('hex').slice(0, 24);
       const take = path.join(cacheDir, `${key}.pcm`);
       let raw;
       if (!fresh && existsSync(take)) {
@@ -412,9 +459,14 @@ async function main(argv) {
         cached++;
       } else {
         if (offline) throw new Error(`--offline: no cached take for «${transcript}»`);
-        if (!apiKey) { console.error('Set CARTESIA_API_KEY in this shell (never in a file).'); return 2; }
-        raw = await synthesise(transcript, voice.id, apiKey);
-        charsSent += [...transcript].length;
+        if (voice.provider === 'elevenlabs') {
+          if (!elevenKey) { console.error('Set ELEVENLABS_API_KEY in this shell (never in a file).'); return 2; }
+          raw = await synthesiseEleven(transcript, voice.id, elevenKey, cacheDir);
+        } else {
+          if (!apiKey) { console.error('Set CARTESIA_API_KEY in this shell (never in a file).'); return 2; }
+          raw = await synthesise(transcript, voice.id, apiKey);
+        }
+        charsSent[voice.provider] += [...transcript].length;
         writeFileSync(take, Buffer.from(raw.buffer, raw.byteOffset, raw.byteLength));
       }
       sounds.push(prepareTurn(raw));
@@ -422,7 +474,8 @@ async function main(argv) {
 
     await renderClip(clip, sounds, {outDir: OUT_DIR, workDir: cacheDir});
   }
-  console.log(`characters sent to Cartesia this run: ${charsSent} (${cached} cached takes reused)`);
+  console.log(`characters sent this run: Cartesia ${charsSent.cartesia}, ElevenLabs ${charsSent.elevenlabs}` +
+    `${elevenModel ? ` (model ${elevenModel})` : ''} (${cached} cached takes reused)`);
   return 0;
 }
 

@@ -58,7 +58,7 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
         ref={trigger}
         tabIndex={0}
         aria-describedby={id}
-        className="cursor-help rounded-xs underline decoration-dotted underline-offset-4 focus:outline-2 focus:outline-offset-2 focus:outline-brand-blue"
+        className="cursor-help rounded-xs underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
         onPointerEnter={show}
         onPointerLeave={hideSoon}
         onFocus={show}

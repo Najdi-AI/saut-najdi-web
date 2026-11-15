@@ -2,7 +2,7 @@ import "../globals.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { thmanyah } from "../fonts";
+import { thmanyah, thmanyahSerifDisplay } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
@@ -41,7 +41,7 @@ export default function EnglishRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr" className={thmanyah.variable} suppressHydrationWarning>
+    <html lang="en" dir="ltr" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <NoScriptReveal />

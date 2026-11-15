@@ -169,21 +169,47 @@
   }
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+/**
+ * Rebrand palette (2026-11-15) — the guideline colours as literals, ADDED
+ * beside the tokens above for the redesigned sections. Nothing on the
+ * current pages reads them. `static` emits every one as a CSS variable
+ * (var(--color-najdi-red)) even before a utility uses it.
+ *
+ * Unlike brand-* above, these do not lift under [data-theme="dark"].
+ *
+ * House rules for anything built on them: one ground (Off-White), one ink
+ * (Charcoal), one accent (Najdi Red, on the primary action only); the other
+ * hues live inside product fragments. No gradients, glows, blur, glass or
+ * resting shadows.
+ */
+@theme static {
+  --color-cyan: #2ec4e6;
+  --color-blue: #5b6ce5;
+  --color-purple: #6f3fa4;
+  --color-magenta: #e20c3a;
+  --color-najdi-red: #ec1b3a; /* the single accent */
+  --color-najdi-red-press: #c9142f; /* its pressed state (mockups) */
+  --color-charcoal: #0d1326;
+  --color-soft-navy: #112046;
+  --color-off-white: #f7f8fa;
+  --color-silver-gray: #e5e7eb;
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+  /* H1/H2 only. next/font sets --font-serif-display (src/app/fonts.ts). */
+  --font-display: var(--font-serif-display), var(--font-thmanyah), serif;
+}
+
 @layer base {
+  /* v4 made the default border colour currentcolor. --border is Silver
+     Gray #E5E7EB, which is exactly v3's gray-200 default, so every bare
+     `border` looks as it did. outline-ring/50 is shadcn's base; it only
+     shows where an outline has no colour of its own (none on the current
+     pages — :focus-visible below sets #5b6ce5). */
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    @apply border-border outline-ring/50;
   }
   /* v4's preflight dropped the pointer cursor on buttons; keep v3's. */
   button:not(:disabled),
@@ -1171,9 +1197,12 @@ a.mega-item:hover .mega-ico {
     transition-duration: 0.01ms !important;
   }
 }
+
 /* ============================================================
    shadcn/ui (style base-nova, rtl) — semantic tokens for the components
-   the rebrand will add. Nothing on the current pages reads them.
+   the rebrand will add, mapped onto the rebrand palette. Apart from
+   --border (the default border colour, see @layer base above) nothing on
+   the current pages reads them.
 
    Deliberately NOT carried over from `shadcn init`:
    - the radius scale (--radius-sm … --radius-4xl). It would redefine the
@@ -1181,41 +1210,55 @@ a.mega-item:hover .mega-ico {
    - `--font-sans: var(--font-sans)`. The family is set in @theme above
      from next/font's --font-thmanyah; the self-reference would drop it.
    - the `.dark` block. This site's dark theme is [data-theme="dark"], and
-     the night values for these tokens belong to the rebrand.
+     the night values for these tokens belong to the rebrand. --border in
+     particular must not flip: it is the v3 default in both themes.
+   - `body { bg-background text-foreground }`. The body keeps bg-canvas /
+     text-ink, which follow the current light/dark theme.
    ============================================================ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: var(--color-off-white);
+  --foreground: var(--color-charcoal);
+  /* "Paper": product surfaces inside fragments (mockups' --paper). */
+  --card: #ffffff;
+  --card-foreground: var(--color-charcoal);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-charcoal);
+  /* Najdi Red, the single accent. White on it is 4.39:1, so it carries
+     bold type at 18.66px or more (the mockups' button is 20px/700); the
+     pressed red takes white at 5.79:1. */
+  --primary: var(--color-najdi-red);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-silver-gray);
+  --secondary-foreground: var(--color-charcoal);
+  --muted: var(--color-silver-gray);
+  /* 6.49:1 on Off-White, 5.57:1 on Silver Gray (mockups' --muted). */
+  --muted-foreground: #525a6e;
+  /* shadcn's "accent" is the quiet hover surface of menus and lists, not
+     the brand accent — that is --primary. */
+  --accent: var(--color-silver-gray);
+  --accent-foreground: var(--color-charcoal);
+  --destructive: var(--color-magenta);
+  --border: var(--color-silver-gray);
+  /* Control outline in the mockups (inputs, secondary buttons). */
+  --input: #c9ced7;
+  /* The focus colour: the site's :focus-visible outline is brand blue. */
+  --ring: var(--color-blue);
+  --chart-1: var(--color-cyan);
+  --chart-2: var(--color-blue);
+  --chart-3: var(--color-purple);
+  --chart-4: var(--color-magenta);
+  --chart-5: var(--color-soft-navy);
+  /* The mockups' --ui-r (10px), for product UI inside fragments. Marketing
+     buttons and panels in the rebrand are square. */
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: var(--color-off-white);
+  --sidebar-foreground: var(--color-charcoal);
+  --sidebar-primary: var(--color-najdi-red);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--color-silver-gray);
+  --sidebar-accent-foreground: var(--color-charcoal);
+  --sidebar-border: var(--color-silver-gray);
+  --sidebar-ring: var(--color-blue);
 }
 
 @theme inline {

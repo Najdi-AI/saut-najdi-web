@@ -2,7 +2,7 @@ import "../globals.css";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { thmanyah } from "../fonts";
+import { thmanyah, thmanyahSerifDisplay } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
@@ -61,7 +61,7 @@ export default function ArabicRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={thmanyah.variable} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={`${thmanyah.variable} ${thmanyahSerifDisplay.variable}`} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <NoScriptReveal />

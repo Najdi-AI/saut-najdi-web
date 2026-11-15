@@ -32,6 +32,14 @@ export const chrome = {
     langSwitch: "EN",
     langSwitchLabel: "English",
     footer: {
+      // The footer's one heading, read by screen readers only (sr-only h2).
+      title: "عن صوت نجدي",
+      homeLabel: "صوت نجدي، الرئيسية",
+      parent: {
+        lead: "صوت نجدي من إنتاج",
+        name: "نجد لحلول الأعمال",
+        url: "https://najdbs.com",
+      },
       product: {
         title: "المنتج",
         links: [
@@ -64,8 +72,14 @@ export const chrome = {
           { label: "سياسة الاسترداد والإلغاء", path: "refund-policy" },
         ],
       },
+      contact: "تواصل",
+      language: "اللغة",
+      crLabel: "السجل التجاري",
+      vatLabel: "الرقم الضريبي",
       madeIn: "صُنع في السعودية",
-      rights: "© 2026 صوت نجدي",
+      // Followed by the brand name (SITE_NAME_AR); the year sits in its own
+      // ltr <bdi> so the © stays on the digits' side.
+      copyright: "© 2026",
     },
   },
   en: {
@@ -92,6 +106,13 @@ export const chrome = {
     langSwitch: "عربي",
     langSwitchLabel: "العربية",
     footer: {
+      title: "About Saut Najdi",
+      homeLabel: "Saut Najdi, home",
+      parent: {
+        lead: "A product of",
+        name: "Najd Business Solutions",
+        url: "https://najdbs.com",
+      },
       product: {
         title: "Product",
         links: [
@@ -124,8 +145,13 @@ export const chrome = {
           { label: "Refund & Cancellation Policy", path: "refund-policy" },
         ],
       },
+      // Not "Contact": the Company column already has a Contact link.
+      contact: "Get in touch",
+      language: "Language",
+      crLabel: "CR",
+      vatLabel: "VAT number",
       madeIn: "Made in Saudi Arabia",
-      rights: "© 2026 Saut Najdi",
+      copyright: "© 2026",
     },
   },
 } satisfies Record<Locale, unknown>;

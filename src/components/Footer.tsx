@@ -8,98 +8,103 @@ import {
   SELLER_CR,
   SELLER_NAME,
   SELLER_NAME_AR,
+  SITE_NAME_AR,
+  SITE_NAME_EN,
   SUPPORT_EMAIL,
   VAT_NUMBER,
 } from "@/lib/site";
 import { chrome } from "@/content/chrome";
 import { SOCIAL_HEADING } from "@/content/social";
+import { FooterLangSwitch } from "./FooterLangSwitch";
 import { SocialLinks } from "./SocialLinks";
-import { Waveform } from "./Waveform";
+import s from "./Footer.module.css";
 
+/**
+ * The site footer: Try 3's colophon (decision 184). Brand and PDPL line,
+ * three link columns and the support address, then the social row and the
+ * language switch; the company's legal lines sit on a band of their own.
+ * Every figure and address comes from lib/site.ts.
+ */
 export function Footer({ locale }: { locale: Locale }) {
   const t = chrome[locale].footer;
-  const pdpl = locale === "ar" ? PDPL_LINE_AR : PDPL_LINE_EN;
+  const ar = locale === "ar";
   const columns = [t.product, t.company, t.legal];
 
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="container py-12">
-        <div className="grid gap-10 md:grid-cols-4">
-          <div>
-            {/* Same two-cut swap as the header: the light-background file's
-                wordmark is baked dark and vanished on the navy footer. */}
-            <Image
-              src="/brand/logo-full.svg"
-              alt={locale === "ar" ? "شعار صوت نجدي" : "Saut Najdi logo"}
-              width={140}
-              height={47}
-              className="logo-default"
-            />
-            <Image
-              src="/brand/logo-full-inverse.svg"
-              alt=""
-              aria-hidden
-              width={140}
-              height={47}
-              className="logo-inverse"
-            />
-            <p className="mt-4 max-w-xs text-body text-ink/60">{pdpl}</p>
-            {/* Under the brand column rather than in the link grid: these are
-                outbound identity endpoints, not site navigation, and the three
-                nav columns are already a <nav> each. */}
-            <div className="mt-6">
-              <SocialLinks heading={SOCIAL_HEADING[locale]} />
-            </div>
-          </div>
-          {columns.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              {/* A column LABEL, not a section heading: as an <h2> it injected
-                  three site-wide siblings into every page's outline, competing
-                  with the real content headings crawlers rank on. */}
-              <p className="text-h5 text-ink">{col.title}</p>
-              <ul className="mt-3 space-y-2">
-                {col.links.map((l) => (
-                  <li key={l.path}>
-                    <Link
-                      href={localePath(locale, l.path)}
-                      className="text-body-lg text-ink/65 transition-colors hover:text-brand-blue"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+    <footer className={s.colophon} aria-labelledby="footer-title">
+      {/* The footer's one heading, for screen-reader outlines. The column
+          names stay labels: as <h2>s they injected three site-wide siblings
+          into every page's outline, competing with the real content
+          headings crawlers rank on. */}
+      <h2 id="footer-title" className="sr-only">
+        {t.title}
+      </h2>
+      <div className={`${s.wrap} ${s.main}`}>
+        <div className={s.brand}>
+          {/* The light-ground cut only: the footer is light in every theme. */}
+          <Link
+            href={localePath(locale, "")}
+            className={s.logo}
+            aria-label={t.homeLabel}
+          >
+            <Image src="/brand/logo-full.svg" alt="" width={142} height={110} />
+          </Link>
+          <p className={s.pdpl}>{ar ? PDPL_LINE_AR : PDPL_LINE_EN}</p>
+          <p className={s.parent}>
+            {t.parent.lead}{" "}
+            <a href={t.parent.url} rel="noopener">
+              {t.parent.name}
+            </a>
+          </p>
         </div>
-
-        <div className="mt-10 border-t border-line pt-6">
-          {/* Animated, same as the hero. It used to be `animate={false}`; the
-              bars are short here (20px against the hero's 30) so the motion
-              reads as a slow idle pulse rather than a second hero. Safe to
-              run: the global prefers-reduced-motion rule in globals.css stops
-              every animation on the page, this one included. */}
-          <Waveform bars={36} maxHeight={20} className="opacity-60" />
-          <div className="mt-4 flex flex-col items-center justify-between gap-3 text-body text-ink/65 sm:flex-row">
+        {columns.map((col) => (
+          <nav key={col.title} className={s.nav} aria-label={col.title}>
+            <p className={s.label}>{col.title}</p>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.path}>
+                  <Link href={localePath(locale, l.path)}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+        <div className={s.reach}>
+          <p className={s.label}>{t.contact}</p>
+          <a className={s.mail} href={`mailto:${SUPPORT_EMAIL}`} dir="ltr">
+            {SUPPORT_EMAIL}
+          </a>
+        </div>
+        {/* Social profiles sit outside the three <nav>s: they are outbound
+            identity endpoints, not site navigation. */}
+        <div className={s.row}>
+          <SocialLinks heading={SOCIAL_HEADING[locale]} />
+          <FooterLangSwitch locale={locale} label={t.language} />
+        </div>
+      </div>
+      <div className={s.legal}>
+        <div className={`${s.wrap} ${s.legalIn}`}>
+          <p className={s.seller}>
+            <span>{ar ? SELLER_NAME_AR : SELLER_NAME}</span>
+            <span>
+              {t.crLabel}: <bdi dir="ltr">{SELLER_CR}</bdi>
+            </span>
+            <span>
+              {t.vatLabel}: <bdi dir="ltr">{VAT_NUMBER}</bdi>
+            </span>
+            <a href={`mailto:${BILLING_EMAIL}`} dir="ltr">
+              {BILLING_EMAIL}
+            </a>
+          </p>
+          <p className={s.made}>
             {/* Text only. The 🇸🇦 emoji rendered as the letters "SA" on
                 Windows, and a hand-drawn flag would have to redraw the
                 Shahada, which is not ours to approximate. */}
             <span>{t.madeIn}</span>
-            <a
-              href={`mailto:${SUPPORT_EMAIL}`}
-              className="inline-block py-2.5 transition-colors hover:text-brand-blue"
-              dir="ltr"
-            >
-              {SUPPORT_EMAIL}
-            </a>
-            <span dir="ltr">{t.rights}</span>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-body-sm text-ink/60">
-            <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span>
-            <span>{locale === "ar" ? "السجل التجاري" : "CR"}: <bdi dir="ltr">{SELLER_CR}</bdi></span>
-            <span>{locale === "ar" ? "الرقم الضريبي" : "VAT number"}: <bdi dir="ltr">{VAT_NUMBER}</bdi></span>
-            <a href={`mailto:${BILLING_EMAIL}`} dir="ltr" className="hover:text-brand-blue">{BILLING_EMAIL}</a>
-          </div>
+            <span>
+              <bdi dir="ltr">{t.copyright}</bdi> {ar ? SITE_NAME_AR : SITE_NAME_EN}
+            </span>
+          </p>
         </div>
       </div>
     </footer>

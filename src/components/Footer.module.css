@@ -1,0 +1,284 @@
+/*
+ * The site footer, built from the Try 3 colophon (decision 184): light, on
+ * the Off-White ground, with the company's legal lines on a Silver Gray band.
+ * PR 1 literal tokens only, so nothing here follows the theme attribute; the
+ * public site is light-only. Values are the mockup's (15px UI text, 14px legal
+ * text, 24px gutter, margins of clamp(20px, 2.3vw, 32px)).
+ *
+ * The module is unlayered, so its rules win over Tailwind's layered
+ * preflight and utilities without !important.
+ */
+.colophon {
+  background: var(--color-off-white);
+  color: var(--color-charcoal);
+  line-height: 1.7;
+}
+.colophon:lang(en) {
+  line-height: 1.55;
+}
+.colophon :focus-visible {
+  outline-width: 3px;
+  outline-offset: 3px;
+}
+.colophon ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wrap {
+  padding-inline: clamp(20px, 2.3vw, 32px);
+}
+
+.main {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 48px;
+  padding-block: 56px 72px;
+}
+
+.brand {
+  grid-column: 1 / span 4;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 22px;
+}
+/* The SVG's artboard is mostly empty canvas (artwork 707 x 290 centred in
+   792 x 612), so the link is a window cut to the artwork at the mockup's
+   size (about 127 x 52) and the image is drawn larger behind it. The
+   artwork is centred, so the same offsets hold in RTL and LTR. */
+.logo {
+  display: block;
+  inline-size: 126px;
+  block-size: 52px;
+  overflow: hidden;
+}
+.logo img {
+  display: block;
+  inline-size: 142px;
+  max-inline-size: none;
+  block-size: auto;
+  margin-block-start: -29px;
+  margin-inline: -8px;
+}
+.pdpl {
+  font-size: 15px;
+  line-height: 1.75;
+  max-inline-size: 40ch;
+}
+.parent {
+  font-size: 15px;
+}
+.parent a,
+.mail {
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 700;
+  margin-block-end: 6px;
+}
+
+.nav {
+  grid-column: span 2;
+}
+.nav a {
+  display: inline-block;
+  padding-block: 9px;
+  font-size: 15px;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.nav a:active {
+  transform: translateY(1px);
+}
+
+.reach {
+  grid-column: span 2;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+}
+.mail {
+  display: inline-block;
+  padding-block: 9px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.follow {
+  display: grid;
+  gap: 4px;
+}
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.social a {
+  inline-size: 44px;
+  block-size: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.social a:active {
+  transform: scale(0.94);
+}
+.social svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+.langsw {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--color-silver-gray);
+}
+.langsw a {
+  min-block-size: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.langsw a[aria-current] {
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  font-weight: 700;
+}
+
+.legal {
+  background: var(--color-silver-gray);
+}
+.legalIn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 32px;
+  padding-block: 20px 22px;
+  font-size: 14px;
+}
+.seller,
+.made {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+}
+.legal a {
+  text-decoration: none;
+}
+
+/* Hover is for real pointers only; a tap must not leave a link underlined. */
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: var(--color-najdi-red);
+  }
+  .parent a:hover,
+  .mail:hover {
+    text-decoration-color: var(--color-najdi-red);
+  }
+  .social a:hover {
+    background: var(--color-charcoal);
+    color: var(--color-off-white);
+  }
+  .langsw a:not([aria-current]):hover {
+    color: var(--color-charcoal);
+  }
+  .legal a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}
+
+@media (max-width: 1100px) {
+  .brand {
+    grid-column: 1 / -1;
+  }
+  .nav,
+  .reach {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-block: 40px 48px;
+    row-gap: 36px;
+  }
+  .nav {
+    grid-column: span 6;
+  }
+  .reach {
+    grid-column: 1 / -1;
+  }
+  .social {
+    display: grid;
+    grid-template-columns: repeat(4, 44px);
+  }
+  .legalIn {
+    flex-direction: column;
+    /* The mockup's 10px, plus room for the billing link's hit area below
+       (12px, see the tap targets): at 10px the next row covered its edge. */
+    gap: 14px;
+  }
+  .seller {
+    flex-direction: column;
+    gap: 2px;
+  }
+  /* 44px tap targets on a phone: the mockup's 42px link rows and 40px
+     language segments grow by the difference, and short labels ("FAQ") get
+     a 44px minimum width. The billing address keeps its line height and
+     takes the extra as an invisible hit area. */
+  .nav a,
+  .mail {
+    padding-block: 10px;
+    min-inline-size: 44px;
+  }
+  .langsw a {
+    min-block-size: 44px;
+  }
+  .legal a {
+    padding-block: 12px;
+    margin-block: -12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colophon a {
+    transition: none;
+  }
+  .nav a:active,
+  .social a:active {
+    transform: none;
+  }
+}

@@ -80,6 +80,9 @@ export function MobileNav({ locale }: { locale: Locale }) {
         burger.current,
         ...sheet.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
       ].filter((el) => el.offsetParent !== null);
+      // Nothing on screen to trap into (the burger and sheet are hidden at
+      // 1140px and up): leave Tab alone.
+      if (!ring.length) return;
       const first = ring[0];
       const last = ring[ring.length - 1];
       const active = document.activeElement as HTMLElement | null;
@@ -96,6 +99,19 @@ export function MobileNav({ locale }: { locale: Locale }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // The burger and sheet hide at 1140px, so widening (resize, rotate, zoom
+  // out) past it closes the sheet rather than leaving it open unseen.
+  useEffect(() => {
+    if (!open) return;
+    const wide = window.matchMedia("(min-width: 1140px)");
+    const onChange = () => {
+      if (wide.matches) setOpen(false);
+    };
+    onChange();
+    wide.addEventListener("change", onChange);
+    return () => wide.removeEventListener("change", onChange);
   }, [open]);
 
   const groups: Record<GroupKey, { label: string; path: string }[]> = {

@@ -1,4 +1,5 @@
 import { DemoLink } from "@/components/DemoLink";
+import { Section } from "@/components/page/Section";
 import type { Locale } from "@/lib/i18n";
 
 const copy = {
@@ -28,28 +29,45 @@ const copy = {
   },
 } as const;
 
-export function WorkflowComparison({ locale }: { locale: Locale }) {
+/**
+ * Separate tools against one platform, on the inner-page kit: a Section
+ * head, the four chores as flat Silver chips, then the two columns as
+ * square panels, the Saut Najdi one a Charcoal .on-dark panel with the
+ * demo link. Text colours come from the tokens so both panels read right.
+ */
+export function WorkflowComparison({ locale, className = "" }: { locale: Locale; className?: string }) {
   const t = copy[locale];
-  return <section className="border-y border-line bg-canvas py-16" aria-labelledby="workflow-comparison-heading">
-    <div className="container">
-      <div className="mx-auto max-w-3xl text-center"><h2 id="workflow-comparison-heading" className="text-h2">{t.title}</h2><p className="mt-4 text-body-lg text-ink/70">{t.intro}</p></div>
-      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3" aria-label={locale === "ar" ? "قلّل العمل المتكرر" : "Reduce repetitive work"}>
-        {(locale === "ar" ? ["تكرار الردود يدوياً", "التنقل بين أدوات متفرقة", "إعادة شرح طلب العميل", "كتابة ملخص كل مكالمة يدوياً"] : ["Repetitive manual answers", "Switching between separate tools", "Customers repeating their request", "Writing every call summary manually"]).map(label => <span key={label} className="rounded-lg border border-line bg-surface px-4 py-2 text-body text-ink/70"><span aria-hidden="true" className="me-2 text-brand-blue">−</span>{label}</span>)}
+  return (
+    <Section title={t.title} lead={t.intro} className={className}>
+      <ul className="flex flex-wrap gap-2" aria-label={locale === "ar" ? "قلّل العمل المتكرر" : "Reduce repetitive work"}>
+        {(locale === "ar" ? ["تكرار الردود يدوياً", "التنقل بين أدوات متفرقة", "إعادة شرح طلب العميل", "كتابة ملخص كل مكالمة يدوياً"] : ["Repetitive manual answers", "Switching between separate tools", "Customers repeating their request", "Writing every call summary manually"]).map((label) => (
+          <li key={label} className="bg-secondary px-4 py-2.5 text-[0.9375rem] font-medium">
+            <span aria-hidden="true" className="me-2">−</span>
+            {label}
+          </li>
+        ))}
+      </ul>
+      <div className="mt-10 grid gap-2 md:grid-cols-2">
+        {([false, true] as const).map((withSaut) => (
+          <article key={String(withSaut)} className={`flex min-w-0 flex-col p-6 sm:p-8 ${withSaut ? "on-dark" : "border border-border"}`}>
+            <h3 className={`text-[1.5rem] font-bold ${withSaut ? "" : "text-muted-foreground"}`}>{withSaut ? t.saut : t.traditional}</h3>
+            <ol className="mt-4 flex-1">
+              {t.rows.map(([topic, before, after], index) => (
+                <li key={topic} className="border-b border-border py-5 last:border-b-0 md:min-h-40">
+                  <h4 className="flex items-start gap-3 text-[1.125rem] font-bold">
+                    <span className="flex size-7 shrink-0 items-center justify-center bg-secondary text-[0.9375rem] tabular-nums">{index + 1}</span>
+                    {topic}
+                  </h4>
+                  <p className="mt-3 text-[1.0625rem] leading-[1.7] text-muted-foreground">{withSaut ? after : before}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-6 bg-secondary p-4 text-[1.0625rem] font-medium">{withSaut ? (locale === "ar" ? "اختر الباقة المناسبة، ثم نحدد التجهيز في العرض التعريفي" : "Choose your plan, then scope setup in your demo") : (locale === "ar" ? "يعتمد الجهد والوقت على أدواتك ومزوّدي الخدمة" : "Time and effort depend on your tools and providers")}</p>
+            {withSaut && <div className="mt-6"><DemoLink locale={locale}>{t.cta}</DemoLink></div>}
+          </article>
+        ))}
       </div>
-      <div className="mx-auto mt-9 grid max-w-6xl gap-6 md:grid-cols-2">
-        {([false, true] as const).map(withSaut => <article key={String(withSaut)} className={`flex min-w-0 flex-col rounded-3xl border p-5 shadow-card sm:p-8 ${withSaut ? "border-brand-blue/50 bg-brand-gradient-soft" : "border-line bg-surface"}`}>
-          <h3 className={`text-center text-h3 ${withSaut ? "text-brand-blue" : "text-ink/70"}`}>{withSaut ? t.saut : t.traditional}</h3>
-          <ol className="mt-6 flex-1">
-            {t.rows.map(([topic, before, after], index) => <li key={topic} className="border-line py-5 not-first:border-t md:min-h-40">
-              <h4 className="flex items-start gap-3 text-body-lg font-semibold"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-body text-brand-blue">{index + 1}</span>{topic}</h4>
-              <p className="mt-3 text-body leading-relaxed text-ink/70">{withSaut ? after : before}</p>
-            </li>)}
-          </ol>
-          <div className="mt-6 rounded-xl bg-canvas p-4 text-center text-body font-medium">{withSaut ? (locale === "ar" ? "اختر الباقة المناسبة، ثم نحدد التجهيز في العرض التعريفي" : "Choose your plan, then scope setup in your demo") : (locale === "ar" ? "يعتمد الجهد والوقت على أدواتك ومزوّدي الخدمة" : "Time and effort depend on your tools and providers")}</div>
-          {withSaut && <div className="mt-6 text-center"><DemoLink locale={locale}>{t.cta}</DemoLink></div>}
-        </article>)}
-      </div>
-      <p className="mx-auto mt-6 max-w-3xl text-center text-body text-ink/65">{t.note} {locale === "ar" ? "تتوفر الميزات بحسب الباقة والنطاق المتفق عليه." : "Feature availability depends on your plan and agreed scope."}</p>
-    </div>
-  </section>;
+      <p className="mt-6 max-w-[60ch] text-[1.0625rem] leading-[1.7] text-muted-foreground">{t.note} {locale === "ar" ? "تتوفر الميزات بحسب الباقة والنطاق المتفق عليه." : "Feature availability depends on your plan and agreed scope."}</p>
+    </Section>
+  );
 }

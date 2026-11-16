@@ -5,15 +5,28 @@ import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { formatSarRate, plans, textConversations, voiceMinutes } from "@/content/pricing";
 import { SELLER_NAME, SELLER_NAME_AR, VAT_NUMBER } from "@/lib/site";
+import { DemoLink } from "@/components/DemoLink";
 import { PricingTooltip } from "@/components/pages/PricingTooltip";
-import { PricingOverview } from "@/components/PricingOverview";
-import { Waveform } from "@/components/Waveform";
+import { PlanWalk } from "@/components/pricing/PlanWalk";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import { capacityCopy, planCapacityRows, planFeatureRows } from "@/components/PlanCapacity";
 import { WorkflowComparison } from "@/components/WorkflowComparison";
 
+/**
+ * /pricing (rebrand D5) on the inner-page kit, About as the pilot: PageHero,
+ * the four-tier walk under its own h2 (its tier names are h3), then the
+ * detail: the full comparison table, the trial, credit and contract terms as
+ * ruled rows, the workflow comparison and the closing links. Figures come
+ * from content/pricing.ts and billingTerms.ts only. This module is not
+ * imported by pageFactory, so the walk's client island stays on this route.
+ */
+
+/** The walk's heading: the plans overview's own line. */
+const walkTitle = { ar: "باقات لكل مرحلة من نموك", en: "Plans for every stage of growth" } as const;
+
 const copy = {
   ar: {
-    eyebrow: "الباقات والأسعار",
     title: "حصة واحدة للمكالمات والمحادثات",
     intro: "اختر باقتك الشهرية واستخدم حصتها من النقاط للمكالمات الصوتية أو المحادثات النصية أو مزيج منهما. ابدأ بعرض تعريفي لنحدد التجهيز المناسب لمنشأتك.",
     vat: "الأسعار المعروضة بالريال السعودي ولا تشمل ضريبة القيمة المضافة 15%. تُضاف الضريبة في الفاتورة الضريبية عند الدفع بعد العرض التعريفي والعرض المكتوب.",
@@ -60,7 +73,6 @@ const copy = {
     swipe: "مرّر الجدول أفقياً لمقارنة بقية الباقات.",
   },
   en: {
-    eyebrow: "Plans & pricing",
     title: "One credit pool for calls and conversations",
     intro: "Choose a monthly plan and use its credits for AI calls, text conversations, or both. Start with a demo so we can scope setup for your business.",
     vat: "Displayed prices are in SAR and exclude 15% VAT. VAT is added on the tax invoice at payment after the demo and written offer.",
@@ -112,6 +124,18 @@ function Amount({ value }: { value: number }) {
   return <span dir="ltr" className="inline-block tabular-nums">{new Intl.NumberFormat("en-US").format(value)}</span>;
 }
 
+/** About's ruled row: the heading on the start side, its content beside it. */
+function Row({ title, children }: { title: ReactNode; children: ReactNode }) {
+  return (
+    <div className="grid gap-4 border-b border-border py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">{title}</h2>
+      <div className="max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">{children}</div>
+    </div>
+  );
+}
+
+const textLink = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
+
 export function PricingPage({ locale }: { locale: Locale }) {
   const t = copy[locale];
   const terms = billingTerms[locale];
@@ -121,99 +145,107 @@ export function PricingPage({ locale }: { locale: Locale }) {
     { key: "enterprise", label: t.enterprise, fit: t.fit.enterprise, credits: null, monthlySar: null, withinVoiceSar: null, withinTextSar: null },
   ];
   type Column = typeof columns[number];
-  const monthlyPrice = (p: Column) => p.monthlySar === null ? t.custom : <><Amount value={p.monthlySar} /> <span className="text-body-lg font-medium">{t.sar}</span></>;
+  const monthlyPrice = (p: Column) => p.monthlySar === null ? t.custom : <><Amount value={p.monthlySar} /> <span className="text-[1.125rem] font-medium">{t.sar}</span></>;
   type PricingRow = { key: string; label: string; detail: string; value: (p: Column) => ReactNode };
   const primaryRows: PricingRow[] = [
-    { key: "credits", label: t.credits, detail: t.math, value: (p: Column) => p.credits === null ? t.custom : <span className="text-h4 font-bold"><Amount value={p.credits} /></span> },
+    { key: "credits", label: t.credits, detail: t.math, value: (p: Column) => p.credits === null ? t.custom : <span className="text-[1.375rem] font-bold"><Amount value={p.credits} /></span> },
     { key: "creditsPerSar", label: t.creditsPerSar, detail: t.creditsPerSarHelp, value: (p: Column) => p.credits === null || p.monthlySar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{creditsPerSar.format(p.credits / p.monthlySar)}</span> },
-    { key: "voice", label: t.voice, detail: t.exclusive, value: (p: Column) => p.credits === null ? t.custom : <><Amount value={voiceMinutes(p.credits)} /> <span className="text-body">{t.min}</span></> },
-    { key: "text", label: t.text, detail: t.exclusive, value: (p: Column) => p.credits === null ? t.custom : <><Amount value={textConversations(p.credits)} /> <span className="text-body">{t.conversation}</span></> },
+    { key: "voice", label: t.voice, detail: t.exclusive, value: (p: Column) => p.credits === null ? t.custom : <><Amount value={voiceMinutes(p.credits)} /> <span>{t.min}</span></> },
+    { key: "text", label: t.text, detail: t.exclusive, value: (p: Column) => p.credits === null ? t.custom : <><Amount value={textConversations(p.credits)} /> <span>{t.conversation}</span></> },
   ];
   const detailRows: PricingRow[] = [
     { key: "valueVoice", label: t.valueVoice, detail: t.unitHelp, value: (p: Column) => p.withinVoiceSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.withinVoiceSar)} {t.perMinute}</span> },
     { key: "valueText", label: t.valueText, detail: t.unitHelp, value: (p: Column) => p.withinTextSar === null ? t.custom : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(p.withinTextSar)} {t.perConversation}</span> },
   ];
   const renderRow = (row: PricingRow, prominent: boolean) => (
-    <tr key={row.key} className="border-t border-line">
-      <th scope="row" className="sticky inset-s-0 z-10 border-t border-line bg-surface px-5 py-4 text-start text-body font-medium text-ink">
+    <tr key={row.key}>
+      <th scope="row" className="border-t border-border bg-background px-5 py-4 text-start font-medium sm:sticky sm:inset-s-0 sm:z-10">
         <PricingTooltip id={`price-help-table-${row.key}`} explanation={row.detail}>{row.label}</PricingTooltip>
       </th>
-      {columns.map((p) => <td key={p.key} className={`border-t border-line px-4 py-4 text-center text-ink ${p.key === "growth" ? "bg-brand-purple/5" : "bg-surface"} ${prominent ? "text-body-lg font-semibold" : "text-body"}`}>{row.value(p)}</td>)}
+      {columns.map((p) => <td key={p.key} className={`border-t border-border px-4 py-4 text-center ${prominent ? "text-[1.125rem] font-semibold" : ""}`}>{row.value(p)}</td>)}
     </tr>
+  );
+  const groupRow = (title: string) => (
+    <tr><th colSpan={columns.length + 1} className="border-t border-border bg-secondary px-5 py-3 text-start font-bold">{title}</th></tr>
   );
 
   return (
     <>
-      <section className="border-b border-line bg-brand-gradient-soft">
-        <div className="container py-7 text-center sm:py-10">
-          <p className="eyebrow">{t.eyebrow}</p>
-          <h1 className="mx-auto mt-3 max-w-4xl text-3xl font-bold max-sm:leading-tight sm:text-h1">{t.title}</h1>
-          <p className="mx-auto mt-3 max-w-3xl text-body max-sm:leading-relaxed text-ink/75 sm:text-body-lg">{t.intro}</p>
-          <Waveform bars={28} animate={false} maxHeight={26} className="mt-3" />
-          <a href="#plan-comparison" className="mt-5 inline-flex rounded-full border border-line bg-surface px-6 py-3 text-body font-medium hover:border-brand-blue">{t.fullDetails} ↓</a>
-        </div>
-      </section>
-      <section className="container pt-6 sm:pt-8">
-        <p className="rounded-xl border border-line bg-surface px-5 py-3 text-body leading-relaxed text-ink/75">{t.vat}</p>
-      </section>
-      <PricingOverview locale={locale} variant="page" />
-      <section className="container pb-8">
-        <div className="rounded-2xl border border-line bg-surface p-6">
-          <h2 className="text-h3">{locale === "ar" ? "تجربة 14 يوماً" : "14-day trial"}</h2>
-          <p className="mt-3 text-body-lg">{terms.trial}</p>
-        </div>
-      </section>
-      <section className="container pb-8">
-        <details open id="plan-comparison" className="group scroll-mt-28">
-          <summary className="cursor-pointer rounded-xl border border-line bg-surface px-5 py-4 text-h4 font-semibold text-ink hover:border-brand-blue focus-visible:outline-brand-blue">{t.fullDetails}</summary>
-          <p className="my-3 text-body text-ink/70 xl:hidden">{t.swipe}</p>
-          <div role="region" aria-label={t.tableLabel} tabIndex={0} className="mt-4 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card focus-visible:outline-brand-blue">
-          <table className="w-full min-w-[1010px] border-separate border-spacing-0 text-start" aria-label={t.tableLabel}>
+      {/* No in-page link to the table below the walk: the walk grows after
+          hydration, and a smooth fragment scroll aims at the old offset. */}
+      <PageHero title={t.title} lead={t.intro} />
+
+      <Section title={walkTitle[locale]}>
+        <PlanWalk locale={locale} />
+      </Section>
+
+      <Section title={t.fullDetails}>
+        <p className="max-w-[75ch] bg-secondary px-5 py-4 text-[1.0625rem] leading-[1.7]">{t.vat}</p>
+        <p className="mt-6 text-[1.0625rem] text-muted-foreground xl:hidden">{t.swipe}</p>
+        <div role="region" aria-label={t.tableLabel} tabIndex={0} className="mt-4 overflow-x-auto border border-border focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring">
+          <table className="w-full min-w-[1010px] border-separate border-spacing-0 text-start text-[1.0625rem]" aria-label={t.tableLabel}>
             <thead>
-              <tr className="bg-navy text-white">
-                <th scope="col" className="sticky inset-s-0 z-20 w-[225px] bg-navy px-5 py-6 text-start align-top text-body-lg">{t.plan}</th>
-                {columns.map((p) => <th key={p.key} scope="col" className={`min-w-[195px] px-4 py-5 text-center align-top ${p.key === "growth" ? "bg-brand-purple/30" : ""}`}>
+              <tr className="bg-charcoal text-off-white">
+                <th scope="col" className="w-[225px] bg-charcoal px-5 py-6 text-start align-top text-[1.125rem] sm:sticky sm:inset-s-0 sm:z-20">{t.plan}</th>
+                {columns.map((p) => <th key={p.key} scope="col" className="min-w-[195px] px-4 py-5 text-center align-top">
                   <div className="flex min-h-[205px] flex-col items-center justify-between gap-3">
                     <div>
-                      <span className="block text-h4 font-bold">{p.label}</span>
-                      <span className="mt-2 block whitespace-normal text-body font-normal leading-snug text-white/75">{p.fit}</span>
-                      <span className="mt-4 block text-body-sm font-normal text-white/70">{t.monthly}</span>
-                      <span className="mt-1 block text-h3 font-bold">{monthlyPrice(p)}</span>
+                      <span className="block text-[1.375rem] font-bold">{p.label}</span>
+                      <span className="mt-2 block whitespace-normal font-normal leading-snug text-[#a3abbd]">{p.fit}</span>
+                      <span className="mt-4 block text-[0.9375rem] font-normal text-[#a3abbd]">{t.monthly}</span>
+                      <span className="mt-1 block text-[1.75rem] font-bold">{monthlyPrice(p)}</span>
                     </div>
-                    <Link href={localePath(locale, "demo")} className="inline-flex min-h-10 items-center justify-center rounded-full bg-white px-5 py-2 text-body font-semibold text-[#0D1326] transition hover:bg-white/90 focus-visible:outline-brand-cyan">{t.book}</Link>
+                    <Link href={localePath(locale, "demo")} className="inline-flex min-h-11 items-center justify-center bg-off-white px-5 font-bold text-charcoal transition-colors hover:bg-silver-gray focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-cyan">{t.book}</Link>
                   </div>
                 </th>)}
               </tr>
             </thead>
             <tbody>
               {primaryRows.map((row) => renderRow(row, true))}
-              <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{capacityCopy[locale].title}</th></tr>
+              {groupRow(capacityCopy[locale].title)}
               {planCapacityRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: row.key === "recordings" ? capacityCopy[locale].draft : capacityCopy[locale].note, value: (p) => planCapacityRows(p.key, locale)[index].value }, false))}
-              <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{locale === "ar" ? "ميّزات المنصة" : "Platform features"}</th></tr>
+              {groupRow(locale === "ar" ? "ميّزات المنصة" : "Platform features")}
               {planFeatureRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: locale === "ar" ? "يخضع استخدام المكالمات والمحادثات النصية لقواعد حصة النقاط الموضحة أعلاه. يوضح العرض المكتوب نطاق الربط ورسوم التجهيز وأي رسوم خارجية." : "Call and text usage follows the credit rules shown above. The written offer specifies integration scope, setup and any external charges.", value: (p) => planFeatureRows(p.key, locale)[index].value }, false))}
-              <tr><th colSpan={columns.length + 1} className="border-t border-line bg-canvas px-5 py-3 text-start text-body font-semibold text-ink">{t.usageDetail}</th></tr>
+              {groupRow(t.usageDetail)}
               {detailRows.map((row) => renderRow(row, false))}
             </tbody>
           </table>
-          </div>
-        </details>
-        <p className="mt-4 text-body leading-relaxed text-ink/70">{t.exclusive}</p>
-        <p className="mt-2 text-body leading-relaxed text-ink/70">{t.inPlanNote}</p>
-        <p className="mt-2 text-body text-ink/70">{locale === "ar" ? "قيمة النقطة: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب عدد النقاط الشهري إلى عدد صحيح. أسعار مؤسسات وحصتها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
-        <p className="mt-2 text-body text-ink/70">{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
-      </section>
-      <section className="container grid gap-8 py-10 lg:grid-cols-2">
-        <div className="card"><h2 className="text-h3">{t.mathTitle}</h2><p className="mt-4 text-body leading-relaxed">{terms.units}</p><p className="mt-3 text-body">{terms.cloning}</p><ul className="mt-5 divide-y divide-line text-body-lg font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul><p dir="ltr" className="mt-5 rounded-xl bg-canvas p-4 text-center text-body-lg font-semibold">(3 × 10) + (2 × 4) = 38 {locale === "ar" ? "نقطة" : "credits"}</p><p className="mt-3 text-body text-ink/65">{locale === "ar" ? "حصة واحدة مشتركة. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p></div>
-        <div className="card"><h2 className="text-h3">{t.conditionTitle}</h2><ul className="mt-4 list-disc space-y-3 ps-5 text-body-lg leading-relaxed text-ink/75">{[terms.zero, terms.more, terms.packs, terms.annual, terms.expiry, terms.setup, terms.byoc].map((c) => <li key={c}>{c}</li>)}</ul></div>
-      </section>
-      <WorkflowComparison locale={locale} />
-      <section className="container py-16 text-center">
-        <Link href={localePath(locale, "demo")} className="btn-primary">{t.book}</Link>
-        <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-body">
-          <Link href={localePath(locale, "refund-policy")} className="text-brand-blue hover:underline">{t.policy}</Link>
-          <Link href={localePath(locale, "contact")} className="text-brand-blue hover:underline">{t.contact}</Link>
         </div>
-      </section>
+        <div className="mt-6 grid max-w-[75ch] gap-2 text-[1.0625rem] leading-[1.7] text-muted-foreground">
+          <p>{t.exclusive}</p>
+          <p>{t.inPlanNote}</p>
+          <p>{locale === "ar" ? "قيمة النقطة: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب عدد النقاط الشهري إلى عدد صحيح. أسعار مؤسسات وحصتها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
+          <p>{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="border-t border-border">
+          <Row title={locale === "ar" ? "تجربة 14 يوماً" : "14-day trial"}>
+            <p>{terms.trial}</p>
+          </Row>
+          <Row title={t.mathTitle}>
+            <p>{terms.units}</p>
+            <p className="mt-3">{terms.cloning}</p>
+            <ul className="mt-5 divide-y divide-border border-y border-border font-medium tabular-nums">{t.math.split(";").flatMap(line => line.split("؛")).map(line => <li key={line} className="py-3">{line.trim()}</li>)}</ul>
+            <p dir="ltr" className="mt-5 bg-secondary p-4 text-center text-[1.125rem] font-semibold">(3 × 10) + (2 × 4) = 38 {locale === "ar" ? "نقطة" : "credits"}</p>
+            <p className="mt-3 text-muted-foreground">{locale === "ar" ? "حصة واحدة مشتركة. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p>
+          </Row>
+          <Row title={t.conditionTitle}>
+            <ul className="list-disc space-y-3 ps-5">{[terms.zero, terms.more, terms.packs, terms.annual, terms.expiry, terms.setup, terms.byoc].map((c) => <li key={c}>{c}</li>)}</ul>
+          </Row>
+        </div>
+      </Section>
+
+      <WorkflowComparison locale={locale} />
+
+      <Section className="pb-[clamp(96px,11.2vw,168px)]">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+          <DemoLink locale={locale}>{t.book}</DemoLink>
+          <Link href={localePath(locale, "refund-policy")} className={`inline-flex min-h-11 items-center text-[1.125rem] ${textLink}`}>{t.policy}</Link>
+          <Link href={localePath(locale, "contact")} className={`inline-flex min-h-11 items-center text-[1.125rem] ${textLink}`}>{t.contact}</Link>
+        </div>
+      </Section>
     </>
   );
 }

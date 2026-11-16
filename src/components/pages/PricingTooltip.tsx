@@ -58,7 +58,7 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
         ref={trigger}
         tabIndex={0}
         aria-describedby={id}
-        className="cursor-help rounded-xs underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+        className="inline-flex min-h-11 cursor-help items-center underline decoration-dotted underline-offset-4 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring"
         onPointerEnter={show}
         onPointerLeave={hideSoon}
         onFocus={show}
@@ -90,14 +90,14 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
             }
           }}
           style={position}
-          className={`fixed z-50 ${sections ? "w-80" : "w-64"} max-w-[calc(100vw-16px)] max-h-[50vh] overflow-y-auto rounded-xl bg-ink p-4 text-start text-sm leading-relaxed text-canvas shadow-lg`}
+          className={`fixed z-50 ${sections ? "w-80" : "w-64"} max-w-[calc(100vw-16px)] max-h-[50vh] overflow-y-auto rounded-(--radius) bg-charcoal p-4 text-start text-sm leading-relaxed text-off-white`}
         >
-          {sections ? sections.map((section, index) => <span key={section.title} className={`block ${index ? "mt-3 border-t border-canvas/20 pt-3" : ""}`}>
-            <span className="mb-2 block text-xs font-semibold text-canvas/70">{section.title}</span>
+          {sections ? sections.map((section, index) => <span key={section.title} className={`block ${index ? "mt-3 border-t border-[#3a4566] pt-3" : ""}`}>
+            <span className="mb-2 block text-xs font-semibold text-[#a3abbd]">{section.title}</span>
             <span className="grid gap-2">{section.rows.map(row => <span key={row.label} className="flex items-start justify-between gap-4">
               <span className="min-w-0">{row.label}</span><bdi className="shrink-0 whitespace-nowrap font-semibold tabular-nums">{row.value}</bdi>
             </span>)}</span>
-            {section.note && <span className="mt-2 block text-xs text-canvas/70">{section.note}</span>}
+            {section.note && <span className="mt-2 block text-xs text-[#a3abbd]">{section.note}</span>}
           </span>) : explanation.split(/[;؛]/).map((line, index) => <span key={index} className={index ? "mt-2 block" : "block"}>{line.trim()}</span>)}
         </span>,
         document.body,

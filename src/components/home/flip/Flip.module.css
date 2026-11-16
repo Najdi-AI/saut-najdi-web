@@ -1,0 +1,120 @@
+/*
+ * The closing sentence (Try 3 `.flip`, mockups/try-3/try.css section 9):
+ * the business word turns on a Charcoal plate like a departures board, as
+ * a whole word. The plate stacks every word in one grid cell, so it is
+ * always as wide as the widest and the line never reflows. The turn is
+ * transform and opacity only; reduced motion turns nothing.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.in {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  align-items: end;
+}
+.h {
+  grid-column: 1 / span 7;
+  font-family: var(--font-display);
+  font-size: clamp(52px, 8.9vw, 128px);
+  font-weight: 500;
+  line-height: 1.38;
+}
+.en .h {
+  font-size: clamp(44px, 6.2vw, 92px);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+.line {
+  display: block;
+}
+.plate {
+  display: inline-grid;
+  justify-items: center;
+  padding-inline: 0.2em;
+  margin-inline: 0.04em 0.02em;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  line-height: 1.2;
+  white-space: nowrap;
+  perspective: 6em;
+}
+.w {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  transform-origin: 50% 54%;
+  visibility: hidden;
+  opacity: 0;
+  transform: rotateX(-90deg);
+}
+/* The word coming in turns down from above once the old one is half over. */
+.w[data-on] {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1) 230ms,
+    opacity 420ms ease 230ms,
+    visibility 0s linear 230ms;
+}
+.w[data-out] {
+  transform: rotateX(90deg);
+  transition:
+    transform 280ms cubic-bezier(0.45, 0, 0.55, 1),
+    opacity 280ms ease,
+    visibility 0s linear 280ms;
+}
+.side {
+  grid-column: 8 / span 5;
+  display: grid;
+  gap: 36px;
+  padding-block-end: 0.5em;
+}
+.act {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+.note {
+  max-inline-size: 40ch;
+  font-size: 18px;
+  color: var(--muted-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w,
+  .w[data-on],
+  .w[data-out] {
+    transform: none;
+    transition: none;
+  }
+}
+@media (max-width: 900px) {
+  .h,
+  .side {
+    grid-column: 1 / -1;
+  }
+  .side {
+    margin-block-start: 28px;
+    padding-block-end: 0;
+  }
+}
+@media (max-width: 640px) {
+  .h {
+    font-size: 12vw;
+    line-height: 1.45;
+  }
+  .en .h {
+    font-size: 10vw;
+    line-height: 1.25;
+  }
+  .side {
+    gap: 32px;
+  }
+  .act > a {
+    inline-size: 100%;
+  }
+  .note {
+    font-size: 15px;
+  }
+}

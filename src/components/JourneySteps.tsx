@@ -34,10 +34,11 @@ export function JourneySteps({
         <motion.li
           key={step.title}
           /* The HowTo JSON-LD points each step at #step-N, so the anchor has
-             to exist; scroll-mt clears the sticky header when it lands. */
+             to exist; the site-wide scroll-padding-top clears the sticky
+             header when it lands. */
           id={`step-${i + 1}`}
           data-reveal=""
-          className="relative scroll-mt-28 pb-10 ps-10 before:absolute before:inset-y-0 before:start-1 before:w-1 before:bg-silver-gray after:absolute after:start-0 after:top-2 after:size-3 after:bg-charcoal last-of-type:pb-0 last-of-type:before:bottom-auto last-of-type:before:h-4"
+          className="relative pb-10 ps-10 before:absolute before:inset-y-0 before:start-1 before:w-1 before:bg-silver-gray after:absolute after:start-0 after:top-2 after:size-3 after:bg-charcoal last-of-type:pb-0 last-of-type:before:bottom-auto last-of-type:before:h-4"
           initial={reduced ? false : { opacity: 0, y: 16 }}
           animate={reduced ? { opacity: 1, y: 0 } : undefined}
           whileInView={{ opacity: 1, y: 0 }}

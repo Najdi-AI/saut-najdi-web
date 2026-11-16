@@ -171,15 +171,20 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* No in-page link to the table below the walk: the walk grows after
-          hydration, and a smooth fragment scroll aims at the old offset. */}
-      <PageHero title={t.title} lead={t.intro} />
+      {/* The way past the four-screen walk to the full table. */}
+      <PageHero title={t.title} lead={t.intro}>
+        <a href="#plan-comparison" className={`inline-flex min-h-11 items-center text-[1.125rem] ${textLink}`}>
+          {t.fullDetails}
+          <span aria-hidden="true">&nbsp;↓</span>
+        </a>
+      </PageHero>
 
       <Section title={walkTitle[locale]}>
         <PlanWalk locale={locale} />
       </Section>
 
-      <Section title={t.fullDetails}>
+      {/* The anchor is the heading itself, so a jump lands it just under the header. */}
+      <Section title={<span id="plan-comparison">{t.fullDetails}</span>}>
         <p className="max-w-[75ch] bg-secondary px-5 py-4 text-[1.0625rem] leading-[1.7]">{t.vat}</p>
         <p className="mt-6 text-[1.0625rem] text-muted-foreground xl:hidden">{t.swipe}</p>
         <div role="region" aria-label={t.tableLabel} tabIndex={0} className="mt-4 overflow-x-auto border border-border focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring">
@@ -214,6 +219,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
         <div className="mt-6 grid max-w-[75ch] gap-2 text-[1.0625rem] leading-[1.7] text-muted-foreground">
           <p>{t.exclusive}</p>
           <p>{t.inPlanNote}</p>
+          <p>{capacityCopy[locale].note}</p>
           <p>{locale === "ar" ? "قيمة النقطة: 11 هللة في أساسي، و10 هللات في نمو، ونحو 9 هللات في توسّع. أسعار الاستخدام في توسّع تقريبية بسبب تقريب عدد النقاط الشهري إلى عدد صحيح. أسعار مؤسسات وحصتها واستخدامها تُحدد في العقد." : "Credit value: 11 halalah in Essential, 10 in Growth and approximately 9 in Expansion. Expansion’s usage values are approximate because its monthly credits are rounded to a whole number. Enterprise pricing, credits and usage terms are set by contract."}</p>
           <p>{t.seller}: <span>{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</span> · {t.vatNumber}: <span dir="ltr">{VAT_NUMBER}</span></p>
         </div>

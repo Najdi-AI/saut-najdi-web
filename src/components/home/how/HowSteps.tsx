@@ -1,0 +1,49 @@
+"use client";
+
+import { Fragment, useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useInView } from "../ui/useInView";
+import s from "./How.module.css";
+
+/**
+ * The statements and their fragments, in reading order: each statement is
+ * followed by its own state. That order is the layout on a phone, under
+ * reduced motion and without JavaScript (every state visible). Once this has
+ * hydrated (data-pin) on a wide, tall enough screen, the CSS pins the three
+ * states over one another beside the statements, and the statement crossing
+ * the middle of the viewport, seen by one IntersectionObserver, sets which
+ * one shows. No scroll listeners, nothing is prevented.
+ */
+export function HowSteps({ steps, states }: { steps: { title: string; body: string }[]; states: ReactNode[] }) {
+  const [ref, inView] = useInView<HTMLDivElement>({ once: false, rootMargin: "0px", threshold: 0 });
+  const [active, setActive] = useState(0);
+  const [pin, setPin] = useState(false);
+
+  useEffect(() => {
+    setPin(true);
+    const root = ref.current;
+    if (!root || typeof IntersectionObserver === "undefined") return;
+    // A band one tenth of the viewport tall around its middle line.
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(Number((e.target as HTMLElement).dataset.step))),
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    root.querySelectorAll("[data-step]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [ref]);
+
+  return (
+    <div ref={ref} className={s.flow} data-pin={pin || undefined} data-in-view={inView || undefined}>
+      {steps.map((step, i) => (
+        <Fragment key={step.title}>
+          <div className={s.step} data-step={i} data-active={active === i || undefined} style={{ "--row": i + 1 } as CSSProperties}>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </div>
+          <div className={s.slot} data-active={active === i || undefined} style={{ "--row": i + 1 } as CSSProperties}>
+            <figure className={s.card}>{states[i]}</figure>
+          </div>
+        </Fragment>
+      ))}
+    </div>
+  );
+}

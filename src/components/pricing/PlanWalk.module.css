@@ -4,7 +4,7 @@
  *
  * Two layouts from one DOM. Stacked (four cards, no transitions) is the
  * default: phones, reduced motion, no JavaScript, the server HTML. The walk
- * needs 768px wide, 560px tall (a landscape phone's panel would not fit), no
+ * needs 768px wide, 640px tall (shorter panels crowd the chat launcher), no
  * reduced motion and the island hydrated (data-ready). Then the container is
  * four screens tall, the panel sticks under the header and the sentinels
  * (.mark) pick the tier; scrolling stays the browser's own.
@@ -148,7 +148,7 @@
 }
 
 /* ---- the walk ---- */
-@media (min-width: 768px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
   .walk[data-ready] {
     /* The panel's pinned run, split evenly between the four sentinels. */
     --run: calc(300svh + var(--header-h));

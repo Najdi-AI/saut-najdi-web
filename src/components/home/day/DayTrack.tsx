@@ -81,7 +81,7 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
       }
       at = 0;
       keys.forEach((k, i) => {
-        const on = T >= k.T - 1;
+        const on = min >= k.t; // on the minute the clock shows it, never a frame apart
         k.el?.toggleAttribute("data-on", on);
         if (on) at = i;
       });

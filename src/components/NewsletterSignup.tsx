@@ -38,14 +38,11 @@ export function NewsletterSignup({ locale, source }: { locale: Locale; source: s
   const privacyHref = locale === "en" ? "/en/privacy" : "/privacy";
 
   return (
-    <div
-      id="newsletter"
-      className="card mt-14 bg-brand-gradient-soft"
-    >
-      <div className="flex flex-col gap-5 p-2 sm:p-4 md:flex-row md:items-center md:justify-between">
+    <div id="newsletter" className="mt-14 bg-silver-gray p-6 sm:p-10">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-md">
-          <h2 className="text-h4 text-ink">{c.heading}</h2>
-          <p className="mt-1.5 text-body-lg text-ink/70">{c.body}</p>
+          <h2 className="font-display text-[clamp(26px,2.6vw,36px)] leading-[1.3] font-medium">{c.heading}</h2>
+          <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{c.body}</p>
         </div>
 
         <form action="/api/newsletter" method="post" className="w-full md:max-w-sm">
@@ -72,18 +69,17 @@ export function NewsletterSignup({ locale, source }: { locale: Locale; source: s
               placeholder={c.placeholder}
               autoComplete="email"
               dir="ltr"
-              className="w-full rounded-full border border-line bg-surface px-4 py-2.5 text-body text-ink outline-hidden transition focus:border-brand-purple placeholder:text-ink/40"
+              className="min-w-0 flex-1 rounded-none border border-muted-foreground bg-white px-4 text-body-lg text-ink placeholder:text-muted-foreground"
             />
-            <button
-              type="submit"
-              className="btn-spectrum shrink-0 rounded-full px-5 py-2.5 text-body font-semibold"
-            >
+            {/* The standard button, unsized: white on Najdi Red needs its
+                20px/700 label (builder rules, btn-primary). */}
+            <button type="submit" className="btn-primary shrink-0">
               {c.button}
             </button>
           </div>
-          {/* ink/65 clears 4.5:1 on the tinted card (ink/55 was 4.11:1);
-              Arabic gets 14px, the floor for Arabic meta text. */}
-          <p className={`mt-2 text-ink/65 ${locale === "ar" ? "text-body" : "text-body-sm"}`}>
+          {/* Muted ink is 5.57:1 on the Silver Gray panel; Arabic gets
+              14px, the floor for Arabic meta text. */}
+          <p className={`mt-3 text-muted-foreground ${locale === "ar" ? "text-body" : "text-body-sm"}`}>
             {c.consent}{" "}
             <a href={privacyHref} className="underline hover:text-ink">
               {c.privacy}

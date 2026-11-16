@@ -93,12 +93,11 @@ export function BookingDesk({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <div
-      className="mx-auto grid max-w-[1120px] overflow-hidden rounded-3xl border border-white/10 shadow-[0_30px_90px_-40px_rgba(0,0,0,0.9)] lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
-      /* Pinning --surface as well as the background: this card is dark in
-         BOTH themes, so anything inside it that reads the surface token —
-         .ring-spectrum fills its centre with it — must see the card's own
-         colour rather than the page's, or the chip turns into a white
-         sticker whenever the site is in light mode. */
+      className="on-dark mx-auto grid max-w-[1120px] overflow-hidden border border-white/10 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
+      /* A dark band through .on-dark, so the chip's hairline is #3A4566
+         and the focus ring cyan. --surface is pinned to the card's own
+         colour as well as the background, so .ring-spectrum fills its
+         centre with the card rather than the band's Soft Navy. */
       style={
         { backgroundColor: BOOKER_SURFACE, "--surface": BOOKER_SURFACE } as React.CSSProperties
       }

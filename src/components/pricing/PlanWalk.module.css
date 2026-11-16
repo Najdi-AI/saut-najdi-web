@@ -5,7 +5,8 @@
  * Two layouts from one DOM. Stacked (four cards, no transitions) is the
  * default: phones, reduced motion, no JavaScript, the server HTML. The walk
  * needs 768px wide, 640px tall (shorter panels crowd the chat launcher), no
- * reduced motion and the island hydrated (data-ready). Then the container is
+ * reduced motion (--can-walk), and the tallest tier fitting the panel at the
+ * current text settings (data-ready, useWalkFit.ts). Then the container is
  * four screens tall, the panel sticks under the header and the sentinels
  * (.mark) pick the tier; scrolling stays the browser's own.
  *
@@ -13,6 +14,8 @@
  * Button's ghost look on the tier names).
  */
 .walk {
+  /* The pinned panel's foot, kept clear of the chat launcher: 20px + 56px + 8px. */
+  --fab-clear: 84px;
   position: relative;
 }
 
@@ -149,6 +152,9 @@
 
 /* ---- the walk ---- */
 @media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .walk {
+    --can-walk: 1;
+  }
   .walk[data-ready] {
     /* The panel's pinned run, split evenly between the four sentinels. */
     --run: calc(300svh + var(--header-h));
@@ -163,7 +169,7 @@
     align-content: center;
     align-items: start;
     block-size: calc(100svh - var(--header-h));
-    padding-block-end: 84px; /* centred above the chat launcher: 20px + 56px + 8px */
+    padding-block-end: var(--fab-clear);
   }
   .walk[data-ready] .index {
     grid-column: 1 / span 6;

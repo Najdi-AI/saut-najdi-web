@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import s from "./PlanWalk.module.css";
+import { useWalkFit } from "./useWalkFit";
 
 /**
  * The walk's client island: the tier index, the four sentinels and the
@@ -13,6 +14,7 @@ import s from "./PlanWalk.module.css";
  * the sentinel on that line is the active tier. There are no scroll, pointer
  * or key listeners and nothing blocks a default action, so the page scrolls
  * as it always does and the tiers follow. A tier name scrolls to its step.
+ * The walk turns on only while it fits the window (useWalkFit).
  */
 export function PlanSteps({
   label,
@@ -34,6 +36,7 @@ export function PlanSteps({
   const [active, setActive] = useState(0);
   const [heard, setHeard] = useState("");
   const last = useRef(0);
+  const fit = useWalkFit(box, ready);
 
   useEffect(() => {
     const el = box.current;
@@ -86,7 +89,7 @@ export function PlanSteps({
   };
 
   return (
-    <div ref={box} className={s.walk} data-ready={ready || undefined} data-active={active}>
+    <div ref={box} className={s.walk} data-ready={(ready && fit) || undefined} data-active={active}>
       <div className={s.panel}>
         <ol className={s.index} aria-label={label}>
           {names.map((name, i) => (

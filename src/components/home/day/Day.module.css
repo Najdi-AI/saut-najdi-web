@@ -1,0 +1,402 @@
+/*
+ * A day on the board (Try 3 `.day`, mockups/try-3/try.css section 4): the
+ * vertical timeline from the server HTML, every moment and fragment
+ * visible. Night moments are .on-dark bands, so --foreground and
+ * --muted-foreground flip there by themselves; fragments are .on-light
+ * product cards.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.day {
+  --m: 20px; /* the sections' gutter: px-5, sm:px-8 */
+  --s-l: clamp(32px, 3.9vw, 56px);
+  --s-m: clamp(22px, 2.23vw, 32px);
+  line-height: 1.7;
+}
+@media (min-width: 640px) {
+  .day {
+    --m: 32px;
+  }
+}
+
+.top {
+  display: grid;
+  gap: 14px;
+  padding-inline: var(--m);
+}
+
+/* ---- the timeline ---- */
+.band {
+  margin-block-start: 48px;
+}
+.strip {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mo {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding-block: 30px 34px;
+  padding-inline: calc(var(--m) + 30px) var(--m);
+}
+.mo::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--m) + 4px);
+  inline-size: 4px;
+  background: var(--color-silver-gray);
+}
+.mo::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 44px;
+  inset-inline-start: var(--m);
+  inline-size: 12px;
+  block-size: 12px;
+  background: var(--color-charcoal);
+}
+.night::before {
+  background: #2a3352;
+}
+.night::after {
+  background: var(--color-blue);
+}
+.time {
+  font-family: var(--font-display);
+  font-size: var(--s-l);
+  font-weight: 500;
+  line-height: 1.15;
+}
+.say {
+  max-inline-size: 24ch;
+  font-size: var(--s-m);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---- the product fragments: --radius-like corners of product UI ---- */
+.ui {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  inline-size: min(420px, 100%);
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--card-foreground);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.uiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-block-end: 10px;
+  border-block-end: 1px solid var(--color-silver-gray);
+}
+.uiTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+.note {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+}
+.live::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--color-cyan);
+}
+.rows,
+.log,
+.card ul,
+.ticket ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rows,
+.log {
+  gap: 2px;
+}
+.rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--color-off-white);
+}
+.rows b,
+.log b {
+  font-weight: 700;
+}
+.log li {
+  display: grid;
+  grid-template-columns: 4.6em 1fr auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--color-off-white);
+}
+.logT {
+  color: var(--muted-foreground);
+}
+.thread {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+.bubble {
+  max-inline-size: 88%;
+  padding: 8px 12px 9px;
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.bubble small {
+  display: block;
+  margin-block-end: 2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.caller {
+  justify-self: start;
+  border-start-start-radius: 4px;
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
+}
+.agent {
+  justify-self: end;
+  border-start-end-radius: 4px;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+}
+.agent small {
+  color: #a3abbd; /* 8.0:1 on Charcoal */
+}
+.card {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-off-white);
+}
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.cardTitle svg {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+}
+.card ul {
+  gap: 3px;
+  color: var(--muted-foreground);
+}
+.card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card li::before {
+  content: "";
+  flex: none;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.cardP {
+  color: var(--muted-foreground);
+}
+.sent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.sent svg {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  color: var(--color-cyan);
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tag i {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.tagCyan {
+  background: var(--color-cyan);
+  color: var(--color-charcoal);
+}
+.tagBlue {
+  background: #e4e7fb;
+  color: #2f3c9e;
+}
+.tagPurple {
+  background: #efe8f7;
+  color: var(--color-purple);
+}
+.ticket {
+  display: grid;
+  gap: 10px;
+}
+.to {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-off-white);
+}
+.to b {
+  display: block;
+  font-size: 16px;
+}
+.to div span {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 50%;
+  background: var(--color-purple);
+  color: #ffffff;
+  font-weight: 700;
+}
+.ticket ul {
+  gap: 6px;
+}
+.ticket li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.ticket li b {
+  min-inline-size: 56px;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+/* A picture of the agent screen's button, not a control. */
+.take {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 40px;
+  padding-inline: 14px;
+  border-radius: 8px;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  font-weight: 700;
+}
+.ring {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--color-off-white);
+}
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  block-size: 30px;
+}
+.wave i {
+  display: block;
+  inline-size: 3px;
+  border-radius: 2px;
+  background: var(--color-blue);
+}
+
+.foot {
+  display: grid;
+  gap: 8px;
+  margin-block-start: 40px;
+  padding-inline: var(--m);
+}
+.foot p:first-child {
+  max-inline-size: 46ch;
+  font-size: 20px;
+}
+
+/* Wide: the time and line beside the fragment. */
+@media (min-width: 641px) {
+  .mo {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: 24px;
+  }
+  .time,
+  .say {
+    grid-column: 1;
+  }
+  .ui {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+}
+
+/* ---- phone ---- */
+@media (max-width: 640px) {
+  .band {
+    margin-block-start: 28px;
+  }
+  .mo {
+    gap: 10px;
+    padding-block: 20px 24px;
+    padding-inline: calc(var(--m) + 26px) var(--m);
+  }
+  .mo::after {
+    inset-block-start: 36px;
+  }
+  .time {
+    font-size: 28px;
+  }
+  .say {
+    font-size: 19px;
+  }
+  .ui {
+    padding: 14px;
+  }
+  .foot {
+    margin-block-start: 28px;
+  }
+}

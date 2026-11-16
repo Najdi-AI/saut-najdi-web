@@ -271,6 +271,13 @@
     block-size: 20px;
   }
 }
+/* Too narrow for a large figure (white on red needs 18.66px bold): the icon only; the value stays
+   in the tile's label and the legend's average. */
+@container (max-width: 63.98px) {
+  .tile[data-kind] .val {
+    display: none;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .tile[data-ring] .ic {
     animation: ring 110ms ease-in-out infinite alternate;

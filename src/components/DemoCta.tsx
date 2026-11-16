@@ -2,12 +2,13 @@ import { CAL_LINK_QUICK } from "@/lib/site";
 import { DemoLink } from "./DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { CalButton } from "./CalButton";
-import { Waveform } from "./Waveform";
 import { Reveal } from "./Reveal";
 
 /**
- * The standard end-of-page demo CTA block (blueprint §4.3): heading +
- * «احجز عرضاً» + the quick-call tertiary line.
+ * The standard end-of-page demo CTA block (blueprint §4.3): a Charcoal
+ * `.on-dark` band with a serif heading, «احجز عرضاً» as the page's one red
+ * button, and the quick-call tertiary line. It pads only itself, so the
+ * section before it brings its own bottom room (page/Section).
  */
 const t = {
   ar: {
@@ -27,20 +28,19 @@ const t = {
 export function DemoCta({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
-    <section className="relative overflow-hidden bg-navy py-16 text-white">
-      <div className="absolute inset-0 opacity-20">
-        <Waveform bars={72} maxHeight={220} className="h-full" />
-      </div>
-      <Reveal className="container relative text-center">
-        <h2 className="text-h2">{s.heading}</h2>
-        <p className="mx-auto mt-3 max-w-xl text-body-lg text-white/80">{s.line}</p>
-        <div className="mt-7 flex flex-col items-center gap-4">
-          <DemoLink locale={locale} className="bg-white! text-navy! hover:bg-white/90!">
-            {s.cta}
-          </DemoLink>
-          <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="link" className="text-white/80! hover:text-white!">
-            {s.quick}
-          </CalButton>
+    <section className="on-dark py-[clamp(96px,11.2vw,168px)]">
+      <Reveal className="container grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-6">
+        <h2 className="font-display text-[clamp(32px,3.9vw,56px)] leading-[1.25] font-medium text-balance lg:col-span-7">
+          {s.heading}
+        </h2>
+        <div className="lg:col-span-5 lg:col-start-8">
+          <p className="max-w-[44ch] text-[1.0625rem] leading-[1.7] text-muted-foreground sm:text-[1.25rem]">{s.line}</p>
+          <div className="mt-8 flex flex-col items-start gap-3">
+            <DemoLink locale={locale}>{s.cta}</DemoLink>
+            <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="link" className="text-foreground! underline">
+              {s.quick}
+            </CalButton>
+          </div>
         </div>
       </Reveal>
     </section>

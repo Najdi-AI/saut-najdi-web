@@ -116,7 +116,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
           <p className="font-display text-[clamp(32px,3.9vw,56px)] leading-[1.25] font-medium">{s.tagline}</p>
           {/* bdi: the other language's line keeps its own direction. */}
           <p className="mt-2 text-[1.25rem] text-muted-foreground">
-            <bdi>{s.taglineSub}</bdi>
+            <bdi lang={locale === "ar" ? "en" : "ar"}>{s.taglineSub}</bdi>
           </p>
         </Reveal>
         <Reveal className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">

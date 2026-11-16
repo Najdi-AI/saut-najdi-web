@@ -1,0 +1,424 @@
+/*
+ * The missed-calls board (Try 3 `.board`, mockups/try-3/try.css). An
+ * .on-dark band, so colours are its tokens: --foreground Off-White,
+ * --muted-foreground #A3ABBD (6.9:1 on Soft Navy, 8.0:1 on Charcoal),
+ * --card Soft Navy (the score boxes, knobs and tiles), --ring cyan.
+ *
+ * Losses carry a minus and a label and gains a plus and a label, never
+ * colour alone. Najdi Red stays a fill (a missed tile, white on it 4.39:1
+ * at 19px bold and up); as text it is lifted to --loss (#FF6B7F: 5.8:1 on
+ * Soft Navy, 4.9:1 on the ringing tile, 6.7:1 on Charcoal). Cyan text is
+ * 7.7:1 on Soft Navy; Charcoal on a cyan tile 8.9:1. Squares are square.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.board {
+  --loss: #ff6b7f;
+  --navy-up: #1c2c5c; /* a ringing tile, one step above Soft Navy */
+  margin-block-start: 96px;
+  padding-block: clamp(88px, 11.2vw, 168px);
+  padding-inline: clamp(20px, 2.3vw, 32px);
+  line-height: 1.7;
+}
+@media (min-width: 1024px) {
+  .board {
+    margin-block-start: 160px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 44px 24px;
+}
+.head {
+  grid-column: 1 / span 7;
+  align-content: start;
+}
+.play {
+  display: grid;
+  grid-column: 1 / span 7;
+  align-content: start;
+  gap: 20px;
+}
+.score {
+  display: grid;
+  grid-column: 9 / span 4;
+  grid-row: 1 / span 2;
+  align-content: start;
+  gap: 8px;
+}
+.calc {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* ---- the score */
+.box {
+  display: grid;
+  gap: 6px;
+  padding: 20px 24px 22px;
+  background: var(--card);
+}
+.fig {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  font-size: clamp(48px, 5.6vw, 84px);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.fig small,
+.name {
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+.fig small {
+  font-weight: 500;
+}
+.name {
+  font-weight: 700;
+}
+.board [data-tone="loss"] {
+  color: var(--loss);
+}
+.board [data-tone="gain"] {
+  color: var(--color-cyan);
+}
+.month {
+  display: grid;
+  gap: 6px;
+  padding: 18px 2px 0;
+}
+.monthLine {
+  font-size: clamp(22px, 2.23vw, 32px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.monthFig {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.cap {
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+
+/* ---- the day's calls */
+.tiles {
+  --cols: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 8px;
+}
+.tiles[data-size="m"] {
+  --cols: 8;
+}
+.tiles[data-size="l"] {
+  --cols: 10;
+}
+/* A tile is square, and taller if its words need it (WCAG 1.4.12 spacing): a square spacer and the
+   two faces share one grid cell, so it never clips or widens; a row's tiles stretch to its tallest. */
+.tile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-self: stretch;
+  min-inline-size: 0;
+  perspective: 900px;
+  container-type: inline-size;
+}
+/* Its height comes from its width (align-self: start), never the reverse. */
+.tile::before {
+  content: "";
+  grid-area: 1 / 1;
+  align-self: start;
+  aspect-ratio: 1;
+}
+.flip {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  transform-style: preserve-3d;
+  transition: transform 640ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+.tile[data-saved] .flip {
+  transform: rotateY(180deg);
+}
+.face {
+  position: relative;
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 10px 11px;
+  background: var(--card);
+  backface-visibility: hidden;
+}
+.face[data-side="back"] {
+  transform: rotateY(180deg);
+  background: var(--color-cyan);
+  color: var(--color-charcoal);
+}
+.time {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.face[data-side="back"] .time {
+  color: var(--color-charcoal);
+}
+.mid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+}
+.ic {
+  inline-size: 24px;
+  block-size: 24px;
+  color: var(--muted-foreground);
+}
+.ic svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.val {
+  display: none;
+  font-size: clamp(19px, 23cqi, 26px);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* A part tile keeps a band clear below its value; the bar grows only inside it, never over the digits. */
+.bar {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: none;
+  block-size: var(--band);
+  background: var(--color-najdi-red);
+  transform: scaleY(var(--w, 1));
+  transform-origin: bottom;
+}
+.face[data-side="back"] .bar {
+  background: var(--color-cyan);
+}
+.tile[data-ring] .face[data-side="front"] {
+  background: var(--navy-up);
+}
+.tile[data-ring] .ic {
+  color: var(--color-off-white);
+}
+.tile[data-kind="miss"] .face[data-side="front"] {
+  background: var(--color-najdi-red);
+  color: #ffffff;
+}
+.tile[data-kind="miss"] .face[data-side="front"] .time {
+  visibility: hidden;
+}
+.tile[data-kind="miss"] .ic,
+.tile[data-kind="part"] .face[data-side="front"] .ic,
+.face[data-side="back"] .ic {
+  color: inherit;
+}
+.tile[data-kind="miss"] .val,
+.tile[data-kind="part"] .val {
+  display: block;
+}
+.tile[data-kind="part"] .face[data-side="front"] {
+  color: var(--loss);
+}
+.tile[data-kind="part"] .face[data-side="back"] {
+  background: var(--card);
+  color: var(--color-cyan);
+}
+.tile[data-kind="part"] .face[data-side="back"] .time {
+  color: var(--muted-foreground);
+}
+.tile[data-kind="part"] {
+  --band: 24cqi;
+}
+.tile[data-kind="part"] .mid {
+  margin-block-end: var(--band);
+}
+.tile[data-kind="part"] .bar {
+  display: block;
+}
+@container (max-width: 88px) {
+  .face {
+    padding: 8px 6px;
+  }
+}
+@container (max-width: 74px) {
+  .time {
+    display: none;
+  }
+  .face {
+    grid-template-rows: 1fr;
+    padding: 6px;
+  }
+  .ic {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+}
+/* Too narrow for a large figure (white on red needs 18.66px bold): the icon only; the value stays
+   in the tile's label and the legend's average. */
+@container (max-width: 63.98px) {
+  .tile[data-kind] .val {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tile[data-ring] .ic {
+    animation: ring 110ms ease-in-out infinite alternate;
+  }
+  .tile[data-land] .face[data-side="front"] {
+    animation: land 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+@keyframes ring {
+  from {
+    transform: rotate(-14deg);
+  }
+  to {
+    transform: rotate(14deg);
+  }
+}
+@keyframes land {
+  from {
+    transform: scale(0.86);
+  }
+}
+
+.legend {
+  max-inline-size: 60ch;
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+.ctl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  min-block-size: 52px;
+}
+.ctl [hidden] {
+  display: none;
+}
+/* Without JavaScript the buttons would do nothing: they keep their room, unseen. */
+.ctl:not([data-ready]) > * {
+  visibility: hidden;
+}
+.status {
+  min-block-size: 1.7em;
+  font-size: 15px;
+}
+
+/* ---- the knobs */
+.calcTitle {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  font-weight: 700;
+}
+.knob {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 12px;
+  padding: 14px 18px 4px;
+  background: var(--card);
+  font-size: 15px;
+}
+.knob output {
+  color: var(--color-cyan);
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* Native range: the browser lays it out for the page direction (minimum on
+   the right in Arabic) and its arrow keys follow; 44px tall to touch. */
+.knob input {
+  grid-column: 1 / -1;
+  inline-size: 100%;
+  block-size: 44px;
+  margin: 0;
+  accent-color: var(--color-cyan);
+  cursor: pointer;
+}
+.knob input:disabled {
+  cursor: default;
+}
+.knob input:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---- tablet and phone */
+@media (max-width: 1100px) {
+  .score {
+    grid-column: 8 / span 5;
+  }
+  .calc {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .head,
+  .play,
+  .score {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .score {
+    grid-template-columns: 1fr 1fr;
+  }
+  .month {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 640px) {
+  .grid {
+    row-gap: 32px;
+  }
+  .score {
+    gap: 6px;
+  }
+  .box {
+    padding: 14px 14px 16px;
+  }
+  .fig {
+    font-size: 34px;
+  }
+  .fig small {
+    flex-basis: 100%;
+    font-size: 14px;
+  }
+  .monthLine {
+    font-size: 22px;
+  }
+  .tiles {
+    --cols: 4;
+    gap: 6px;
+  }
+  .tiles[data-size="m"],
+  .tiles[data-size="l"] {
+    --cols: 6;
+  }
+  .ctl > :not(:last-child) {
+    inline-size: 100%;
+  }
+  .calc {
+    grid-template-columns: 1fr;
+  }
+}

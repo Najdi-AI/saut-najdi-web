@@ -1,0 +1,301 @@
+/*
+ * Channels around one inbox (Try 3 `.hub`, mockups/try-3/try.css section 6).
+ *
+ * Each tile takes its channel's colour on hover (fine pointers only),
+ * :focus-visible and when pressed (a tap or click, HubBoard), and the inbox
+ * rows of that channel light up: a Soft Navy step up, a bar in the
+ * channel's colour and a brighter label. Both run on :has(), so hover and
+ * keyboard need no script. Two tile colours are darker than the mockup's
+ * so white text clears 4.5:1: Najdi Red's pressed shade for the phone
+ * (5.79:1; Najdi Red itself is 4.39:1) and a deeper blue for Telegram
+ * (5.26:1; brand blue is 4.45:1). The row dots keep the brand hues.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.board {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  column-gap: 24px;
+  margin-block-start: 48px;
+  line-height: 1.7;
+}
+.board [data-ch="phone"] {
+  --c: var(--color-najdi-red-press);
+  --dot: var(--color-najdi-red);
+}
+.board [data-ch="whatsapp"] {
+  --c: var(--color-cyan);
+  --on: var(--color-charcoal);
+  --dot: var(--color-cyan);
+}
+.board [data-ch="telegram"] {
+  --c: #4f5fdb;
+  --dot: var(--color-blue);
+}
+.board [data-ch="web"] {
+  --c: var(--color-purple);
+  --dot: var(--color-purple);
+}
+.board :is([data-ch="grandstream"], [data-ch="sip"]) {
+  --c: var(--color-soft-navy);
+  --dot: var(--color-off-white);
+}
+
+/* ---- the tiles: square marketing tiles ---- */
+.side {
+  display: grid;
+  grid-column: span 3;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.ch {
+  --on: #ffffff;
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  gap: 12px;
+  min-block-size: 150px;
+  padding: 22px 24px;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
+  text-align: start;
+  cursor: pointer;
+  /* Keyboard focus never lands under the sticky header. */
+  scroll-margin-block: calc(var(--header-h) + 16px) 16px;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 140ms var(--ease-out);
+}
+.name {
+  font-size: clamp(22px, 2.23vw, 32px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+/* 20px bold: large text on every tile colour too. */
+.kind {
+  color: #525a6e;
+  font-size: 20px;
+  font-weight: 700;
+  transition: color 180ms ease;
+}
+.ch:active {
+  transform: scale(0.98);
+}
+.ch:focus-visible {
+  outline: 3px solid var(--color-charcoal);
+  outline-offset: 3px;
+}
+.ch:is(:focus-visible, [aria-pressed="true"]) {
+  background: var(--c);
+  color: var(--on);
+}
+.ch:is(:focus-visible, [aria-pressed="true"]) .kind {
+  color: var(--on);
+}
+
+/* ---- the inbox: a Charcoal .on-dark fragment ---- */
+.inbox {
+  display: grid;
+  grid-column: span 6;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--radius);
+  overflow: clip;
+}
+.inboxTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px 14px;
+}
+.inboxTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+.all {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.list {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  margin: 0;
+  padding: 0 10px 10px;
+  list-style: none;
+}
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 8.4em minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--lit-bg, var(--card));
+  font-size: 15px;
+  transition: background-color 180ms ease;
+}
+.row::before {
+  content: "";
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-start: 0;
+  inline-size: 4px;
+  background: var(--dot);
+  opacity: var(--lit-bar, 0);
+  transition: opacity 180ms ease;
+}
+.rowCh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lit-label, var(--muted-foreground));
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+.rowCh i {
+  flex: none;
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: 3px;
+  background: var(--dot);
+}
+.rowBody {
+  display: grid;
+  min-inline-size: 0;
+  line-height: 1.45;
+}
+.rowBody b {
+  font-weight: 700;
+}
+.msg {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rowT {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* A tile's rows light up while it is focused by keyboard or pressed. */
+.board:has(.ch[data-ch="phone"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="phone"],
+.board:has(.ch[data-ch="whatsapp"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="whatsapp"],
+.board:has(.ch[data-ch="telegram"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="telegram"],
+.board:has(.ch[data-ch="web"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="web"],
+.board:has(.ch[data-ch="grandstream"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="grandstream"],
+.board:has(.ch[data-ch="sip"]:is(:focus-visible, [aria-pressed="true"])) .row[data-ch="sip"] {
+  --lit-bg: var(--secondary); /* #1C2C5C inside .on-dark */
+  --lit-bar: 1;
+  --lit-label: var(--foreground);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ch:hover {
+    background: var(--c);
+    color: var(--on);
+  }
+  .ch:hover .kind {
+    color: var(--on);
+  }
+  .board:has(.ch[data-ch="phone"]:hover) .row[data-ch="phone"],
+  .board:has(.ch[data-ch="whatsapp"]:hover) .row[data-ch="whatsapp"],
+  .board:has(.ch[data-ch="telegram"]:hover) .row[data-ch="telegram"],
+  .board:has(.ch[data-ch="web"]:hover) .row[data-ch="web"],
+  .board:has(.ch[data-ch="grandstream"]:hover) .row[data-ch="grandstream"],
+  .board:has(.ch[data-ch="sip"]:hover) .row[data-ch="sip"] {
+    --lit-bg: var(--secondary);
+    --lit-bar: 1;
+    --lit-label: var(--foreground);
+  }
+}
+
+/* ---- tablet: the inbox on top, the tiles in two columns under it ---- */
+@media (max-width: 1100px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .inbox {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin-block-end: 8px;
+  }
+  .side {
+    grid-column: span 1;
+  }
+}
+
+/* ---- phone: two-line rows, one per channel, so the inbox and every tile share one screen ---- */
+@media (max-width: 640px) {
+  .board {
+    gap: 6px;
+    margin-block-start: 32px;
+  }
+  .inbox {
+    margin-block-end: 6px;
+  }
+  .inboxTop {
+    padding: 14px 14px 10px;
+  }
+  .list {
+    padding: 0 6px 6px;
+  }
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 10px;
+    padding: 9px 12px;
+  }
+  .row[data-dup] {
+    display: none;
+  }
+  .rowCh {
+    grid-column: 1;
+    font-size: 14px;
+  }
+  .rowT {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .rowBody {
+    display: block;
+    grid-column: 1 / -1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rowBody b {
+    margin-inline-end: 0.5em;
+  }
+  .msg {
+    display: inline;
+  }
+  .side {
+    gap: 6px;
+  }
+  .ch {
+    align-content: center;
+    gap: 8px;
+    min-block-size: 84px;
+    padding: 16px;
+  }
+  .name {
+    font-size: 22px;
+  }
+  /* Two lines for "Any SIP phone system", so the tile rows stay as short as the Arabic ones. */
+  .name:lang(en) {
+    font-size: 20px;
+  }
+  .kind {
+    display: none;
+  }
+}

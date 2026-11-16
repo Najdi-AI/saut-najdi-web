@@ -107,7 +107,7 @@ export function BookingDesk({ locale }: { locale: Locale }) {
         <div className="flex items-center gap-3">
           {/* Cyan, not purple: the chip's ground is the dark card in both
               themes, and brand-purple on it is nearly unreadable. */}
-          <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-cyan">
+          <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-(--radius) text-brand-cyan">
             <AnimatedIcon name="wave" size={22} />
           </span>
           <span className="text-body font-medium text-muted-foreground">{s.org}</span>

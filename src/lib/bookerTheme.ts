@@ -1,5 +1,6 @@
 /**
- * The dark skin for the inline Cal.com booker on /demo.
+ * The skin for the inline Cal.com booker on /demo: the rebrand's dark band
+ * tokens, so the booker reads as part of the .on-dark BookingDesk card.
  *
  * This lives in its own module — not in `cal.ts` — because `cal.ts` is a
  * "use client" module: every export of a client module reaches a Server
@@ -13,42 +14,45 @@
  * differently-shaded rectangle inside the card and the seam is obvious.
  */
 
-/** Card surface. A step above ink (#0D1326) so the card lifts off the band. */
-export const BOOKER_SURFACE = "#0F1730";
+/** Card surface: Charcoal, the rebrand's dark ground (.on-dark). */
+export const BOOKER_SURFACE = "#0D1326";
 
 /**
- * Brand tokens mapped onto Cal's dark palette. Names and roles are Cal's
- * (see cal.com/docs → customize embed CSS variables); values are ours.
+ * Rebrand tokens mapped onto Cal's palette (names and roles are Cal's, see
+ * cal.com/docs → customize embed CSS variables; values are ours): Charcoal
+ * ground, Soft Navy raised, Off-White text, #3A4566 hairlines, and cyan for
+ * the selection. Cal paints the selected date and its Confirm button from
+ * the same brand token, so Najdi Red cannot be given to the confirm alone.
  */
-export const BOOKER_DARK_VARS: Record<string, string> = {
-  // Brand — the selected date, the Confirm button
-  "cal-brand": "#5B6CE5",
-  "cal-brand-emphasis": "#7C8AEF",
-  "cal-brand-text": "#FFFFFF",
-  "cal-brand-subtle": "#3A4694",
-  "cal-brand-accent": "#FFFFFF",
+export const BOOKER_VARS: Record<string, string> = {
+  // Brand: the selected date, the Confirm button (Charcoal on cyan, 8.9:1)
+  "cal-brand": "#2EC4E6",
+  "cal-brand-emphasis": "#63D4EE",
+  "cal-brand-text": "#0D1326",
+  "cal-brand-subtle": "#1C2C5C",
+  "cal-brand-accent": "#0D1326",
 
   // Text
-  "cal-text": "#D6DAE8",
-  "cal-text-emphasis": "#FFFFFF",
-  "cal-text-subtle": "#98A1B8",
-  "cal-text-muted": "#5D6680",
+  "cal-text": "#D5D9E2",
+  "cal-text-emphasis": "#F7F8FA",
+  "cal-text-subtle": "#A3ABBD",
+  "cal-text-muted": "#737D99",
   "cal-text-inverted": "#0D1326",
-  "cal-text-success": "#34D399", // the availability dot beside each slot
+  "cal-text-success": "#2EC4E6", // the availability dot beside each slot
 
   // Surfaces
   "cal-bg": BOOKER_SURFACE,
-  "cal-bg-emphasis": "#1E2745",
-  "cal-bg-subtle": "#151E38",
-  "cal-bg-muted": "#121A32",
+  "cal-bg-emphasis": "#1C2C5C",
+  "cal-bg-subtle": "#112046",
+  "cal-bg-muted": "#112046",
   "cal-bg-inverted": "#F7F8FA",
 
   // Borders. The booker's own outer border is switched off — our card
   // already draws one, and two concentric borders read as a rendering bug.
-  "cal-border": "#232C49",
-  "cal-border-emphasis": "#3A4568",
-  "cal-border-subtle": "#1E2740",
-  "cal-border-muted": "#182034",
+  "cal-border": "#3A4566",
+  "cal-border-emphasis": "#737D99",
+  "cal-border-subtle": "#3A4566",
+  "cal-border-muted": "#2A3352",
   "cal-border-booker": "transparent",
   "cal-border-booker-width": "0px",
 };

@@ -1,34 +1,42 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import type { FaqItem } from "@/lib/schema";
 
 /**
- * FAQ accordion (blueprint §4.3) — native <details>/<summary>, so every
- * answer is in the server HTML and works with zero JavaScript. Feeds
- * FAQPage schema via the page's JSON-LD (built from the same items).
+ * FAQ accordion (blueprint §4.3), rendered by page/FaqRows on the ui/
+ * Accordion. Feeds FAQPage schema via the page's JSON-LD (built from the
+ * same items).
  *
- * The padding lives on the <summary>, not the <details>, so the whole row is
- * the tap target (56px tall for a one-line question) rather than the 24px
- * line of text inside it.
+ * Lazy on purpose. lib/pageFactory imports the FAQ arrays from the page
+ * modules, so every route that uses it pulls in every page module's client
+ * components, whether the route renders them or not. A static import here
+ * put the Base UI accordion (~10 kB) in the First Load JS of 50 routes;
+ * through next/dynamic it is still server-rendered (every answer in the
+ * prerendered HTML) but its chunk loads only where a FAQ actually renders.
  */
+const FaqRows = dynamic(() => import("./page/FaqRows"));
+
+/**
+ * Without JavaScript no row can open, so this sheet (inside <noscript>, which
+ * the browser ignores when scripts run) shows every answer in place, in the
+ * muted ink of the closed row, and drops the plus/minus that would promise
+ * otherwise. The display rule sits in Tailwind's theme layer because the
+ * preflight hides [hidden] with !important in the base layer, and only an
+ * important declaration in an earlier layer outranks that.
+ */
+const SHOW_ANSWERS =
+  "@layer theme{[data-faq] [data-slot=accordion-content][hidden]{display:block!important}}" +
+  "[data-faq] [data-slot=accordion-content] > div{color:var(--muted-foreground)!important}" +
+  "[data-faq] [data-slot=accordion-trigger-icon]{display:none!important}";
+
 export function FaqAccordion({ items }: { items: FaqItem[] }) {
   return (
-    <div className="divide-y divide-line rounded-2xl border border-line bg-surface shadow-card">
-      {items.map((item) => (
-        <details key={item.q} className="group">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-body-lg font-bold text-ink [&::-webkit-details-marker]:hidden">
-            {item.q}
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              aria-hidden
-              className="shrink-0 text-brand-blue transition-transform duration-300 group-open:rotate-45"
-            >
-              <path d="M9 3v12M3 9h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </summary>
-          <p className="-mt-1 px-6 pb-4 text-body-lg leading-relaxed text-ink/75">{item.a}</p>
-        </details>
-      ))}
-    </div>
+    <>
+      <noscript>
+        <style dangerouslySetInnerHTML={{ __html: SHOW_ANSWERS }} />
+      </noscript>
+      <FaqRows items={items} />
+    </>
   );
 }

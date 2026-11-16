@@ -1,22 +1,20 @@
 "use client";
 
-import { motion, type Transition } from "framer-motion";
+import { motion } from "framer-motion";
 import { AnimatedIcon, type IconName } from "./icons";
 import { useReducedMotionAfterHydration } from "./useReducedMotionAfterHydration";
 import type { Locale } from "@/lib/i18n";
 
 /**
- * The /how-it-works journey: seven outline icon nodes on a vertical
- * timeline, animated like the homepage «كيف يشتغل؟» flow — each step's
- * node pops in as it scrolls into view, its icon draws itself, a handoff
- * pulse fires, and the connector fills down to the next stage. Outline
- * icons only — no gradient fills (owner rule).
+ * The /how-it-works journey: seven steps on Try 3's day timeline — a 4px
+ * Silver Gray rail with a square Charcoal marker at each step. Each step
+ * rises into place as it scrolls into view and its line icon draws itself;
+ * a plain ease-out, no spring.
  *
  * Under reduced motion it hydrates the server's hidden frame, then lands on
- * the end state at once: every transition is instant and the handoff pulse
- * is dropped (after hydration, so the trees still match). Every node with a
- * hidden first frame carries data-reveal, which the no-JavaScript sheet shows
- * at rest (NoScriptReveal); the pulse ring rests invisible, so it does not.
+ * the end state at once (after hydration, so the trees still match). Every
+ * step carries data-reveal, which the no-JavaScript sheet shows at rest
+ * (NoScriptReveal).
  */
 
 const STEP_ICONS: IconName[] = ["phone", "wave", "chat", "mic", "calendar", "human", "chart"];
@@ -29,7 +27,6 @@ export function JourneySteps({
   locale: Locale;
 }) {
   const reduced = useReducedMotionAfterHydration();
-  const at = (transition: Transition): Transition => (reduced ? { duration: 0 } : transition);
 
   return (
     <ol className="mx-auto max-w-2xl">
@@ -39,70 +36,21 @@ export function JourneySteps({
           /* The HowTo JSON-LD points each step at #step-N, so the anchor has
              to exist; scroll-mt clears the sticky header when it lands. */
           id={`step-${i + 1}`}
-          className="relative flex scroll-mt-28 gap-5"
-          initial={reduced ? false : "hidden"}
-          animate={reduced ? "show" : undefined}
-          whileInView="show"
+          data-reveal=""
+          className="relative scroll-mt-28 pb-10 ps-10 before:absolute before:inset-y-0 before:start-1 before:w-1 before:bg-silver-gray after:absolute after:start-0 after:top-2 after:size-3 after:bg-charcoal last-of-type:pb-0 last-of-type:before:bottom-auto last-of-type:before:h-4"
+          initial={reduced ? false : { opacity: 0, y: 16 }}
+          animate={reduced ? { opacity: 1, y: 0 } : undefined}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
+          transition={reduced ? { duration: 0 } : { duration: 0.45, ease: "easeOut" }}
         >
-          {/* Node + connector column */}
-          <div className="flex flex-col items-center">
-            <motion.span
-              data-reveal=""
-              className="ring-spectrum relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-brand-purple shadow-card"
-              variants={{
-                hidden: { scale: 0.6, opacity: 0 },
-                show: {
-                  scale: 1,
-                  opacity: 1,
-                  transition: at({ type: "spring", stiffness: 260, damping: 18 }),
-                },
-              }}
-            >
-              <AnimatedIcon name={STEP_ICONS[i]} size={26} delay={0.15} />
-              {!reduced && (
-                <motion.span
-                  aria-hidden
-                  className="absolute inset-0 rounded-2xl border-2 border-brand-blue/50"
-                  variants={{
-                    hidden: { opacity: 0, scale: 1 },
-                    show: {
-                      opacity: [0, 0.8, 0],
-                      scale: [1, 1.45, 1.6],
-                      transition: { duration: 0.9, delay: 0.1, ease: "easeOut" },
-                    },
-                  }}
-                />
-              )}
-            </motion.span>
-            {i < steps.length - 1 && (
-              <motion.span
-                aria-hidden
-                data-reveal=""
-                className="w-0.5 flex-1 origin-top rounded-full bg-brand-gradient"
-                variants={{
-                  hidden: { scaleY: 0 },
-                  show: {
-                    scaleY: 1,
-                    transition: at({ duration: 0.6, delay: 0.35, ease: "easeInOut" }),
-                  },
-                }}
-              />
-            )}
-          </div>
-
-          {/* Step card */}
-          <motion.div
-            data-reveal=""
-            className={`card min-w-0 flex-1 ${i < steps.length - 1 ? "mb-6" : ""}`}
-            variants={{
-              hidden: { opacity: 0, y: 16 },
-              show: { opacity: 1, y: 0, transition: at({ duration: 0.45, delay: 0.15 }) },
-            }}
-          >
-            <h2 className="text-h4">{step.title}</h2>
-            <p className="mt-2 text-body-lg leading-relaxed text-ink/75">{step.body}</p>
-          </motion.div>
+          <h2 className="flex items-center gap-3 text-h4">
+            <span className="shrink-0 text-ink">
+              <AnimatedIcon name={STEP_ICONS[i]} size={24} delay={0.15} />
+            </span>
+            {step.title}
+          </h2>
+          <p className="mt-2 text-body-lg leading-relaxed text-ink/75">{step.body}</p>
         </motion.li>
       ))}
       <span className="sr-only">

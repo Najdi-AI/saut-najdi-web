@@ -41,9 +41,9 @@ export function NotFoundView({ locale }: { locale: Locale }) {
       className="container flex min-h-[70vh] flex-col items-center justify-center py-20 text-center font-sans"
     >
       <Waveform bars={24} maxHeight={48} animate={false} className="opacity-60" />
-      <h1 className="mt-6 text-h2">{s.h1}</h1>
-      <p className="mt-3 max-w-md text-body-lg text-ink/65">{s.body}</p>
-      <div className="mt-6 flex flex-wrap justify-center gap-3">
+      <h1 className="mt-8 font-display text-[clamp(40px,5.6vw,80px)] leading-[1.25] font-medium">{s.h1}</h1>
+      <p className="mt-4 max-w-md text-[1.0625rem] leading-[1.7] text-muted-foreground sm:text-[1.25rem]">{s.body}</p>
+      <div className="mt-9 flex flex-wrap justify-center gap-3">
         <Link href={localePath(locale, "")} className="btn-primary">{s.home}</Link>
         <Link href={localePath(locale, "how-it-works")} className="btn-secondary">{s.how}</Link>
         <Link href={localePath(locale, "demo")} className="btn-secondary">{s.demo}</Link>

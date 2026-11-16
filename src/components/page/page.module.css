@@ -1,0 +1,100 @@
+/*
+ * The inner-page kit (PageHero, Section), derived from the approved home
+ * (Try 1 and Try 3 mockups): H1 and H2 in the serif display face, heads
+ * start-aligned, the home's section rhythm, flat and square, and dark bands
+ * through the global .on-dark class. Text colours come from the shadcn
+ * tokens, so the same rules read right inside .on-dark.
+ *
+ * The module is unlayered, so its rules win over Tailwind's layered
+ * utilities without !important.
+ */
+/* Top only, so a page that ends on its hero can add bottom room (pb-*). */
+.hero {
+  padding-block-start: clamp(56px, 7vw, 112px);
+}
+.band {
+  margin-block-start: clamp(96px, 11.2vw, 168px);
+  padding-block: clamp(96px, 11.2vw, 168px);
+}
+.hero.band {
+  margin-block-start: 0;
+  padding-block: clamp(72px, 8vw, 128px);
+}
+
+/* Between the home's H2 (56px) and its hero line (128px). */
+.title {
+  max-inline-size: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.6vw, 80px);
+  font-weight: 500;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.lead {
+  margin-block-start: 28px;
+  max-inline-size: 52ch;
+  color: var(--muted-foreground);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.lead:lang(en) {
+  line-height: 1.55;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block-start: 36px;
+}
+
+.section {
+  padding-block-start: clamp(96px, 11.2vw, 168px);
+}
+.head {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+.h2 {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.9vw, 56px);
+  font-weight: 500;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.head > p {
+  max-inline-size: 52ch;
+  color: var(--muted-foreground);
+  font-size: 20px;
+  line-height: 1.7;
+}
+.head + .body {
+  margin-block-start: 48px;
+}
+
+/* Try 3's FAQ layout: the head holds the start columns and stays in view
+   while the content runs beside it. */
+@media (min-width: 1024px) {
+  .split {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+  .split > .head {
+    position: sticky;
+    inset-block-start: calc(var(--header-h) + 32px);
+    grid-column: 1 / span 4;
+    align-self: start;
+  }
+  .split > .body {
+    grid-column: 5 / span 8;
+    margin-block-start: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .lead,
+  .head > p {
+    font-size: 17px;
+  }
+}

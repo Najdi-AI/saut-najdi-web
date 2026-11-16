@@ -215,9 +215,9 @@ export function AnimatedIcon({
 }
 
 /**
- * Outline icon chip — white ground, spectrum BORDER, stroke icon.
- * Gradient fills on icons are banned site-wide (owner rule); the
- * spectrum only ever appears as an outline ring.
+ * A card's line icon: the stroke icon on its own in the ink, with no box,
+ * ring or ground around it (the rebrand dropped the icon-in-a-box chip).
+ * The name is kept so the pages that place it need no change.
  */
 export function IconChip({
   name,
@@ -229,10 +229,8 @@ export function IconChip({
   delay?: number;
 }) {
   return (
-    <span
-      className={`ring-spectrum inline-flex h-11 w-11 items-center justify-center rounded-xl text-brand-purple shadow-card transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 ${className}`}
-    >
-      <AnimatedIcon name={name} size={22} delay={delay} />
+    <span className={`inline-flex h-8 w-8 items-center text-ink ${className}`}>
+      <AnimatedIcon name={name} size={28} delay={delay} />
     </span>
   );
 }

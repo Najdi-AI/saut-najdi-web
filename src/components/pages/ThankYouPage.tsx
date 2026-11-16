@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { Waveform } from "@/components/Waveform";
+import { PageHero } from "@/components/page/PageHero";
 
 /** /demo/thank-you — booking redirect target, noindex (blueprint §2.4). */
 
@@ -23,14 +23,9 @@ const t = {
 export function ThankYouPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
-    <section className="container flex min-h-[55vh] flex-col items-center justify-center py-20 text-center">
-      <Waveform bars={28} maxHeight={44} className="opacity-80" />
-      <h1 className="mt-6 text-h1">{s.h1}</h1>
-      <p className="mt-4 max-w-xl text-body-lg leading-relaxed text-ink/70">{s.body}</p>
-      <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <Link href={localePath(locale, "")} className="btn-primary">{s.home}</Link>
-        <Link href={localePath(locale, "how-it-works")} className="btn-secondary">{s.how}</Link>
-      </div>
-    </section>
+    <PageHero title={s.h1} lead={s.body} className="min-h-[55vh] pb-[clamp(96px,11.2vw,168px)]">
+      <Link href={localePath(locale, "")} className="btn-primary">{s.home}</Link>
+      <Link href={localePath(locale, "how-it-works")} className="btn-secondary">{s.how}</Link>
+    </PageHero>
   );
 }

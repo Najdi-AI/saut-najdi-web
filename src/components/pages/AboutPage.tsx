@@ -4,13 +4,17 @@ import { localePath } from "@/lib/i18n";
 import { TAGLINE_AR, TAGLINE_EN } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
-import { Waveform } from "@/components/Waveform";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 
 /**
  * /about (blueprint §6.7): honest — no fabricated founding story, no
  * invented milestones, no photos until real team members agree. The prose
  * is cut into question-shaped H2 blocks because /about is where an entity
  * engine looks for who-builds-this, and a wall of <p> answers nothing.
+ *
+ * The pilot for the inner-page kit: PageHero, then one Section of ruled
+ * rows, each question on the start side and its answer beside it.
  */
 
 /** `link` renders inline at the end of `p` — /about used to link only via buttons. */
@@ -79,25 +83,26 @@ export function AboutPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-linear-to-b/srgb from-surface to-canvas py-14">
-        <div className="container text-center">
-          <h1 className="text-h1">{s.h1}</h1>
-          <Waveform bars={32} maxHeight={28} className="mt-6 opacity-70" />
-        </div>
-      </section>
-      <section className="container pb-16">
-        <div className="mx-auto max-w-2xl space-y-8">
+      <PageHero title={s.h1} />
+      <Section className="pb-[clamp(96px,11.2vw,168px)]">
+        <div className="border-t border-line">
           {s.blocks.map((b, i) => (
-            <Reveal key={b.h} delay={i * 0.05}>
-              <h2 className="text-h3">{b.h}</h2>
-              <p className="mt-3 text-body-lg leading-relaxed text-ink/80">
+            <Reveal
+              key={b.h}
+              delay={i * 0.05}
+              className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6"
+            >
+              <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+                {b.h}
+              </h2>
+              <p className="max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
                 {b.p}
                 {b.link ? (
                   <>
                     {" "}
                     <Link
                       href={localePath(locale, b.link.path)}
-                      className="font-medium text-brand-blue underline-offset-4 hover:underline"
+                      className="font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
                     >
                       {b.link.text}
                     </Link>
@@ -106,19 +111,22 @@ export function AboutPage({ locale }: { locale: Locale }) {
               </p>
             </Reveal>
           ))}
-          <Reveal>
-            <p className="pt-2 text-center text-h4 text-gradient">{s.tagline}</p>
-            <p className="mt-1 text-center text-body-lg text-ink/60">{s.taglineSub}</p>
-          </Reveal>
-          <Reveal className="pt-4 text-center">
-            <p className="text-body-lg text-ink/70">{s.reach}</p>
-            <div className="mt-3 flex justify-center gap-3">
-              <Link href={localePath(locale, "contact")} className="btn-primary">{s.contact}</Link>
-              <Link href={localePath(locale, "security")} className="btn-secondary">{s.security}</Link>
-            </div>
-          </Reveal>
         </div>
-      </section>
+        <Reveal className="mt-16 sm:mt-24">
+          <p className="font-display text-[clamp(32px,3.9vw,56px)] leading-[1.25] font-medium">{s.tagline}</p>
+          {/* bdi: the other language's line keeps its own direction. */}
+          <p className="mt-2 text-[1.25rem] text-muted-foreground">
+            <bdi lang={locale === "ar" ? "en" : "ar"}>{s.taglineSub}</bdi>
+          </p>
+        </Reveal>
+        <Reveal className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <p className="text-[1.25rem] font-bold">{s.reach}</p>
+          <div className="flex flex-wrap gap-3">
+            <Link href={localePath(locale, "contact")} className="btn-secondary">{s.contact}</Link>
+            <Link href={localePath(locale, "security")} className="btn-secondary">{s.security}</Link>
+          </div>
+        </Reveal>
+      </Section>
       <DemoCta locale={locale} />
     </>
   );

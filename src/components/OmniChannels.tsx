@@ -1,14 +1,15 @@
 import type { Locale } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
+import { Section } from "@/components/page/Section";
 
 /**
  * Omnichannel section — every customer channel, one inbox, one agent.
  *
  * Shared by the homepage and all five product pages so the story is told the
  * same way everywhere the ads land. Question-shaped H2 with the answer right
- * under it, per the site's copy style; six channel cards, each an icon in the
- * house `.ring-spectrum` chip (white ground, spectrum border, purple stroke —
- * never a gradient fill, per the brand rule).
+ * under it, per the site's copy style; six flat Silver Gray tiles (Try 1's
+ * channel tiles), each with its line icon in the ink. It brings its own
+ * bottom room because a DemoCta band follows it on every product page.
  */
 const t = {
   ar: {
@@ -41,7 +42,7 @@ const t = {
   },
 } as const;
 
-/** Small stroke icons, drawn inline; purple stroke per the icon rule. */
+/** Small stroke icons, drawn inline in the current colour (the ink). */
 function ChannelGlyph({ name }: { name: string }) {
   const common = {
     fill: "none",
@@ -97,29 +98,23 @@ function ChannelGlyph({ name }: { name: string }) {
 export function OmniChannels({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
-    <section className="container py-16">
-      <Reveal>
-        <h2 className="text-center text-h2">{s.heading}</h2>
-        <p className="mx-auto mt-4 max-w-3xl text-center text-body-lg leading-relaxed text-ink/75">
-          {s.answer}
-        </p>
-      </Reveal>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <Section title={s.heading} lead={s.answer} className="pb-[clamp(96px,11.2vw,168px)]">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {s.channels.map((c, i) => (
-          <Reveal key={c.key} delay={i * 0.06}>
-            <div className="card card-hover flex h-full items-start gap-3">
-              <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-purple">
+          <Reveal key={c.key} delay={i * 0.06} className="h-full">
+            <div className="flex h-full flex-col gap-4 bg-silver-gray p-6">
+              <span className="text-ink">
                 <ChannelGlyph name={c.key} />
               </span>
               <div>
-                <h3 className="text-h5">{c.name}</h3>
-                <p className="mt-1 text-body leading-relaxed text-ink/70">{c.line}</p>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{c.name}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{c.line}</p>
               </div>
             </div>
           </Reveal>
         ))}
       </div>
-      <p className="mt-8 text-center text-body-lg font-medium text-ink/80">{s.closing}</p>
-    </section>
+      <p className="mt-8 text-[1.25rem] font-bold">{s.closing}</p>
+    </Section>
   );
 }

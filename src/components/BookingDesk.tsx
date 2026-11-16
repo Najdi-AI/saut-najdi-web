@@ -93,31 +93,31 @@ export function BookingDesk({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <div
-      className="mx-auto grid max-w-[1120px] overflow-hidden rounded-3xl border border-white/10 shadow-[0_30px_90px_-40px_rgba(0,0,0,0.9)] lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
-      /* Pinning --surface as well as the background: this card is dark in
-         BOTH themes, so anything inside it that reads the surface token —
-         .ring-spectrum fills its centre with it — must see the card's own
-         colour rather than the page's, or the chip turns into a white
-         sticker whenever the site is in light mode. */
+      className="on-dark mx-auto grid max-w-[1120px] overflow-hidden border lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
+      /* A Charcoal band through .on-dark, so hairlines (the card, its
+         dividers, the chip) are #3A4566 and the focus ring cyan.
+         BOOKER_SURFACE is the same Charcoal the Cal booker paints, pinned
+         here and as --surface so .ring-spectrum fills its centre with the
+         card rather than the band's Soft Navy. */
       style={
         { backgroundColor: BOOKER_SURFACE, "--surface": BOOKER_SURFACE } as React.CSSProperties
       }
     >
-      <aside className="min-w-0 border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-e">
+      <aside className="min-w-0 border-b p-6 sm:p-8 lg:border-b-0 lg:border-e">
         <div className="flex items-center gap-3">
           {/* Cyan, not purple: the chip's ground is the dark card in both
               themes, and brand-purple on it is nearly unreadable. */}
-          <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-brand-cyan">
+          <span className="ring-spectrum flex h-11 w-11 shrink-0 items-center justify-center rounded-(--radius) text-brand-cyan">
             <AnimatedIcon name="wave" size={22} />
           </span>
-          <span className="text-body font-medium text-white/55">{s.org}</span>
+          <span className="text-body font-medium text-muted-foreground">{s.org}</span>
         </div>
 
-        <p className="mt-5 text-h3 text-white">{s.title}</p>
+        <p className="mt-5 text-h3 text-foreground">{s.title}</p>
 
         <ul className="mt-5 space-y-3">
           {s.items.map((item, i) => (
-            <li key={item} className="flex items-start gap-3 text-body leading-relaxed text-white/70">
+            <li key={item} className="flex items-start gap-3 text-body leading-relaxed text-[#d5d9e2]">
               <span className="mt-0.5 shrink-0 text-brand-cyan">
                 <AnimatedIcon name="check" size={16} delay={i * 0.18} strokeWidth={2.4} />
               </span>
@@ -126,10 +126,10 @@ export function BookingDesk({ locale }: { locale: Locale }) {
           ))}
         </ul>
 
-        <ul className="mt-6 space-y-3 border-t border-white/10 pt-5">
+        <ul className="mt-6 space-y-3 border-t pt-5">
           {s.meta.map((m) => (
-            <li key={m.label} className="flex items-center gap-3 text-body text-white/55">
-              <span className="shrink-0 text-white/35">
+            <li key={m.label} className="flex items-center gap-3 text-body text-muted-foreground">
+              <span className="shrink-0 text-muted-foreground">
                 <AnimatedIcon name={m.icon} size={16} />
               </span>
               {m.label}
@@ -137,7 +137,7 @@ export function BookingDesk({ locale }: { locale: Locale }) {
           ))}
         </ul>
 
-        <div className="mt-6 border-t border-white/10 pt-5">
+        <div className="mt-6 border-t pt-5">
           {/* Stays a modal: there is no page for the 15-minute call, and
               sending someone from a booker to another booker is worse than
               opening it where they stand. */}

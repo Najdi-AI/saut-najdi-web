@@ -28,12 +28,12 @@ const items: Record<
 
 export function TrustStrip({ locale }: { locale: Locale }) {
   return (
-    <div className="border-y border-line bg-surface">
-      <ul className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-4">
+    <div className="border-y border-line">
+      <ul className="container flex flex-wrap items-center justify-center gap-x-8 gap-y-1 py-3">
         {items[locale].map((item, i) => {
           const inner = (
-            <span className="flex items-center gap-2 text-body text-ink/70">
-              <span className="shrink-0 text-brand-blue">
+            <span className="flex min-h-11 items-center gap-2 text-[0.9375rem] text-muted-foreground">
+              <span className="shrink-0 text-ink">
                 <AnimatedIcon name={item.icon} size={20} delay={i * 0.1} />
               </span>
               {item.label}
@@ -42,7 +42,7 @@ export function TrustStrip({ locale }: { locale: Locale }) {
           return (
             <li key={item.label}>
               {item.href ? (
-                <Link href={localePath(locale, item.href)} className="transition-opacity hover:opacity-70">
+                <Link href={localePath(locale, item.href)} className="block underline-offset-4 hover:underline">
                   {inner}
                 </Link>
               ) : (

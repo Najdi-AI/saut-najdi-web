@@ -1,0 +1,333 @@
+/*
+ * The home hero (Try 1 `.hero`, mockups/css/site.css, with en-hero.html's
+ * Latin settings). The section is an .on-dark band, so colours are its
+ * tokens: --foreground Off-White, --muted-foreground #A3ABBD, --card Soft
+ * Navy (the chips), --ring cyan. The sticky global header (--header-h) now
+ * draws the mockup's bar, so the hero is the mockup's height and top
+ * padding minus that bar.
+ *
+ * Motion is CSS only and starts with the server HTML: the H1 lines rise
+ * (transform), the lead and chips fade up (opacity and transform). A chip's
+ * tilt is the `rotate` property, not `transform`, so the no-JavaScript reset
+ * (transform: none on data-reveal) keeps it.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.hero {
+  --chip-above: 122px; /* the dialect chip's reach above the stage */
+  --pad-top: calc(132px - var(--header-h));
+  position: relative;
+  overflow: clip;
+  display: grid;
+  /* Centred as in the mockup, but the track above the stage never drops below
+     the chip's reach plus 24px, so a short screen grows the hero, not clips. */
+  grid-template-rows: minmax(calc(var(--chip-above) + 24px - var(--pad-top)), 1fr) auto minmax(0, 1fr);
+  place-items: center;
+  min-block-size: calc(max(760px, 100svh) - var(--header-h));
+  padding-block: var(--pad-top) 112px;
+  padding-inline: clamp(20px, 2.3vw, 32px);
+  line-height: 1.7;
+}
+.hero :focus-visible {
+  outline-width: 3px;
+  outline-offset: 3px;
+}
+
+.stage {
+  grid-row: 2;
+  position: relative;
+  inline-size: min(1120px, 100%);
+  margin-block-start: 2vh;
+  text-align: center;
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 8.9vw, 128px);
+  font-weight: 500;
+  line-height: 1.22;
+}
+/* Each line clips its own rise; the padding keeps the descenders and dots. */
+.line {
+  display: block;
+  overflow: clip;
+  padding-block: 0.08em 0.2em;
+  margin-block: -0.08em -0.2em;
+}
+.line > span {
+  display: block;
+}
+
+.lead {
+  max-inline-size: 40ch;
+  margin-block-start: 64px;
+  margin-inline: auto;
+  color: var(--muted-foreground);
+  font-size: 20px;
+  line-height: 1.75;
+}
+
+/* ---- product chips: the --radius corners of product UI */
+.chip {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 10px;
+  inline-size: 300px;
+  padding: 14px 16px 16px;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--card-foreground);
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: start;
+  rotate: var(--tilt, 0deg);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.label {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 500;
+}
+.state {
+  display: block;
+}
+.title,
+.readout {
+  font-weight: 700;
+}
+.say {
+  min-block-size: 1.45em;
+  transition: opacity 240ms ease;
+}
+.say[data-fading] {
+  opacity: 0;
+}
+
+.dialect {
+  --tilt: -3deg;
+  inset-block-start: calc(-1 * var(--chip-above));
+  inset-inline-start: 13%;
+}
+.playChip {
+  --tilt: 2.5deg;
+  inset-block-start: 200px;
+  inset-inline-start: 5%;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  column-gap: 14px;
+  inline-size: 310px;
+}
+.handoff {
+  --tilt: -2deg;
+  inset-block-start: 296px;
+  inset-inline-end: 1%;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+  inline-size: 290px;
+}
+
+.playBtn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-cyan);
+  color: var(--color-charcoal);
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* A square 44px target at any drawn size (the round corners do not hit). */
+.playBtn::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 22px);
+}
+.playBtn:active {
+  transform: scale(0.94);
+}
+.playBtn svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.playBody {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  block-size: 24px;
+  margin-block-start: 4px;
+}
+.wave > span {
+  display: block;
+  inline-size: 3px;
+  border-radius: 2px;
+  background: var(--muted-foreground);
+  transition: background-color 120ms linear;
+}
+.wave > span[data-on] {
+  background: var(--color-cyan);
+}
+
+/* ---- motion */
+@media (prefers-reduced-motion: no-preference) {
+  .line > span {
+    animation: line-up 820ms cubic-bezier(0.16, 1, 0.3, 1) calc(100ms + var(--i) * 110ms) both;
+  }
+  .rise {
+    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 420ms) both;
+  }
+  .playChip[data-playing] .wave > span {
+    animation: bar 900ms ease-in-out calc(var(--k) * -70ms) infinite alternate;
+  }
+}
+@keyframes line-up {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-y, 12px));
+  }
+}
+@keyframes bar {
+  from {
+    transform: scaleY(0.55);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.chip {
+  --rise-y: 14px;
+}
+
+/* ---- English (en-hero.html): Latin display settings and chip places */
+.en .h1 {
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+}
+.en .line {
+  padding-block: 0.04em 0.12em;
+  margin-block: -0.04em -0.12em;
+}
+.en .lead {
+  margin-block-start: 56px;
+}
+.en {
+  --chip-above: 132px;
+}
+.en .dialect {
+  inset-inline-start: 6%;
+}
+.en .playChip {
+  --tilt: -2.5deg;
+  inset-block-start: 300px;
+  inset-inline-start: -1%;
+}
+.en .handoff {
+  --tilt: 2deg;
+  inset-block-start: 286px;
+  inset-inline-end: -1%;
+}
+
+/* ---- tablet: up to 1180px the lead is too wide for chips beside it (they
+   covered it up to ~1155px in English), so the play and handoff chips drop
+   into the flow between the H1 and the lead, still tilted (the mockups stop
+   at 1440 and 390). After the English block so it overrides those too. */
+@media (max-width: 1180px) {
+  .dialect,
+  .en .dialect {
+    inset-inline-start: 0;
+  }
+  .pair {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 24px;
+    margin-block-start: 32px;
+  }
+  .stage .pair > .chip {
+    position: relative;
+    inset: auto;
+  }
+  .stage .lead {
+    margin-block-start: 40px;
+  }
+}
+
+/* ---- phone: its own composition, chips in the flow under and over the H1.
+   `.stage` raises these over the English places above. */
+@media (max-width: 640px) {
+  .hero {
+    grid-template-rows: none;
+    align-items: start;
+    min-block-size: auto;
+    padding-block: calc(104px - var(--header-h)) 72px;
+  }
+  .stage {
+    grid-row: auto;
+    display: grid;
+    gap: 14px;
+    margin-block-start: 0;
+  }
+  .h1 {
+    font-size: 13.4vw;
+    line-height: 1.24;
+  }
+  .en .h1 {
+    font-size: 15vw;
+  }
+  .stage .chip {
+    position: relative;
+    inset: auto;
+    inline-size: auto;
+    rotate: none;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-block-start: 0;
+  }
+  .stage .playChip {
+    grid-template-columns: 40px 1fr;
+    column-gap: 10px;
+    padding: 12px;
+  }
+  .playChip .readout {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .wave {
+    display: none;
+  }
+  .stage .handoff {
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    padding: 12px;
+  }
+  .playBtn {
+    inline-size: 40px;
+    block-size: 40px;
+  }
+  .stage .lead {
+    max-inline-size: none;
+    margin-block-start: 10px;
+    font-size: 17px;
+  }
+}

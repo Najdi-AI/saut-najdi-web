@@ -53,14 +53,21 @@ export const thmanyah = localFont({
 /**
  * Thmanyah Serif Display — the rebrand's display face, for H1 and H2 only
  * (2026-11-15 mockups). Exposed as --font-serif-display and the `font-display`
- * utility (globals.css @theme); no current heading uses it yet.
+ * utility (globals.css @theme); the home hero's H1 is the first to use it.
  *
  * Medium (500) is the only weight the mockups set in this face, so it is the
  * only file registered. WOFF2 from the same licensed bundle as the sans.
  *
- * preload is off while nothing paints it: a preloaded face no page uses is
- * 82 KB fetched on every first visit for nothing. Turn it on with the PR
- * that puts it on a heading above the fold.
+ * Preloaded since the home hero, whose H1 is set in this face. Without the
+ * preload the browser finds the file only once the stylesheet is parsed;
+ * with it the file starts with the HTML, so on a throttled line the H1's
+ * swap from Thmanyah Sans comes sooner. The costs: like the sans, the
+ * preload is per family, so every page fetches this 82 KB file on a first
+ * visit, and on a slow line first paint waits a little longer for the
+ * shared bandwidth.
+ *
+ * Local Windows builds emit no font preloads at all (Next's font manifest
+ * misses backslash paths); check the <link> on a Linux or Vercel build.
  *
  * adjustFontFallback is off on purpose, unlike the sans above. The Arial-
  * metric fallback face Next would emit sits FIRST in the variable's stack,
@@ -74,6 +81,6 @@ export const thmanyahSerifDisplay = localFont({
   ],
   variable: "--font-serif-display",
   display: "swap",
-  preload: false,
+  preload: true,
   adjustFontFallback: false,
 });

@@ -3,10 +3,12 @@ import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
-import { Waveform } from "@/components/Waveform";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { JourneySteps } from "@/components/JourneySteps";
+import { IvrComparison } from "@/components/IvrComparison";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 
 /**
  * /how-it-works (blueprint §6.6): one call's journey told in dialect —
@@ -15,6 +17,11 @@ import { JourneySteps } from "@/components/JourneySteps";
  * Copy pass: a brief per stage, not an explanation of it. Each step is one
  * or two short sentences; the seven-step shape is fixed by JourneySteps'
  * icon list and by the HowTo graph that consumes `journeySteps` below.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, the trust strip, the
+ * journey under its question, then the IVR comparison (moved here from the
+ * old home, rebrand D4). pageFactory imports this module for journeySteps,
+ * so every import here stays server-only or already ships everywhere.
  */
 
 const t = {
@@ -106,42 +113,34 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-linear-to-b/srgb from-surface to-canvas">
-        <div className="container py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      <PageHero title={s.h1} lead={s.intro}>
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       <TrustStrip locale={locale} />
 
-      <section className="container py-16">
-        {/* The seven steps only answer the query if you read all seven. This
-            capsule answers it in one liftable paragraph under the question as
-            it is actually typed — the steps below stay the proof. */}
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.answerH2}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.capsule}</p>
-        </Reveal>
-        <div className="mt-12">
+      {/* The seven steps only answer the query if you read all seven. This
+          capsule answers it in one liftable paragraph under the question as
+          it is actually typed — the steps below stay the proof. */}
+      <Section title={s.answerH2} lead={s.capsule}>
+        {/* JourneySteps centres a 2xl list; this box holds it to the start. */}
+        <div className="max-w-2xl">
           <JourneySteps steps={s.steps} locale={locale} />
         </div>
-        <Reveal className="mx-auto mt-10 max-w-2xl text-center">
-          <Waveform bars={40} maxHeight={32} className="mb-6 opacity-70" />
-          <p className="text-body-lg leading-relaxed text-ink/75">{s.outro}</p>
-          <p className="mt-4">
+        <Reveal className="mt-12 max-w-[60ch] border-t border-border pt-10">
+          <p className="text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">{s.outro}</p>
+          <p className="mt-2">
             <Link
               href={localePath(locale, "product/human-handoff")}
-              className="font-medium text-brand-blue underline-offset-4 hover:underline"
+              className="inline-flex min-h-11 items-center text-[1.0625rem] font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red sm:text-[1.125rem]"
             >
               {locale === "ar" ? "اعرف أكثر عن التصعيد للموظف البشري ←" : "Learn more about human handoff →"}
             </Link>
           </p>
         </Reveal>
-      </section>
+      </Section>
+
+      <IvrComparison locale={locale} className="pb-[clamp(96px,11.2vw,168px)]" />
 
       <DemoCta locale={locale} />
     </>

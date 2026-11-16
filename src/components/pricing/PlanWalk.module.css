@@ -163,6 +163,7 @@
     align-content: center;
     align-items: start;
     block-size: calc(100svh - var(--header-h));
+    padding-block-end: 84px; /* centred above the chat launcher: 20px + 56px + 8px */
   }
   .walk[data-ready] .index {
     grid-column: 1 / span 6;

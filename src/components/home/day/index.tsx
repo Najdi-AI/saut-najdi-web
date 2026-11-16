@@ -218,7 +218,9 @@ export function Day({ locale }: { locale: Locale }) {
             <span className={s.now} data-now="" aria-hidden="true" />
           </div>
           <div className={s.meter} aria-hidden="true">
-            <span>{t.meter[0]}</span>
+            <span>
+              <Num>{t.meter[0][0]}</Num> {t.meter[0][1]}
+            </span>
             <span className={s.bars} data-bars="">
               {Array.from({ length: 18 }, (_, k) => (
                 <i key={k}>
@@ -226,7 +228,9 @@ export function Day({ locale }: { locale: Locale }) {
                 </i>
               ))}
             </span>
-            <span>{t.meter[1]}</span>
+            <span>
+              <Num>{t.meter[1][0]}</Num> {t.meter[1][1]}
+            </span>
           </div>
         </div>
       </DayTrack>

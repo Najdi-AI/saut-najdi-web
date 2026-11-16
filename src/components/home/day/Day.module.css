@@ -41,7 +41,7 @@
 .clock {
   display: none;
 }
-/* Sized for 11:42, so the minutes never move. */
+/* Room for a four-digit time until DayTrack holds it at its widest (10:00), so the minutes never move. */
 .fig {
   display: inline-block;
   min-inline-size: 2.5em;
@@ -602,10 +602,11 @@ html[dir="ltr"] .bars b {
 .track[data-pin] .mo[data-on] .log li:nth-child(5) {
   transition-delay: 640ms;
 }
-/* Four swings, so the bars settle inside five seconds (WCAG 2.2.2). */
+/* Three swings: the bars settle inside five seconds (WCAG 2.2.2), and an odd count ends on full
+   height, their resting state, so nothing snaps at the end. */
 @media (prefers-reduced-motion: no-preference) {
   .track[data-pin] .mo[data-on] .wave i {
-    animation: bar 1100ms ease-in-out 4 alternate;
+    animation: bar 1100ms ease-in-out 3 alternate;
     animation-delay: calc(var(--k, 0) * -90ms);
   }
 }

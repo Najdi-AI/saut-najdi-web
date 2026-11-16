@@ -14,7 +14,11 @@ export const dayCopy = {
     strip: "مواقف من يوم واحد",
     // The clock's word for each part of the day, up to 12:00, 15:00, 17:30, 19:00, midnight, then after.
     parts: ["الصبح", "الظهر", "العصر", "المغرب", "الليل", "بعد نص الليل"],
-    meter: ["8 الصبح", "2 بعد نص الليل"],
+    // The meter's two ends, figure and word.
+    meter: [
+      ["8", "الصبح"],
+      ["2", "بعد نص الليل"],
+    ],
     agent: "وكيل صوت نجدي",
     moments: [
       { t: 480, time: "8:00", part: "الصبح", say: "يبدأ الدوام، ووكيلك شغّال على كل قنواتك." },
@@ -87,8 +91,12 @@ export const dayCopy = {
     title: "A full day with your agent",
     lead: "Scroll and the clock runs through one day with your agent.",
     strip: "Moments from one day",
-    parts: ["morning", "midday", "afternoon", "evening", "night", "after midnight"],
-    meter: ["8 am", "2 am"],
+    // "afternoon" from noon: "1:30 midday" read oddly beside the moment's "1:30 pm".
+    parts: ["morning", "afternoon", "afternoon", "evening", "night", "after midnight"],
+    meter: [
+      ["8", "am"],
+      ["2", "am"],
+    ],
     agent: "Saut Najdi agent",
     moments: [
       { t: 480, time: "8:00", part: "am", say: "Your workday starts, and your agent is live on every channel." },

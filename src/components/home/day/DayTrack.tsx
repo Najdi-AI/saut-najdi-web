@@ -108,6 +108,18 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
       }
       return spare;
     };
+    // Sizes an element to the widest of some texts it will show, then puts its own text back.
+    const hold = (el: HTMLElement, texts: string[]) => {
+      const shown = el.textContent;
+      let widest = 0;
+      el.style.minInlineSize = "";
+      for (const text of texts) {
+        el.textContent = text;
+        widest = Math.max(widest, el.getBoundingClientRect().width);
+      }
+      el.textContent = shown;
+      el.style.minInlineSize = `${Math.ceil(widest)}px`;
+    };
     const measure = () => {
       check = 0;
       const was = pinned;
@@ -115,11 +127,21 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
       const before = track.getBoundingClientRect();
       // The moment being read in the list: the one across a line a quarter of the way down under the header.
       const line = top + (innerHeight - top) / 4;
-      if (!was) at = Math.max(0, items.findIndex((li) => li.getBoundingClientRect().bottom > line));
+      if (!was) {
+        const i = items.findIndex((li) => li.getBoundingClientRect().bottom > line);
+        at = i < 0 ? items.length - 1 : i; // the list's end above the line: the reader is past the last moment
+      }
       strip.style.transform = "";
       strip.style.paddingInlineStart = "";
       track.style.removeProperty("--run");
       track.toggleAttribute("data-pin", mq.matches);
+      if (mq.matches) {
+        // The clock holds its widest face, so it never grows as the day runs and the fit measured now
+        // holds all day: the figure at its widest times (10:00 is the widest in this face, 2.58em) and
+        // the widest word («بعد نص الليل», "after midnight"), at the current text settings.
+        hold(fig, ["10:00", "11:42", "12:00"]);
+        hold(word, parts);
+      }
       pinned = mq.matches && room() >= (was ? 0 : SLACK);
       track.toggleAttribute("data-pin", pinned);
       if (pinned) {
@@ -162,7 +184,7 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
 
     measure();
     const sizes = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
-    for (const el of [head, clock, ...items.flatMap((li) => [...li.children])]) sizes?.observe(el);
+    for (const el of [head, clock, ...items.flatMap((li) => [...li.children])]) sizes?.observe(el, { box: "border-box" });
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", schedule);
     mq.addEventListener("change", schedule);

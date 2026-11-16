@@ -311,6 +311,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Focus and #anchor scrolls stop below the sticky header, so a control
+       reached with Shift+Tab is never hidden behind it (WCAG 2.4.11). */
+    scroll-padding-top: calc(var(--header-h) + 8px);
   }
   body {
     @apply bg-canvas text-ink antialiased;

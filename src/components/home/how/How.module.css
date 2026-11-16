@@ -1,0 +1,399 @@
+/*
+ * How it works (Try 1 `.how` and states.html, mockups/css/site.css). A
+ * light section. Two layouts from one reading order (statement, its state,
+ * statement, its state...):
+ *
+ * - Stacked, the default: on a phone each statement sits over its state; from
+ *   900px each pair is a row, the statement beside its state. Every state is
+ *   visible. This is also the layout under reduced motion, without
+ *   JavaScript and on screens under 600px tall.
+ * - Pinned, once hydrated, from 900 x 600 with motion allowed (--can-pin)
+ *   and only while the tallest state fits under the header at the current
+ *   text settings (data-pin, usePinFit): the three states share one sticky
+ *   stage beside the statements (sticky grid items over the whole grid
+ *   area, so the page scrolls normally) and the statement in the middle of
+ *   the viewport sets the one that shows.
+ *
+ * The cards are product UI: 14px corners, Paper on Silver Gray, the page's
+ * muted ink (#525A6E, 6.9:1 on Paper). The stage is a square marketing panel.
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.step {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+.step h3 {
+  font-size: clamp(22px, 2.23vw, 32px);
+  font-weight: 700;
+  line-height: 1.35;
+  transition: color 240ms ease;
+}
+.step p {
+  max-inline-size: 40ch;
+  color: var(--muted-foreground);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.slot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  margin-block-end: 36px;
+  padding-block: 32px;
+  background: var(--muted);
+}
+
+/* ---- the fragment card */
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 12px;
+  inline-size: min(440px, 90%);
+  margin: 0;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+.note,
+.muted {
+  color: var(--muted-foreground);
+}
+.note {
+  font-size: 14px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tag i {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.tag[data-tone="blue"] {
+  background: #e4e7fb;
+  color: #2f3c9e; /* 7.6:1 */
+}
+.tag[data-tone="purple"] {
+  background: #efe8f7;
+  color: var(--color-purple); /* 6.0:1 */
+}
+.tag[data-tone="cyan"] {
+  background: var(--color-cyan);
+  color: var(--color-charcoal); /* 8.9:1 */
+}
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 50%;
+  background: var(--color-silver-gray);
+  font-weight: 700;
+}
+.avatar[data-tone="purple"] {
+  background: var(--color-purple);
+  color: #ffffff;
+}
+
+/* state 1: incoming call */
+.ring {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding-block: 26px 18px;
+  text-align: center;
+}
+.ring .avatar {
+  inline-size: 76px;
+  block-size: 76px;
+  font-size: 26px;
+}
+.ringName {
+  font-size: 20px;
+  font-weight: 700;
+}
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--color-off-white);
+}
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.live::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--color-cyan);
+}
+/* On a narrow card the wave gives way (its ends clip), not the words. */
+.wave {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  min-inline-size: 0;
+  block-size: 30px;
+  overflow: hidden;
+}
+.wave span {
+  flex: none;
+  inline-size: 3px;
+  border-radius: 2px;
+  background: var(--color-blue);
+}
+
+/* state 2: the call and the booking */
+.thread {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+.bubble {
+  max-inline-size: 84%;
+  padding: 10px 14px 11px;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.bubble small {
+  display: block;
+  margin-block-end: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #a3abbd; /* 8.0:1 on Charcoal */
+}
+.bubble[data-who="caller"] {
+  justify-self: start;
+  border-start-start-radius: 4px;
+  background: var(--color-silver-gray);
+}
+.bubble[data-who="agent"] {
+  justify-self: end;
+  border-start-end-radius: 4px;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+}
+.booked {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--color-off-white);
+}
+.bookedTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.bookedTitle svg {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+}
+.booked ul {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted-foreground);
+}
+.booked li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.booked li::before {
+  content: "";
+  flex: none;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* state 3: the handoff ticket */
+.ticket {
+  display: grid;
+  gap: 10px;
+}
+.to {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--color-off-white);
+}
+.to b {
+  display: block;
+  font-size: 16px;
+}
+.to span:not(.avatar) {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.ticket dl {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.ticket dl > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.ticket dt {
+  flex: none;
+  min-inline-size: 64px;
+  color: var(--muted-foreground);
+}
+.ticket dd {
+  margin: 0;
+}
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.btns span {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 40px;
+  padding-inline: 14px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius);
+  background: var(--card);
+  font-weight: 700;
+}
+.btns span[data-solid] {
+  border-color: var(--color-charcoal);
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+}
+
+/* ---- stacked, from 900px: a row per statement and its state */
+@media (min-width: 900px) {
+  .flow {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 56px 24px;
+  }
+  .step {
+    grid-row: var(--row);
+    grid-column: 1 / span 5;
+  }
+  .slot {
+    grid-row: var(--row);
+    grid-column: 7 / span 6;
+    margin: 0;
+    padding-block: 40px;
+  }
+}
+
+/* ---- pinned: one sticky stage, the statement in the middle sets its state */
+@media (min-width: 900px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .flow {
+    --can-pin: 1;
+  }
+  /* The stage: the mockup's min(600px, 72vh), grown to hold the tallest
+     card (--card-h) with 24px around it, within the room under the header;
+     centred in that room. usePinFit pins only when it fits. */
+  .flow[data-pin] {
+    --stage-h: clamp(min(600px, 72vh), calc(var(--card-h, 392px) + 48px), calc(100vh - var(--header-h) - 32px));
+    --pin-top: calc(var(--header-h) + (100vh - var(--header-h) - var(--stage-h)) / 2);
+    row-gap: 0;
+  }
+  .flow[data-pin] .step {
+    min-block-size: 78vh;
+  }
+  /* The last statement keeps room below its words, so the stage stays
+     pinned until its last line has left the middle of the screen: with its
+     text's bottom on the centre line, the step still reaches past the
+     stage's bottom, however tall the text is. */
+  .flow[data-pin] .step[data-step="2"] {
+    min-block-size: 70vh;
+    padding-block-end: max(0px, calc(var(--pin-top) + var(--stage-h) - 50vh + 8px));
+  }
+  .flow[data-pin] .step:not([data-active]) h3 {
+    color: var(--muted-foreground);
+  }
+  /* The three slots fill the same grid area and stick at the same place;
+     only the first draws the stage, the others are transparent over it. */
+  .flow[data-pin] .slot {
+    position: sticky;
+    inset-block-start: var(--pin-top);
+    grid-row: 1 / span 3;
+    align-self: start;
+    block-size: var(--stage-h);
+    padding: 0;
+  }
+  .flow[data-pin] .slot:not(:nth-child(2)) {
+    background: transparent;
+  }
+  /* Hits and text selection pass through the inactive slots to the card on show. */
+  .flow[data-pin] .slot:not([data-active]) {
+    pointer-events: none;
+  }
+  /* Every state is as tall as the tallest, so the card keeps its size. */
+  .flow[data-pin] .card {
+    min-block-size: var(--card-h, 392px);
+    transition:
+      opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .flow[data-pin] .slot:not([data-active]) .card {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    pointer-events: none;
+  }
+  .flow[data-pin][data-in-view] .slot[data-active] .wave span {
+    animation: bar 1100ms ease-in-out infinite alternate;
+    animation-delay: calc(var(--k, 0) * -90ms);
+  }
+}
+@keyframes bar {
+  from {
+    transform: scaleY(0.55);
+  }
+}

@@ -1,0 +1,223 @@
+/*
+ * The home FAQ (Try 3 `.convo`, mockups/try-3/try.css). A light section:
+ * questions are the caller's Silver Gray bubbles, answers the agent's
+ * Charcoal ones, with the site's chat-bubble corners (14px, a 4px tail).
+ * Ink on Silver Gray 14.9:1, on the open bubble's #DCE0E7 13.8:1;
+ * Off-White on Charcoal 17.4:1, its label #A3ABBD 8.0:1.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+}
+.head {
+  display: grid;
+  grid-column: 1 / span 4;
+  align-content: start;
+  gap: 28px;
+}
+.who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+}
+.who p {
+  display: grid;
+  line-height: 1.45;
+}
+.who p span {
+  color: var(--muted-foreground);
+}
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 50%;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  font-size: 18px;
+  font-weight: 700;
+}
+.thread {
+  display: grid;
+  grid-column: 6 / span 7;
+  align-content: start;
+  gap: 14px;
+}
+
+.ask summary {
+  display: flex;
+  list-style: none;
+  cursor: pointer;
+}
+.ask summary::-webkit-details-marker {
+  display: none;
+}
+/* The ring goes on the bubble, not the full-width row. */
+.ask summary:focus-visible {
+  outline: none;
+}
+.q {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  max-inline-size: 88%;
+  min-block-size: 56px;
+  padding: 13px 18px 14px;
+  border-radius: 14px;
+  border-start-start-radius: 4px;
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition:
+    background-color 180ms ease,
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ask summary:focus-visible .q {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+.ask summary:active .q {
+  transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ask:not([open]) summary:hover .q {
+    background: #d6dae1;
+  }
+}
+.plus,
+.seen {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+}
+.plus {
+  color: var(--muted-foreground);
+}
+.seen {
+  display: none;
+  color: var(--color-blue);
+}
+.ask[open] .plus {
+  display: none;
+}
+.ask[open] .seen {
+  display: block;
+}
+.ask[open] .q {
+  background: #dce0e7;
+}
+
+.a {
+  position: relative;
+  display: grid;
+  justify-items: end;
+  padding-block-start: 10px;
+}
+.r {
+  max-inline-size: 86%;
+  padding: 14px 20px 16px;
+  border-radius: 14px;
+  border-start-end-radius: 4px;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  font-size: 18px;
+  line-height: 1.75;
+}
+.r small {
+  display: block;
+  margin-block-end: 4px;
+  color: #a3abbd;
+  font-size: 13px;
+  font-weight: 500;
+}
+/* Typing, then the reply: only when motion is allowed. */
+.typing {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ask[open] .typing {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 0;
+    display: inline-flex;
+    gap: 5px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border-start-end-radius: 4px;
+    background: var(--color-charcoal);
+    animation: typing-out 160ms ease 620ms both;
+  }
+  .typing i {
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background: #a3abbd;
+    animation: dot 600ms ease-in-out 2 alternate;
+  }
+  .typing i:nth-child(2) {
+    animation-delay: 150ms;
+  }
+  .typing i:nth-child(3) {
+    animation-delay: 300ms;
+  }
+  .ask[open] .r {
+    animation: reply-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 640ms both;
+  }
+}
+@keyframes typing-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+    visibility: hidden;
+  }
+}
+@keyframes dot {
+  from {
+    transform: translateY(2px);
+    opacity: 0.45;
+  }
+  to {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+}
+@keyframes reply-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@media (max-width: 1100px) {
+  .head,
+  .thread {
+    grid-column: 1 / -1;
+  }
+  .head {
+    margin-block-end: 32px;
+  }
+}
+@media (max-width: 640px) {
+  .head {
+    gap: 18px;
+    margin-block-end: 24px;
+  }
+  .q {
+    max-inline-size: 94%;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .r {
+    max-inline-size: 94%;
+    padding: 12px 16px 14px;
+    font-size: 16px;
+  }
+}

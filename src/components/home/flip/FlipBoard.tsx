@@ -64,15 +64,19 @@ export function FlipBoard({ locale, t, children }: { locale: Locale; t: FlipCopy
         <span className={s.line} aria-hidden>
           {t.before.map((line, i) => (
             <Fragment key={line}>
-              {i > 0 && <br />}
+              {i > 0 && [" ", <br key="br" />]}
               {line}
             </Fragment>
           ))}{" "}
           <span ref={ref} className={s.plate}>
+            {/* Spaces between the words keep the heading's text readable; a grid drops them. */}
             {t.words.map((w, i) => (
-              <span key={w} className={s.w} data-on={i === word.on || undefined} data-out={i === word.out || undefined}>
-                {w}
-              </span>
+              <Fragment key={w}>
+                {i > 0 && " "}
+                <span className={s.w} data-on={i === word.on || undefined} data-out={i === word.out || undefined}>
+                  {w}
+                </span>
+              </Fragment>
             ))}
           </span>
           {t.after}

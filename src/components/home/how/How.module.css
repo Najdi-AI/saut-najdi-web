@@ -7,10 +7,12 @@
  *   900px each pair is a row, the statement beside its state. Every state is
  *   visible. This is also the layout under reduced motion, without
  *   JavaScript and on screens under 600px tall.
- * - Pinned, once hydrated (data-pin) from 900 x 600 with motion allowed: the
- *   three states share one sticky stage beside the statements (sticky grid
- *   items over the whole grid area, so the page scrolls normally) and the
- *   statement in the middle of the viewport sets the one that shows.
+ * - Pinned, once hydrated, from 900 x 600 with motion allowed (--can-pin)
+ *   and only while the tallest state fits under the header at the current
+ *   text settings (data-pin, usePinFit): the three states share one sticky
+ *   stage beside the statements (sticky grid items over the whole grid
+ *   area, so the page scrolls normally) and the statement in the middle of
+ *   the viewport sets the one that shows.
  *
  * The cards are product UI: 14px corners, Paper on Silver Gray, the page's
  * muted ink (#525A6E, 6.9:1 on Paper). The stage is a square marketing panel.
@@ -331,9 +333,15 @@
 
 /* ---- pinned: one sticky stage, the statement in the middle sets its state */
 @media (min-width: 900px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .flow {
+    --can-pin: 1;
+  }
+  /* The stage: the mockup's min(600px, 72vh), grown to hold the tallest
+     card (--card-h) with 24px around it, within the room under the header;
+     centred in that room. usePinFit pins only when it fits. */
   .flow[data-pin] {
-    --pin-top: calc(var(--header-h) + 5vh);
-    --stage-h: min(600px, 72vh);
+    --stage-h: clamp(min(600px, 72vh), calc(var(--card-h, 392px) + 48px), calc(100vh - var(--header-h) - 32px));
+    --pin-top: calc(var(--header-h) + (100vh - var(--header-h) - var(--stage-h)) / 2);
     row-gap: 0;
   }
   .flow[data-pin] .step {
@@ -354,17 +362,15 @@
     inset-block-start: var(--pin-top);
     grid-row: 1 / span 3;
     align-self: start;
-    align-items: start;
     block-size: var(--stage-h);
-    /* Cards share one top edge, so a state that wraps a line longer only
-       reaches a little lower. */
-    padding: calc((var(--stage-h) - 392px) / 2) 0 0;
+    padding: 0;
   }
   .flow[data-pin] .slot:not(:nth-child(2)) {
     background: transparent;
   }
+  /* Every state is as tall as the tallest, so the card keeps its size. */
   .flow[data-pin] .card {
-    min-block-size: 392px;
+    min-block-size: var(--card-h, 392px);
     transition:
       opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
       transform 520ms cubic-bezier(0.22, 1, 0.36, 1);

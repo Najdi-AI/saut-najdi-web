@@ -55,6 +55,12 @@ const t = {
  */
 const AVOID = "[data-fab-avoid], .hero-photo";
 const AVOID_PAD = 8;
+/**
+ * The footer's legal band (Footer.tsx, its last child) carries «© 2026 صوت
+ * نجدي» at the launcher's height when the page is scrolled to the bottom.
+ * The launcher rises with the band instead of covering it.
+ */
+const LIFT_OVER = "footer > :last-child";
 
 export function ChatLauncher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -79,6 +85,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
    */
   const pathname = usePathname();
   const [clear, setClear] = useState(false);
+  const [lift, setLift] = useState(0);
   const [focusWithin, setFocusWithin] = useState(false);
   useEffect(() => {
     const slot = slotRef.current;
@@ -97,6 +104,8 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         );
       });
       setClear(!blocked);
+      const band = document.querySelector(LIFT_OVER)?.getBoundingClientRect();
+      setLift(band && band.top < f.bottom + AVOID_PAD ? Math.ceil(f.bottom + AVOID_PAD - band.top) : 0);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -155,22 +164,6 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
     return () => window.removeEventListener("message", onMessage);
   }, [open]);
 
-  /**
-   * Mirror the site theme into the widget frame. ThemeToggle fires
-   * `themechange` on <html> rather than us polling, and the initial read
-   * happens on mount because ThemeScript has already stamped the attribute
-   * by then. Server-rendered as "light" so the markup is deterministic.
-   */
-  const [frameScheme, setFrameScheme] = useState<"light" | "dark">("light");
-  useEffect(() => {
-    const root = document.documentElement;
-    const read = () =>
-      setFrameScheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
-    read();
-    root.addEventListener("themechange", read);
-    return () => root.removeEventListener("themechange", read);
-  }, []);
-
   return (
     /* Inline-END corner: bottom-left in Arabic, bottom-right in English. In
        RTL the right edge is where every line starts, so the old start corner
@@ -198,7 +191,8 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                unlabelled group. */
             role="dialog"
             aria-label={s.title}
-            className="absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card-hover"
+            style={lift ? { marginBottom: lift } : undefined}
+            className="absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[14px] border-2 border-charcoal bg-white"
           >
             {/* Header ONLY for the fallback panel. The widget frame renders
                 its own — title, greeting and an X — so pairing it with ours
@@ -215,7 +209,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label={s.close}
-                  className="rounded-full border border-line p-2 text-ink/60 transition-colors hover:text-ink"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-input text-ink/60 transition-colors hover:text-ink"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden fill="none">
                     <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -227,16 +221,15 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
             {WEBCHAT_KEY ? (
               // `colorScheme` is the only lever we have on a cross-origin
               // frame: it decides what prefers-color-scheme reports INSIDE it,
-              // and the widget themes itself off that. It used to be pinned to
-              // light so the widget could not go dark under a light page;
-              // now it follows the site's own theme instead, so a dark page
-              // does not open a white rectangle over itself.
+              // and the widget themes itself off that. The public site is
+              // light only, so the frame is pinned light and a dark OS cannot
+              // open a dark widget over a light page.
               <iframe
                 ref={frameRef}
                 src={WEBCHAT_FRAME_URL(WEBCHAT_KEY)}
                 title={s.frameTitle}
                 className="min-h-0 w-full flex-1 border-0 bg-surface"
-                style={{ colorScheme: frameScheme }}
+                style={{ colorScheme: "light" }}
                 allow="clipboard-write; microphone"
               />
             ) : (
@@ -267,19 +260,15 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? s.close : s.open}
-        className={`ring-spectrum relative flex h-14 w-14 items-center justify-center rounded-full text-brand-purple shadow-card-hover transition-[opacity,transform,translate,scale,visibility] duration-300 hover:scale-105 ${
+        /* The lift is a margin: the slot keeps its bottom edge, so the
+           measurement above still reads the resting place. */
+        style={lift ? { marginBottom: lift } : undefined}
+        /* A Charcoal edge on a white disc: 17:1 against the Off-White page,
+           and the disc itself stands out the same on a Charcoal band. */
+        className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-charcoal bg-white text-ink transition-[opacity,transform,translate,scale,visibility,background-color] duration-300 hover:bg-silver-gray ${
           tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "visible translate-y-0 opacity-100"
         }`}
       >
-        {/* Hidden by CSS under reduced motion, not by a `reduced` branch: the
-            server cannot know the preference, so a branch here rendered a
-            different tree while hydrating (React #418). */}
-        {!open && (
-          <span
-            aria-hidden
-            className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-brand-blue/40 motion-reduce:hidden"
-          />
-        )}
         <AnimatedIcon name="chat" size={24} />
       </button>
     </div>

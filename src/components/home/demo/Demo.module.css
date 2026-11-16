@@ -1,0 +1,300 @@
+/*
+ * Try the call (Try 1 `.showcase`, mockups/css/site.css). A light section:
+ * the panel is square (a marketing panel), the product inside it keeps the
+ * product's own corners (cards and the activity track at --radius, chat
+ * bubbles at 14px). Colours are the page tokens: --card Paper, --muted
+ * Silver Gray, --muted-foreground #525A6E (6.9:1 on Paper, 5.57:1 on Silver).
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities.
+ */
+.col {
+  display: grid;
+  gap: 32px;
+  inline-size: min(1000px, 100%);
+  margin-inline: auto;
+}
+
+/*
+ * The panel keeps one height whatever the call, so a change never moves the
+ * controls or the page under them. The minimums hold the tallest call (every
+ * activity, scenario, setting and dialect) with room to spare, measured per
+ * width from 360 to 1440px (rebrand PR 5a); English bubbles wrap more. On one
+ * column the call sits at the bottom of its box, right above the controls.
+ */
+.panel {
+  display: grid;
+  grid-template-columns: 61fr 39fr;
+  min-block-size: 640px;
+  background: var(--muted);
+  line-height: 1.45;
+}
+.panel:lang(en) {
+  min-block-size: 688px;
+}
+
+.demo {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+  min-inline-size: 0;
+  padding: 22px 26px 18px;
+  background: var(--card);
+}
+
+.callbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block-end: 12px;
+  border-block-end: 1px solid var(--color-silver-gray);
+  font-size: 15px;
+}
+.who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 50%;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+  font-weight: 700;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted-foreground);
+}
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--foreground);
+  font-weight: 700;
+}
+.live::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--color-cyan);
+}
+
+/* ---- the call */
+.thread {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+.bubble {
+  max-inline-size: 84%;
+  padding: 10px 14px 11px;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.bubble small {
+  display: block;
+  margin-block-end: 2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.bubble[data-who="caller"] {
+  justify-self: start;
+  border-start-start-radius: 4px;
+  background: var(--color-silver-gray);
+  color: var(--color-charcoal);
+}
+.bubble[data-who="agent"] {
+  justify-self: end;
+  border-start-end-radius: 4px;
+  background: var(--color-charcoal);
+  color: var(--color-off-white);
+}
+.bubble[data-who="agent"] small {
+  color: #a3abbd; /* 8.0:1 on Charcoal */
+}
+.bubble[data-who="staff"] {
+  justify-self: end;
+  border-start-end-radius: 4px;
+  background: var(--color-purple);
+  color: #ffffff; /* 7.2:1 */
+}
+.bubble[data-who="staff"] small {
+  color: #e6ddf2; /* 5.5:1 on Purple */
+}
+
+.card {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--color-off-white);
+  font-size: 15px;
+}
+.card[data-card="handoff"] {
+  background: #f4eff9;
+}
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.card[data-card="handoff"] .cardTitle {
+  color: var(--color-purple); /* 6.3:1 on its lilac */
+}
+.cardTitle svg {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+}
+.card ul {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted-foreground);
+}
+.card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card li::before {
+  content: "";
+  flex: none;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.sent svg {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  color: var(--color-cyan);
+}
+.note {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+
+/* Only the steps a change brought in enter, one after another (site.js). */
+@media (prefers-reduced-motion: no-preference) {
+  .thread > [data-enter] {
+    animation:
+      enter-fade 320ms cubic-bezier(0.22, 1, 0.36, 1) both,
+      enter-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(60ms + var(--i, 0) * 120ms);
+  }
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes enter-rise {
+  from {
+    transform: translateY(10px);
+  }
+}
+
+/* ---- the settings */
+.controls {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+  padding: 10px 22px 18px;
+  font-size: 15px;
+}
+.ctl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-block-size: 56px;
+  border-block-end: 1px solid #d3d7de;
+}
+.name {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 700;
+}
+.value small {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 500;
+}
+.stack {
+  display: grid;
+  justify-content: stretch;
+  gap: 10px;
+  padding-block: 14px 6px;
+  border-block-end: 0;
+}
+/* «كل الإعدادات»: a phone-only disclosure, shown once it can work. */
+.toggle {
+  display: none;
+  justify-self: start;
+  margin-block-start: 8px;
+}
+
+@media (max-width: 1100px) {
+  .panel,
+  .panel:lang(en) {
+    grid-template-columns: 1fr;
+    min-block-size: 0;
+  }
+  .demo {
+    min-block-size: 636px;
+  }
+  .demo:lang(en) {
+    min-block-size: 706px;
+  }
+  .thread {
+    align-content: end;
+  }
+}
+
+@media (max-width: 640px) {
+  .demo {
+    min-block-size: calc(680px + (640px - 100vw) * 0.36);
+    padding: 16px;
+  }
+  .demo:lang(en) {
+    min-block-size: calc(756px + (640px - 100vw) * 0.4);
+  }
+  .controls {
+    padding: 4px 16px 14px;
+  }
+  .panel[data-ready]:not([data-open]) .more {
+    display: none;
+  }
+  .panel[data-ready] .toggle {
+    display: inline-flex;
+  }
+}

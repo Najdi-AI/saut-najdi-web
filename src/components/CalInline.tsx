@@ -133,8 +133,8 @@ export function CalInline({
                 : "The calendar couldn't load here — open the booking page directly"}
             </a>
           ) : (
-            // white/60 on the #0F1730 card is 6.96:1; white/45 was 4.46:1.
-            <span className="text-white/60">{loadingLabel}</span>
+            // Muted Off-White on the Charcoal card is 8.0:1.
+            <span className="text-muted-foreground">{loadingLabel}</span>
           )}
         </p>
       )}

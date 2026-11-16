@@ -2,7 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { CAL_LINK_QUICK } from "./site";
-import { BOOKER_DARK_VARS } from "./bookerTheme";
+import { BOOKER_VARS } from "./bookerTheme";
 
 /**
  * Cal.com embed loader (blueprint §2.4): nothing Cal-related loads until the
@@ -17,8 +17,9 @@ import { BOOKER_DARK_VARS } from "./bookerTheme";
  *
  *   - the DEFAULT namespace stays light. It powers every modal on the site,
  *     and a dark modal thrown over a light page reads as a bug.
- *   - the `booker` namespace is dark. It powers the single inline booker on
- *     /demo, which sits inside a dark band.
+ *   - the `booker` namespace is dark, in the rebrand's dark band tokens
+ *     (lib/bookerTheme). It powers the single inline booker on /demo,
+ *     which sits inside the .on-dark BookingDesk card.
  *
  * `ui` config in Cal is per-namespace, and that is the only reason the two
  * can disagree. Collapse the namespace and the modal follows the booker
@@ -178,7 +179,8 @@ export async function mountCalInline(
        * visitor's browser timezone, they just cannot override it here.
        */
       hideEventTypeDetails: true,
-      cssVarsPerTheme: { dark: BOOKER_DARK_VARS },
+      // `dark` is Cal's booker theme key, not the site's dark mode.
+      cssVarsPerTheme: { dark: BOOKER_VARS },
     });
     /**
      * No locale here. The booker takes its language from the VISITOR's

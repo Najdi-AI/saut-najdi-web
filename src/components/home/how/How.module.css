@@ -347,10 +347,13 @@
   .flow[data-pin] .step {
     min-block-size: 78vh;
   }
-  /* 70vh, or tall enough that the stage is still pinned while the last
-     statement is in the middle of a short screen. */
+  /* The last statement keeps room below its words, so the stage stays
+     pinned until its last line has left the middle of the screen: with its
+     text's bottom on the centre line, the step still reaches past the
+     stage's bottom, however tall the text is. */
   .flow[data-pin] .step[data-step="2"] {
-    min-block-size: max(70vh, calc(2 * (var(--pin-top) + var(--stage-h)) - 100vh + 8px));
+    min-block-size: 70vh;
+    padding-block-end: max(0px, calc(var(--pin-top) + var(--stage-h) - 50vh + 8px));
   }
   .flow[data-pin] .step:not([data-active]) h3 {
     color: var(--muted-foreground);
@@ -367,6 +370,10 @@
   }
   .flow[data-pin] .slot:not(:nth-child(2)) {
     background: transparent;
+  }
+  /* Hits and text selection pass through the inactive slots to the card on show. */
+  .flow[data-pin] .slot:not([data-active]) {
+    pointer-events: none;
   }
   /* Every state is as tall as the tallest, so the card keeps its size. */
   .flow[data-pin] .card {

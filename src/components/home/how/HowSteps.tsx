@@ -24,14 +24,37 @@ export function HowSteps({ steps, states }: { steps: { title: string; body: stri
   useEffect(() => {
     const root = ref.current;
     if (!root || typeof IntersectionObserver === "undefined") return;
-    // A band one tenth of the viewport tall around its middle line.
+    const steps = root.querySelectorAll("[data-step]");
+    const last = steps.length - 1;
+    // A band one tenth of the viewport tall around its middle line. Past
+    // either end nothing is in it: the first statement leaving below means
+    // the start, the last one leaving above means the end.
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(Number((e.target as HTMLElement).dataset.step))),
+      (entries) => {
+        for (const e of entries) {
+          const i = Number((e.target as HTMLElement).dataset.step);
+          const band = e.rootBounds;
+          if (e.isIntersecting) setActive(i);
+          else if (band && i === 0 && e.boundingClientRect.top >= band.bottom) setActive(0);
+          else if (band && i === last && e.boundingClientRect.bottom <= band.top) setActive(last);
+        }
+      },
       { rootMargin: "-45% 0px -45% 0px" },
     );
-    root.querySelectorAll("[data-step]").forEach((el) => io.observe(el));
+    steps.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [ref]);
+
+  // Arriving from far away (a jump to the top or the end) crosses no band
+  // edge: when the section comes into view, start from where it is.
+  useEffect(() => {
+    const root = ref.current;
+    if (!inView || !root) return;
+    const steps = root.querySelectorAll("[data-step]");
+    const mid = window.innerHeight / 2;
+    if (steps[0].getBoundingClientRect().top > mid) setActive(0);
+    else if (steps[steps.length - 1].getBoundingClientRect().bottom < mid) setActive(steps.length - 1);
+  }, [inView, ref]);
 
   return (
     <div ref={ref} className={s.flow} data-pin={pin || undefined} data-in-view={inView || undefined}>

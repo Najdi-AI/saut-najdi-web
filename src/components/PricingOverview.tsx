@@ -1,0 +1,209 @@
+import { billingTerms } from "@/content/billingTerms";
+import Link from "next/link";
+import { DemoLink } from "@/components/DemoLink";
+import { PricingTooltip } from "@/components/pages/PricingTooltip";
+import { Waveform } from "@/components/Waveform";
+import { PlanCapacity, capacityCopy, planUpgradeSummary } from "@/components/PlanCapacity";
+import { CREDIT_COST, formatSarRate, plans, textConversations, voiceMinutes } from "@/content/pricing";
+import { localePath, type Locale } from "@/lib/i18n";
+
+const copy = {
+  ar: {
+    eyebrow: "الباقات والأسعار",
+    heading: "باقات لكل مرحلة من نموك",
+    intro: "حصة نقاط شهرية مشتركة للمكالمات مع الوكيل والمحادثات النصية. اختر السعة التي تناسب استخدامك، ثم احجز عرضاً لنحدد التجهيز لمنشأتك.",
+    fit: {
+      essential: "لموقع واحد وتغطية المكالمات خارج الدوام وعند الانشغال",
+      growth: "لفريق ينمو ويحتاج سعة أكبر للرد والمتابعة",
+      expansion: "لتشغيل فروع متعددة بسعة أكبر للفريق والوكلاء",
+      enterprise: "احتياجات خاصة تُحدد في العقد",
+    },
+    monthly: "شهرياً",
+    sar: "ر.س",
+    credits: "حصة النقاط الشهرية المشتركة",
+    creditsHelp: `مكالمة: 1 دقيقة = ${CREDIT_COST.voiceMinute} نقاط؛ نص: 1 محادثة (24 ساعة) = ${CREDIT_COST.textConversation} نقاط؛ استنساخ الصوت: 1 صوت جديد = نقطتان (نمو/توسّع)؛ النص والردود والملخص = مشمولة في المكالمة.`,
+    voice: "إذا استُخدم كله للمكالمات",
+    text: "إذا استُخدم كله للمحادثات",
+    exclusive: "تقدير لكل نوع على حدة؛ عند المزج يُخصم الاستهلاك الفعلي من الحصة نفسها.",
+    minuteUnit: "دقيقة",
+    conversationUnit: "محادثة",
+    rates: "تفاصيل سعر الاستخدام",
+    withinVoice: "مرجع سعر الدقيقة ضمن الباقة",
+    withinText: "مرجع سعر المحادثة ضمن الباقة",
+    ratesNote: "حصة النقاط مشمولة في السعر الشهري؛ أسعار الاستخدام ضمن الباقة مرجعية ولا تُضاف إليه. لا توجد رسوم تجاوز للحصة.",
+    perMinute: "ر.س/دقيقة",
+    perConversation: "ر.س/محادثة",
+    quote: "حسب العقد",
+    quoteCapacity: "تُحسب في العرض",
+    book: "احجز عرضاً",
+    compare: "قارن كل تفاصيل الباقات",
+    vat: "الأسعار بالريال السعودي ولا تشمل ضريبة القيمة المضافة 15%. تُضاف عند الدفع بعد العرض التعريفي والعرض المكتوب. رسوم التجهيز تُحدد حسب احتياج منشأتك في العرض المكتوب.",
+    vatShort: "لا يشمل ضريبة القيمة المضافة 15%",
+    hoverRates: (voice: string, text: string) => `ضمن الباقة: ${voice} ر.س/دقيقة و${text} ر.س/محادثة. لا رسوم تجاوز للحصة.`,
+    inclusions: [
+      "بناء الوكيل وقاعدة معرفة خاصة بمنشأتك",
+      "صندوق وارد مشترك وتحويل المحادثة لموظفك",
+      "نص المكالمة وردود الوكيل ومعالجة الملخص ضمن نقاط المكالمة",
+      "لوحة متابعة وسجل محادثات العملاء",
+    ],
+  },
+  en: {
+    eyebrow: "Plans & pricing",
+    heading: "Plans for every stage of growth",
+    intro: "One monthly credit pool for AI calls and text conversations. Choose the capacity that fits your use, then book a demo to scope setup for your business.",
+    fit: {
+      essential: "For a single site, after-hours and overflow coverage",
+      growth: "For growing teams that need more answering capacity",
+      expansion: "For multi-branch operations with larger teams",
+      enterprise: "Custom needs set out in a written quote",
+    },
+    monthly: "month",
+    sar: "SAR",
+    credits: "Shared monthly credits",
+    creditsHelp: `AI call: 1 min = ${CREDIT_COST.voiceMinute} credits; Text: 1 conversation (24h) = ${CREDIT_COST.textConversation} credits; Voice clone: 1 new voice = 2 credits (Growth/Expansion); Transcript + replies + summary = included in call.`,
+    voice: "If used only for voice",
+    text: "If used only for conversations",
+    exclusive: "Each estimate uses the whole pool for one type. Mixed usage draws actual credits from the same pool.",
+    minuteUnit: "minutes",
+    conversationUnit: "conversations",
+    rates: "Usage price details",
+    withinVoice: "In-plan voice-minute reference rate",
+    withinText: "In-plan conversation reference rate",
+    ratesNote: "Credits are included in the monthly base; in-plan rates are reference values, not added charges. There are no overage charges.",
+    perMinute: "SAR/minute",
+    perConversation: "SAR/conversation",
+    quote: "By contract",
+    quoteCapacity: "Calculated in quote",
+    book: "Book a demo",
+    compare: "Compare all plan details",
+    vat: "Prices are in SAR and exclude 15% VAT. VAT is added at payment after the demo and written offer. Your setup fee is scoped to your needs in that offer.",
+    vatShort: "Excludes 15% VAT",
+    hoverRates: (voice: string, text: string) => `In-plan reference rates: voice SAR ${voice}/minute and text SAR ${text}/conversation. No overage charges.`,
+    inclusions: [
+      "Agent builder and your business knowledge base",
+      "Shared inbox and human handoff",
+      "Call transcript, AI replies and summary processing are covered by voice credits",
+      "Dashboard and customer conversation history",
+    ],
+  },
+} as const;
+
+const amount = (value: number) => new Intl.NumberFormat("en-US").format(value);
+
+/**
+ * Isolate every percentage in a line of copy, the way prices already are.
+ * After an Arabic letter the bidi algorithm treats «15» as an Arabic number,
+ * which strands the % sign on its left: «15%» rendered «%15». An LTR isolate
+ * keeps the number and its sign in reading order. The strings stay plain
+ * text because llms.txt and the FAQ JSON-LD read the same billing terms.
+ */
+const isolatePercents = (text: string) =>
+  text.split(/(\d+(?:\.\d+)?%)/).map((part, i) => (i % 2 === 1 ? <bdi key={i} dir="ltr">{part}</bdi> : part));
+
+export function PricingOverview({ locale, variant = "home" }: { locale: Locale; variant?: "home" | "page" }) {
+  const t = copy[locale];
+  const terms = billingTerms[locale];
+  const isHome = variant === "home";
+  const cards = [
+    ...plans.map((plan) => ({ ...plan, label: locale === "ar" ? plan.ar : plan.en })),
+    {
+      key: "enterprise" as const,
+      label: locale === "ar" ? "مؤسسات" : "Enterprise",
+      monthlySar: null,
+      credits: null,
+      withinVoiceSar: null,
+      withinTextSar: null,
+    },
+  ];
+
+  return (
+    <section
+      aria-labelledby={isHome ? "home-pricing-heading" : undefined}
+      aria-label={isHome ? undefined : t.eyebrow}
+      className={isHome ? "border-y border-line bg-brand-gradient-soft py-16 dark:bg-canvas" : "bg-canvas py-8 sm:py-10"}
+    >
+      <div className="container">
+        {isHome && <div className="mx-auto max-w-3xl text-center">
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h2 id="home-pricing-heading" className="mt-3 text-h2">{t.heading}</h2>
+          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{t.intro}</p>
+          <Waveform bars={28} animate={false} maxHeight={25} className="mt-4" />
+        </div>}
+
+        <div className={`mx-auto max-w-6xl space-y-5 ${isHome ? "mt-10" : ""}`}>
+          {cards.map((plan) => {
+            const isQuote = plan.credits === null;
+            const rate = (value: number | null, unit: string) => value === null ? t.quote : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(value)} {unit}</span>;
+            return (
+              <article key={plan.key} className="overflow-hidden rounded-3xl border border-line bg-surface shadow-card">
+                <div className="h-1 bg-brand-gradient" aria-hidden="true" />
+                <div className="grid min-w-0 lg:grid-cols-[minmax(0,0.39fr)_minmax(0,0.61fr)]">
+                  <div className="flex min-w-0 flex-col border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-e">
+                    {isHome ? <h3 className="text-h3">{plan.label}</h3> : <h2 className="text-h3">{plan.label}</h2>}
+                    <p className="mt-2 text-body-lg text-ink/70">{t.fit[plan.key]}</p>
+                    <p className="mt-7 text-3xl font-bold text-ink sm:text-h2">
+                      {plan.monthlySar === null ? t.quote : <><span dir="ltr" className="inline-block tabular-nums">{amount(plan.monthlySar)}</span> <span className="text-h4 font-medium">{t.sar}</span></>}
+                      {plan.monthlySar !== null && <span className="ms-2 text-body-lg font-normal text-ink/60">{locale === "ar" ? t.monthly : `/ ${t.monthly}`}</span>}
+                    </p>
+                    {plan.monthlySar !== null && <p className="mt-2 text-body text-ink/60">{isolatePercents(t.vatShort)}</p>}
+                    <DemoLink locale={locale} className="mt-7 w-full sm:max-w-xs">{t.book}</DemoLink>
+                  </div>
+
+                  <div className="min-w-0 p-6 sm:p-8">
+                    <dl className="divide-y divide-line">
+                      <div className="flex flex-col gap-2 pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+                        <dt className="text-body-lg font-medium text-ink/75"><PricingTooltip id={`home-price-${plan.key}-credits`} explanation={isQuote ? (locale === "ar" ? "حصة النقاط ومعدلات الاستهلاك والأسعار تُحدد في العقد." : "Credits, conversion rates and pricing are set by contract.") : `${t.creditsHelp} ${terms.units} ${t.hoverRates(formatSarRate(plan.withinVoiceSar), formatSarRate(plan.withinTextSar))}`} sections={isQuote ? undefined : [
+                          { title: locale === "ar" ? "استهلاك حصة النقاط" : "Credit usage", rows: [
+                            { label: locale === "ar" ? "دقيقة مكالمة" : "1 call minute", value: locale === "ar" ? "10 نقاط" : "10 credits" },
+                            { label: locale === "ar" ? "محادثة نصية (24 ساعة)" : "1 text conversation (24h)", value: locale === "ar" ? "4 نقاط" : "4 credits" },
+                            { label: locale === "ar" ? "استنساخ صوت جديد" : "1 new cloned voice", value: locale === "ar" ? "نقطتين" : "2 credits" },
+                          ], note: locale === "ar" ? "الاستنساخ لنمو وتوسّع. نص المكالمة والردود والملخص مشمولة في نقاط المكالمة." : "Cloning: Growth/Expansion. Call transcript, replies and summary are included in call credits." },
+                          { title: locale === "ar" ? "قيمة الاستخدام ضمن الباقة" : "In-plan usage value", rows: [
+                            { label: locale === "ar" ? "دقيقة مكالمة" : "Per call minute", value: `${formatSarRate(plan.withinVoiceSar)} ${t.sar}` },
+                            { label: locale === "ar" ? "محادثة نصية" : "Per text conversation", value: `${formatSarRate(plan.withinTextSar)} ${t.sar}` },
+                          ] },
+                        ]}>{t.credits}</PricingTooltip></dt>
+                        <dd className="text-h4 font-bold text-ink">{isQuote ? t.quote : <span dir="ltr" className="inline-block tabular-nums">{amount(plan.credits)}</span>}</dd>
+                      </div>
+                      <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+                        <dt className="text-body-lg text-ink/70">{t.voice}</dt>
+                        <dd className="text-body-lg font-semibold text-ink">{isQuote ? t.quoteCapacity : <><span dir="ltr" className="inline-block tabular-nums">{amount(voiceMinutes(plan.credits))}</span> {t.minuteUnit}</>}</dd>
+                      </div>
+                      <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+                        <dt className="text-body-lg text-ink/70">{t.text}</dt>
+                        <dd className="text-body-lg font-semibold text-ink">{isQuote ? t.quoteCapacity : <><span dir="ltr" className="inline-block tabular-nums">{amount(textConversations(plan.credits))}</span> {t.conversationUnit}</>}</dd>
+                      </div>
+                    </dl>
+                    <p className="mt-2 text-body text-ink/60">{t.exclusive}</p>
+                    <PlanCapacity planKey={plan.key} locale={locale} />
+                    <ul className="mt-4 grid gap-2 border-t border-line pt-4 text-body text-ink/75 sm:grid-cols-2">
+                      {planUpgradeSummary(plan.key, locale).map((item) => <li key={item} className="flex items-start gap-2"><span aria-hidden="true" className="text-brand-blue">✓</span><span>{item}</span></li>)}
+                    </ul>
+                    {/* The summary row is the tap target: 44px tall, full width. Its
+                        vertical padding replaces the details' top padding and the
+                        first note's top margin, so the text sits where it did. */}
+                    <details className="group mt-5 border-t border-line pt-1.5">
+                      <summary className="min-h-11 cursor-pointer py-2.5 font-semibold text-brand-blue underline-offset-4 hover:underline focus-visible:rounded-xs focus-visible:outline-brand-blue">{t.rates}</summary>
+                      <p className="mt-0.5 text-body leading-relaxed text-ink/65">{t.ratesNote}</p><p className="mt-3 text-body leading-relaxed text-ink/65">{isolatePercents(terms.zero)}</p>
+                      <dl className="mt-3 grid gap-x-6 gap-y-3 text-body sm:grid-cols-2">
+                        <div><dt className="text-ink/65">{t.withinVoice}</dt><dd className="mt-1 font-semibold text-ink">{rate(plan.withinVoiceSar, t.perMinute)}</dd></div>
+                        <div><dt className="text-ink/65">{t.withinText}</dt><dd className="mt-1 font-semibold text-ink">{rate(plan.withinTextSar, t.perConversation)}</dd></div>
+                      </dl>
+                    </details>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <p className="mx-auto mt-6 max-w-4xl text-center text-body leading-relaxed text-ink/70">{capacityCopy[locale].note}</p>
+        {isHome && <p className="mx-auto mt-4 max-w-4xl text-center text-body leading-relaxed text-ink/70">{isolatePercents(terms.annual)} {terms.more}</p>}
+        {isHome && <p className="mx-auto mt-7 max-w-4xl text-center text-body leading-relaxed text-ink/70">{isolatePercents(t.vat)}</p>}
+        {isHome && <div className="mt-7 text-center">
+          <Link href={localePath(locale, "pricing")} className="btn-secondary">{t.compare} {locale === "ar" ? "←" : "→"}</Link>
+        </div>}
+      </div>
+    </section>
+  );
+}

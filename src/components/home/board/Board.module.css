@@ -121,10 +121,8 @@
 .tiles[data-size="l"] {
   --cols: 10;
 }
-/* A tile is square, and taller if its words need it (larger text, WCAG
-   1.4.12 spacing): a square spacer and the two faces share one grid cell,
-   so the tile is at least as tall as it is wide and never clips; it never
-   grows wider than its column. A row's tiles stretch to its tallest. */
+/* A tile is square, and taller if its words need it (WCAG 1.4.12 spacing): a square spacer and the
+   two faces share one grid cell, so it never clips or widens; a row's tiles stretch to its tallest. */
 .tile {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -143,6 +141,7 @@
 .flip {
   grid-area: 1 / 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   transform-style: preserve-3d;
   transition: transform 640ms cubic-bezier(0.76, 0, 0.24, 1);
 }
@@ -152,6 +151,7 @@
 .face {
   position: relative;
   grid-area: 1 / 1;
+  min-inline-size: 0;
   display: grid;
   grid-template-rows: auto 1fr;
   padding: 10px 11px;
@@ -198,12 +198,13 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+/* A part tile keeps a band clear below its value; the bar grows only inside it, never over the digits. */
 .bar {
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
   display: none;
-  block-size: 34%;
+  block-size: var(--band);
   background: var(--color-najdi-red);
   transform: scaleY(var(--w, 1));
   transform-origin: bottom;
@@ -243,6 +244,12 @@
 .tile[data-kind="part"] .face[data-side="back"] .time {
   color: var(--muted-foreground);
 }
+.tile[data-kind="part"] {
+  --band: 24cqi;
+}
+.tile[data-kind="part"] .mid {
+  margin-block-end: var(--band);
+}
 .tile[data-kind="part"] .bar {
   display: block;
 }
@@ -270,11 +277,6 @@
   }
   .tile[data-land] .face[data-side="front"] {
     animation: land 360ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .flip {
-    transition: none;
   }
 }
 @keyframes ring {
@@ -406,11 +408,8 @@
   .tiles[data-size="l"] {
     --cols: 6;
   }
-  .ctl > * {
+  .ctl > :not(:last-child) {
     inline-size: 100%;
-  }
-  .ctl > :last-child {
-    inline-size: auto;
   }
   .calc {
     grid-template-columns: 1fr;

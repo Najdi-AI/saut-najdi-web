@@ -1,15 +1,11 @@
 /**
- * Asserts the home missed-calls board's arithmetic
- * (src/components/home/board/model.ts) against the brief: the defaults
- * (12 calls, 35% missed, 40% would book, 250 SAR) make 420 SAR a day and
- * 12,600 a month, and 0% missed makes 0.
- *
- * Run: node scripts/check-board-model.mjs
- * Node 22.18+ / 23.6+ strips the TypeScript types from model.ts on import
- * (its MODULE_TYPELESS_PACKAGE_JSON warning about model.ts is harmless).
+ * Asserts the home missed-calls board's arithmetic (src/components/home/board/model.ts) against the
+ * brief: the defaults (12 calls, 35% missed, 40% would book, 250 SAR) make 420 SAR a day and 12,600
+ * a month, and 0% missed makes 0. Run: node scripts/check-board-model.mjs (Node 22.18+ / 23.6+ strips
+ * the types from model.ts on import; its MODULE_TYPELESS_PACKAGE_JSON warning is harmless).
  */
 import assert from "node:assert/strict";
-import { DEFAULTS, DAYS, RANGES, boardOf, clockOf, weights } from "../src/components/home/board/model.ts";
+import { DEFAULTS, DAYS, RANGES, boardOf, clockOf, signed, weights } from "../src/components/home/board/model.ts";
 
 let n = 0;
 const check = (actual, expected, what) => {
@@ -47,4 +43,25 @@ check(max.month, 60 * 2000 * 30, "the busiest day: every call a booking");
 check(clockOf(0, 12), { hm: "10:25", pm: true }, "the first call is just after 10 pm");
 check(clockOf(11, 12), { hm: "7:35", pm: false }, "the last call is before 8 am");
 
-console.log(`board model: ${n} checks pass (defaults 420/day, 12,600/month; 0% missed = 0)`);
+// signed(): the magnitude is rounded, then signed, so a loss and a gain show the same digits;
+// 0 has no sign. A half is the case that broke (Math.round(-367.5) is -367).
+const half = boardOf({ calls: 7, miss: 35, book: 60, value: 250 });
+check(half.day, 367.5, "7 calls, 35%, 60%, 250 SAR: 367.5 a day");
+check([signed(-half.day), signed(half.day)], ["−368", "+368"], "a loss of 367.5 and the same gain both show 368");
+check([signed(0), signed(-0), signed(0.4), signed(-0.4)], ["0", "0", "0", "0"], "anything that rounds to 0 is a bare 0");
+check([signed(-12600), signed(12600)], ["−12,600", "+12,600"], "thousands separators and the U+2212 minus");
+// every knob combination: the loss box, the gain box and the status line (Intl, as BoardGame formats
+// it) show the same day figure, and a 0% booking makes no signed tile value
+const status = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+const steps = (k) => Array.from({ length: (RANGES[k].max - RANGES[k].min) / RANGES[k].step + 1 }, (_, i) => RANGES[k].min + i * RANGES[k].step);
+let combos = 0, disagree = 0;
+for (const calls of steps("calls")) for (const miss of steps("miss")) for (const book of steps("book")) for (const value of steps("value")) {
+  const b = boardOf({ calls, miss, book, value });
+  const loss = signed(-b.day), gain = signed(b.day), digits = gain.replace("+", "");
+  combos++;
+  if (loss.replace("−", "") !== digits || digits !== status.format(b.day) || (digits === "0" && (loss !== "0" || gain !== "0"))) disagree++;
+}
+check(disagree, 0, `loss, gain and status agree in all ${combos} knob combinations`);
+check(weights(boardOf({ ...DEFAULTS, book: 0 })).map((x) => signed(-x * 0)).every((v) => v === "0"), true, "0% would book: tiles show 0, never −0");
+
+console.log(`board model: ${n} checks pass (defaults 420/day, 12,600/month; 0% missed = 0; 367.5 shows 368 both ways; ${combos} knob combinations agree)`);

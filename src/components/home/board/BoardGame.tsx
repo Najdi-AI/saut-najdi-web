@@ -4,15 +4,13 @@ import { Fragment, useEffect, useId, useRef, useState, type CSSProperties, type 
 import { Button } from "@/components/ui/button";
 import { useReducedMotion } from "../ui/useReducedMotion";
 import type { BoardCopy } from "./copy";
-import { DEFAULTS, RANGES, boardOf, clockOf, weights, type Board, type Inputs, type Knob } from "./model";
+import { DEFAULTS, RANGES, boardOf, clockOf, signed, weights, type Board, type Inputs, type Knob } from "./model";
 import s from "./Board.module.css";
 
 type Phase = "idle" | "running" | "loss" | "saving" | "profit";
 const KNOBS: Knob[] = ["calls", "miss", "book", "value"];
 const n0 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 const n1 = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
-/** A figure with its sign: − for a loss, + for a gain, and a bare 0. */
-const signed = (v: number) => (Math.round(v) === 0 ? "0" : (v > 0 ? "+" : "−") + n0.format(Math.abs(Math.round(v))));
 const fill = (text: string, vars: Record<string, string>) => text.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? "");
 /** The same, with each figure in an LTR island (house rule). */
 const fillBdi = (text: string, vars: Record<string, string>): ReactNode =>
@@ -21,24 +19,16 @@ const shown = (k: Knob, v: number) => (k === "miss" || k === "book" ? `${v}%` : 
 
 const PHONE = "M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z";
 const MISSED = "M6.5 5.5 12 11l7-7-1-1-6 6-4.5-4.5H11V3H5v6h1.5V5.5zm17.21 11.67C20.66 14.27 16.54 12.5 12 12.5S3.34 14.27.29 17.17c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .39.23.74.56.9.98.49 1.87 1.12 2.67 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.27-.11-.52-.29-.7z";
-const Icon = ({ d, ok }: { d?: string; ok?: boolean }) => (
-  <svg viewBox="0 0 24 24" aria-hidden>
-    {ok ? (
-      <path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-    ) : (
-      <path d={d} fill="currentColor" />
-    )}
-  </svg>
-);
+const TICK = <path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />;
+/** A filled glyph from a path, or the answered tick. */
+const Icon = ({ d }: { d?: string }) => <svg viewBox="0 0 24 24" aria-hidden>{d ? <path d={d} fill="currentColor" /> : TICK}</svg>;
 
 /**
- * Play the day (Try 3 board): the score, the day's calls as tiles, the
- * buttons and the four knobs. It opens on the played day (the loss), so the
- * server HTML carries the default figures; «أعد اليوم» starts over and
- * «شغّل اليوم» plays it again, a call at a time (at once under reduced
- * motion). The single role="status" line speaks only once the board has
- * settled: after a run ends, or after a knob stops moving. The knobs are
- * native range inputs, disabled until this hydrates.
+ * Play the day (Try 3 board): the score, the day's calls as tiles, the buttons and the four knobs.
+ * It opens on the played day (the loss), so the server HTML carries the default figures; «أعد اليوم»
+ * starts over and «شغّل اليوم» plays it again, a call at a time (at once under reduced motion). The
+ * one role="status" line speaks only once the board has settled: after a run ends, or after a knob
+ * stops moving. The knobs are native range inputs, disabled until this hydrates.
  */
 export function BoardGame({ t }: { t: BoardCopy }) {
   const id = useId();
@@ -56,7 +46,7 @@ export function BoardGame({ t }: { t: BoardCopy }) {
   const statusFor = (p: Phase, m: Board) =>
     p === "loss"
       ? m.missed
-        ? fill(t.status.loss, { missed: n1.format(m.missed), day: n0.format(m.day) })
+        ? fill(t.status.loss, { missed: n1.format(m.missed), calls: n1.format(m.missed) === "1" ? t.call.one : t.call.many, day: n0.format(m.day) })
         : t.status.none
       : p === "profit"
         ? fill(t.status.profit, { day: n0.format(m.day) })
@@ -90,13 +80,25 @@ export function BoardGame({ t }: { t: BoardCopy }) {
     return () => window.clearTimeout(timer);
   }, [phase, step, b.calls, missed.length]);
 
-  // A button that hides or disables itself hands keyboard focus to the next one.
+  // A button that hides or disables itself hands keyboard focus to the next
+  // one (Try 3 try.js): only if focus was lost with it, or still sits on it.
+  // Focus the visitor moved elsewhere (a knob) stays put. Once handled, or
+  // once the visitor has moved on, this stops watching.
   useEffect(() => {
     const box = ctl.current;
     if (!refocus.current || !box) return;
     const at = document.activeElement as HTMLButtonElement | null;
-    if (at && box.contains(at) && !at.disabled) return;
-    box.querySelector<HTMLButtonElement>("button:not([disabled]):not([hidden])")?.focus({ preventScroll: true });
+    const lost = !at || at === document.body;
+    const stranded = !!at && box.contains(at) && at.tagName === "BUTTON" && (at.disabled || at.hidden);
+    if (!lost && !stranded) {
+      refocus.current = false;
+      return;
+    }
+    const next = box.querySelector<HTMLButtonElement>("button:not([disabled]):not([hidden])");
+    if (next) {
+      next.focus({ preventScroll: true });
+      refocus.current = false;
+    }
   }, [phase]);
 
   const go = (next: Phase) => {
@@ -118,7 +120,7 @@ export function BoardGame({ t }: { t: BoardCopy }) {
   const saved = (i: number) => phase === "profit" || (phase === "saving" && missed.indexOf(i) > -1 && missed.indexOf(i) < step);
   const loss = phase === "idle" ? 0 : phase === "running" ? w.slice(0, step).reduce((a, x) => a + x * b.per, 0) : b.day;
   const gain = phase === "profit" ? b.day : phase === "saving" ? missed.slice(0, step).reduce((a, i) => a + w[i] * b.per, 0) : 0;
-  const month = phase === "loss" ? -b.month : phase === "profit" ? b.month : 0;
+  const month = phase === "loss" || phase === "saving" ? -b.month : phase === "profit" ? b.month : 0;
   const size = b.calls <= 12 ? "s" : b.calls <= 24 ? "m" : "l";
 
   return (
@@ -126,25 +128,21 @@ export function BoardGame({ t }: { t: BoardCopy }) {
       <div className={s.score}>
         <div className={s.box}>
           <p className={s.fig}>
-            <bdi dir="ltr" data-tone={loss ? "loss" : undefined}>
-              {signed(-loss)}
-            </bdi>
+            <bdi dir="ltr" data-tone={loss ? "loss" : undefined}>{signed(-loss)}</bdi>
             <small>{t.perDay}</small>
           </p>
           <span className={s.name}>{t.without}</span>
         </div>
         <div className={s.box}>
           <p className={s.fig}>
-            <bdi dir="ltr" data-tone={gain ? "gain" : undefined}>
-              {signed(gain)}
-            </bdi>
+            <bdi dir="ltr" data-tone={gain ? "gain" : undefined}>{signed(gain)}</bdi>
             <small>{t.perDay}</small>
           </p>
           <span className={s.name}>{t.with}</span>
         </div>
         <div className={s.month}>
           <p className={s.monthLine}>
-            {t.month[phase === "loss" || phase === "profit" ? phase : "idle"]}{" "}
+            {t.month[phase === "saving" ? "loss" : phase === "loss" || phase === "profit" ? phase : "idle"]}{" "}
             <span className={s.monthFig}>
               <bdi dir="ltr" data-tone={month < 0 ? "loss" : month > 0 ? "gain" : undefined}>
                 {signed(month)}
@@ -161,7 +159,7 @@ export function BoardGame({ t }: { t: BoardCopy }) {
           {w.map((x, i) => {
             const c = clockOf(i, b.calls);
             const time = `${c.hm} ${c.pm ? t.pm : t.am}`;
-            const v = n0.format(Math.round(x * b.per));
+            const v = signed(x * b.per).replace(/^[+−]/, "");
             const kind = !landed(i) ? undefined : !x ? "ans" : x < 1 ? "part" : "miss";
             const face = (side: "front" | "back", sign: string) => (
               <div className={s.face} data-side={side}>
@@ -169,12 +167,9 @@ export function BoardGame({ t }: { t: BoardCopy }) {
                   <bdi dir="ltr">{c.hm}</bdi> {c.pm ? t.pm : t.am}
                 </span>
                 <span className={s.mid}>
-                  <span className={s.ic}>{kind === "ans" || side === "back" ? <Icon ok /> : <Icon d={kind ? MISSED : PHONE} />}</span>
+                  <span className={s.ic}>{kind === "ans" || side === "back" ? <Icon /> : <Icon d={kind ? MISSED : PHONE} />}</span>
                   <span className={s.val}>
-                    <bdi dir="ltr">
-                      {sign}
-                      {v}
-                    </bdi>
+                    <bdi dir="ltr">{v === "0" ? v : sign + v}</bdi>
                   </span>
                 </span>
                 <span className={s.bar} style={{ "--w": x } as CSSProperties} />
@@ -213,15 +208,11 @@ export function BoardGame({ t }: { t: BoardCopy }) {
             {t.reset}
           </Button>
         </div>
-        <p className={s.status} role="status">
-          {said}
-        </p>
+        <p className={s.status} role="status">{said}</p>
       </div>
 
       <div className={s.calc} role="group" aria-labelledby={`${id}-calc`}>
-        <p className={s.calcTitle} id={`${id}-calc`}>
-          {t.calc}
-        </p>
+        <p className={s.calcTitle} id={`${id}-calc`}>{t.calc}</p>
         {KNOBS.map((k) => (
           <div key={k} className={s.knob}>
             <label htmlFor={`${id}-${k}`}>{t.knobs[k]}</label>

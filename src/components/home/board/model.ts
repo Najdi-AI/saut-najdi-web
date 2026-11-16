@@ -48,6 +48,18 @@ export function weights(b: Board): number[] {
   return w;
 }
 
+const whole = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+
+/**
+ * A figure with its sign (U+2212 minus), as the board shows it: the magnitude is rounded first, so a
+ * loss and the same gain show the same digits (Math.round(-367.5) is -367 but Math.round(367.5) is
+ * 368), and anything that rounds to 0 is a bare "0", never "−0" or "+0".
+ */
+export function signed(v: number): string {
+  const n = Math.round(Math.abs(v));
+  return n === 0 ? "0" : (v > 0 ? "+" : "−") + whole.format(n);
+}
+
 /** Call i of n, spread over the after-hours window from 10 pm to 8 am: "h:mm" and whether it is pm. */
 export function clockOf(i: number, n: number): { hm: string; pm: boolean } {
   const m = 1320 + Math.round(((i + 0.5) * 600) / n / 5) * 5;

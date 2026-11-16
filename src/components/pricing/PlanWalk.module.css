@@ -1,0 +1,263 @@
+/*
+ * The plan walk (decision 185) on Try 1's pricing (mockups/css/site.css):
+ * tier names on the start side, one tier's figure and copy on the end side.
+ *
+ * Two layouts from one DOM. Stacked (four cards, no transitions) is the
+ * default: phones, reduced motion, no JavaScript, the server HTML. The walk
+ * needs 768px wide, 640px tall (shorter panels crowd the chat launcher), no
+ * reduced motion and the island hydrated (data-ready). Then the container is
+ * four screens tall, the panel sticks under the header and the sentinels
+ * (.mark) pick the tier; scrolling stays the browser's own.
+ *
+ * Unlayered, so these rules win over Tailwind's layered utilities (the ui
+ * Button's ghost look on the tier names).
+ */
+.walk {
+  position: relative;
+}
+
+/* ---- stacked ---- */
+.index,
+.mark {
+  display: none;
+}
+.step {
+  padding-block: 32px;
+  border-block-start: 1px solid var(--border);
+}
+.step:last-child {
+  border-block-end: 1px solid var(--border);
+}
+.name {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: clamp(32px, 3.9vw, 56px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.name::before,
+.tier::before {
+  content: "";
+  flex: none;
+  inline-size: 0.3em;
+  block-size: 0.3em;
+  border-radius: 50%;
+  background: currentColor;
+}
+.body {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 16px;
+  margin-block-start: 16px;
+}
+.body p:not(.fig) {
+  max-inline-size: 48ch;
+}
+.fig {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.num {
+  font-size: clamp(52px, 8.9vw, 128px);
+  font-weight: 700;
+  line-height: 0.95;
+}
+/* Enterprise has no number: its figure slot is two words. */
+.word {
+  font-size: clamp(40px, 5.6vw, 80px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+/* "Tailored to you" is wider than «على مقاسك»: one line in the column. */
+.word:lang(en) {
+  font-size: clamp(36px, 4.6vw, 66px);
+}
+.per {
+  font-size: 18px;
+  color: var(--muted-foreground);
+}
+.fit {
+  font-size: 20px;
+  font-weight: 700;
+}
+.text {
+  font-size: 18px;
+}
+.act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+.more {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+.note {
+  font-size: 15px;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 768px) {
+  /* The same two columns as the walk, once per tier. */
+  .step {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+  .name {
+    grid-column: 1 / span 6;
+    align-self: start;
+  }
+  .body {
+    grid-column: 8 / span 5;
+    gap: 22px;
+    margin-block-start: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .body {
+    grid-column: 7 / span 6;
+  }
+}
+@media (max-width: 640px) {
+  .num {
+    font-size: 20vw;
+  }
+  /* "SAR 2,900 a month" on one row. */
+  .num:lang(en) {
+    font-size: 17vw;
+  }
+  .word {
+    font-size: 11vw;
+  }
+  .per,
+  .text {
+    font-size: 17px;
+  }
+}
+
+/* ---- the walk ---- */
+@media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .walk[data-ready] {
+    /* The panel's pinned run, split evenly between the four sentinels. */
+    --run: calc(300svh + var(--header-h));
+    block-size: 400svh;
+  }
+  .walk[data-ready] .panel {
+    position: sticky;
+    inset-block-start: var(--header-h);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+    align-content: center;
+    align-items: start;
+    block-size: calc(100svh - var(--header-h));
+    padding-block-end: 84px; /* centred above the chat launcher: 20px + 56px + 8px */
+  }
+  .walk[data-ready] .index {
+    grid-column: 1 / span 6;
+    display: grid;
+    justify-items: start;
+    gap: 6px;
+  }
+  .walk[data-ready] .stage {
+    grid-column: 8 / span 5;
+    display: grid;
+  }
+  /* Try 1's swap: the old tier fades out, then the new one fades in. */
+  .walk[data-ready] .step {
+    grid-area: 1 / 1;
+    display: block;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 200ms ease,
+      visibility 0s linear 200ms;
+  }
+  .walk[data-ready][data-active="0"] .step[data-step="0"],
+  .walk[data-ready][data-active="1"] .step[data-step="1"],
+  .walk[data-ready][data-active="2"] .step[data-step="2"],
+  .walk[data-ready][data-active="3"] .step[data-step="3"] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 200ms ease 200ms,
+      visibility 0s linear 200ms;
+  }
+  /* The index names the tier; the heading stays for screen readers. */
+  .walk[data-ready] .name {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* A short window: the figure gives up height before the panel overflows. */
+  .walk[data-ready] .num {
+    font-size: min(clamp(52px, 8.9vw, 128px), 17svh);
+  }
+  .walk[data-ready] .mark {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(50svh - var(--header-h) + var(--i) * var(--run) / 4);
+    block-size: calc(var(--run) / 4);
+    pointer-events: none;
+  }
+  .walk[data-ready] .mark[data-mark="0"] {
+    inset-block-start: 0;
+    block-size: calc(50svh - var(--header-h) + var(--run) / 4);
+  }
+  .walk[data-ready] .mark[data-mark="3"] {
+    block-size: auto;
+    inset-block-end: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .walk[data-ready] .stage {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* The tier names: Try 1's .plan on the ui Button. */
+.tier {
+  min-block-size: 44px;
+  gap: 0.35em;
+  padding: 0.05em 0;
+  background: none;
+  font-size: clamp(32px, 3.9vw, 56px);
+  line-height: 1.3;
+  color: var(--muted-foreground);
+  transition:
+    color 180ms ease,
+    scale 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tier:hover {
+    color: var(--foreground);
+  }
+}
+.tier::before {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.tier[aria-current="step"] {
+  color: var(--foreground);
+}
+.tier[aria-current="step"]::before {
+  opacity: 1;
+}

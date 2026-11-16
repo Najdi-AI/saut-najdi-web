@@ -12,7 +12,8 @@ export type Tile = { ch: Channel; name: ReactNode; kind: string };
  * CSS alone (Hub.module.css); this only adds the tap. A tap or click
  * presses a tile (aria-pressed) so its colour stays on a touch screen, and
  * a second tap lets it go. Hovering or focusing another tile lets it go
- * too, so one channel shows at a time.
+ * too, so one channel shows at a time. The chat launcher tucks away while
+ * it would cover a tile (data-fab-avoid, ChatLauncher).
  */
 export function HubBoard({ groups, sides, children }: { groups: string[]; sides: Tile[][]; children: ReactNode }) {
   const [on, setOn] = useState<Channel | null>(null);
@@ -24,6 +25,7 @@ export function HubBoard({ groups, sides, children }: { groups: string[]; sides:
       type="button"
       className={s.ch}
       data-ch={ch}
+      data-fab-avoid=""
       aria-pressed={on === ch}
       onClick={() => setOn((k) => (k === ch ? null : ch))}
       onFocus={() => others(ch)}

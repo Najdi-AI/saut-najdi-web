@@ -65,8 +65,6 @@
   color: var(--color-charcoal);
   text-align: start;
   cursor: pointer;
-  /* Keyboard focus never lands under the sticky header. */
-  scroll-margin-block: calc(var(--header-h) + 16px) 16px;
   transition:
     background-color 180ms ease,
     color 180ms ease,
@@ -133,7 +131,8 @@
 .row {
   position: relative;
   display: grid;
-  grid-template-columns: 8.4em minmax(0, 1fr) auto;
+  /* The label sets its own track ("SIP phone system" is wider than 8.4em); the message gives way. */
+  grid-template-columns: minmax(8.4em, max-content) minmax(0, 1fr) auto;
   align-items: center;
   gap: 14px;
   padding: 12px 14px;

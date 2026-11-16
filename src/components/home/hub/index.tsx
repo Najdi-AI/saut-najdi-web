@@ -6,14 +6,16 @@ import { hubCopy, type Channel, type Text } from "./copy";
 import { HubBoard, type Tile } from "./HubBoard";
 import s from "./Hub.module.css";
 
-/** Copy text, with its middle part (a figure or a Latin name) as an LTR island. */
+/** Copy text, with its middle part (a figure or a Latin name) as an LTR island; a Latin name is marked English. */
 const Run = ({ text }: { text: Text }) =>
   typeof text === "string" ? (
     text
   ) : (
     <>
       {text[0]}
-      <bdi dir="ltr">{text[1]}</bdi>
+      <bdi dir="ltr" lang={/[a-z]/i.test(text[1]) ? "en" : undefined}>
+        {text[1]}
+      </bdi>
       {text[2]}
     </>
   );

@@ -29,12 +29,15 @@ const copy: Record<
   Locale,
   {
     label: string;
+    pre?: string; // the unit before the figure: English reads "SAR 990 a month"
     per: string;
     fit: Record<PlanKey, string>;
     capacity: (minutes: number, conversations: number) => ReactNode;
     includes: Record<PlanKey, string>;
-    said: (name: string, monthlySar: number) => string;
-    enterprise: { name: string; fig: string; fit: string; body: string; said: string; contact: string };
+    /** The live region's prefix, and the figure in words after a tier's name. */
+    said: string;
+    price: (monthlySar: number) => string;
+    enterprise: { name: string; fig: string; fit: string; body: string; price: string; contact: string };
     vat: ReactNode;
     cta: string;
   }
@@ -57,13 +60,14 @@ const copy: Record<
       growth: "كل اللي في أساسي، مع واتساب وتيليجرام وصندوق وارد مشترك، وتسمع المكالمة وتستلمها وهي شغالة.",
       expansion: "كل اللي في نمو، مع مسارات أتمتة أكثر وتقارير لكل فرع.",
     },
-    said: (name, monthlySar) => `الباقة: ${name}، ${sar.format(monthlySar)} ر.س شهرياً`,
+    said: "الباقة: ",
+    price: (monthlySar) => `، ${sar.format(monthlySar)} ر.س شهرياً`,
     enterprise: {
       name: "مؤسسات",
       fig: "على مقاسك",
       fit: "لشركة كبيرة أو فروعها كثيرة، واحتياجاتها خاصة",
       body: "نجهز لك باقة على قد شغلك: السعة، والقنوات، والتكاملات، ومدة حفظ التسجيلات، كلها نتفق عليها في العقد، ومدير حساب واتفاقية خدمة حسب الاتفاق.",
-      said: "الباقة: مؤسسات، على مقاسك",
+      price: "، على مقاسك",
       contact: "أو تواصل معنا",
     },
     vat: (
@@ -76,7 +80,8 @@ const copy: Record<
   },
   en: {
     label: "Plans",
-    per: "SAR a month",
+    pre: "SAR",
+    per: "a month",
     fit: {
       essential: "For one location: after-hours and overflow calls covered",
       growth: "For a growing team that needs more answering capacity",
@@ -93,13 +98,14 @@ const copy: Record<
         "Everything in Essential, plus WhatsApp, Telegram, a shared inbox, and listening in on live calls and taking them over.",
       expansion: "Everything in Growth, plus more automated workflows and per-branch reporting.",
     },
-    said: (name, monthlySar) => `Plan: ${name}, SAR ${sar.format(monthlySar)} a month`,
+    said: "Plan: ",
+    price: (monthlySar) => `, SAR ${sar.format(monthlySar)} a month`,
     enterprise: {
       name: "Enterprise",
       fig: "Tailored to you",
-      fit: "For large companies or many branches with special needs.",
+      fit: "For large companies or many branches with special needs",
       body: "Capacity, channels, integrations and recording retention agreed in your contract, with an account manager and SLA as agreed.",
-      said: "Plan: Enterprise, tailored to you",
+      price: ", tailored to you",
       contact: "or contact us",
     },
     vat: <>Prices in SAR, excluding {vatRate} VAT. Setup fees are scoped to your needs in the written offer.</>,
@@ -146,10 +152,11 @@ export function PlanWalk({ locale }: { locale: Locale }) {
   const t = copy[locale];
   const e = t.enterprise;
   const names = [...plans.map((p) => p[locale]), e.name];
-  const said = [...plans.map((p) => t.said(p[locale], p.monthlySar)), e.said];
+  const prices = [...plans.map((p) => t.price(p.monthlySar)), e.price];
+  const said = names.map((name, i) => t.said + name + prices[i]);
 
   return (
-    <PlanSteps label={t.label} names={names} said={said}>
+    <PlanSteps label={t.label} names={names} prices={prices} said={said}>
       {plans.map((plan, i) => (
         <Tier
           key={plan.key}
@@ -157,6 +164,7 @@ export function PlanWalk({ locale }: { locale: Locale }) {
           name={plan[locale]}
           figure={
             <>
+              {t.pre && <span className={s.per}>{t.pre}</span>}
               <Num value={plan.monthlySar} className={s.num} />
               <span className={s.per}>{t.per}</span>
             </>

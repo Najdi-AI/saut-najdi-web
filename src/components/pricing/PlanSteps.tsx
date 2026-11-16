@@ -11,18 +11,20 @@ import s from "./PlanWalk.module.css";
  *
  * One IntersectionObserver watches a line across the middle of the window:
  * the sentinel on that line is the active tier. There are no scroll, pointer
- * or key listeners and nothing blocks a default action (the PR 8 grep gate
- * holds this file to that), so the page scrolls as it always does and the
- * tiers follow. A tier name scrolls to its step.
+ * or key listeners and nothing blocks a default action, so the page scrolls
+ * as it always does and the tiers follow. A tier name scrolls to its step.
  */
 export function PlanSteps({
   label,
   names,
+  prices,
   said,
   children,
 }: {
   label: string;
   names: string[];
+  /** Each tier's figure in words, read after its name on the tier button. */
+  prices: string[];
   /** What the polite live region reads for each tier. */
   said: string[];
   children: ReactNode;
@@ -46,14 +48,21 @@ export function PlanSteps({
           else on.delete(i);
         }
         // Two sentinels share the line only at a boundary; the later one wins.
-        if (on.size) setActive(Math.max(...on));
+        if (on.size) return setActive(Math.max(...on));
+        // Off the line after a jump: first tier below it, last above it, unread (the
+        // panel is off screen). Hidden sentinels (stacked cards) have no box.
+        const e = entries.find((x) => x.rootBounds && x.boundingClientRect.height);
+        if (!e?.rootBounds) return;
+        last.current = e.boundingClientRect.top > e.rootBounds.top ? 0 : names.length - 1;
+        setActive(last.current);
+        setHeard("");
       },
       { rootMargin: "-50% 0px -49% 0px" },
     );
     el.querySelectorAll("[data-mark]").forEach((m) => io.observe(m));
     setReady(true);
     return () => io.disconnect();
-  }, []);
+  }, [names.length]);
 
   // Announce a tier once it has held for 450ms, so scrolling past one never reads it.
   useEffect(() => {
@@ -88,6 +97,7 @@ export function PlanSteps({
                 onClick={() => go(i)}
               >
                 {name}
+                <span className="sr-only">{prices[i]}</span>
               </Button>
             </li>
           ))}

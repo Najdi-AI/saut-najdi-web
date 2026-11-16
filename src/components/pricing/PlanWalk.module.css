@@ -1,15 +1,13 @@
 /*
- * The plan walk (decision 185) on Try 1's pricing (mockups/css/site.css,
- * "pricing: plan names, one live figure"): the tier names on the start
- * side, one tier's figure and copy on the end side.
+ * The plan walk (decision 185) on Try 1's pricing (mockups/css/site.css):
+ * tier names on the start side, one tier's figure and copy on the end side.
  *
- * Two layouts from one DOM. Stacked is the default: four cards, no
- * transitions; it is what a phone, reduced motion, no JavaScript and the
- * server HTML get. The walk needs all of: 768px or wider, 560px or taller
- * (a landscape phone's panel would not fit), no reduced motion, and the
- * island hydrated (data-ready, set once the observer runs). Then the
- * container is four screens tall, the panel sticks under the header, and
- * the sentinels (.mark) pick the tier; scrolling stays the browser's own.
+ * Two layouts from one DOM. Stacked (four cards, no transitions) is the
+ * default: phones, reduced motion, no JavaScript, the server HTML. The walk
+ * needs 768px wide, 560px tall (a landscape phone's panel would not fit), no
+ * reduced motion and the island hydrated (data-ready). Then the container is
+ * four screens tall, the panel sticks under the header and the sentinels
+ * (.mark) pick the tier; scrolling stays the browser's own.
  *
  * Unlayered, so these rules win over Tailwind's layered utilities (the ui
  * Button's ghost look on the tier names).

@@ -120,25 +120,30 @@
   color: var(--muted-foreground);
   font-size: 14px;
 }
+/* One set of columns for every row (subgrid): the label track takes the widest label, at least 8.4em
+   ("SIP phone system" is wider), so names and messages line up; the message gives way. The track also
+   holds the row's 14px inline padding, so its floor adds that back. */
 .list {
   display: grid;
+  grid-template-columns: minmax(calc(8.4em + 14px), max-content) minmax(0, 1fr) auto;
   align-content: start;
-  gap: 4px;
+  gap: 4px 14px;
   margin: 0;
   padding: 0 10px 10px;
+  font-size: 15px;
   list-style: none;
 }
 .row {
   position: relative;
   display: grid;
-  /* The label sets its own track ("SIP phone system" is wider than 8.4em); the message gives way. */
-  grid-template-columns: minmax(8.4em, max-content) minmax(0, 1fr) auto;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(8.4em, max-content) minmax(0, 1fr) auto; /* without subgrid: per row */
+  grid-template-columns: subgrid;
   align-items: center;
   gap: 14px;
   padding: 12px 14px;
   border-radius: 8px;
   background: var(--lit-bg, var(--card));
-  font-size: 15px;
   transition: background-color 180ms ease;
 }
 .row::before {
@@ -247,6 +252,7 @@
     padding: 14px 14px 10px;
   }
   .list {
+    grid-template-columns: minmax(0, 1fr);
     padding: 0 6px 6px;
   }
   .row {

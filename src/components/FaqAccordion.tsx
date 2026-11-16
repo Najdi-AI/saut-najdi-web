@@ -17,6 +17,26 @@ import type { FaqItem } from "@/lib/schema";
  */
 const FaqRows = dynamic(() => import("./page/FaqRows"));
 
+/**
+ * Without JavaScript no row can open, so this sheet (inside <noscript>, which
+ * the browser ignores when scripts run) shows every answer in place, in the
+ * muted ink of the closed row, and drops the plus/minus that would promise
+ * otherwise. The display rule sits in Tailwind's theme layer because the
+ * preflight hides [hidden] with !important in the base layer, and only an
+ * important declaration in an earlier layer outranks that.
+ */
+const SHOW_ANSWERS =
+  "@layer theme{[data-faq] [data-slot=accordion-content][hidden]{display:block!important}}" +
+  "[data-faq] [data-slot=accordion-content] > div{color:var(--muted-foreground)!important}" +
+  "[data-faq] [data-slot=accordion-trigger-icon]{display:none!important}";
+
 export function FaqAccordion({ items }: { items: FaqItem[] }) {
-  return <FaqRows items={items} />;
+  return (
+    <>
+      <noscript>
+        <style dangerouslySetInnerHTML={{ __html: SHOW_ANSWERS }} />
+      </noscript>
+      <FaqRows items={items} />
+    </>
+  );
 }

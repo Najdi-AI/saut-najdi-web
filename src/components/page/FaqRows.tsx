@@ -7,14 +7,15 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
  * for why it is a separate, lazily loaded module).
  *
  * Every answer stays in the server HTML: AccordionContent keeps closed
- * panels mounted (with `hidden`), so crawlers and no-JavaScript visitors
- * still get them. `multiple` keeps each row independent, as the native
+ * panels mounted (with `hidden`), so crawlers get them, and FaqAccordion's
+ * <noscript> sheet shows them to visitors without JavaScript, who cannot
+ * open a row. `multiple` keeps each row independent, as the native
  * <details> rows were. The trigger is the whole row (76px, 64px on a phone)
  * and takes `rounded-none` so its focus outline is square like the row.
  */
 export default function FaqRows({ items }: { items: FaqItem[] }) {
   return (
-    <Accordion multiple className="gap-2">
+    <Accordion multiple data-faq="" className="gap-2">
       {items.map((item) => (
         <AccordionItem
           key={item.q}

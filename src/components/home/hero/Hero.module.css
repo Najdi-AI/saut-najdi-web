@@ -245,11 +245,11 @@
   inset-inline-end: -1%;
 }
 
-/* ---- tablet: below 1100px the lead is too wide for chips beside it, so
-   the play and handoff chips drop into the flow between the H1 and the
-   lead, still tilted (the mockups stop at 1440 and 390). After the English
-   block so it overrides those places too. */
-@media (max-width: 1100px) {
+/* ---- tablet: up to 1180px the lead is too wide for chips beside it (they
+   covered it up to ~1155px in English), so the play and handoff chips drop
+   into the flow between the H1 and the lead, still tilted (the mockups stop
+   at 1440 and 390). After the English block so it overrides those too. */
+@media (max-width: 1180px) {
   .dialect,
   .en .dialect {
     inset-inline-start: 0;

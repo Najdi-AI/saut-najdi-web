@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Num } from "../ui/Num";
 import { SectionHead } from "../ui/SectionHead";
 import { dayCopy, type DayCopy } from "./copy";
+import { DayTrack } from "./DayTrack";
 import s from "./Day.module.css";
 
 /** Deterministic bar heights for the after-hours call's waveform (Try 1 site.js). */
@@ -170,32 +171,65 @@ function fragments(t: DayCopy): (ReactNode | null)[] {
 
 /**
  * A day on the board (Try 3 capabilities, mockups/try-3 `#day`): seven
- * moments from 8 am to 2 am, each with the product fragment it shows, as a
- * vertical timeline with every moment visible: what phones, reduced motion
- * and no JavaScript get. The night moments are .on-dark bands; their
- * fragments stay light (.on-light).
+ * moments from 8 am to 2 am, each with the product fragment it shows.
+ *
+ * This server markup is the vertical timeline that phones, reduced motion
+ * and no JavaScript get, every moment visible. On a wide screen with motion
+ * allowed, DayTrack pins the board under the header and lets the page's own
+ * scroll run the clock and slide the moments past the "now" line. The night
+ * moments are .on-dark bands; their fragments stay light (.on-light).
  */
 export function Day({ locale }: { locale: Locale }) {
   const t = dayCopy[locale];
   const ui = fragments(t);
   return (
     <section id="day" aria-labelledby="day-title" className={cn(s.day, "pt-24 lg:pt-40")}>
-      <div className={s.top}>
-        <SectionHead id="day-title" title={t.title} lead={t.lead} />
-      </div>
-      <div className={s.band}>
-        <ol className={s.strip} aria-label={t.strip}>
-          {t.moments.map((m, i) => (
-            <li key={m.t} className={cn(s.mo, i >= 4 && cn(s.night, "on-dark"))}>
-              <p className={s.time}>
-                <Num>{m.time}</Num> {m.part}
-              </p>
-              <p className={s.say}>{m.say}</p>
-              {ui[i] && <div className={cn(s.ui, "on-light")}>{ui[i]}</div>}
-            </li>
-          ))}
-        </ol>
-      </div>
+      <DayTrack parts={t.parts}>
+        <div className={s.pin}>
+          <div className={s.top}>
+            <SectionHead id="day-title" title={t.title} lead={t.lead} className={s.head} />
+            <p className={s.clock} aria-hidden="true">
+              <bdi dir="ltr" className={s.fig} data-clock="">
+                8:00
+              </bdi>
+              <span className={s.part} data-part="">
+                {t.parts[0]}
+              </span>
+            </p>
+          </div>
+          <div className={s.band} data-band="">
+            <ol className={s.strip} data-strip="" aria-label={t.strip}>
+              {t.moments.map((m, i) => (
+                <li
+                  key={m.t}
+                  className={cn(s.mo, i === 4 && s.dusk, i >= 4 && cn(s.night, "on-dark"))}
+                  data-t={m.t}
+                  data-on={i === 0 ? "" : undefined}
+                >
+                  <p className={s.time}>
+                    <Num>{m.time}</Num> {m.part}
+                  </p>
+                  <p className={s.say}>{m.say}</p>
+                  {ui[i] && <div className={cn(s.ui, "on-light")}>{ui[i]}</div>}
+                </li>
+              ))}
+              <li className={cn(s.fill, "on-dark")} aria-hidden="true" />
+            </ol>
+            <span className={s.now} data-now="" aria-hidden="true" />
+          </div>
+          <div className={s.meter} aria-hidden="true">
+            <span>{t.meter[0]}</span>
+            <span className={s.bars} data-bars="">
+              {Array.from({ length: 18 }, (_, k) => (
+                <i key={k}>
+                  <b />
+                </i>
+              ))}
+            </span>
+            <span>{t.meter[1]}</span>
+          </div>
+        </div>
+      </DayTrack>
       <div className={s.foot}>
         <p>{t.foot}</p>
         <p className={s.note}>{t.note}</p>

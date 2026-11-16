@@ -171,7 +171,7 @@ export const demoCopy = {
     voiceName: "Majed",
     voiceAccent: "Najdi",
     dialect: "Dialect",
-    dialects: { sa: "Saudi", ar: "Arabic", en: "English" },
+    dialects: { sa: "Saudi", ar: "Standard Arabic", en: "English" },
     settings: { handoff: "Hand off to staff", autobook: "Auto-booking", whatsapp: "Summary on WhatsApp" },
     scenario: "Try a scenario",
     scenarios: { book: "Booking", price: "Price query", urgent: "Emergency" },

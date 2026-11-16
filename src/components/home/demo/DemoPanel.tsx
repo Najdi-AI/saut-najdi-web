@@ -31,7 +31,8 @@ function threadOf(t: DemoCopy, st: State): Node[] {
     else nodes.push({ key: `${step.who}:${step.text}`, kind: "line", who: step.who, text: step.text });
   }
   if (st.whatsapp) {
-    const text = st.scenario === "book" ? t.sent.book : st.scenario === "urgent" && st.handoff ? t.sent.staff : t.sent.team;
+    // A booking left for staff to confirm sends the summary to the team, not a confirmation to the customer.
+    const text = st.scenario === "book" && st.autobook ? t.sent.book : st.scenario === "urgent" && st.handoff ? t.sent.staff : t.sent.team;
     nodes.push({ key: `sent:${text}`, kind: "sent", text });
   }
   return nodes;
@@ -90,7 +91,9 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
   }));
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
-  useEffect(() => setReady(true), []);
+  useEffect(() => {
+    setReady(true);
+  }, []);
 
   const change = (patch: Partial<State>) =>
     setView((v) => {

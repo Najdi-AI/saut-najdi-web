@@ -1,11 +1,9 @@
 /*
- * The closing sentence (Try 3 `.flip`, mockups/try-3/try.css section 9):
- * the business word turns on a Charcoal plate like a departures board, as
- * a whole word. The plate stacks every word in one grid cell, so it is
- * always as wide as the widest and the line never reflows. The turn is
- * transform and opacity only; reduced motion turns nothing.
- *
- * Unlayered, so these rules win over Tailwind's layered utilities.
+ * The closing sentence (Try 3 `.flip`, mockups/try-3/try.css section 9): the
+ * business word turns as a whole word on a Charcoal plate, like a departures
+ * board. The plate stacks every word in one grid cell, so it keeps the widest
+ * word's width and the line never reflows. Transform and opacity only; reduced
+ * motion turns nothing. Unlayered, so these rules win over Tailwind's layers.
  */
 .in {
   display: grid;

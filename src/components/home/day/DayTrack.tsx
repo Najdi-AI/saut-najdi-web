@@ -125,15 +125,19 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
       const was = pinned;
       top = parseFloat(getComputedStyle(track).getPropertyValue("--header-h")) || 0;
       const before = track.getBoundingClientRect();
+      // How far along the board the reader is, kept through a resize while pinned.
+      const along = was ? (top - before.top) / run : 0;
       // The moment being read in the list: the one across a line a quarter of the way down under the header.
       const line = top + (innerHeight - top) / 4;
       if (!was) {
         const i = items.findIndex((li) => li.getBoundingClientRect().bottom > line);
         at = i < 0 ? items.length - 1 : i; // the list's end above the line: the reader is past the last moment
       }
+      // The track keeps its height while it is measured. Dropping it collapsed the page under the reader:
+      // the browser clamped the scroll, and scroll anchoring then threw the reader to the page's end.
+      track.style.setProperty("--run", `${before.height}px`);
       strip.style.transform = "";
       strip.style.paddingInlineStart = "";
-      track.style.removeProperty("--run");
       track.toggleAttribute("data-pin", mq.matches);
       if (mq.matches) {
         // The clock holds its widest face, so it never grows as the day runs and the fit measured now
@@ -159,19 +163,21 @@ export function DayTrack({ parts, children }: { parts: string[]; children: React
         for (const el of items.slice(1)) keys.push({ T: edge(el) - ph, t: Number(el.dataset.t), el });
         travel = keys[keys.length - 1].T;
         run = Math.round(travel * 0.9); // the board moves a little faster than the page
-        track.style.setProperty("--run", `${pin.offsetHeight + run + Math.round(innerHeight * 0.4)}px`);
+        // The hold after the last moment is the pin's own height, not the window's (a phone toolbar changes that).
+        track.style.setProperty("--run", `${Math.round(pin.offsetHeight * 1.4) + run}px`);
         last = -1;
-      }
-      if (pinned !== was) {
-        const after = track.getBoundingClientRect();
+      } else track.style.removeProperty("--run");
+      const after = track.getBoundingClientRect();
+      // Keep the reader's place when the track changed: past the day, what is on screen stays put; inside it,
+      // the board keeps its progress, or the list shows the moment that was being read.
+      if (pinned !== was || after.height !== before.height) {
         let by = 0;
         if (before.bottom <= top) by = after.bottom - before.bottom;
         else if (before.top < top) {
-          by = pinned
-            ? after.top - (top - ((keys[at]?.T ?? 0) / travel) * run)
-            : items[at].getBoundingClientRect().top - top - 16;
+          if (pinned) by = after.top - (top - (was ? along : (keys[at]?.T ?? 0) / travel) * run);
+          else if (was) by = items[at].getBoundingClientRect().top - top - 16;
         }
-        if (by) window.scrollBy({ top: by, behavior: "instant" });
+        if (Math.abs(by) >= 1) window.scrollBy({ top: by, behavior: "instant" });
       }
       frame();
     };

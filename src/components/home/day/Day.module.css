@@ -342,6 +342,7 @@
   gap: 10px;
 }
 .ticket li b {
+  flex: none; /* never squeezed under its word ("Summary" is wider than 56px) */
   min-inline-size: 56px;
   color: var(--muted-foreground);
   font-weight: 500;

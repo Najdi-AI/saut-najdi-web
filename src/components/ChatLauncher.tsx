@@ -104,8 +104,11 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         );
       });
       setClear(!blocked);
+      // Only a band that really meets the corner: on a short page in a tall
+      // window it ends above the launcher, which then stays where it is.
       const band = document.querySelector(LIFT_OVER)?.getBoundingClientRect();
-      setLift(band && band.top < f.bottom + AVOID_PAD ? Math.ceil(f.bottom + AVOID_PAD - band.top) : 0);
+      const meets = band && band.top < f.bottom + AVOID_PAD && band.bottom > f.top - AVOID_PAD;
+      setLift(meets ? Math.ceil(f.bottom + AVOID_PAD - band.top) : 0);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -171,7 +174,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
        ragged one. Lifted clear of the iOS home indicator where there is one. */
     <div
       ref={slotRef}
-      className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] inset-e-5 z-90"
+      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] inset-e-5 z-90"
       onFocus={() => setFocusWithin(true)}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
@@ -191,8 +194,15 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                unlabelled group. */
             role="dialog"
             aria-label={s.title}
-            style={lift ? { marginBottom: lift } : undefined}
-            className="absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[14px] border-2 border-charcoal bg-white"
+            /* It rises with the launcher and gives up the same height, and
+               it always clears the sticky header (z-100), so its title and
+               close control stay on screen and clickable. */
+            style={
+              lift
+                ? { marginBottom: lift, height: `min(560px, calc(100dvh - var(--header-h) - 7rem - ${lift}px))` }
+                : undefined
+            }
+            className="pointer-events-auto absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-var(--header-h)-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[14px] border-2 border-charcoal bg-white"
           >
             {/* Header ONLY for the fallback panel. The widget frame renders
                 its own — title, greeting and an X — so pairing it with ours
@@ -260,13 +270,13 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? s.close : s.open}
-        /* The lift is a margin: the slot keeps its bottom edge, so the
-           measurement above still reads the resting place. */
-        style={lift ? { marginBottom: lift } : undefined}
+        /* The lift is a transform, so the slot keeps its resting rect for
+           the measurement above (and stays out of the pointer's way). */
+        style={lift ? { transform: `translateY(-${lift}px)` } : undefined}
         /* A Charcoal edge on a white disc: 17:1 against the Off-White page,
            and the disc itself stands out the same on a Charcoal band. */
-        className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-charcoal bg-white text-ink transition-[opacity,transform,translate,scale,visibility,background-color] duration-300 hover:bg-silver-gray ${
-          tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "visible translate-y-0 opacity-100"
+        className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-charcoal bg-white text-ink transition-[opacity,translate,scale,visibility,background-color] duration-300 hover:bg-silver-gray ${
+          tucked ? "pointer-events-none invisible translate-y-3 opacity-0" : "pointer-events-auto visible translate-y-0 opacity-100"
         }`}
       >
         <AnimatedIcon name="chat" size={24} />

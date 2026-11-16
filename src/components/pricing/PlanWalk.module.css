@@ -52,7 +52,7 @@
   gap: 16px;
   margin-block-start: 16px;
 }
-.body p {
+.body p:not(.fig) {
   max-inline-size: 48ch;
 }
 .fig {
@@ -133,6 +133,10 @@
 @media (max-width: 640px) {
   .num {
     font-size: 20vw;
+  }
+  /* "SAR 2,900 a month" on one row. */
+  .num:lang(en) {
+    font-size: 17vw;
   }
   .word {
     font-size: 11vw;
@@ -240,9 +244,6 @@
   transition:
     color 180ms ease,
     scale 140ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.tier:hover {
-  background: none;
 }
 @media (hover: hover) and (pointer: fine) {
   .tier:hover {

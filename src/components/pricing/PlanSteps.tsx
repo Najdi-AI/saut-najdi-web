@@ -68,6 +68,7 @@ export function PlanSteps({
   useEffect(() => {
     if (active === last.current) return;
     const id = setTimeout(() => {
+      if (active === last.current) return; // reset off screen meanwhile
       last.current = active;
       setHeard(said[active]);
     }, 450);

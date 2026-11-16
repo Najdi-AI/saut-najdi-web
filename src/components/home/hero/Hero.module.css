@@ -14,12 +14,17 @@
  * Unlayered, so these rules win over Tailwind's layered utilities.
  */
 .hero {
+  --chip-above: 122px; /* the dialect chip's reach above the stage */
+  --pad-top: calc(132px - var(--header-h));
   position: relative;
   overflow: clip;
   display: grid;
+  /* Centred as in the mockup, but the track above the stage never drops below
+     the chip's reach plus 24px, so a short screen grows the hero, not clips. */
+  grid-template-rows: minmax(calc(var(--chip-above) + 24px - var(--pad-top)), 1fr) auto minmax(0, 1fr);
   place-items: center;
   min-block-size: calc(max(760px, 100svh) - var(--header-h));
-  padding-block: calc(132px - var(--header-h)) 112px;
+  padding-block: var(--pad-top) 112px;
   padding-inline: clamp(20px, 2.3vw, 32px);
   line-height: 1.7;
 }
@@ -29,6 +34,7 @@
 }
 
 .stage {
+  grid-row: 2;
   position: relative;
   inline-size: min(1120px, 100%);
   margin-block-start: 2vh;
@@ -91,9 +97,7 @@
 .state {
   display: block;
 }
-.title {
-  font-weight: 700;
-}
+.title,
 .readout {
   font-weight: 700;
 }
@@ -107,7 +111,7 @@
 
 .dialect {
   --tilt: -3deg;
-  inset-block-start: -122px;
+  inset-block-start: calc(-1 * var(--chip-above));
   inset-inline-start: 13%;
 }
 .playChip {
@@ -224,8 +228,10 @@
 .en .lead {
   margin-block-start: 56px;
 }
+.en {
+  --chip-above: 132px;
+}
 .en .dialect {
-  inset-block-start: -132px;
   inset-inline-start: 6%;
 }
 .en .playChip {
@@ -268,11 +274,13 @@
    `.stage` raises these over the English places above. */
 @media (max-width: 640px) {
   .hero {
+    grid-template-rows: none;
     align-items: start;
     min-block-size: auto;
     padding-block: calc(104px - var(--header-h)) 72px;
   }
   .stage {
+    grid-row: auto;
     display: grid;
     gap: 14px;
     margin-block-start: 0;

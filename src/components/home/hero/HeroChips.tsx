@@ -94,7 +94,8 @@ const clock = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.floor(sec 
 export function PlayChip({ locale }: { locale: Locale }) {
   const t = heroCopy[locale];
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "playing">("idle");
+  const playing = status === "playing";
   const [pos, setPos] = useState({ on: 0, left: LENGTH_S });
 
   // Follow the clip only while it plays; state changes only when a bar or a
@@ -123,8 +124,12 @@ export function PlayChip({ locale }: { locale: Locale }) {
     const audio = audioRef.current;
     if (!audio) return;
     if (!audio.paused) return audio.pause();
+    // A failed element stays failed until reloaded (as in VoiceClip); an
+    // AbortError only means a pause() came before the sound did.
+    if (audio.error) audio.load();
     document.querySelectorAll("audio").forEach((other) => other !== audio && other.pause());
-    audio.play().catch(() => setPlaying(false));
+    setStatus("loading");
+    audio.play().catch((e: unknown) => (e as Error).name !== "AbortError" && setStatus("idle"));
   };
 
   return (
@@ -134,7 +139,7 @@ export function PlayChip({ locale }: { locale: Locale }) {
       data-playing={playing || undefined}
       style={delay(600)}
     >
-      <button type="button" className={s.playBtn} aria-label={playing ? t.pause : t.play} onClick={toggle}>
+      <button type="button" className={s.playBtn} aria-label={playing ? t.pause : t.play} aria-busy={status === "loading" || undefined} onClick={toggle}>
         {/* Media glyphs are never mirrored in RTL. */}
         <svg viewBox="0 0 16 16" aria-hidden>
           <path d={playing ? "M4 2.5h3v11H4zM9 2.5h3v11H9z" : "M4 2.5v11l9-5.5z"} fill="currentColor" />
@@ -155,8 +160,11 @@ export function PlayChip({ locale }: { locale: Locale }) {
         ref={audioRef}
         src={clip.src}
         preload="none"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        // The pause glyph and moving bars wait for sound, not for the press.
+        onPlaying={() => setStatus("playing")}
+        onWaiting={() => setStatus("loading")}
+        onPause={() => setStatus("idle")}
+        onError={() => setStatus("idle")}
         onEnded={() => setPos({ on: 0, left: LENGTH_S })}
       />
     </div>

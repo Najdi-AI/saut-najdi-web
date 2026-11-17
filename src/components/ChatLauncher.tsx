@@ -48,12 +48,11 @@ const t = {
 } as const;
 
 /**
- * Art the launcher must never sit on. The homepage hero floats its chat
- * bubbles and mic over the photo's physical left edge (HeroVisual), which is
- * exactly where a phone's bottom corner lands in the first screen. Any other
- * surface can opt in with a `data-fab-avoid` attribute.
+ * Art the launcher must never sit on. A surface opts in with a
+ * `data-fab-avoid` attribute (the hub board does, so the launcher never
+ * covers a channel tile).
  */
-const AVOID = "[data-fab-avoid], .hero-photo";
+const AVOID = "[data-fab-avoid]";
 const AVOID_PAD = 8;
 /**
  * The footer's legal band (Footer.tsx, its last child) carries «© 2026 صوت

@@ -35,15 +35,6 @@ export function planCapacityRows(key: string, locale: Locale) {
   ];
 }
 
-export function PlanCapacity({ planKey, locale }: { planKey: string; locale: Locale }) {
-  return <dl className="mt-5 grid gap-x-6 gap-y-3 border-t border-line pt-5 text-body sm:grid-cols-2">
-    {planCapacityRows(planKey, locale).map(row => <div key={row.key}>
-      <dt className="text-ink/65">{row.label}</dt>
-      <dd className="mt-1 font-semibold tabular-nums text-ink">{row.value}</dd>
-    </div>)}
-  </dl>;
-}
-
 // Feature gates and workflow limits approved by Sultan, 2026-09-27.
 // Growth includes takeover. Cloning uses credits from Growth upward;
 // 2 credits per new clone approved. This is not runtime entitlement code.
@@ -70,15 +61,4 @@ export function planFeatureRows(key: string, locale: Locale) {
     [t("Bring your own line / PBX (BYOC)", "ربط خطك أو مقسمك الحالي (BYOC)"), [quote, quote, quote, quote]],
   ] as const;
   return rows.map(([label, values], i) => ({ key: `feature-${i}`, label, value: values[index] }));
-}
-
-export function planUpgradeSummary(key: string, locale: Locale) {
-  const ar = locale === "ar";
-  const copy = {
-    essential: ar ? ["رد صوتي ودردشة الموقع", "تقارير أساسية وتحويل لموظف"] : ["Voice answering and website chat", "Basic reports and human handoff"],
-    growth: ar ? ["كل ميزات أساسي، مع واتساب وتيليجرام وصندوق مشترك", "3 مسارات أتمتة وإشراف بالاستماع واستلام المكالمة", "استنساخ الصوت: نقطتان لكل صوت جديد"] : ["Everything in Essential, plus WhatsApp, Telegram and a shared inbox", "3 active workflows, supervisor listening and takeover", "Voice cloning: 2 credits per new voice"],
-    expansion: ar ? ["كل ميزات نمو، مع 15 مسار أتمتة", "تقارير الفروع والتوجيه ووصول API محدد", "استنساخ الصوت: نقطتان لكل صوت جديد"] : ["Everything in Growth, plus 15 active workflows", "Branch reporting, whisper and scoped API access", "Voice cloning: 2 credits per new voice"],
-    enterprise: ar ? ["متطلبات توسّع مخصصة بحسب العقد", "مدير حساب واتفاقية خدمة وتكاملات حسب الاتفاق"] : ["Custom scale requirements in a written offer", "Account management, SLA and integrations by agreement"],
-  };
-  return copy[key as keyof typeof copy] ?? copy.enterprise;
 }

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Num } from "../ui/Num";
@@ -48,8 +49,14 @@ export function Hub({ locale }: { locale: Locale }) {
             <span className={s.all}>{t.all}</span>
           </div>
           <ul className={s.list}>
-            {t.rows.map((row) => (
-              <li key={row.time} className={s.row} data-ch={row.ch} data-dup={"dup" in row ? "" : undefined}>
+            {t.rows.map((row, i) => (
+              <li
+                key={row.time}
+                className={s.row}
+                data-ch={row.ch}
+                data-dup={"dup" in row ? "" : undefined}
+                style={{ "--i": i } as CSSProperties}
+              >
                 <span className={s.rowCh}>
                   <i />
                   <span>

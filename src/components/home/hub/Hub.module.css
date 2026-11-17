@@ -228,6 +228,48 @@
   }
 }
 
+/* ---- clip D (storyboard 16): once the board is in view the rows arrive from their channels' sides, one after
+   another newest first, and settle into the one inbox; held while off screen (HubBoard, data-merge). Beside the
+   tiles they come in sideways from their tile column (the first column is at the inline start); with the inbox
+   above the tiles they rise. Transform and opacity only; the inbox as rendered is the final frame. */
+@media (prefers-reduced-motion: no-preference) {
+  .board[data-merge="wait"] .row {
+    opacity: 0;
+  }
+  .board[data-merge="go"] .row {
+    animation: merge 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 90ms);
+  }
+  .board[data-hold] .row {
+    animation-play-state: paused;
+  }
+}
+@media (min-width: 1101px) {
+  .row:is([data-ch="phone"], [data-ch="whatsapp"], [data-ch="telegram"]) {
+    --from: -56px;
+  }
+  .row:is([data-ch="web"], [data-ch="grandstream"], [data-ch="sip"]) {
+    --from: 56px;
+  }
+  [dir="rtl"] .row:is([data-ch="phone"], [data-ch="whatsapp"], [data-ch="telegram"]) {
+    --from: 56px;
+  }
+  [dir="rtl"] .row:is([data-ch="web"], [data-ch="grandstream"], [data-ch="sip"]) {
+    --from: -56px;
+  }
+}
+@media (max-width: 1100px) {
+  .row {
+    --rise: 14px;
+  }
+}
+@keyframes merge {
+  from {
+    opacity: 0;
+    transform: translate(var(--from, 0), var(--rise, 0));
+  }
+}
+
 /* ---- tablet: the inbox on top, the tiles in two columns under it ---- */
 @media (max-width: 1100px) {
   .board {

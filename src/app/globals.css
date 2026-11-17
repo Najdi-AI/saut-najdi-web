@@ -449,25 +449,6 @@
   transition: none !important;
 }
 
-/* The hero cut-out is transparent around the subject's head but fully opaque
-   across the desk, and the desk runs off the frame — on white those cuts are
-   invisible, on night they are two hard light edges (the desk's front lip at
-   ~88% height, and the left frame boundary).
-
-   Two gradients composited to an intersection: the vertical one sinks the
-   desk and the laptop BASE into the ground while stopping short of the lid,
-   which carries the logo and must stay crisp; the horizontal one softens both
-   side boundaries. Prefixed for Safari < 16.4 and its legacy composite
-   keyword. */
-[data-theme="dark"] .hero-photo {
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 86%),
-    linear-gradient(to right, transparent 0%, #000 9%, #000 94%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
 /* The wordmark is live <text> with a fixed dark fill, so it cannot follow
    currentColor — ship both cuts and swap (the header's on-dark tone). */
 .logo-inverse {

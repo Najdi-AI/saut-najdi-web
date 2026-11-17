@@ -10,11 +10,14 @@ import { useEffect } from "react";
  * scroll finishes at that stale offset, up to ~3,500px from the target.
  *
  * On the first load only, and only when the hash names an element: wait for
- * the fonts, then for a few frames in which neither body nor main changes
- * size (capped at 1.5s), and scroll the target into view once, instantly, so
- * html's scroll-padding-top (and any scroll-margin) applies as it would for
- * the browser's own jump. Without a hash it does nothing; without JavaScript
- * the browser's native jump is all there is.
+ * the fonts, for the finite animations on anything above or around the
+ * target to end (an entrance can end in a size change: the hero re-fits its
+ * chips once its entrance has run, under text spacing), and then for a few
+ * frames in which neither body nor main changes size, all capped at 1.5s;
+ * then scroll the target into view once, instantly, so html's
+ * scroll-padding-top (and any scroll-margin) applies as it would for the
+ * browser's own jump. Without a hash it does nothing; without JavaScript the
+ * browser's native jump is all there is.
  *
  * The reader wins: if the page scrolls while the target stays put in the
  * document and the target moves away from its landing line, someone is
@@ -40,6 +43,18 @@ export function HashSettle() {
       const top = target.getBoundingClientRect().top;
       return { y: window.scrollY, doc: top + window.scrollY, gap: Math.abs(top - line()) };
     };
+    // A finite animation still running (or waiting out its delay) on an element before the target or around it.
+    const animating = () =>
+      typeof document.getAnimations === "function" &&
+      document.getAnimations().some((a) => {
+        const el = a.effect instanceof KeyframeEffect ? a.effect.target : null;
+        return (
+          a.playState === "running" &&
+          a.effect?.getComputedTiming().endTime !== Infinity &&
+          !!el &&
+          !!(el.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)
+        );
+      });
     const started = performance.now();
     let prev = read();
     let quiet = 0;
@@ -70,7 +85,7 @@ export function HashSettle() {
         return;
       }
       prev = now;
-      quiet += 1;
+      quiet = animating() ? 0 : quiet + 1;
       if ((fonts && quiet > 3) || performance.now() - started > 1500) {
         stop();
         if (now.gap > 1) target.scrollIntoView({ block: "start", behavior: "instant" });

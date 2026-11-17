@@ -1,7 +1,7 @@
 /**
  * The no-JavaScript fallback for the motion wrappers, shared by both root
- * layouts so the two locales can never drift apart. Reveal, ProcessSteps,
- * JourneySteps, SampleConversation and AnimatedIcon server-render their
+ * layouts so the two locales can never drift apart. Reveal, JourneySteps,
+ * SampleConversation and AnimatedIcon server-render their
  * hidden first frame (opacity 0, an offset or scaled transform, an undrawn
  * path) and only framer-motion lifts it, after hydration, so without
  * JavaScript that copy would never appear. Every such node carries

@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 import { Num } from "../ui/Num";
 import type { HowCopy } from "./copy";
 import s from "./How.module.css";
@@ -8,7 +8,9 @@ import s from "./How.module.css";
  * server markup. Each is a light product card; the pinned layout lays them
  * over one another and shows the one its statement sets, the stacked
  * layout shows each under its statement. Illustrations only: the buttons
- * in the handoff ticket are drawn, not operable.
+ * in the handoff ticket are drawn, not operable. While pinned and on screen,
+ * the booking and the handoff play their moment when they come on (clips B
+ * and C, How.module.css); the markup is the final frame.
  */
 
 /** Deterministic bar heights (Try 1 site.js, 22 bars up to 28px), so server and client draw the same wave. */
@@ -26,6 +28,21 @@ const CHECK = (
 /** Latin digits in an LTR island (house rule) inside a line of either script. */
 const digits = (text: string) =>
   text.split(/(\d[\d:.,]*\d|\d)/).map((part, i) => (i % 2 ? <Num key={i}>{part}</Num> : part));
+
+/**
+ * A line a word at a time (clips B and C): each word a span with its place
+ * in --w for the pinned motion, the spaces between them plain text, so the
+ * line reads, wraps and copies as one sentence.
+ */
+const words = (text: string) =>
+  text.split(" ").map((word, i) => (
+    <Fragment key={i}>
+      {i > 0 && " "}
+      <span data-w="" style={{ "--w": i } as CSSProperties}>
+        {digits(word)}
+      </span>
+    </Fragment>
+  ));
 
 export function RingState({ t }: { t: HowCopy["ring"] }) {
   return (
@@ -78,7 +95,7 @@ export function BookState({ t }: { t: HowCopy["book"] }) {
         </p>
         <p className={s.bubble} data-who="agent">
           <small>{t.agent}</small>
-          {digits(t.reply)}
+          {words(t.reply)}
         </p>
         <p className={s.bubble} data-who="caller">
           {t.caller2}
@@ -122,10 +139,10 @@ export function HandoffState({ t }: { t: HowCopy["handoff"] }) {
           </div>
         </div>
         <dl>
-          {t.rows.map(([k, v]) => (
+          {t.rows.map(([k, v], i) => (
             <div key={k}>
               <dt>{k}</dt>
-              <dd>{digits(v)}</dd>
+              <dd>{i === 0 ? words(v) : digits(v)}</dd>
             </div>
           ))}
         </dl>

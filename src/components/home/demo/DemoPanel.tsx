@@ -1,11 +1,13 @@
 "use client";
 
-import { Fragment, useEffect, useId, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useId, useState, type CSSProperties } from "react";
 import { dirOf, type Locale } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Num } from "../ui/Num";
+import { useInView } from "../ui/useInView";
+import { Words, withDigits } from "../ui/Words";
 import type { Activity, DemoCopy, Line, Outcome, ReplyDialect, Scenario, Setting } from "./copy";
 import s from "./Demo.module.css";
 
@@ -38,9 +40,11 @@ function threadOf(t: DemoCopy, st: State): Node[] {
   return nodes;
 }
 
-/** Latin digits in an LTR island (house rule), inside a sentence of either script. */
-const withDigits = (text: string): ReactNode =>
-  text.split(/(\d[\d:.,]*\d|\d)/).map((part, i) => (i % 2 ? <bdi key={i} dir="ltr">{part}</bdi> : <Fragment key={i}>{part}</Fragment>));
+/** When the first step enters: after the ring on the first play, at once after a change (ms). */
+const RING = 480;
+const AFTER_CHANGE = 60;
+/** How long a step holds the next one back: a line by its words (one every 55ms), a card or a note flat (ms). */
+const stepMs = (n: Node) => (n.kind === "line" ? 160 + n.text.split(" ").length * 55 : 280);
 
 const CHECK = (
   <svg viewBox="0 0 20 20" aria-hidden>
@@ -80,6 +84,11 @@ const SWITCH = "data-unchecked:bg-[#737d99]";
  * the agent's new reply instead of the whole thread. On a phone three rows
  * fold behind «كل الإعدادات»; they fold only once this has hydrated, so
  * without JavaScript every row stays visible.
+ *
+ * The first time the call comes into view it plays in (clip A): the avatar
+ * rings, then each step enters in turn and every line writes itself word by
+ * word. It runs under five seconds and holds while the call is off screen;
+ * under reduced motion or without JavaScript the call is simply there.
  */
 export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
   const id = useId();
@@ -88,12 +97,21 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
     st: { activity: "clinic", scenario: "book", dialect: locale === "ar" ? "sa" : "en", handoff: true, autobook: true, whatsapp: true } as State,
     fresh: [] as string[],
     said: null as Said | null,
+    from: AFTER_CHANGE,
   }));
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
+  const [ref, inView] = useInView<HTMLDivElement>({ once: false });
+  const [played, setPlayed] = useState(false);
   useEffect(() => {
     setReady(true);
   }, []);
+  // The first sight of the call plays all of it in.
+  useEffect(() => {
+    if (!inView || played) return;
+    setPlayed(true);
+    setView((v) => ({ ...v, fresh: threadOf(t, v.st).map((n) => n.key), from: RING }));
+  }, [inView, played, t]);
 
   const change = (patch: Partial<State>) =>
     setView((v) => {
@@ -107,11 +125,12 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
       if (reply?.kind === "line") said = { who: reply.who === "staff" ? t.staff : t.agent, text: reply.text, lang: reply.lang, outcome: card?.kind === "card" ? card.title : undefined };
       else if (card?.kind === "card") said = { text: card.title };
       else if (sent?.kind === "sent") said = { text: sent.text };
-      return { st, fresh: fresh.map((n) => n.key), said };
+      return { st, fresh: fresh.map((n) => n.key), said, from: AFTER_CHANGE };
     });
 
   const { st, fresh, said } = view;
   const nodes = threadOf(t, st);
+  let at = view.from;
   const nextDialect = DIALECTS[(DIALECTS.indexOf(st.dialect) + 1) % DIALECTS.length];
   const setting = (k: Setting, more = false) => (
     <div className={`${s.ctl} ${more ? s.more : ""}`} id={more ? `${id}-${k}` : undefined}>
@@ -123,8 +142,14 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
   );
 
   return (
-    <div className={s.panel} data-ready={ready || undefined} data-open={open || undefined}>
-      <div className={s.demo}>
+    <div
+      className={s.panel}
+      data-ready={ready || undefined}
+      data-open={open || undefined}
+      data-played={played || undefined}
+      data-hold={(played && !inView) || undefined}
+    >
+      <div ref={ref} className={s.demo}>
         <div className={s.callbar}>
           <div className={s.who}>
             <span className={s.avatar} aria-hidden>
@@ -141,8 +166,11 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
         </div>
         <div className={s.thread}>
           {nodes.map((n) => {
-            const i = fresh.indexOf(n.key);
-            const enter = i < 0 ? {} : { "data-enter": "", style: { "--i": i } as CSSProperties };
+            let enter = {};
+            if (fresh.includes(n.key)) {
+              enter = { "data-enter": "", style: { "--t": `${at}ms` } as CSSProperties };
+              at += stepMs(n);
+            }
             if (n.kind === "card")
               return (
                 <div key={n.key} className={s.card} data-card={n.card} {...enter}>
@@ -171,10 +199,10 @@ export function DemoPanel({ locale, t }: { locale: Locale; t: DemoCopy }) {
                 {n.who !== "caller" && <small>{n.who === "staff" ? t.staff : t.agent}</small>}
                 {n.lang ? (
                   <span lang={n.lang} dir={dirOf(n.lang)} className="block">
-                    {n.text}
+                    <Words text={n.text} />
                   </span>
                 ) : (
-                  withDigits(n.text)
+                  <Words text={n.text} />
                 )}
               </div>
             );

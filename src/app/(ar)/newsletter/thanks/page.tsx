@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHero } from "@/components/page/PageHero";
 
 /**
  * Newsletter confirmation, Arabic. noindex like every thank-you page —
@@ -10,24 +11,26 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
 };
 
+/* On the inner-page kit, as /demo/thank-you (ThankYouPage). The link is the
+   standard button, unsized: white on Najdi Red needs its 20px/700 label. */
 export default function Page() {
   return (
-    <section className="container flex min-h-[50vh] items-center py-14">
-      <div className="mx-auto max-w-lg text-center">
-        <h1 className="text-h2 text-ink">تم الاشتراك بنجاح</h1>
-        <p className="mt-3 text-body-lg text-ink/70">
+    <PageHero
+      title="تم الاشتراك بنجاح"
+      lead={
+        <>
           أهلاً بك في نشرة صوت نجدي — بنرسل لك آخر التطورات وأهم أخبار الذكاء
           الاصطناعي. رسالة موجزة، وبدون إزعاج.
-        </p>
-        <p className="mt-2 text-body text-ink/55">
-          تقدر تلغي الاشتراك في أي وقت بمراسلتنا على ai@sautnajdi.ai.
-        </p>
-        <div className="mt-6">
-          <Link href="/blog" className="btn-spectrum rounded-full px-6 py-2.5 text-body font-semibold">
-            العودة إلى المدونة
-          </Link>
-        </div>
-      </div>
-    </section>
+        </>
+      }
+      className="min-h-[55vh] pb-[clamp(96px,11.2vw,168px)]"
+    >
+      <p className="mb-3 basis-full text-body-lg text-muted-foreground">
+        تقدر تلغي الاشتراك في أي وقت بمراسلتنا على ai@sautnajdi.ai.
+      </p>
+      <Link href="/blog" className="btn-primary">
+        العودة إلى المدونة
+      </Link>
+    </PageHero>
   );
 }

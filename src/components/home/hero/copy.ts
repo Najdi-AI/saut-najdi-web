@@ -15,6 +15,30 @@ export const SAMPLE: Record<Dialect, { text: string; lang: Locale }> = {
   en: { text: "“Hello, how can I help you today?”", lang: "en" },
 };
 
+/**
+ * The hero clip, turn by turn: exactly what public/audio/home-hero.m4a says,
+ * in the order of the turns in home-hero.json. scripts/make-home-voice.mjs
+ * voices these lines and fails if they no longer appear in this file, so
+ * the transcript and the live line in the play chip always match the sound.
+ * Arabic on both pages: it is what the caller hears.
+ */
+export const CLIP_TURNS: { who: "agent" | "caller"; text: string }[] = [
+  { who: "agent", text: "هلا! كيف أقدر أساعدك؟" },
+  { who: "caller", text: "أبغى أحجز موعد بكرة" },
+  { who: "agent", text: "أبشر! بكرة عندنا الساعة 4:30 العصر، يناسبك؟" },
+];
+
+/** The clip's transcript: its button, its close button and, on the English page, a rendering of each turn. */
+export const scriptCopy = {
+  ar: { open: "اقرأ النص", close: "إغلاق", title: "نص المكالمة", lines: null },
+  en: {
+    open: "Read the transcript",
+    close: "Close",
+    title: "Call transcript",
+    lines: ["Hi! How can I help you?", "I'd like to book an appointment for tomorrow.", "Of course! We have 4:30 pm tomorrow. Does that suit you?"],
+  },
+} satisfies Record<Locale, { open: string; close: string; title: string; lines: string[] | null }>;
+
 /** Hero copy (mockups/index.html and en-hero.html). The H1 is split into its two display lines. */
 export const heroCopy = {
   ar: {
@@ -24,6 +48,7 @@ export const heroCopy = {
     dialects: { sa: "سعودي", ar: "عربي", en: "English" },
     play: "اسمع الرد",
     pause: "إيقاف",
+    who: { agent: "الوكيل", caller: "المتصل" },
     handoff: "تحويل لموظف",
     handoffOn: "أحمد يستلم لما يلزم",
     handoffOff: "الوكيل يكمل المكالمة",
@@ -35,6 +60,7 @@ export const heroCopy = {
     dialects: { sa: "Saudi", ar: "Arabic", en: "English" },
     play: "Hear the reply",
     pause: "Pause",
+    who: { agent: "Agent", caller: "Caller" },
     handoff: "Hand off to staff",
     handoffOn: "Ahmed takes over",
     handoffOff: "The agent stays on the call",

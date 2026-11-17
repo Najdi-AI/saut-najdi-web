@@ -1,10 +1,12 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { BookingDesk } from "@/components/BookingDesk";
-import { Waveform } from "@/components/Waveform";
 import { Reveal } from "@/components/Reveal";
 import { FaqAccordion } from "@/components/FaqAccordion";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
 
 /**
@@ -24,7 +26,26 @@ import type { FaqItem } from "@/lib/schema";
  * H2s answer what a visitor hesitates over before booking (price, who to
  * bring, why they can't just call in), and the FAQ below feeds the page's
  * FAQPage node via the `demoFaq` export.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, the desk, each
+ * question with its answer as a ruled row, the FAQ in the split layout.
+ * pageFactory imports this module for `demoFaq`, so imports here stay
+ * server-only or already ship everywhere.
  */
+
+/** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
 
 const t = {
   ar: {
@@ -133,58 +154,53 @@ export function DemoPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-linear-to-b/srgb from-surface to-canvas">
-        <div className="container py-12 text-center">
-          <h1 className="text-h1">
-            {s.h1} <span className="text-ink/40">{s.h1Tail}</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.lead}</p>
-          <p className="mx-auto mt-2 max-w-2xl text-body-lg leading-relaxed text-brand-purple">{s.pricingNote}</p>
-          <Waveform bars={36} maxHeight={30} className="mt-6 opacity-70" />
-        </div>
-      </section>
+      <PageHero
+        title={
+          <>
+            {s.h1} <span className="text-muted-foreground">{s.h1Tail}</span>
+          </>
+        }
+        lead={s.lead}
+      >
+        <p className="max-w-[52ch] text-body-lg font-bold text-pretty">{s.pricingNote}</p>
+      </PageHero>
 
-      {/* The booking desk, shared with the homepage closing section.
-          `bg-night`, not `bg-ink`: ink inverts with the theme and would turn
-          this band white, but the Cal booker inside is pinned dark
-          (lib/bookerTheme.ts) — its palette reaches the iframe once at mount
-          and cannot follow a live theme switch. */}
-      <section className="bg-night py-12 sm:py-14">
+      {/* The booking desk, shared with the old homepage: its own Charcoal
+          .on-dark card (BookingDesk), so it sits on the page's ground with no
+          band of its own. */}
+      <section className="pt-12 sm:pt-16">
         <div className="container">
           <BookingDesk locale={locale} />
         </div>
       </section>
 
-      <section className="bg-surface py-16">
-        <div className="container">
-          <div className="mx-auto max-w-3xl space-y-6">
-            {s.sections.map((sec, i) => (
-              <Reveal key={sec.h} delay={i * 0.04}>
-                <article className="card">
-                  <h2 className="text-h4">{sec.h}</h2>
-                  <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.p}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-body-lg">
-            {s.related.map((r) => (
-              <Link key={r.path} href={localePath(locale, r.path)} className="text-brand-blue hover:underline">
-                {r.label}
-              </Link>
-            ))}
-          </div>
+      <Section>
+        <div className="border-t border-line">
+          {s.sections.map((sec, i) => (
+            <Row key={sec.h} title={sec.h} delay={i * 0.04}>
+              <p>{sec.p}</p>
+            </Row>
+          ))}
         </div>
-      </section>
 
-      {/* No DemoCta here — the booking embed above already is the CTA. */}
-      <section className="container py-16">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
+        <div className="mt-8 flex flex-wrap gap-x-8 gap-y-1">
+          {s.related.map((r) => (
+            <Link
+              key={r.path}
+              href={localePath(locale, r.path)}
+              className="inline-flex min-h-12 items-center text-body-lg font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
+            >
+              {r.label}
+            </Link>
+          ))}
         </div>
-      </section>
+      </Section>
+
+      {/* No DemoCta here — the booking desk above already is the CTA, so the
+          page ends on the FAQ with its own bottom room. */}
+      <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
+        <FaqAccordion items={s.faq} />
+      </Section>
     </>
   );
 }

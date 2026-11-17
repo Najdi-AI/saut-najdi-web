@@ -222,11 +222,11 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
-/* A 44px tall target around the 21px line. */
+/* A target at least 48px tall around the 20px line (14px type at line-height 1.45), 8px wider on each side. */
 .scriptOpen::after {
   content: "";
   position: absolute;
-  inset: -12px -8px -11px;
+  inset: -14px -8px;
 }
 /* The Arabic button is short enough to sit under the time, so the chip grows by the live line alone and stays
    clear of the lead under WCAG 1.4.12 text spacing too (the English one keeps its own row: it would squeeze the wave). */
@@ -266,7 +266,7 @@
   margin-block-end: 10px;
 }
 .scriptClose {
-  min-block-size: 44px;
+  min-block-size: 48px;
   padding-inline: 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius);

@@ -115,11 +115,33 @@ export function spokenForm(text) {
   return out;
 }
 
-export function checkAgainstSource(clip) {
-  const src = readFileSync(path.join(ROOT, clip.source), 'utf8');
+// A clip's speakers as its source names them (the clinic call's «أحمد» is its `human` turn).
+const SOURCE_WHO = {agent: 'agent', caller: 'caller', ahmed: 'human'};
+
+// The source's turns are `{ who: "...", text: "..." }` objects in one array. Beyond every line being there, the
+// clip must have the same turns: each line said by the same speaker, in the same order, and as many turns as the
+// array holds (the chime stands for the clinic call's handoff card, which is a turn there too).
+export function checkAgainstSource(clip, src = readFileSync(path.join(ROOT, clip.source), 'utf8')) {
   const missing = clip.parts.filter((p) => !p.chime && !src.includes(p.text)).map((p) => p.text);
   if (missing.length) {
     throw new Error(`${clip.source} no longer shows: ${missing.map((t) => `«${t}»`).join(', ')} (update CLIPS to match the bubbles)`);
+  }
+  const lines = clip.parts.filter((p) => !p.chime);
+  let at = -1;
+  for (const p of lines) {
+    const i = src.indexOf(p.text);
+    const who = /who:\s*["']([a-z]+)["']/.exec(src.slice(src.lastIndexOf('{', i), i))?.[1];
+    if (who !== SOURCE_WHO[p.who]) {
+      throw new Error(`${clip.source}: «${p.text}» is said by ${who ?? 'nobody'} there, not ${p.who} (update CLIPS to match the bubbles)`);
+    }
+    if (i < at) throw new Error(`${clip.source}: «${p.text}» comes earlier there than in the clip (update CLIPS to the bubbles' order)`);
+    at = i;
+  }
+  const first = src.lastIndexOf('[', src.lastIndexOf('{', src.indexOf(lines[0].text)));
+  const last = src.indexOf(']', src.indexOf(lines[lines.length - 1].text));
+  const turns = (src.slice(first, last).match(/who:\s*["']/g) ?? []).length;
+  if (turns !== clip.parts.length) {
+    throw new Error(`${clip.source}: ${turns} turns there, ${clip.parts.length} in the clip (update CLIPS to match the bubbles)`);
   }
 }
 

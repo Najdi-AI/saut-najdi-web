@@ -78,7 +78,11 @@ export function useStageFit(ref: RefObject<HTMLElement | null>) {
     for (const el of [h1, lead, dialect, ...pair]) sizes.observe(el);
     float.addEventListener("change", schedule);
     above.addEventListener("change", schedule);
-    const entrance = hero.getAnimations({ subtree: true }).filter((a) => a.effect?.getComputedTiming().endTime !== Infinity);
+    // Older browsers without element.getAnimations() just check at once.
+    const entrance =
+      typeof hero.getAnimations === "function"
+        ? hero.getAnimations({ subtree: true }).filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
+        : [];
     Promise.all(entrance.map((a) => a.finished.catch(() => {}))).then(() => {
       settled = true;
       schedule();

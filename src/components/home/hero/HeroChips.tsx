@@ -89,6 +89,8 @@ const LENGTH_S = clip.durationMs / 1000;
 const clock = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
 /** The clip's turns with their times (home-hero.json) and word counts. */
 const TURNS = CLIP_TURNS.map((turn, i) => ({ ...clip.turns[i], ...turn, words: turn.text.split(" ").length }));
+/** The live line at rest: the reply's first line, whole. */
+const REST = { k: 0, n: TURNS[0].words };
 
 /**
  * The line being spoken at a time in the clip (ms): its turn, and how many of
@@ -109,7 +111,8 @@ const lineAt = (ms: number, whole: boolean) => {
  * press (preload="none"), and it stops any other clip on the page.
  *
  * Under it, the line being spoken writes itself word by word in time with
- * the sound (clip A); at rest it shows the reply's first line whole. All
+ * the sound (clip A); at rest, before and after the clip, it shows the
+ * reply's first line whole (a pause keeps the line where it is). All
  * three lines share one cell, so the chip keeps its height as they change.
  * It is a picture of the sound (aria-hidden): the transcript, passed in as
  * children from the server, is the text alternative.
@@ -121,7 +124,7 @@ export function PlayChip({ locale, children }: { locale: Locale; children: React
   const [status, setStatus] = useState<"idle" | "loading" | "playing">("idle");
   const playing = status === "playing";
   const [pos, setPos] = useState({ on: 0, left: LENGTH_S });
-  const [line, setLine] = useState({ k: 0, n: TURNS[0].words });
+  const [line, setLine] = useState(REST);
   // The hero's fit check lives with this chip, the one island that is on every hero (useStageFit).
   const rootRef = useRef<HTMLDivElement>(null);
   useStageFit(rootRef);
@@ -207,7 +210,10 @@ export function PlayChip({ locale, children }: { locale: Locale; children: React
         onWaiting={() => setStatus("loading")}
         onPause={() => setStatus("idle")}
         onError={() => setStatus("idle")}
-        onEnded={() => setPos({ on: 0, left: LENGTH_S })}
+        onEnded={() => {
+          setPos({ on: 0, left: LENGTH_S });
+          setLine(REST);
+        }}
       />
     </div>
   );

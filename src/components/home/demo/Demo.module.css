@@ -241,6 +241,14 @@
     transform: rotate(12deg);
   }
 }
+/* On paper the call is its final frame, whether or not it was ever scrolled into view. */
+@media print {
+  .panel :is(.avatar, .thread > *, .thread [data-w]) {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
 
 /* ---- the settings */
 .controls {

@@ -60,6 +60,8 @@ const AVOID_PAD = 8;
  * The launcher rises with the band instead of covering it.
  */
 const LIFT_OVER = "footer > :last-child";
+/** A window shorter than this (px) keeps the open panel in the corner instead of lifting it. */
+const SHORT = 480;
 
 export function ChatLauncher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -85,6 +87,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [clear, setClear] = useState(false);
   const [lift, setLift] = useState(0);
+  const [short, setShort] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   useEffect(() => {
     const slot = slotRef.current;
@@ -108,6 +111,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
       const band = document.querySelector(LIFT_OVER)?.getBoundingClientRect();
       const meets = band && band.top < f.bottom + AVOID_PAD && band.bottom > f.top - AVOID_PAD;
       setLift(meets ? Math.ceil(f.bottom + AVOID_PAD - band.top) : 0);
+      setShort(window.innerHeight < SHORT);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -132,6 +136,9 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
     };
   }, [pathname]);
   const tucked = !clear && !open && !focusWithin;
+  // On a short screen (a phone on its side) the open panel takes the corner back: rising over the footer's band
+  // would leave it too little height to show a whole button.
+  const rise = open && short ? 0 : lift;
 
   useEffect(() => {
     if (!open) return;
@@ -197,8 +204,8 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                it always clears the sticky header (z-100), so its title and
                close control stay on screen and clickable. */
             style={
-              lift
-                ? { marginBottom: lift, height: `min(560px, calc(100dvh - var(--header-h) - 7rem - ${lift}px))` }
+              rise
+                ? { marginBottom: rise, height: `min(560px, calc(100dvh - var(--header-h) - 7rem - ${rise}px))` }
                 : undefined
             }
             className="pointer-events-auto absolute bottom-18 inset-e-0 flex h-[min(560px,calc(100dvh-var(--header-h)-7rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[14px] border-2 border-charcoal bg-white"
@@ -242,7 +249,10 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
                 allow="clipboard-write; microphone"
               />
             ) : (
-              <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-5">
+              /* Its parts never shrink: on a short screen (or with the panel lifted over the
+                 footer) the list scrolls instead, so a two-line button label never crosses
+                 the button's border. */
+              <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-5 *:shrink-0">
                 <p className="text-body-lg font-bold text-ink">{s.fallbackTitle}</p>
                 <p className="text-body-lg leading-relaxed text-ink/70">{s.fallbackBody}</p>
                 <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="secondary" className="w-full">
@@ -271,7 +281,7 @@ export function ChatLauncher({ locale }: { locale: Locale }) {
         aria-label={open ? s.close : s.open}
         /* The lift is a transform, so the slot keeps its resting rect for
            the measurement above (and stays out of the pointer's way). */
-        style={lift ? { transform: `translateY(-${lift}px)` } : undefined}
+        style={rise ? { transform: `translateY(-${rise}px)` } : undefined}
         /* A Charcoal edge on a white disc: 17:1 against the Off-White page,
            and the disc itself stands out the same on a Charcoal band. */
         className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-charcoal bg-white text-ink transition-[opacity,translate,scale,visibility,background-color] duration-300 hover:bg-silver-gray ${

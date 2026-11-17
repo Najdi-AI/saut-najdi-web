@@ -122,11 +122,12 @@ export function CalInline({
           dir={locale === "ar" ? "rtl" : "ltr"}
         >
           {failed ? (
+            // A standalone link, so a 48px target however many lines it takes.
             <a
               href={`https://cal.com/${calLink}`}
               target="_blank"
               rel="noopener"
-              className="font-medium text-brand-cyan underline-offset-4 hover:underline"
+              className="inline-flex min-h-12 items-center justify-center font-medium text-brand-cyan underline-offset-4 hover:underline"
             >
               {locale === "ar"
                 ? "التقويم ما قدر يحمّل هنا — افتح صفحة الحجز مباشرة"

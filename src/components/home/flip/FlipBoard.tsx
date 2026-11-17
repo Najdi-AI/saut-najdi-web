@@ -61,6 +61,8 @@ export function FlipBoard({ locale, t, children }: { locale: Locale; t: FlipCopy
     <div className={cn(s.in, locale === "en" && s.en)}>
       <h2 id="book-title" className={s.h}>
         <span className="sr-only">{t.title}</span>
+        {/* A space, so the heading's text reads as two sentences (copy, find, reader views); the
+            visible line is a block, so it draws nothing. */}{" "}
         <span className={s.line} aria-hidden>
           {t.before.map((line, i) => (
             <Fragment key={line}>

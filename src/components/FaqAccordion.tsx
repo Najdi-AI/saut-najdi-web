@@ -23,10 +23,13 @@ const FaqRows = dynamic(() => import("./page/FaqRows"));
  * muted ink of the closed row, and drops the plus/minus that would promise
  * otherwise. The display rule sits in Tailwind's theme layer because the
  * preflight hides [hidden] with !important in the base layer, and only an
- * important declaration in an earlier layer outranks that.
+ * important declaration in an earlier layer outranks that. The panel's own
+ * open animation is off too: shown from the start, it has nothing to open
+ * from, and it would flicker for 200ms on load.
  */
 const SHOW_ANSWERS =
   "@layer theme{[data-faq] [data-slot=accordion-content][hidden]{display:block!important}}" +
+  "[data-faq] [data-slot=accordion-content]{animation:none!important}" +
   "[data-faq] [data-slot=accordion-content] > div{color:var(--muted-foreground)!important}" +
   "[data-faq] [data-slot=accordion-trigger-icon]{display:none!important}";
 

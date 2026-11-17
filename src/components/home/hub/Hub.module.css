@@ -354,3 +354,12 @@
     display: none;
   }
 }
+
+/* On paper the inbox is its final frame, whether or not the board was ever scrolled into view (clip D). */
+@media print {
+  .board .row {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}

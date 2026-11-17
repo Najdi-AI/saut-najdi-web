@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
@@ -6,12 +7,9 @@ import { localePath } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
-
-// Positional icons — one per `kinds` card and one per `sections` card.
-const kindIcons: IconName[] = ["chat", "doc", "globe", "check", "clock"];
-const sectionIcons: IconName[] = ["doc", "database", "chat", "check", "shield", "repeat"];
 
 /**
  * /product/knowledge-base (spec P2-22 row 7). Brief-per-feature: each section
@@ -24,7 +22,26 @@ const sectionIcons: IconName[] = ["doc", "database", "chat", "check", "shield", 
  * chat/text channels and the test chat, with no roadmap promise either. Do
  * not reintroduce live-call grounding. The OCR processing location is
  * disclosed here, not hidden.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, every question with
+ * its answer as a ruled row, the content types as flat tiles. pageFactory
+ * imports this module for its FAQ, so imports here stay server-only or
+ * already ship everywhere.
  */
+
+/** About's ruled row: the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
 
 const t = {
   ar: {
@@ -217,83 +234,60 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-linear-to-b/srgb from-surface to-canvas">
-        <div className="container py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      <PageHero title={s.h1} lead={s.intro}>
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       {/* Answer-first paragraph: the whole pipeline in one liftable capsule. */}
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.answer.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.answer.capsule}</p>
-        </Reveal>
-      </section>
-
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <h2 className="text-h2">{s.kindsHeading}</h2>
-            <p className="mt-3 text-body-lg leading-relaxed text-ink/70">{s.kindsLead}</p>
-          </Reveal>
-          <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {s.kinds.map((k, i) => (
-              <Reveal key={k.title} delay={i * 0.06}>
-                <article className="card card-hover group h-full">
-                  <IconChip name={kindIcons[i]} delay={i * 0.08} />
-                  <h3 className="mt-3 text-h4">{k.title}</h3>
-                  <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{k.body}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+      <Section>
+        <div className="border-t border-line">
+          <Row title={s.answer.heading}>
+            <p>{s.answer.capsule}</p>
+          </Row>
         </div>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        <div className="mx-auto max-w-3xl space-y-6">
-          {s.sections.map((sec, i) => (
-            <Reveal key={sec.title} delay={i * 0.04}>
-              <article className="card group border-s-4 border-s-brand-cyan">
-                <div className="flex items-start gap-4">
-                  <IconChip name={sectionIcons[i]} className="shrink-0" delay={i * 0.1} />
-                  <div>
-                    <h2 className="text-h4">{sec.title}</h2>
-                    <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.body}</p>
-                  </div>
-                </div>
-              </article>
+      <Section title={s.kindsHeading} lead={s.kindsLead}>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {s.kinds.map((k, i) => (
+            <Reveal key={k.title} delay={i * 0.06} className="h-full">
+              <div className="h-full bg-silver-gray p-6">
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{k.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{k.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
+      </Section>
 
-        {/* The processing-location disclosure belongs on this page, not only
-            on /security — OCR is the one step that leaves the region. */}
-        <Reveal className="mx-auto mt-10 max-w-3xl text-center">
-          <h2 className="text-h3">{s.disclosure.heading}</h2>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.disclosure.body}</p>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/70">
-            {s.disclosure.link.lead}
-            <Link
-              href={localePath(locale, s.disclosure.link.path)}
-              className="text-brand-blue underline-offset-4 hover:underline"
-            >
-              {s.disclosure.link.text}
-            </Link>
-            {"."}
-          </p>
-        </Reveal>
-
-        <div className="mx-auto mt-14 max-w-2xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
+      <Section>
+        <div className="border-t border-line">
+          {s.sections.map((sec, i) => (
+            <Row key={sec.title} title={sec.title} delay={i * 0.04}>
+              <p>{sec.body}</p>
+            </Row>
+          ))}
+          {/* The processing-location disclosure belongs on this page, not only
+              on /security — OCR is the one step that leaves the region. */}
+          <Row title={s.disclosure.heading}>
+            <p>{s.disclosure.body}</p>
+            <p>
+              {s.disclosure.link.lead}
+              <Link
+                href={localePath(locale, s.disclosure.link.path)}
+                className="font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
+              >
+                {s.disclosure.link.text}
+              </Link>
+              {"."}
+            </p>
+          </Row>
         </div>
-      </section>
+      </Section>
+
+      <Section title={s.faqHeading} layout="split">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <OmniChannels locale={locale} />
 

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import type { Locale } from "@/lib/i18n";
 import { DemoLink } from "@/components/DemoLink";
@@ -6,10 +7,9 @@ import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { SampleConversation } from "@/components/SampleConversation";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
-
-const pillarIcons: IconName[] = ["sliders", "headset", "doc", "clock"];
 
 /**
  * /product/human-handoff — the moat page (blueprint §6.2 ★). Scene first,
@@ -17,7 +17,26 @@ const pillarIcons: IconName[] = ["sliders", "headset", "doc", "clock"];
  * context, after-hours callbacks. Copy is deliberately brief — one idea per
  * block, outcome first. Warm mid-call phone transfer is still NOT promised
  * as GA (research §3.2); everything here is shipped.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, the scene beside its
+ * conversation, the pillars as flat tiles, and the remaining questions as
+ * ruled rows. pageFactory imports this module for its FAQ, so imports here
+ * stay server-only or already ship everywhere.
  */
+
+/** About's ruled row: the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
 
 const t = {
   ar: {
@@ -30,9 +49,9 @@ const t = {
       body: "عميل يحجز موعد أسنان مع الوكيل، وبعدها يسأل عن ألم بعد حشوة. الوكيل ما يجتهد بجواب طبي — يحوّل فوراً:",
     },
     pillars: {
-      // The old statement heading survives as the eyebrow: the H2 slot
-      // carries the question a buyer actually types.
-      eyebrow: "أربع ركائز — كلها شغالة اليوم",
+      // The old statement heading survives as the label over the pillars:
+      // the H2 slot carries the question a buyer actually types.
+      label: "أربع ركائز — كلها شغالة اليوم",
       heading: "متى تتحول المكالمة من الذكاء الاصطناعي لموظف بشري؟",
       capsule:
         "في أربع حالات: طلب العميل إنسان، أو بان انزعاجه، أو تكرر سؤال ما انحل، أو صار الموضوع أكبر من صلاحيات الوكيل. والقواعد أنت تحددها.",
@@ -94,7 +113,7 @@ const t = {
       body: "A customer books a dental appointment with the agent, then asks about pain after a filling. The agent doesn't improvise a medical answer — it hands over:",
     },
     pillars: {
-      eyebrow: "Four pillars — all live today",
+      label: "Four pillars — all live today",
       heading: "When does an AI call get handed to a human agent?",
       capsule:
         "Four triggers: the caller asks for a human, the caller sounds upset, a question stays unresolved, or the matter goes beyond the agent's remit. You set the rules.",
@@ -152,67 +171,48 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-gradient-soft" aria-hidden />
-        <div className="container relative py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      {/* Bottom room so the button doesn't sit on the trust strip's rule. */}
+      <PageHero title={s.h1} lead={s.intro} className="pb-12 sm:pb-16">
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       <TrustStrip locale={locale} />
 
-      <section className="container py-16">
-        <Reveal className="text-center">
-          <h2 className="text-h2">{s.scene.heading}</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.scene.body}</p>
-        </Reveal>
-        <div className="mt-10">
-          <SampleConversation locale={locale} />
-        </div>
-      </section>
+      <Section title={s.scene.heading} lead={s.scene.body} layout="split">
+        <SampleConversation locale={locale} />
+      </Section>
 
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow">{s.pillars.eyebrow}</p>
-            <h2 className="mt-2 text-h2">{s.pillars.heading}</h2>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.pillars.capsule}</p>
-          </Reveal>
-          <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
-            {s.pillars.items.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.08}>
-                <article className="card card-hover group h-full border-s-4 border-s-brand-blue">
-                  <IconChip name={pillarIcons[i]} delay={i * 0.1} />
-                  <h3 className="mt-3 text-h4">{p.title}</h3>
-                  <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{p.body}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+      <Section title={s.pillars.heading} lead={s.pillars.capsule}>
+        <p className="mb-6 text-[1.25rem] font-bold">{s.pillars.label}</p>
+        <div className="grid gap-2 md:grid-cols-2">
+          {s.pillars.items.map((p, i) => (
+            <Reveal key={p.title} delay={i * 0.08} className="h-full">
+              <div className="h-full bg-silver-gray p-6">
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{p.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        {/* Live listen/whisper/take-over is the page's strongest claim but it
-            was buried inside pillar 2 — it gets its own question heading so
-            the query «أقدر أسمع مكالمة وهي شغالة» lands on an answer. */}
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.live.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.live.capsule}</p>
-        </Reveal>
-        <Reveal className="mx-auto mt-14 max-w-2xl text-center">
-          <h2 className="text-h3">{s.after.heading}</h2>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.after.body}</p>
-        </Reveal>
-        <div className="mx-auto mt-12 max-w-2xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
+      <Section>
+        <div className="border-t border-line">
+          {/* Live listen/whisper/take-over is the page's strongest claim but it
+              was buried inside pillar 2 — it gets its own question heading so
+              the query «أقدر أسمع مكالمة وهي شغالة» lands on an answer. */}
+          <Row title={s.live.heading}>
+            <p>{s.live.capsule}</p>
+          </Row>
+          <Row title={s.after.heading}>
+            <p>{s.after.body}</p>
+          </Row>
         </div>
-      </section>
+      </Section>
+
+      <Section title={s.faqHeading} layout="split">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <OmniChannels locale={locale} />
 

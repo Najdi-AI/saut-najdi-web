@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
@@ -6,11 +7,9 @@ import { localePath } from "@/lib/i18n";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
-
-// Positional — one per step in `steps`.
-const stepIcons: IconName[] = ["badge", "sliders", "chat", "check", "repeat"];
 
 /**
  * /product/agent-builder (spec P2-22 row 9). Brief-per-step: a heading plus
@@ -22,7 +21,37 @@ const stepIcons: IconName[] = ["badge", "sliders", "chat", "check", "repeat"];
  * conversational dialect; the full terms live on /product/voice-agent. The
  * page describes authoring, testing and publishing — it never claims the
  * builder replaces the team onboarding step (no self-signup, blueprint §2.2).
+ *
+ * On the inner-page kit (About is the pilot): PageHero, every question with
+ * its answer as a ruled row, and the five steps as rows under their own H2.
+ * pageFactory imports this module for its FAQ, so imports here stay
+ * server-only or already ship everywhere.
  */
+
+/** About's ruled row: the heading on the start side, its text beside it. */
+function Row({
+  title,
+  delay = 0,
+  level = 2,
+  children,
+}: {
+  title: string;
+  delay?: number;
+  level?: 2 | 3;
+  children: ReactNode;
+}) {
+  const H = level === 3 ? "h3" : "h2";
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <H className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </H>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
 
 const t = {
   ar: {
@@ -179,75 +208,55 @@ export function AgentBuilderPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-linear-to-b/srgb from-surface to-canvas">
-        <div className="container py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/70">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
+      <PageHero title={s.h1} lead={s.intro}>
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
+
+      <Section>
+        <div className="border-t border-line">
+          <Row title={s.answer.heading}>
+            <p>{s.answer.capsule}</p>
+          </Row>
         </div>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.answer.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.answer.capsule}</p>
-        </Reveal>
-      </section>
-
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow">{s.stepsHeading}</p>
-            <p className="mt-2 text-body-lg leading-relaxed text-ink/70">{s.stepsLead}</p>
-          </Reveal>
-          <div className="mx-auto mt-10 max-w-3xl space-y-6">
-            {s.steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 0.04}>
-                <article className="card card-hover group border-s-4 border-s-brand-blue">
-                  <div className="flex items-start gap-4">
-                    <IconChip name={stepIcons[i]} className="shrink-0" delay={i * 0.1} />
-                    <div>
-                      <h2 className="text-h4">{step.title}</h2>
-                      <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{step.body}</p>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+      {/* The steps' label is their section's H2 now, so each step is an H3. */}
+      <Section title={s.stepsHeading} lead={s.stepsLead}>
+        <div className="border-t border-line">
+          {s.steps.map((step, i) => (
+            <Row key={step.title} title={step.title} level={3} delay={i * 0.04}>
+              <p>{step.body}</p>
+            </Row>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        {/* Honesty beat: the builder is real, but onboarding is done by the
-            team — there is no self-signup anywhere on this site. */}
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h3">{s.note.heading}</h2>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.note.body}</p>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/70">
-            {s.note.link.lead}
-            <Link
-              href={localePath(locale, s.note.link.path)}
-              className="text-brand-blue underline-offset-4 hover:underline"
-            >
-              {s.note.link.text}
-            </Link>
-            {"."}
-          </p>
-        </Reveal>
-
-        <Reveal className="mx-auto mt-12 max-w-3xl text-center">
-          <h2 className="text-h3">{s.who.heading}</h2>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.who.body}</p>
-        </Reveal>
-
-        <div className="mx-auto mt-14 max-w-2xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
+      <Section>
+        <div className="border-t border-line">
+          {/* Honesty beat: the builder is real, but onboarding is done by the
+              team — there is no self-signup anywhere on this site. */}
+          <Row title={s.note.heading}>
+            <p>{s.note.body}</p>
+            <p>
+              {s.note.link.lead}
+              <Link
+                href={localePath(locale, s.note.link.path)}
+                className="font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
+              >
+                {s.note.link.text}
+              </Link>
+              {"."}
+            </p>
+          </Row>
+          <Row title={s.who.heading}>
+            <p>{s.who.body}</p>
+          </Row>
         </div>
-      </section>
+      </Section>
+
+      <Section title={s.faqHeading} layout="split">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <OmniChannels locale={locale} />
 

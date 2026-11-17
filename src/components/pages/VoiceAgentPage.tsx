@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
@@ -7,12 +8,9 @@ import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
-
-// One icon per capability section, positional — keep this array the same
-// length as `sections` or a new card renders with an undefined icon name.
-const sectionIcons: IconName[] = ["wave", "headset", "check", "mic", "badge", "database", "doc"];
 
 /**
  * /product/voice-agent (spec P2-22 row 3) — the capability page behind the
@@ -31,7 +29,26 @@ const sectionIcons: IconName[] = ["wave", "headset", "check", "mic", "badge", "d
  *   consent-gated dialling claims.
  * - We publish no performance numbers about ourselves; the customer's own
  *   numbers live in the dashboard (see /product/dashboard).
+ *
+ * On the inner-page kit (About is the pilot): PageHero, then every question
+ * with its answer as a ruled row; the limits as flat tiles. pageFactory
+ * imports this module for its FAQ, so imports here stay server-only or
+ * already ship everywhere.
  */
+
+/** About's ruled row: the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
 
 const t = {
   ar: {
@@ -228,80 +245,56 @@ export function VoiceAgentPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-gradient-soft" aria-hidden />
-        <div className="container relative py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      {/* Bottom room so the button doesn't sit on the trust strip's rule. */}
+      <PageHero title={s.h1} lead={s.intro} className="pb-12 sm:pb-16">
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       <TrustStrip locale={locale} />
 
-      {/* Answer-first: the H2 is the query, the paragraph is a liftable answer. */}
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.answer.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.answer.capsule}</p>
-        </Reveal>
-      </section>
-
-      <section className="bg-surface py-16">
-        <div className="container">
-          <div className="mx-auto max-w-3xl space-y-6">
-            {s.sections.map((sec, i) => (
-              <Reveal key={sec.title} delay={i * 0.04}>
-                <article className="card card-hover group">
-                  <div className="flex items-start gap-4">
-                    <IconChip name={sectionIcons[i]} className="shrink-0" delay={i * 0.1} />
-                    <div>
-                      <h2 className="text-h4">{sec.title}</h2>
-                      <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.body}</p>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+      {/* Answer-first: the H2 is the query, the paragraph is a liftable answer;
+          each capability after it is its own question row. */}
+      <Section>
+        <div className="border-t border-line">
+          <Row title={s.answer.heading}>
+            <p>{s.answer.capsule}</p>
+          </Row>
+          {s.sections.map((sec, i) => (
+            <Row key={sec.title} title={sec.title} delay={i * 0.04}>
+              <p>{sec.body}</p>
+            </Row>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.limits.heading}</h2>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/70">{s.limits.lead}</p>
-        </Reveal>
-        <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+      <Section title={s.limits.heading} lead={s.limits.lead}>
+        <div className="grid gap-2 md:grid-cols-2">
           {s.limits.items.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.06}>
-              <article className="card h-full border-s-4 border-s-brand-purple">
-                <h3 className="text-h4">{item.title}</h3>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{item.body}</p>
-              </article>
+            <Reveal key={item.title} delay={i * 0.06} className="h-full">
+              <div className="h-full bg-silver-gray p-6">
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{item.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
-        <Reveal className="mx-auto mt-8 max-w-3xl text-center">
-          <p className="text-body-lg leading-relaxed text-ink/70">
+        <Reveal className="mt-8">
+          <p className="max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">
             {s.link.lead}
             <Link
               href={localePath(locale, s.link.path)}
-              className="text-brand-blue underline-offset-4 hover:underline"
+              className="font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
             >
               {s.link.text}
             </Link>
             {"."}
           </p>
         </Reveal>
+      </Section>
 
-        <div className="mx-auto mt-14 max-w-2xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
-        </div>
-      </section>
+      <Section title={s.faqHeading} layout="split">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <OmniChannels locale={locale} />
 

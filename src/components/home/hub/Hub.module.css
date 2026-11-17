@@ -286,8 +286,10 @@
   .msg {
     display: inline;
   }
+  /* A size container: a Latin name sizes itself to the tile (100cqi is the tile's width) below. */
   .side {
     gap: 6px;
+    container-type: inline-size;
   }
   .ch {
     align-content: center;
@@ -298,9 +300,13 @@
   .name {
     font-size: 22px;
   }
-  /* Two lines for "Any SIP phone system", so the tile rows stay as short as the Arabic ones. */
-  .name:lang(en) {
-    font-size: 20px;
+  /* Latin words are a step smaller: an English page (two lines for "Any SIP phone system", so the tile rows stay
+     as short as the Arabic ones) and a Latin name on the Arabic page. On the narrowest phones they shrink with the
+     tile, so "Grandstream" (6.21em wide in this face) stays one word at default text settings and the name only
+     breaks inside a word under WCAG 1.4.12 text spacing. The 32px is the tile's inline padding. */
+  .name:lang(en),
+  .name :lang(en) {
+    font-size: min(20px, (100cqi - 32px) / 6.3);
   }
   .kind {
     display: none;

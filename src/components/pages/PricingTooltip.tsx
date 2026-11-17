@@ -5,8 +5,11 @@ import { createPortal } from "react-dom";
 
 type HelpSection = { title: string; rows: { label: string; value: string }[]; note?: string };
 
-/** The page's one open tooltip: opening another closes it, so rows never stack tooltips. */
-let closeOpenTip: (() => void) | null = null;
+/**
+ * The page's one open tooltip: opening another closes it, so rows never stack tooltips.
+ * `tooltip` lets a hover see whether that one holds focus (opened with Enter).
+ */
+let openTip: { close: () => void; tooltip: { current: HTMLSpanElement | null } } | null = null;
 
 export function PricingTooltip({ children, explanation, id, sections }: { children: ReactNode; explanation: string; id: string; sections?: HelpSection[] }) {
   const trigger = useRef<HTMLSpanElement>(null);
@@ -19,7 +22,7 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
   }, []);
   const close = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    if (closeOpenTip === close) closeOpenTip = null;
+    if (openTip?.close === close) openTip = null;
     setPosition(null);
   }, []);
   // What keeps a tooltip open (WCAG 1.4.13): the pointer on the term or the tooltip, or focus in either.
@@ -44,7 +47,7 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
   }, [close, hideSoon, hovered]);
   useEffect(() => () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    if (closeOpenTip === close) closeOpenTip = null;
+    if (openTip?.close === close) openTip = null;
   }, [close]);
   useEffect(() => {
     if (position && focusHelp.current) {
@@ -71,21 +74,37 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
 
   const show = useCallback(() => {
     keepOpen();
-    if (closeOpenTip && closeOpenTip !== close) closeOpenTip();
-    closeOpenTip = close;
+    if (openTip && openTip.close !== close) {
+      // A pointer passing over this term never takes over a tooltip that holds focus: the keyboard
+      // reader keeps their place (closing it would drop focus to the page). Focus moving here has
+      // already left that tooltip, so a keyboard or click open still takes over.
+      if (openTip.tooltip.current?.contains(document.activeElement)) return;
+      openTip.close();
+    }
+    openTip = { close, tooltip };
     place();
   }, [close, keepOpen, place]);
 
-  // On scroll or resize an open tooltip follows its term while something still holds it, and
-  // closes otherwise; a scroll never reopens one or cancels a pending close.
+  // While open: on scroll or resize the tooltip follows its term while something still holds it,
+  // and closes otherwise (a scroll never reopens one or cancels a pending close). Escape closes it
+  // from anywhere on the page (WCAG 1.4.13 dismissible), without moving focus or stopping the
+  // event; the term and the tooltip keep their own Escape (the tooltip returns focus to its term).
   useEffect(() => {
     if (!position) return;
     const follow = () => (engaged() ? place() : close());
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      const target = event.target instanceof Node ? event.target : null;
+      if (target && (trigger.current?.contains(target) || tooltip.current?.contains(target))) return;
+      close();
+    };
     window.addEventListener("scroll", follow, true);
     window.addEventListener("resize", follow);
+    document.addEventListener("keydown", dismiss, true);
     return () => {
       window.removeEventListener("scroll", follow, true);
       window.removeEventListener("resize", follow);
+      document.removeEventListener("keydown", dismiss, true);
     };
   }, [position, engaged, place, close]);
 

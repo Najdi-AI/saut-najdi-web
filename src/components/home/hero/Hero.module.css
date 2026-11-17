@@ -295,6 +295,33 @@
   color: var(--muted-foreground);
   font-size: 15px;
 }
+/* A browser without popovers ignores the attribute: the transcript then stays open in the chip, across its full
+   width, and the buttons, which could not do anything there, are hidden. The taller chip would cover the H1 or the
+   lead where the chips float, so there the play and handoff chips join the flow at every width (the tablet layout). */
+@supports not selector(:popover-open) {
+  .script {
+    grid-column: 1 / -1;
+    inline-size: auto;
+    margin: 0;
+    padding: 12px 0 0;
+  }
+  .scriptOpen,
+  .scriptClose {
+    display: none;
+  }
+  .pair {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: center;
+    gap: 16px 24px;
+    margin-block-start: 32px;
+  }
+  .stage .pair > .chip {
+    position: relative;
+    inset: auto;
+  }
+}
 
 /* ---- motion */
 @media (prefers-reduced-motion: no-preference) {

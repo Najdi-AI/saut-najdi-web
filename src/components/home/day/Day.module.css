@@ -395,6 +395,25 @@
   font-size: 20px;
 }
 
+/* The list is held to the screen: its grids get one minmax(0, 1fr) column instead of an implicit auto one, which
+   grew to the widest unbreakable content (the call's wave row, the log rows) and pushed a 360px phone sideways under
+   WCAG 1.4.12 text spacing. Where a row is still too wide, the wave (a picture) gives up its end bars and the log's
+   result column wraps (the channel keeps its word); at default text settings nothing moves. The pinned board is
+   untouched. */
+.track:not([data-pin]) :is(.strip, .mo, .ui) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.track:not([data-pin]) .wave {
+  min-inline-size: 0;
+  overflow-x: clip;
+}
+.track:not([data-pin]) .log li {
+  grid-template-columns: 4.6em 1fr minmax(0, max-content);
+}
+.track:not([data-pin]) .log b {
+  overflow-wrap: break-word;
+}
+
 /* Wide, but not pinned (reduced motion, a short screen): time and line beside the fragment. */
 @media (min-width: 641px) {
   .track:not([data-pin]) .mo:not(.fill) {

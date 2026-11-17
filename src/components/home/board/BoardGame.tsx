@@ -16,6 +16,8 @@ const fill = (text: string, vars: Record<string, string>) => text.replace(/\{(\w
 const fillBdi = (text: string, vars: Record<string, string>): ReactNode =>
   text.split(/\{(\w+)\}/).map((part, i) => (i % 2 ? <bdi key={i} dir="ltr">{vars[part]}</bdi> : <Fragment key={i}>{part}</Fragment>));
 const shown = (k: Knob, v: number) => (k === "miss" || k === "book" ? `${v}%` : n0.format(v));
+/** A score figure's length, so the CSS can shrink a long one to fit its box. */
+const len = (v: string) => ({ "--n": v.length }) as CSSProperties;
 
 const PHONE = "M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z";
 const MISSED = "M6.5 5.5 12 11l7-7-1-1-6 6-4.5-4.5H11V3H5v6h1.5V5.5zm17.21 11.67C20.66 14.27 16.54 12.5 12 12.5S3.34 14.27.29 17.17c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .39.23.74.56.9.98.49 1.87 1.12 2.67 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.27-.11-.52-.29-.7z";
@@ -38,6 +40,7 @@ export function BoardGame({ t }: { t: BoardCopy }) {
   const [step, setStep] = useState(0);
   const [ready, setReady] = useState(false);
   const ctl = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLDivElement>(null);
   const refocus = useRef(false);
   const b = boardOf(inputs);
   const w = weights(b);
@@ -101,6 +104,30 @@ export function BoardGame({ t }: { t: BoardCopy }) {
     }
   }, [phase]);
 
+  // A figure wider than its tile (a 4-digit value under WCAG 1.4.12 text spacing, which CSS can't
+  // see) gives way to the icon, as on narrow tiles; the value stays in the tile's label. This
+  // watches the list and every figure (its box is its text's width, shown or not) and marks the
+  // tiles a frame later, outside the observer's callback.
+  useEffect(() => {
+    const box = list.current;
+    if (!box || typeof ResizeObserver === "undefined") return;
+    let frame = 0;
+    const mark = () => {
+      const tiles = [...box.children];
+      const tight = tiles.map((tile) => [...tile.querySelectorAll<HTMLElement>(`.${s.val}`)].some((v) => v.offsetWidth > tile.clientWidth - 4));
+      tiles.forEach((tile, i) => tile.toggleAttribute("data-tight", tight[i]));
+    };
+    const sizes = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(mark);
+    });
+    for (const el of [box, ...box.querySelectorAll(`.${s.val}`)]) sizes.observe(el);
+    return () => {
+      sizes.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [b.calls]);
+
   const go = (next: Phase) => {
     refocus.current = !!ctl.current?.contains(document.activeElement);
     setStep(0);
@@ -122,20 +149,22 @@ export function BoardGame({ t }: { t: BoardCopy }) {
   const gain = phase === "profit" ? b.day : phase === "saving" ? missed.slice(0, step).reduce((a, i) => a + w[i] * b.per, 0) : 0;
   const month = phase === "loss" || phase === "saving" ? -b.month : phase === "profit" ? b.month : 0;
   const size = b.calls <= 12 ? "s" : b.calls <= 24 ? "m" : "l";
+  const lost = signed(-loss);
+  const won = signed(gain);
 
   return (
     <>
       <div className={s.score}>
         <div className={s.box}>
           <p className={s.fig}>
-            <bdi dir="ltr" data-tone={loss ? "loss" : undefined}>{signed(-loss)}</bdi>
+            <bdi dir="ltr" data-tone={loss ? "loss" : undefined} style={len(lost)}>{lost}</bdi>
             <small>{t.perDay}</small>
           </p>
           <span className={s.name}>{t.without}</span>
         </div>
         <div className={s.box}>
           <p className={s.fig}>
-            <bdi dir="ltr" data-tone={gain ? "gain" : undefined}>{signed(gain)}</bdi>
+            <bdi dir="ltr" data-tone={gain ? "gain" : undefined} style={len(won)}>{won}</bdi>
             <small>{t.perDay}</small>
           </p>
           <span className={s.name}>{t.with}</span>
@@ -155,7 +184,7 @@ export function BoardGame({ t }: { t: BoardCopy }) {
       </div>
 
       <div className={s.play}>
-        <div className={s.tiles} role="list" aria-label={t.tiles} data-size={size}>
+        <div ref={list} className={s.tiles} role="list" aria-label={t.tiles} data-size={size}>
           {w.map((x, i) => {
             const c = clockOf(i, b.calls);
             const time = `${c.hm} ${c.pm ? t.pm : t.am}`;

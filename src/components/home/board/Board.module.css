@@ -61,6 +61,7 @@
   gap: 6px;
   padding: 20px 24px 22px;
   background: var(--card);
+  container-type: inline-size;
 }
 .fig {
   display: flex;
@@ -71,6 +72,12 @@
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums lining-nums;
+}
+/* A long figure (up to −120,000 a day) shrinks to fit its box, also under WCAG 1.4.12 letter
+   spacing: --n is its length, and n characters of this face with 0.12em spacing measure under
+   0.7n + 0.4em (−120,000 is 5.66em). Short figures keep the size above. */
+.fig bdi {
+  font-size: min(1em, 100cqi / (var(--n, 1) * 0.7 + 0.4));
 }
 .fig small,
 .name {
@@ -153,6 +160,7 @@
   grid-area: 1 / 1;
   min-inline-size: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   padding: 10px 11px;
   background: var(--card);
@@ -172,10 +180,12 @@
 .face[data-side="back"] .time {
   color: var(--color-charcoal);
 }
+/* One column as wide as the face's content: a figure a little wider stays centred, into the padding. */
 .mid {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   align-content: center;
   gap: 4px;
@@ -277,6 +287,13 @@
   .tile[data-kind] .val {
     display: none;
   }
+}
+/* Too wide for its tile all the same (a 4-digit value under WCAG 1.4.12 spacing, which CSS can't
+   see, so BoardGame measures and marks it): the icon only, as above. The figure keeps its box,
+   unseen and out of the flow, so it is measured again when the spacing or the value changes. */
+.tile[data-tight] .val {
+  position: absolute;
+  visibility: hidden;
 }
 @media (prefers-reduced-motion: no-preference) {
   .tile[data-ring] .ic {
@@ -381,7 +398,7 @@
     grid-row: auto;
   }
   .score {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .month {
     grid-column: 1 / -1;

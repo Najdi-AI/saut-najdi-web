@@ -8,6 +8,7 @@ import { Num } from "../ui/Num";
 import { useReducedMotion } from "../ui/useReducedMotion";
 import { Words } from "../ui/Words";
 import { CLIP_TURNS, DIALECTS, SAMPLE, heroCopy, type Dialect } from "./copy";
+import { useStageFit } from "./useStageFit";
 // The clip's own timings file (scripts/make-home-voice.mjs writes both).
 import clip from "../../../../public/audio/home-hero.json";
 import s from "./Hero.module.css";
@@ -121,6 +122,9 @@ export function PlayChip({ locale, children }: { locale: Locale; children: React
   const playing = status === "playing";
   const [pos, setPos] = useState({ on: 0, left: LENGTH_S });
   const [line, setLine] = useState({ k: 0, n: TURNS[0].words });
+  // The hero's fit check lives with this chip, the one island that is on every hero (useStageFit).
+  const rootRef = useRef<HTMLDivElement>(null);
+  useStageFit(rootRef);
 
   // Follow the clip only while it plays; state changes only when a bar, a
   // second or a word ticks over, not on every frame.
@@ -160,6 +164,7 @@ export function PlayChip({ locale, children }: { locale: Locale; children: React
 
   return (
     <div
+      ref={rootRef}
       className={`${s.chip} ${s.playChip} ${s.rise}`}
       data-reveal=""
       data-playing={playing || undefined}

@@ -414,6 +414,25 @@
     margin-block-start: 40px;
   }
 }
+/* The same layout on a wide screen while the fit check finds a floating chip on the H1's or the lead's words
+   (data-flow, useStageFit: WCAG 1.4.12 text spacing or enlarged text). Never set at 1180px and below. */
+.hero[data-flow] .dialect {
+  inset-inline-start: 0;
+}
+.hero[data-flow] .pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 24px;
+  margin-block-start: 32px;
+}
+.hero[data-flow] .stage .pair > .chip {
+  position: relative;
+  inset: auto;
+}
+.hero[data-flow] .stage .lead {
+  margin-block-start: 40px;
+}
 
 /* ---- phone: its own composition, chips in the flow under and over the H1.
    `.stage` raises these over the English places above. */

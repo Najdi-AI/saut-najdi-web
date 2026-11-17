@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
@@ -18,7 +18,8 @@ import {
 import { CalButton } from "@/components/CalButton";
 import { DemoCta } from "@/components/DemoCta";
 import { Reveal } from "@/components/Reveal";
-import { IconChip } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 
 /**
  * /contact (blueprint §6.8) — «كلمنا». No phone number (telecom gate).
@@ -30,7 +31,29 @@ import { IconChip } from "@/components/icons";
  * channel is fastest, why there's no number, where the compliance
  * answers live, and what «ما في تسجيل ذاتي» actually means — the four
  * questions people otherwise send an email to ask.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, the form as a flat
+ * panel beside the two channels, the company details, then each question
+ * with its answer as a ruled row. This module is a client component (the
+ * form's state), so the kit pieces ship in /contact's own bundle only.
  */
+
+/** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
+
+/** The underlined link of the inner pages (About, PR 11). */
+const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
 
 /**
  * Section bodies are part arrays, not plain strings, so a sentence can
@@ -153,21 +176,22 @@ export function ContactPage({ locale }: { locale: Locale }) {
     )}&body=${encodeURIComponent(body)}`;
   };
 
+  // Square, as NewsletterSignup's field: white on the panel, a muted-ink edge (5.57:1 on Silver Gray), and the
+  // site's focus outline (the old border-only focus hid the outline).
   const field =
-    "w-full rounded-xl border border-line bg-surface px-4 py-3 text-body-lg text-ink placeholder:text-ink/55 focus:border-brand-blue focus:outline-hidden";
+    "w-full rounded-none border border-muted-foreground bg-white px-4 py-3 text-body-lg text-ink placeholder:text-muted-foreground";
+  const label = "mb-1.5 block text-body font-medium text-muted-foreground";
 
   return (
     <>
-      <section className="container py-14">
-        <div className="text-center">
-          <h1 className="text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-4 max-w-xl text-body-lg leading-relaxed text-ink/70">{s.lead}</p>
-          <p className="mx-auto mt-2 max-w-xl text-body text-ink/60">{s.onboardNote}</p>
-        </div>
+      <PageHero title={s.h1} lead={s.lead}>
+        <p className="max-w-[52ch] text-body-lg text-muted-foreground">{s.onboardNote}</p>
+      </PageHero>
 
-        <div className="mx-auto mt-10 grid max-w-4xl gap-8 md:grid-cols-[1.4fr_1fr]">
+      <Section>
+        <div className="grid gap-2 lg:grid-cols-12">
           <form
-            className="card space-y-4"
+            className="space-y-4 bg-silver-gray p-6 sm:p-8 lg:col-span-7"
             onSubmit={(e) => {
               e.preventDefault();
               mailto();
@@ -175,39 +199,35 @@ export function ContactPage({ locale }: { locale: Locale }) {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className="mb-1.5 block text-body font-medium text-ink/70">{s.name}</span>
+                <span className={label}>{s.name}</span>
                 <input required className={field} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
               </label>
               <label className="block">
-                <span className="mb-1.5 block text-body font-medium text-ink/70">{s.email}</span>
+                <span className={label}>{s.email}</span>
                 <input required type="email" dir="ltr" className={field} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </label>
             </div>
             <label className="block">
-              <span className="mb-1.5 block text-body font-medium text-ink/70">{s.subject}</span>
+              <span className={label}>{s.subject}</span>
               <input className={field} value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-body font-medium text-ink/70">{s.message}</span>
+              <span className={label}>{s.message}</span>
               <textarea required rows={5} className={field} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
             </label>
             <button type="submit" className="btn-primary w-full">{s.send}</button>
-            <p className="text-center text-body-sm text-ink/60">{s.formNote}</p>
+            <p className="text-body text-muted-foreground">{s.formNote}</p>
           </form>
 
-          <div className="space-y-4">
-            <div className="card group">
-              <IconChip name="mail" />
-              <h2 className="mt-3 text-h5">{s.emailHeading}</h2>
-              <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className="mt-2 inline-block py-1.5 text-body-lg text-brand-blue hover:underline">
+          <div className="grid content-start gap-2 lg:col-span-5">
+            <div className="border border-line p-6 sm:p-8">
+              <h2 className="text-[1.25rem] leading-[1.3] font-bold">{s.emailHeading}</h2>
+              <a href={`mailto:${SUPPORT_EMAIL}`} dir="ltr" className={`mt-1 inline-flex min-h-12 items-center text-body-lg ${link}`}>
                 {SUPPORT_EMAIL}
               </a>
             </div>
-            <div className="card group text-center">
-              <div className="flex justify-center">
-                <IconChip name="phone" delay={0.15} />
-              </div>
-              <p className="mt-3 text-body-lg text-ink/70">{s.or}</p>
+            <div className="border border-line p-6 sm:p-8">
+              <p className="text-body-lg text-muted-foreground">{s.or}</p>
               <div className="mt-3">
                 <CalButton calLink={CAL_LINK_QUICK} locale={locale} variant="secondary" className="w-full">
                   {s.quick}
@@ -217,57 +237,56 @@ export function ContactPage({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <section className="card mx-auto mt-10 max-w-4xl" aria-label={s.companyHeading}>
-          <h2 className="text-h4">{s.companyHeading}</h2>
-          <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+        <section className="mt-2 bg-silver-gray p-6 sm:p-8" aria-label={s.companyHeading}>
+          <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium">{s.companyHeading}</h2>
+          <dl className="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2">
             <div>
-              <dt className="text-body-sm text-ink/60">{s.sellerLabel}</dt>
-              <dd className="mt-1 text-body text-ink">{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</dd>
+              <dt className="text-body text-muted-foreground">{s.sellerLabel}</dt>
+              <dd className="mt-1 text-body-lg">{locale === "ar" ? SELLER_NAME_AR : SELLER_NAME}</dd>
             </div>
             <div>
-              <dt className="text-body-sm text-ink/60">{s.crLabel}</dt>
-              <dd className="mt-1 text-body text-ink" dir="ltr">{SELLER_CR}</dd>
+              <dt className="text-body text-muted-foreground">{s.crLabel}</dt>
+              <dd className="mt-1 text-body-lg" dir="ltr">{SELLER_CR}</dd>
             </div>
             <div>
-              <dt className="text-body-sm text-ink/60">{s.vatLabel}</dt>
-              <dd className="mt-1 text-body text-ink" dir="ltr">{VAT_NUMBER}</dd>
+              <dt className="text-body text-muted-foreground">{s.vatLabel}</dt>
+              <dd className="mt-1 text-body-lg" dir="ltr">{VAT_NUMBER}</dd>
             </div>
             <div>
-              <dt className="text-body-sm text-ink/60">{s.billingLabel}</dt>
-              <dd className="mt-1 text-body">
-                <a href={`mailto:${BILLING_EMAIL}`} dir="ltr" className="text-brand-blue hover:underline">{BILLING_EMAIL}</a>
+              <dt className="text-body text-muted-foreground">{s.billingLabel}</dt>
+              <dd className="text-body-lg">
+                <a href={`mailto:${BILLING_EMAIL}`} dir="ltr" className={`inline-flex min-h-12 items-center ${link}`}>{BILLING_EMAIL}</a>
               </dd>
             </div>
             <div className="sm:col-span-2">
-              <dt className="text-body-sm text-ink/60">{s.addressLabel}</dt>
-              <dd className="mt-1 text-body text-ink">
+              <dt className="text-body text-muted-foreground">{s.addressLabel}</dt>
+              <dd className="mt-1 text-body-lg">
                 <address className="not-italic">{locale === "ar" ? SELLER_ADDRESS_AR : SELLER_ADDRESS_EN}</address>
               </dd>
             </div>
           </dl>
         </section>
+      </Section>
 
-        <div className="mx-auto mt-14 max-w-3xl space-y-6">
+      <Section>
+        <div className="border-t border-line">
           {s.sections.map((sec, i) => (
-            <Reveal key={sec.h} delay={i * 0.04}>
-              <article className="card">
-                <h2 className="text-h4">{sec.h}</h2>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/80">
-                  {sec.p.map((part, j) =>
-                    typeof part === "string" ? (
-                      part
-                    ) : (
-                      <Link key={j} href={localePath(locale, part.path)} className="text-brand-blue hover:underline">
-                        {part.text}
-                      </Link>
-                    ),
-                  )}
-                </p>
-              </article>
-            </Reveal>
+            <Row key={sec.h} title={sec.h} delay={i * 0.04}>
+              <p>
+                {sec.p.map((part, j) =>
+                  typeof part === "string" ? (
+                    part
+                  ) : (
+                    <Link key={j} href={localePath(locale, part.path)} className={link}>
+                      {part.text}
+                    </Link>
+                  ),
+                )}
+              </p>
+            </Row>
           ))}
         </div>
-      </section>
+      </Section>
 
       <DemoCta locale={locale} />
     </>

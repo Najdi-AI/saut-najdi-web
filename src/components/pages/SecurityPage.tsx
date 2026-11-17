@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
@@ -5,12 +6,9 @@ import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
 import type { FaqItem } from "@/lib/schema";
-
-// One icon per section, positional — keep this array the same length as
-// `sections` or a new card renders with an undefined icon name.
-const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", "badge"];
 
 /**
  * /security (blueprint §6.4) — PDPL-led, precise فصحى (the §3 tone
@@ -18,7 +16,29 @@ const sectionIcons: IconName[] = ["shield", "database", "mic", "globe", "lock", 
  * never "everything inside Saudi Arabia" (§2.2). Every section heading is a
  * question with its answer directly underneath, kept short — the disclosure
  * stays complete, the prose around it does not.
+ *
+ * On the inner-page kit (About is the pilot): a Charcoal PageHero (the page
+ * kept its dark hero), each question with its answer as a ruled row, the FAQ
+ * in the split layout. pageFactory imports this module for `securityFaq`, so
+ * imports here stay server-only or already ship everywhere.
  */
+
+/** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
+function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
+  return (
+    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
+      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
+        {title}
+      </h2>
+      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+        {children}
+      </div>
+    </Reveal>
+  );
+}
+
+/** The underlined link of the inner pages (About, PR 11). */
+const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
 
 const t = {
   ar: {
@@ -159,62 +179,46 @@ export function SecurityPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="bg-navy py-14 text-white">
-        <div className="container text-center">
-          <h1 className="text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-brand-cyan">{s.lead}</p>
-          <p className="mx-auto mt-4 max-w-2xl text-body-lg leading-relaxed text-white/75">{s.intro}</p>
-        </div>
-      </section>
+      <PageHero tone="dark" title={s.h1} lead={s.lead}>
+        <p className="max-w-[52ch] text-[1.0625rem] leading-[1.7] text-muted-foreground sm:text-[1.125rem]">{s.intro}</p>
+      </PageHero>
 
-      <section className="container py-16">
-        <div className="mx-auto max-w-3xl space-y-6">
+      <Section>
+        <div className="border-t border-line">
           {s.sections.map((sec, i) => (
-            <Reveal key={sec.title} delay={i * 0.04}>
-              <article className="card group">
-                <div className="flex items-start gap-4">
-                  <IconChip name={sectionIcons[i]} className="shrink-0" />
-                  <div>
-                    <h2 className="text-h4">{sec.title}</h2>
-                    <p className="mt-3 text-body-lg leading-relaxed text-ink/80">{sec.body}</p>
-                    {sec.link && (
-                      <p className="mt-3 text-body-lg leading-relaxed text-ink/70">
-                        {sec.link.lead}
-                        <Link
-                          href={localePath(locale, sec.link.path)}
-                          className="text-brand-blue underline-offset-4 hover:underline"
-                        >
-                          {sec.link.text}
-                        </Link>
-                        {"."}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </article>
-            </Reveal>
+            <Row key={sec.title} title={sec.title} delay={i * 0.04}>
+              <p>{sec.body}</p>
+              {sec.link && (
+                <p>
+                  {sec.link.lead}
+                  <Link href={localePath(locale, sec.link.path)} className={link}>
+                    {sec.link.text}
+                  </Link>
+                  {"."}
+                </p>
+              )}
+            </Row>
           ))}
         </div>
+      </Section>
 
-        <div className="mx-auto mt-12 max-w-3xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
-          <p className="mt-6 text-center text-body-lg text-ink/65">
-            {s.legalLinks}
-            <Link href={localePath(locale, "privacy")} className="text-brand-blue hover:underline">
-              {locale === "ar" ? "سياسة الخصوصية" : "Privacy policy"}
-            </Link>
-            {" · "}
-            <Link href={localePath(locale, "terms")} className="text-brand-blue hover:underline">
-              {locale === "ar" ? "شروط الخدمة" : "Terms of service"}
-            </Link>
-            {" · "}
-            <Link href={localePath(locale, "dpa")} className="text-brand-blue hover:underline">
-              {locale === "ar" ? "اتفاقية معالجة البيانات" : "DPA"}
-            </Link>
-          </p>
-        </div>
-      </section>
+      <Section title={s.faqHeading} layout="split">
+        <FaqAccordion items={s.faq} />
+        <p className="mt-8 text-body-lg text-muted-foreground">
+          {s.legalLinks}
+          <Link href={localePath(locale, "privacy")} className={`text-foreground ${link}`}>
+            {locale === "ar" ? "سياسة الخصوصية" : "Privacy policy"}
+          </Link>
+          {" · "}
+          <Link href={localePath(locale, "terms")} className={`text-foreground ${link}`}>
+            {locale === "ar" ? "شروط الخدمة" : "Terms of service"}
+          </Link>
+          {" · "}
+          <Link href={localePath(locale, "dpa")} className={`text-foreground ${link}`}>
+            {locale === "ar" ? "اتفاقية معالجة البيانات" : "DPA"}
+          </Link>
+        </p>
+      </Section>
 
       <DemoCta locale={locale} />
     </>

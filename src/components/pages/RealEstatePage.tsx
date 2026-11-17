@@ -6,7 +6,9 @@ import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 import type { FaqItem } from "@/lib/schema";
 
 /**
@@ -27,10 +29,14 @@ import type { FaqItem } from "@/lib/schema";
  * change — same bubble language, server rendered, Reveal for the entrance.
  */
 
-// Positional — keep each array the same length as the section it feeds.
-const handleIcons: IconName[] = ["phone", "estate", "calendar", "doc", "chat", "clock"];
-const kbIcons: IconName[] = ["estate", "badge", "doc", "calendar", "globe", "chat"];
-const afterIcons: IconName[] = ["chart", "calendar", "people"];
+// On the inner-page kit (About is the pilot): PageHero, groups under a Section head with their label
+// over the items, the boundary on a Charcoal band, the template note as a ruled row. pageFactory imports
+// this module for its FAQ, so imports here stay server-only or already ship everywhere.
+// Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
+const text = "max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]";
+const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
+const label = "mb-6 text-[1.25rem] font-bold";
+const tile = "h-full bg-silver-gray p-6";
 
 type Dialogue = { tag: string; caller: string; agent: string; note: string };
 
@@ -41,7 +47,7 @@ const t = {
       "اللي شاف إعلانك ما ينتظر — إذا ما رد أحد يدق على الإعلان اللي تحته. وكيلك يرد على كل مكالمة: متاحة ولا لا، السعر والشروط، ومعاينة محجوزة.",
     cta: "احجز عرضاً",
     calls: {
-      eyebrow: "المكالمات اللي تفوتك",
+      label: "المكالمات اللي تفوتك",
       heading: "وش المكالمات اللي تفوتك وأنت في معاينة؟",
       body: "إعلان واحد يجيب عشرات الاتصالات، أكثرها بعد الدوام. وكل مكالمة تفوتك عميل راح لمكتب ثاني.",
       note: "حوارات توضيحية — مو تسجيلات حقيقية.",
@@ -85,14 +91,14 @@ const t = {
       ] as Dialogue[],
     },
     boundary: {
-      eyebrow: "الاتصال الصادر",
+      label: "الاتصال الصادر",
       heading: "وكيلك يقدر يتصل على المستفسر؟",
       body: "إي — من اللوحة. تختار العميل أو تكتب رقمه وتختار وكيلك، والمنصة تطلع المكالمة والوكيل يمسك الحوار. وتنسجل وتتلخص زي أي مكالمة. تحتاج بس تحدد خط الاتصال الصادر.",
       body2:
         "واللي ما يصير: اتصال آلي على قائمة أرقام. كل مكالمة صادرة يبدأها موظف من فريقك.",
     },
     handles: {
-      eyebrow: "وش يتكفل فيه الوكيل",
+      label: "وش يتكفل فيه الوكيل",
       heading: "وش يتكفل فيه الوكيل بنفسه؟",
       capsule:
         "يرد على كل مكالمة، يقول إذا الوحدة متاحة ويعطي سعرها وشروطها، ويحجز المعاينة.",
@@ -124,7 +130,7 @@ const t = {
       ],
     },
     human: {
-      eyebrow: "وش يروح لموظفك",
+      label: "وش يروح لموظفك",
       heading: "وش يروح لموظفك؟",
       capsule:
         "أربع حالات تروح لموظفك على طول، والقواعد تحددها أنت من اللوحة.",
@@ -152,7 +158,7 @@ const t = {
       outroTail: " وفريقك يقدر يتابع المكالمة وهي شغالة ويستلمها بضغطة.",
     },
     kb: {
-      eyebrow: "قاعدة المعرفة",
+      label: "قاعدة المعرفة",
       heading: "وش تحط في قاعدة معرفة مكتبك؟",
       body: "منها يعرف الوكيل وحداتك وشروطك. ترفع ملفاتك أو تكتبها أسئلة وأجوبة، وتجربها في المحادثة التجريبية قبل النشر:",
       items: [
@@ -185,7 +191,7 @@ const t = {
         "ابدأ بجدول الوحدات وشروط العقد، وزد كل أسبوع من سجل مكالماتك.",
     },
     after: {
-      eyebrow: "بعد المكالمة",
+      label: "بعد المكالمة",
       heading: "وبعد ما تسكر المكالمة؟",
       body: "كل مكالمة عندك بتسجيلها ونصها وملخصها العربي. واللوحة تعطيك أرقام مكالماتك — العدد، ونصيب الوكيل منها، ومعدل المدة — مع تصدير CSV أو PDF.",
       items: [
@@ -246,7 +252,7 @@ const t = {
       "Someone who has just seen your listing will not wait. They call, and if nobody answers they call the listing below yours. The Saut Najdi agent answers every one: whether the unit is available, its price and terms from your own data, and a viewing booked into a slot that suits your rep.",
     cta: "Book a demo",
     calls: {
-      eyebrow: "The calls you're missing",
+      label: "The calls you're missing",
       heading: "Which calls are you missing while you're out at a viewing?",
       body: "One listing produces dozens of calls, most of them after hours or at the weekend. Each unanswered one is a buyer who went to another office.",
       note: "Illustrative dialogue — not a real recording.",
@@ -290,14 +296,14 @@ const t = {
       ] as Dialogue[],
     },
     boundary: {
-      eyebrow: "Outbound calling",
+      label: "Outbound calling",
       heading: "Can the agent call an enquirer back?",
       body: "Yes — from the dashboard. Pick a customer or type a number, choose a published agent, and the platform places a real call with the agent holding the conversation. It is recorded, transcribed and summarised like any other call. You only need a default outbound line set on your account.",
       body2:
         "What it does not do is dial a list by itself. Every outbound call is started by someone on your team.",
     },
     handles: {
-      eyebrow: "What the agent handles",
+      label: "What the agent handles",
       heading: "What does the agent handle on its own?",
       capsule:
         "It answers every inbound call, says whether a unit is available and gives its price and terms, and books the viewing — with anything else passed to your employee in context.",
@@ -329,7 +335,7 @@ const t = {
       ],
     },
     human: {
-      eyebrow: "What goes to a human",
+      label: "What goes to a human",
       heading: "What goes to your employee?",
       capsule:
         "Four situations transfer straight away: a request for a person, price negotiation, finance and legal procedure, and tenant complaints. You set the rules from the dashboard.",
@@ -357,7 +363,7 @@ const t = {
       outroTail: " Your team can also follow a live call, listen in, and take it over in one click.",
     },
     kb: {
-      eyebrow: "Your knowledge base",
+      label: "Your knowledge base",
       heading: "What belongs in your office's knowledge base?",
       body: "It's where the agent learns your units, projects and terms. Upload files or write question-and-answer pairs, and check every answer in the test chat before publishing. These matter most:",
       items: [
@@ -390,7 +396,7 @@ const t = {
         "Start with the unit register and the contract terms, then add each week from your call log. The sharper it is, the more of your reps' hours go to viewings and closings.",
     },
     after: {
-      eyebrow: "After the call",
+      label: "After the call",
       heading: "And once the call ends?",
       body: "Every call is kept in your dashboard with its recording, transcript and Arabic summary. The dashboard also shows your own numbers — call volume, the share the agent handled end to end, average duration — with CSV and PDF export.",
       items: [
@@ -450,23 +456,21 @@ const t = {
 /** One mini-dialogue card — the SampleConversation bubble language, static. */
 function DialogueCard({ item, delay }: { item: Dialogue; delay: number }) {
   return (
-    <Reveal delay={delay}>
-      <article className="card h-full">
-        <p className="eyebrow">{item.tag}</p>
+    <Reveal delay={delay} className="h-full">
+      <div className={tile}>
+        <p className="text-[0.9375rem] font-bold text-muted-foreground">{item.tag}</p>
         <div className="mt-4 space-y-3">
           <div className="flex justify-start">
-            <p className="max-w-[90%] rounded-2xl rounded-es-md bg-canvas px-4 py-3 text-body-lg leading-relaxed text-ink">
-              {item.caller}
-            </p>
+            <p className="max-w-[90%] rounded-[14px] bg-background px-4 py-3 text-body-lg leading-relaxed">{item.caller}</p>
           </div>
           <div className="flex justify-end">
-            <p className="max-w-[90%] rounded-2xl rounded-ee-md bg-ink px-4 py-3 text-body-lg leading-relaxed text-canvas">
+            <p className="max-w-[90%] rounded-[14px] bg-charcoal px-4 py-3 text-body-lg leading-relaxed text-off-white">
               {item.agent}
             </p>
           </div>
         </div>
-        <p className="mt-4 text-body leading-relaxed text-ink/65">{item.note}</p>
-      </article>
+        <p className="mt-4 text-body leading-relaxed text-muted-foreground">{item.note}</p>
+      </div>
     </Reveal>
   );
 }
@@ -475,164 +479,126 @@ export function RealEstatePage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-gradient-soft" aria-hidden />
-        <div className="container relative py-14 text-center">
-          <span className="mx-auto mb-4 flex justify-center">
-            <IconChip name="estate" />
-          </span>
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      {/* Bottom room so the button doesn't sit on the trust strip's rule. */}
+      <PageHero title={s.h1} lead={s.intro} className="pb-12 sm:pb-16">
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       <TrustStrip locale={locale} />
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{s.calls.eyebrow}</p>
-          <h2 className="mt-2 text-h2">{s.calls.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.calls.body}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <Section title={s.calls.heading} lead={s.calls.body}>
+        <p className={label}>{s.calls.label}</p>
+        <div className="grid gap-2 md:grid-cols-2">
           {s.calls.items.map((item, i) => (
             <DialogueCard key={item.tag} item={item} delay={(i % 2) * 0.08} />
           ))}
         </div>
-        <p className="mt-6 text-center text-body-sm text-ink/60">{s.calls.note}</p>
-      </section>
+        <p className="mt-6 text-body-sm text-muted-foreground">{s.calls.note}</p>
+      </Section>
 
       {/* The sector's one boundary worth stating outright: outbound calls are
           placed by a person from the dashboard; nothing auto-dials a list. */}
-      <section className="bg-navy py-14 text-white">
-        <Reveal className="container mx-auto max-w-3xl text-center">
-          <p className="eyebrow text-brand-cyan!">{s.boundary.eyebrow}</p>
-          <h2 className="mt-2 text-h3">{s.boundary.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-white/80">{s.boundary.body}</p>
-          <p className="mt-3 text-body-lg leading-relaxed text-white/80">{s.boundary.body2}</p>
+      <Section tone="dark">
+        <Reveal className="grid gap-6 lg:grid-cols-12">
+          <h2 className="font-display text-[clamp(32px,3.9vw,56px)] leading-[1.25] font-medium text-balance lg:col-span-5">
+            {s.boundary.heading}
+          </h2>
+          <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+            <p className="text-[1.25rem] font-bold">{s.boundary.label}</p>
+            <p>{s.boundary.body}</p>
+            <p>{s.boundary.body2}</p>
+          </div>
         </Reveal>
-      </section>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{s.handles.eyebrow}</p>
-          <h2 className="mt-2 text-h2">{s.handles.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.handles.capsule}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Section title={s.handles.heading} lead={s.handles.capsule}>
+        <p className={label}>{s.handles.label}</p>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {s.handles.items.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 3) * 0.08}>
-              <article className="card card-hover group h-full">
-                <IconChip name={handleIcons[i]} delay={i * 0.1} />
-                <h3 className="mt-3 text-h4">{item.title}</h3>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{item.body}</p>
-              </article>
+            <Reveal key={item.title} delay={(i % 3) * 0.08} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{item.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow">{s.human.eyebrow}</p>
-            <h2 className="mt-2 text-h2">{s.human.heading}</h2>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.human.capsule}</p>
-          </Reveal>
-          <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
-            {s.human.items.map((item, i) => (
-              <Reveal key={item.title} delay={(i % 2) * 0.08}>
-                <article className="card h-full border-s-4 border-s-brand-blue">
-                  <h3 className="text-h4">{item.title}</h3>
-                  <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{item.body}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal className="mx-auto mt-8 max-w-3xl text-center">
-            <p className="text-body-lg leading-relaxed text-ink/70">
-              {s.human.outroLead}
-              <Link
-                href={localePath(locale, s.human.outroPath)}
-                className="text-brand-blue underline-offset-4 hover:underline"
-              >
-                {s.human.outroLink}
-              </Link>
-              {"."}
-              {s.human.outroTail}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{s.kb.eyebrow}</p>
-          <h2 className="mt-2 text-h2">{s.kb.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.kb.body}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {s.kb.items.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 3) * 0.08}>
-              <article className="card card-hover group h-full">
-                <IconChip name={kbIcons[i]} delay={i * 0.1} />
-                <h3 className="mt-3 text-h4">{item.title}</h3>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{item.body}</p>
-              </article>
+      <Section title={s.human.heading} lead={s.human.capsule}>
+        <p className={label}>{s.human.label}</p>
+        <div className="grid gap-2 md:grid-cols-2">
+          {s.human.items.map((item, i) => (
+            <Reveal key={item.title} delay={(i % 2) * 0.08} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{item.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
-        <Reveal className="mx-auto mt-8 max-w-3xl text-center">
-          <p className="text-body-lg leading-relaxed text-ink/70">{s.kb.outro}</p>
-        </Reveal>
-      </section>
-
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow">{s.after.eyebrow}</p>
-            <h2 className="mt-2 text-h2">{s.after.heading}</h2>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.after.body}</p>
-          </Reveal>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {s.after.items.map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.08}>
-                <article className="card card-hover group h-full">
-                  <IconChip name={afterIcons[i]} delay={i * 0.1} />
-                  <h3 className="mt-3 text-h4">{item.title}</h3>
-                  <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{item.body}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h3">{s.template.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.template.body}</p>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.template.body2}</p>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/70">
-            {s.template.linkLead}
-            <Link
-              href={localePath(locale, s.template.linkPath)}
-              className="text-brand-blue underline-offset-4 hover:underline"
-            >
-              {s.template.linkText}
+        <Reveal className="mt-8">
+          <p className={text}>
+            {s.human.outroLead}
+            <Link href={localePath(locale, s.human.outroPath)} className={link}>
+              {s.human.outroLink}
             </Link>
             {"."}
+            {s.human.outroTail}
           </p>
         </Reveal>
+      </Section>
 
-        <div className="mx-auto mt-14 max-w-3xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
+      <Section title={s.kb.heading} lead={s.kb.body}>
+        <p className={label}>{s.kb.label}</p>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {s.kb.items.map((item, i) => (
+            <Reveal key={item.title} delay={(i % 3) * 0.08} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{item.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </section>
+        <Reveal className="mt-8">
+          <p className={text}>{s.kb.outro}</p>
+        </Reveal>
+      </Section>
+
+      <Section title={s.after.heading} lead={s.after.body}>
+        <p className={label}>{s.after.label}</p>
+        <div className="grid gap-2 md:grid-cols-3">
+          {s.after.items.map((item, i) => (
+            <Reveal key={item.title} delay={i * 0.08} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{item.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <Rows>
+          <Row title={s.template.heading}>
+            <p>{s.template.body}</p>
+            <p>{s.template.body2}</p>
+            <p>
+              {s.template.linkLead}
+              <Link href={localePath(locale, s.template.linkPath)} className={link}>
+                {s.template.linkText}
+              </Link>
+              {"."}
+            </p>
+          </Row>
+        </Rows>
+      </Section>
+
+      <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <DemoCta locale={locale} />
     </>

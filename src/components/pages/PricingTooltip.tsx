@@ -5,6 +5,9 @@ import { createPortal } from "react-dom";
 
 type HelpSection = { title: string; rows: { label: string; value: string }[]; note?: string };
 
+/** The page's one open tooltip: opening another closes it, so rows never stack tooltips. */
+let closeOpenTip: (() => void) | null = null;
+
 export function PricingTooltip({ children, explanation, id, sections }: { children: ReactNode; explanation: string; id: string; sections?: HelpSection[] }) {
   const trigger = useRef<HTMLSpanElement>(null);
   const tooltip = useRef<HTMLSpanElement>(null);
@@ -14,11 +17,35 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
   const keepOpen = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
   }, []);
+  const close = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (closeOpenTip === close) closeOpenTip = null;
+    setPosition(null);
+  }, []);
+  // What keeps a tooltip open (WCAG 1.4.13): the pointer on the term or the tooltip, or focus in either.
+  const hovered = useCallback(() => !!(trigger.current?.matches(":hover") || tooltip.current?.matches(":hover")), []);
+  const engaged = useCallback(() => {
+    const active = document.activeElement;
+    return hovered() || (!!active && (active === trigger.current || !!tooltip.current?.contains(active)));
+  }, [hovered]);
+  // The grace lets the pointer cross the gap into the tooltip; it closes only if nothing holds it then.
   const hideSoon = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setPosition(null), 180);
-  }, []);
-  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+    closeTimer.current = setTimeout(() => {
+      if (!engaged()) close();
+    }, 180);
+  }, [close, engaged]);
+  // Focus leaving for anywhere but the tooltip (or the term) closes it at once unless the pointer holds it.
+  const onFocusLeave = useCallback((next: EventTarget | null) => {
+    const to = next instanceof Node ? next : null;
+    if (to && (to === trigger.current || tooltip.current?.contains(to))) return;
+    if (hovered()) hideSoon();
+    else close();
+  }, [close, hideSoon, hovered]);
+  useEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (closeOpenTip === close) closeOpenTip = null;
+  }, [close]);
   useEffect(() => {
     if (position && focusHelp.current) {
       focusHelp.current = false;
@@ -26,12 +53,12 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
     }
   }, [position]);
 
-  const show = useCallback(() => {
-    keepOpen();
+  // Place the tooltip by its term (below it in the top half of the viewport, above it in the bottom half).
+  const place = useCallback(() => {
     const rect = trigger.current?.getBoundingClientRect();
     if (!rect) return;
     if (rect.bottom < 0 || rect.top > window.innerHeight) {
-      setPosition(null);
+      close();
       return;
     }
 
@@ -40,17 +67,27 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
     setPosition(rect.top < window.innerHeight / 2
       ? { left, top: rect.bottom + 8 }
       : { left, bottom: window.innerHeight - rect.top + 8 });
-  }, [keepOpen, sections]);
+  }, [close, sections]);
 
+  const show = useCallback(() => {
+    keepOpen();
+    if (closeOpenTip && closeOpenTip !== close) closeOpenTip();
+    closeOpenTip = close;
+    place();
+  }, [close, keepOpen, place]);
+
+  // On scroll or resize an open tooltip follows its term while something still holds it, and
+  // closes otherwise; a scroll never reopens one or cancels a pending close.
   useEffect(() => {
     if (!position) return;
-    window.addEventListener("scroll", show, true);
-    window.addEventListener("resize", show);
+    const follow = () => (engaged() ? place() : close());
+    window.addEventListener("scroll", follow, true);
+    window.addEventListener("resize", follow);
     return () => {
-      window.removeEventListener("scroll", show, true);
-      window.removeEventListener("resize", show);
+      window.removeEventListener("scroll", follow, true);
+      window.removeEventListener("resize", follow);
     };
-  }, [position, show]);
+  }, [position, engaged, place, close]);
 
   return (
     <>
@@ -62,10 +99,10 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
         onPointerEnter={show}
         onPointerLeave={hideSoon}
         onFocus={show}
-        onBlur={hideSoon}
+        onBlur={(event) => onFocusLeave(event.relatedTarget)}
         onClick={show}
         onKeyDown={(event) => {
-          if (event.key === "Escape") setPosition(null);
+          if (event.key === "Escape") close();
           if (event.key === "Enter" || event.key === "ArrowDown") {
             event.preventDefault(); focusHelp.current = true; show();
           }
@@ -82,11 +119,11 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
           onPointerEnter={keepOpen}
           onPointerLeave={hideSoon}
           onFocus={keepOpen}
-          onBlur={hideSoon}
+          onBlur={(event) => onFocusLeave(event.relatedTarget)}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               trigger.current?.focus();
-              setPosition(null);
+              close();
             }
           }}
           style={position}

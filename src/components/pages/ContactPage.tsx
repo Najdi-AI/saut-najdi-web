@@ -268,7 +268,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
         </section>
       </Section>
 
-      <Section>
+      <Section className="pb-[clamp(96px,11.2vw,168px)]">
         <div className="border-t border-line">
           {s.sections.map((sec, i) => (
             <Row key={sec.h} title={sec.h} delay={i * 0.04}>

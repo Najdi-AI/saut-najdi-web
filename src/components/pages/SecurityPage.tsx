@@ -202,19 +202,20 @@ export function SecurityPage({ locale }: { locale: Locale }) {
         </div>
       </Section>
 
-      <Section title={s.faqHeading} layout="split">
+      <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
         <FaqAccordion items={s.faq} />
+        {/* A row of links rather than a sentence, so each link is a full 48px target. */}
         <p className="mt-8 text-body-lg text-muted-foreground">
           {s.legalLinks}
-          <Link href={localePath(locale, "privacy")} className={`text-foreground ${link}`}>
+          <Link href={localePath(locale, "privacy")} className={`inline-flex min-h-12 min-w-12 items-center justify-center text-foreground ${link}`}>
             {locale === "ar" ? "سياسة الخصوصية" : "Privacy policy"}
           </Link>
           {" · "}
-          <Link href={localePath(locale, "terms")} className={`text-foreground ${link}`}>
+          <Link href={localePath(locale, "terms")} className={`inline-flex min-h-12 min-w-12 items-center justify-center text-foreground ${link}`}>
             {locale === "ar" ? "شروط الخدمة" : "Terms of service"}
           </Link>
           {" · "}
-          <Link href={localePath(locale, "dpa")} className={`text-foreground ${link}`}>
+          <Link href={localePath(locale, "dpa")} className={`inline-flex min-h-12 min-w-12 items-center justify-center text-foreground ${link}`}>
             {locale === "ar" ? "اتفاقية معالجة البيانات" : "DPA"}
           </Link>
         </p>

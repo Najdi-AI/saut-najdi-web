@@ -162,7 +162,7 @@ export function DemoPage({ locale }: { locale: Locale }) {
         }
         lead={s.lead}
       >
-        <p className="max-w-[52ch] text-body-lg font-bold">{s.pricingNote}</p>
+        <p className="max-w-[52ch] text-body-lg font-bold text-pretty">{s.pricingNote}</p>
       </PageHero>
 
       {/* The booking desk, shared with the old homepage: its own Charcoal

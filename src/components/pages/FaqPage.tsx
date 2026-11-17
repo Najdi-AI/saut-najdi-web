@@ -62,9 +62,17 @@ export function FaqPage({ locale }: { locale: Locale }) {
           </ul>
         </nav>
       </div>
-      {groups.map((g) => (
-        /* A jump link lands on its group: html's scroll-padding-top (globals.css) clears the sticky header. */
-        <Section key={g.id} id={g.id} title={g.group} layout="split">
+      {groups.map((g, i) => (
+        /* A jump link lands on the group's H2 (headingId), not above the section's top padding; html's
+           scroll-padding-top (globals.css) clears the sticky header. The last group keeps the kit's bottom
+           room before the DemoCta band. */
+        <Section
+          key={g.id}
+          headingId={g.id}
+          title={g.group}
+          layout="split"
+          className={i === groups.length - 1 ? "pb-[clamp(96px,11.2vw,168px)]" : ""}
+        >
           <div className="grid gap-2">
             {g.items.map((item) => (
               <details

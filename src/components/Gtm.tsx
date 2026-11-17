@@ -2,6 +2,15 @@ import Script from "next/script";
 import { GTM_ID } from "@/lib/site";
 
 /**
+ * Only the production deployment reports to analytics. Vercel sets
+ * VERCEL_ENV to "production", "preview" or "development" at build time, and
+ * it is unset for a local `next build` / `next start`, so previews and local
+ * test runs (browser probes included) never send pageviews. Read on the
+ * server only: neither component ships a client bundle.
+ */
+const GTM_ENABLED = GTM_ID.length > 0 && process.env.VERCEL_ENV === "production";
+
+/**
  * Google Tag Manager, shared by both root layouts so the two locales can
  * never drift apart on analytics.
  *
@@ -16,7 +25,7 @@ import { GTM_ID } from "@/lib/site";
  * later push (the Cal.com booking events) lands on a real array.
  */
 export function Gtm() {
-  if (GTM_ID.length === 0) return null;
+  if (!GTM_ENABLED) return null;
   return (
     <Script id="gtm-init" strategy="afterInteractive">
       {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -33,7 +42,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  * install instructions, so it is a separate export rather than part of <Gtm>.
  */
 export function GtmNoScript() {
-  if (GTM_ID.length === 0) return null;
+  if (!GTM_ENABLED) return null;
   return (
     <noscript>
       <iframe

@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
+import { HashSettle } from "@/components/HashSettle";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -72,6 +73,7 @@ export default function ArabicRootLayout({
         <main id="main">{children}</main>
         <Footer locale="ar" />
         <ChatLauncher locale="ar" />
+        <HashSettle />
         {/* Web Analytics was already provisioned and recording; Speed Insights
             was provisioned too but sat at hasData:false because nothing ever
             reported to it. This is the half that was missing — it is what turns

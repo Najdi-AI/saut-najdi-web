@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ChatLauncher } from "@/components/ChatLauncher";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
+import { HashSettle } from "@/components/HashSettle";
 import { SITE_URL } from "@/lib/site";
 
 /** English mirror of the Arabic root metadata — see (ar)/layout.tsx for why. */
@@ -50,6 +51,7 @@ export default function EnglishRootLayout({
         <main id="main">{children}</main>
         <Footer locale="en" />
         <ChatLauncher locale="en" />
+        <HashSettle />
         {/* Vercel-only, as in (ar)/layout.tsx: see ON_VERCEL. */}
         {ON_VERCEL && <Analytics />}
         {ON_VERCEL && <SpeedInsights />}

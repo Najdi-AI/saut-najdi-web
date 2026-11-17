@@ -450,6 +450,46 @@
     animation: how-ring 600ms ease-out 1900ms both;
   }
 }
+
+/* ---- print: paper doesn't scroll, so the pinned stage prints as the stacked rows, every state beside its statement
+   at its final frame (no clip, no bar wave, no fade). Same conditions as the pinned block, so it undoes only that. */
+@media print and (min-width: 900px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .flow[data-pin] {
+    row-gap: 56px;
+  }
+  .flow[data-pin] .step {
+    min-block-size: auto;
+  }
+  .flow[data-pin] .step[data-step="2"] {
+    padding-block-end: 0;
+  }
+  .flow[data-pin] .step:not([data-active]) h3 {
+    color: inherit;
+    transition: none;
+  }
+  .flow[data-pin] .slot {
+    position: static;
+    grid-row: var(--row);
+    align-self: auto;
+    block-size: auto;
+    padding-block: 40px;
+  }
+  .flow[data-pin] .slot:not(:nth-child(2)) {
+    background: var(--muted);
+  }
+  .flow[data-pin] .card {
+    min-block-size: auto;
+    transition: none;
+  }
+  .flow[data-pin] .slot:not([data-active]) .card {
+    opacity: 1;
+    transform: none;
+  }
+  .flow[data-pin] .slot *,
+  .flow[data-pin] .slot *::after {
+    animation: none !important;
+  }
+}
 @keyframes bar {
   from {
     transform: scaleY(0.55);

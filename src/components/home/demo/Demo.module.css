@@ -198,13 +198,28 @@
   font-size: 14px;
 }
 
-/* Only the steps a change brought in enter, one after another (site.js). */
+/* Only the steps a change brought in enter, one after another (site.js), each at its own --t (DemoPanel), and a
+   line's words follow one by one (clip A). The first sight of the call plays all of it in after the avatar rings;
+   until then (with JavaScript and motion) the call waits unseen below the fold. Off screen it holds. */
 @media (prefers-reduced-motion: no-preference) {
+  .panel[data-ready]:not([data-played]) .thread > * {
+    opacity: 0;
+  }
+  .panel[data-played] .avatar {
+    animation: ring 240ms ease-in-out 2;
+  }
   .thread > [data-enter] {
     animation:
       enter-fade 320ms cubic-bezier(0.22, 1, 0.36, 1) both,
       enter-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(60ms + var(--i, 0) * 120ms);
+    animation-delay: var(--t, 60ms);
+  }
+  .thread > [data-enter] [data-w] {
+    animation: enter-fade 200ms ease-out both;
+    animation-delay: calc(var(--t, 60ms) + 120ms + var(--w) * 55ms);
+  }
+  .panel[data-hold] :is(.avatar, .thread *) {
+    animation-play-state: paused;
   }
 }
 @keyframes enter-fade {
@@ -215,6 +230,15 @@
 @keyframes enter-rise {
   from {
     transform: translateY(10px);
+  }
+}
+/* The avatar rocks like a ringing handset and comes to rest level. */
+@keyframes ring {
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
   }
 }
 

@@ -1,4 +1,5 @@
-// Builds the homepage voice clips: the hero's short exchange (HeroVisual) and the clinic call (SampleConversation).
+// Builds the homepage voice clips: the hero's short exchange (the home hero's play chip and its transcript, whose lines
+// live in src/components/home/hero/copy.ts) and the clinic call (SampleConversation).
 // The AI agent speaks in Majed (ElevenLabs), the caller in Raed (Cartesia) and «أحمد», the clinic's human employee,
 // in Tariq (Cartesia), so the three sound clearly different (Sultan, 2026-11-15). Adapted from the booth video's tooling
 // (booth-video-ghe-2026/scripts: voice-lines.mjs for the Cartesia request, voice-post.mjs for trimming, levelling and
@@ -68,7 +69,7 @@ const UNSPOKEN = /[0-9٠-٩۰-۹:]/u;
 export const CLIPS = [
   {
     name: 'home-hero',
-    source: 'src/components/HeroVisual.tsx',
+    source: 'src/components/home/hero/copy.ts',
     parts: [
       {who: 'agent', text: 'هلا! كيف أقدر أساعدك؟'},
       {who: 'caller', text: 'أبغى أحجز موعد بكرة', gapMs: 450},

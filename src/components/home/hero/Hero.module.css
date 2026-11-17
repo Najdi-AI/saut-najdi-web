@@ -114,10 +114,12 @@
   inset-block-start: calc(-1 * var(--chip-above));
   inset-inline-start: 13%;
 }
+/* At the stage's inline-start edge, clear of the 40ch lead beside it, so the live line and the transcript button
+   (PR 9a) can grow the chip downwards without reaching the lead (5% overlapped it by 46px). */
 .playChip {
   --tilt: 2.5deg;
   inset-block-start: 200px;
-  inset-inline-start: 5%;
+  inset-inline-start: 0;
   grid-template-columns: 44px 1fr auto;
   align-items: center;
   column-gap: 14px;
@@ -181,6 +183,119 @@
   background: var(--color-cyan);
 }
 
+/* The live line (clip A): the turn being spoken writes itself word by word. All three turns share one grid cell,
+   so the longest sets the height and the chip never changes size as they swap. */
+.said {
+  grid-column: 1 / -1;
+  display: grid;
+  min-inline-size: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.said > span {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+.said > span[data-on] {
+  visibility: visible;
+}
+.said b {
+  color: var(--foreground);
+}
+.said [data-w]:not([data-on]) {
+  opacity: 0;
+}
+
+/* ---- the transcript: its button in the play chip, its panel a popover in the top layer */
+.scriptOpen {
+  grid-column: 1 / -1;
+  justify-self: start;
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+/* A 44px tall target around the 21px line. */
+.scriptOpen::after {
+  content: "";
+  position: absolute;
+  inset: -12px -8px -11px;
+}
+/* The Arabic button is short enough to sit under the time, so the chip grows by the live line alone and stays
+   clear of the lead under WCAG 1.4.12 text spacing too (the English one keeps its own row: it would squeeze the wave). */
+@media (min-width: 641px) {
+  .playChip:lang(ar) .readout {
+    grid-area: 1 / 3;
+    align-self: start;
+  }
+  .playChip:lang(ar) .scriptOpen {
+    grid-area: 1 / 3;
+    align-self: end;
+  }
+}
+/* Centred in the viewport (the reset's margin: 0 would pin the popover to the corner). */
+.script {
+  inset: 0;
+  margin: auto;
+  inline-size: min(460px, calc(100vw - 32px));
+  max-block-size: calc(100svh - 32px);
+  padding: 16px 20px 20px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--card-foreground);
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: start;
+}
+.script::backdrop {
+  background: rgb(13 19 38 / 0.6);
+}
+.scriptTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 10px;
+}
+.scriptClose {
+  min-block-size: 44px;
+  padding-inline: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--foreground);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.script ol {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.script li {
+  display: grid;
+  gap: 2px;
+}
+.script li > b {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+.render {
+  color: var(--muted-foreground);
+  font-size: 15px;
+}
+
 /* ---- motion */
 @media (prefers-reduced-motion: no-preference) {
   .line > span {
@@ -191,6 +306,9 @@
   }
   .playChip[data-playing] .wave > span {
     animation: bar 900ms ease-in-out calc(var(--k) * -70ms) infinite alternate;
+  }
+  .said [data-w] {
+    transition: opacity 200ms ease-out;
   }
 }
 @keyframes line-up {

@@ -9,7 +9,7 @@ import { localePath, type Locale } from "@/lib/i18n";
 
 const copy = {
   ar: {
-    eyebrow: "الباقات والأسعار",
+    label: "الباقات والأسعار",
     heading: "باقات لكل مرحلة من نموك",
     intro: "حصة نقاط شهرية مشتركة للمكالمات مع الوكيل والمحادثات النصية. اختر السعة التي تناسب استخدامك، ثم احجز عرضاً لنحدد التجهيز لمنشأتك.",
     fit: {
@@ -48,7 +48,7 @@ const copy = {
     ],
   },
   en: {
-    eyebrow: "Plans & pricing",
+    label: "Plans & pricing",
     heading: "Plans for every stage of growth",
     intro: "One monthly credit pool for AI calls and text conversations. Choose the capacity that fits your use, then book a demo to scope setup for your business.",
     fit: {
@@ -119,13 +119,12 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
   return (
     <section
       aria-labelledby={isHome ? "home-pricing-heading" : undefined}
-      aria-label={isHome ? undefined : t.eyebrow}
-      className={isHome ? "border-y border-line bg-brand-gradient-soft py-16 dark:bg-canvas" : "bg-canvas py-8 sm:py-10"}
+      aria-label={isHome ? undefined : t.label}
+      className={isHome ? "border-y border-line py-16" : "bg-canvas py-8 sm:py-10"}
     >
       <div className="container">
         {isHome && <div className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{t.eyebrow}</p>
-          <h2 id="home-pricing-heading" className="mt-3 text-h2">{t.heading}</h2>
+          <h2 id="home-pricing-heading" className="text-h2">{t.heading}</h2>
           <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{t.intro}</p>
           <Waveform bars={28} animate={false} maxHeight={25} className="mt-4" />
         </div>}
@@ -135,8 +134,7 @@ export function PricingOverview({ locale, variant = "home" }: { locale: Locale; 
             const isQuote = plan.credits === null;
             const rate = (value: number | null, unit: string) => value === null ? t.quote : <span dir="ltr" className="inline-block tabular-nums">{formatSarRate(value)} {unit}</span>;
             return (
-              <article key={plan.key} className="overflow-hidden rounded-3xl border border-line bg-surface shadow-card">
-                <div className="h-1 bg-brand-gradient" aria-hidden="true" />
+              <article key={plan.key} className="overflow-hidden border border-line bg-surface">
                 <div className="grid min-w-0 lg:grid-cols-[minmax(0,0.39fr)_minmax(0,0.61fr)]">
                   <div className="flex min-w-0 flex-col border-b border-line p-6 sm:p-8 lg:border-b-0 lg:border-e">
                     {isHome ? <h3 className="text-h3">{plan.label}</h3> : <h2 className="text-h3">{plan.label}</h2>}

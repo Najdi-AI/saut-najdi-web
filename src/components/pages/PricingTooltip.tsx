@@ -5,6 +5,12 @@ import { createPortal } from "react-dom";
 
 type HelpSection = { title: string; rows: { label: string; value: string }[]; note?: string };
 
+/**
+ * The page's one open tooltip: opening another closes it, so rows never stack tooltips.
+ * `tooltip` lets a hover see whether that one holds focus (opened with Enter).
+ */
+let openTip: { close: () => void; tooltip: { current: HTMLSpanElement | null } } | null = null;
+
 export function PricingTooltip({ children, explanation, id, sections }: { children: ReactNode; explanation: string; id: string; sections?: HelpSection[] }) {
   const trigger = useRef<HTMLSpanElement>(null);
   const tooltip = useRef<HTMLSpanElement>(null);
@@ -14,11 +20,35 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
   const keepOpen = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
   }, []);
+  const close = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (openTip?.close === close) openTip = null;
+    setPosition(null);
+  }, []);
+  // What keeps a tooltip open (WCAG 1.4.13): the pointer on the term or the tooltip, or focus in either.
+  const hovered = useCallback(() => !!(trigger.current?.matches(":hover") || tooltip.current?.matches(":hover")), []);
+  const engaged = useCallback(() => {
+    const active = document.activeElement;
+    return hovered() || (!!active && (active === trigger.current || !!tooltip.current?.contains(active)));
+  }, [hovered]);
+  // The grace lets the pointer cross the gap into the tooltip; it closes only if nothing holds it then.
   const hideSoon = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setPosition(null), 180);
-  }, []);
-  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+    closeTimer.current = setTimeout(() => {
+      if (!engaged()) close();
+    }, 180);
+  }, [close, engaged]);
+  // Focus leaving for anywhere but the tooltip (or the term) closes it at once unless the pointer holds it.
+  const onFocusLeave = useCallback((next: EventTarget | null) => {
+    const to = next instanceof Node ? next : null;
+    if (to && (to === trigger.current || tooltip.current?.contains(to))) return;
+    if (hovered()) hideSoon();
+    else close();
+  }, [close, hideSoon, hovered]);
+  useEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (openTip?.close === close) openTip = null;
+  }, [close]);
   useEffect(() => {
     if (position && focusHelp.current) {
       focusHelp.current = false;
@@ -26,12 +56,12 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
     }
   }, [position]);
 
-  const show = useCallback(() => {
-    keepOpen();
+  // Place the tooltip by its term (below it in the top half of the viewport, above it in the bottom half).
+  const place = useCallback(() => {
     const rect = trigger.current?.getBoundingClientRect();
     if (!rect) return;
     if (rect.bottom < 0 || rect.top > window.innerHeight) {
-      setPosition(null);
+      close();
       return;
     }
 
@@ -40,17 +70,43 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
     setPosition(rect.top < window.innerHeight / 2
       ? { left, top: rect.bottom + 8 }
       : { left, bottom: window.innerHeight - rect.top + 8 });
-  }, [keepOpen, sections]);
+  }, [close, sections]);
 
+  const show = useCallback(() => {
+    keepOpen();
+    if (openTip && openTip.close !== close) {
+      // A pointer passing over this term never takes over a tooltip that holds focus: the keyboard
+      // reader keeps their place (closing it would drop focus to the page). Focus moving here has
+      // already left that tooltip, so a keyboard or click open still takes over.
+      if (openTip.tooltip.current?.contains(document.activeElement)) return;
+      openTip.close();
+    }
+    openTip = { close, tooltip };
+    place();
+  }, [close, keepOpen, place]);
+
+  // While open: on scroll or resize the tooltip follows its term while something still holds it,
+  // and closes otherwise (a scroll never reopens one or cancels a pending close). Escape closes it
+  // from anywhere on the page (WCAG 1.4.13 dismissible), without moving focus or stopping the
+  // event; the term and the tooltip keep their own Escape (the tooltip returns focus to its term).
   useEffect(() => {
     if (!position) return;
-    window.addEventListener("scroll", show, true);
-    window.addEventListener("resize", show);
-    return () => {
-      window.removeEventListener("scroll", show, true);
-      window.removeEventListener("resize", show);
+    const follow = () => (engaged() ? place() : close());
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      const target = event.target instanceof Node ? event.target : null;
+      if (target && (trigger.current?.contains(target) || tooltip.current?.contains(target))) return;
+      close();
     };
-  }, [position, show]);
+    window.addEventListener("scroll", follow, true);
+    window.addEventListener("resize", follow);
+    document.addEventListener("keydown", dismiss, true);
+    return () => {
+      window.removeEventListener("scroll", follow, true);
+      window.removeEventListener("resize", follow);
+      document.removeEventListener("keydown", dismiss, true);
+    };
+  }, [position, engaged, place, close]);
 
   return (
     <>
@@ -58,14 +114,14 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
         ref={trigger}
         tabIndex={0}
         aria-describedby={id}
-        className="cursor-help rounded-xs underline decoration-dotted underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+        className="inline-flex min-h-11 cursor-help items-center underline decoration-dotted underline-offset-4 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring"
         onPointerEnter={show}
         onPointerLeave={hideSoon}
         onFocus={show}
-        onBlur={hideSoon}
+        onBlur={(event) => onFocusLeave(event.relatedTarget)}
         onClick={show}
         onKeyDown={(event) => {
-          if (event.key === "Escape") setPosition(null);
+          if (event.key === "Escape") close();
           if (event.key === "Enter" || event.key === "ArrowDown") {
             event.preventDefault(); focusHelp.current = true; show();
           }
@@ -82,22 +138,22 @@ export function PricingTooltip({ children, explanation, id, sections }: { childr
           onPointerEnter={keepOpen}
           onPointerLeave={hideSoon}
           onFocus={keepOpen}
-          onBlur={hideSoon}
+          onBlur={(event) => onFocusLeave(event.relatedTarget)}
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               trigger.current?.focus();
-              setPosition(null);
+              close();
             }
           }}
           style={position}
-          className={`fixed z-50 ${sections ? "w-80" : "w-64"} max-w-[calc(100vw-16px)] max-h-[50vh] overflow-y-auto rounded-xl bg-ink p-4 text-start text-sm leading-relaxed text-canvas shadow-lg`}
+          className={`fixed z-50 ${sections ? "w-80" : "w-64"} max-w-[calc(100vw-16px)] max-h-[50vh] overflow-y-auto rounded-(--radius) bg-charcoal p-4 text-start text-sm leading-relaxed text-off-white`}
         >
-          {sections ? sections.map((section, index) => <span key={section.title} className={`block ${index ? "mt-3 border-t border-canvas/20 pt-3" : ""}`}>
-            <span className="mb-2 block text-xs font-semibold text-canvas/70">{section.title}</span>
+          {sections ? sections.map((section, index) => <span key={section.title} className={`block ${index ? "mt-3 border-t border-[#3a4566] pt-3" : ""}`}>
+            <span className="mb-2 block text-xs font-semibold text-[#a3abbd]">{section.title}</span>
             <span className="grid gap-2">{section.rows.map(row => <span key={row.label} className="flex items-start justify-between gap-4">
               <span className="min-w-0">{row.label}</span><bdi className="shrink-0 whitespace-nowrap font-semibold tabular-nums">{row.value}</bdi>
             </span>)}</span>
-            {section.note && <span className="mt-2 block text-xs text-canvas/70">{section.note}</span>}
+            {section.note && <span className="mt-2 block text-xs text-[#a3abbd]">{section.note}</span>}
           </span>) : explanation.split(/[;؛]/).map((line, index) => <span key={index} className={index ? "mt-2 block" : "block"}>{line.trim()}</span>)}
         </span>,
         document.body,

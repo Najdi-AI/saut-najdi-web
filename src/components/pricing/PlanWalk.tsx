@@ -11,7 +11,7 @@ import s from "./PlanWalk.module.css";
  * The four tiers, one at a time as the visitor scrolls (decision 185):
  * Essential, Growth, Expansion and Enterprise. Shared by the home page's
  * #pricing and /pricing. Prices and capacity come from content/pricing.ts
- * only; the copy is the approved plans strip (HomePlansStrip.tsx), and
+ * only; the copy is the old home's approved plans strip, and
  * Enterprise's is decision 186's. Every tier carries the VAT and setup-fee
  * note, so it is on screen whichever tier is.
  *

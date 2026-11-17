@@ -22,7 +22,8 @@ const GTM_ENABLED = GTM_ID.length > 0 && process.env.VERCEL_ENV === "production"
  * full pageview, it just stops competing with first paint.
  *
  * `dataLayer` is initialised inside the same script that starts GTM, so any
- * later push (the Cal.com booking events) lands on a real array.
+ * later push lands on a real array. Nothing on the site pushes to it today:
+ * bookings report through @vercel/analytics `track()` (lib/cal.ts).
  */
 export function Gtm() {
   if (!GTM_ENABLED) return null;

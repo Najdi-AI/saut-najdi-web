@@ -3,7 +3,7 @@ import { PlanWalk } from "@/components/pricing/PlanWalk";
 import { localePath, type Locale } from "@/lib/i18n";
 import { SectionHead } from "../ui/SectionHead";
 
-/** The approved plans strip's heading and intro (HomePlansStrip.tsx). */
+/** The approved plans strip's heading and intro (from the old home's plans strip). */
 const copy = {
   ar: {
     title: "وش الباقة اللي تناسبك؟",

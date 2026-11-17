@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { dirOf, type Locale } from "@/lib/i18n";
 import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Num } from "../ui/Num";
 import { useReducedMotion } from "../ui/useReducedMotion";
-import { DIALECTS, SAMPLE, heroCopy, type Dialect } from "./copy";
+import { Words } from "../ui/Words";
+import { CLIP_TURNS, DIALECTS, SAMPLE, heroCopy, type Dialect } from "./copy";
+import { useStageFit } from "./useStageFit";
 // The clip's own timings file (scripts/make-home-voice.mjs writes both).
 import clip from "../../../../public/audio/home-hero.json";
 import s from "./Hero.module.css";
@@ -85,21 +87,50 @@ const BARS = [
 ].map((h) => Math.max(4, Math.round(24 * h)));
 const LENGTH_S = clip.durationMs / 1000;
 const clock = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+/** The clip's turns with their times (home-hero.json) and word counts. */
+const TURNS = CLIP_TURNS.map((turn, i) => ({ ...clip.turns[i], ...turn, words: turn.text.split(" ").length }));
+/** The live line at rest: the reply's first line, whole. */
+const REST = { k: 0, n: TURNS[0].words };
+
+/**
+ * The line being spoken at a time in the clip (ms): its turn, and how many of
+ * its words have been said, spread evenly over the turn. `whole` (reduced
+ * motion) shows each turn at once.
+ */
+const lineAt = (ms: number, whole: boolean) => {
+  let k = 0;
+  while (k < TURNS.length - 1 && ms >= TURNS[k + 1].startMs) k++;
+  const { startMs, endMs, words } = TURNS[k];
+  const said = Math.floor(((ms - startMs) / Math.max(1, endMs - startMs)) * words) + 1;
+  return { k, n: whole ? words : Math.min(words, Math.max(0, said)) };
+};
 
 /**
  * Hear the reply: plays the product's sample clip, pauses, and counts the
  * time left in an LTR island while the wave fills. Nothing loads before the
  * press (preload="none"), and it stops any other clip on the page.
+ *
+ * Under it, the line being spoken writes itself word by word in time with
+ * the sound (clip A); at rest, before and after the clip, it shows the
+ * reply's first line whole (a pause keeps the line where it is). All
+ * three lines share one cell, so the chip keeps its height as they change.
+ * It is a picture of the sound (aria-hidden): the transcript, passed in as
+ * children from the server, is the text alternative.
  */
-export function PlayChip({ locale }: { locale: Locale }) {
+export function PlayChip({ locale, children }: { locale: Locale; children: ReactNode }) {
   const t = heroCopy[locale];
+  const reduced = useReducedMotion();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "playing">("idle");
   const playing = status === "playing";
   const [pos, setPos] = useState({ on: 0, left: LENGTH_S });
+  const [line, setLine] = useState(REST);
+  // The hero's fit check lives with this chip, the one island that is on every hero (useStageFit).
+  const rootRef = useRef<HTMLDivElement>(null);
+  useStageFit(rootRef);
 
-  // Follow the clip only while it plays; state changes only when a bar or a
-  // second ticks over, not on every frame.
+  // Follow the clip only while it plays; state changes only when a bar, a
+  // second or a word ticks over, not on every frame.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !playing) return;
@@ -108,12 +139,14 @@ export function PlayChip({ locale }: { locale: Locale }) {
       const length = Number.isFinite(audio.duration) ? audio.duration : LENGTH_S;
       const on = Math.round((audio.currentTime / length) * BARS.length);
       const left = Math.max(0, length - audio.currentTime);
+      const now = lineAt(audio.currentTime * 1000, reduced);
       setPos((p) => (p.on === on && Math.floor(p.left) === Math.floor(left) ? p : { on, left }));
+      setLine((l) => (l.k === now.k && l.n === now.n ? l : now));
       frame = requestAnimationFrame(paint);
     };
     paint();
     return () => cancelAnimationFrame(frame);
-  }, [playing]);
+  }, [playing, reduced]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -134,6 +167,7 @@ export function PlayChip({ locale }: { locale: Locale }) {
 
   return (
     <div
+      ref={rootRef}
       className={`${s.chip} ${s.playChip} ${s.rise}`}
       data-reveal=""
       data-playing={playing || undefined}
@@ -156,6 +190,17 @@ export function PlayChip({ locale }: { locale: Locale }) {
       <span className={s.readout}>
         <Num>{clock(pos.left)}</Num>
       </span>
+      <p className={s.said} aria-hidden>
+        {TURNS.map((turn, k) => (
+          <span key={k} data-on={k === line.k || undefined}>
+            <b>{t.who[turn.who]}:</b>{" "}
+            <span lang="ar" dir="rtl">
+              <Words text={turn.text} shown={k === line.k ? line.n : 0} />
+            </span>
+          </span>
+        ))}
+      </p>
+      {children}
       <audio
         ref={audioRef}
         src={clip.src}
@@ -165,7 +210,10 @@ export function PlayChip({ locale }: { locale: Locale }) {
         onWaiting={() => setStatus("loading")}
         onPause={() => setStatus("idle")}
         onError={() => setStatus("idle")}
-        onEnded={() => setPos({ on: 0, left: LENGTH_S })}
+        onEnded={() => {
+          setPos({ on: 0, left: LENGTH_S });
+          setLine(REST);
+        }}
       />
     </div>
   );

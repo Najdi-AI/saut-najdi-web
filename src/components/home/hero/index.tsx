@@ -1,9 +1,48 @@
 import type { CSSProperties } from "react";
 import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { heroCopy } from "./copy";
+import { withDigits } from "../ui/Words";
+import { CLIP_TURNS, heroCopy, scriptCopy } from "./copy";
 import { DialectChip, HandoffChip, PlayChip } from "./HeroChips";
 import s from "./Hero.module.css";
+
+/**
+ * The play chip's transcript (WCAG 1.2.1): the clip's three turns word for
+ * word, with an English rendering on the English page. A native popover
+ * opened by a button in the chip, so it works without JavaScript, never
+ * moves the hero, and closes with Escape, a click outside or its own close
+ * button. Server markup, so none of it ships in the page's JavaScript.
+ */
+function Transcript({ locale }: { locale: Locale }) {
+  const t = heroCopy[locale];
+  const sc = scriptCopy[locale];
+  return (
+    <>
+      <button type="button" className={s.scriptOpen} popoverTarget="hero-script">
+        {sc.open}
+      </button>
+      <div id="hero-script" popover="auto" role="dialog" aria-labelledby="hero-script-title" className={s.script}>
+        <div className={s.scriptTop}>
+          <b id="hero-script-title">{sc.title}</b>
+          <button type="button" className={s.scriptClose} popoverTarget="hero-script" popoverTargetAction="hide">
+            {sc.close}
+          </button>
+        </div>
+        <ol>
+          {CLIP_TURNS.map((turn, i) => (
+            <li key={turn.text}>
+              <b>{t.who[turn.who]}</b>
+              <span lang="ar" dir="rtl">
+                {withDigits(turn.text)}
+              </span>
+              {sc.lines && <span className={s.render}>{withDigits(sc.lines[i])}</span>}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </>
+  );
+}
 
 /**
  * The home hero (Try 1, mockups/index.html and en-hero.html): the sentence
@@ -36,7 +75,9 @@ export function Hero({ locale }: { locale: Locale }) {
           ))}
         </h1>
         <div className={s.pair}>
-          <PlayChip locale={locale} />
+          <PlayChip locale={locale}>
+            <Transcript locale={locale} />
+          </PlayChip>
           <HandoffChip locale={locale} />
         </div>
         <p className={`${s.lead} ${s.rise}`} data-reveal="" style={{ "--d": "440ms" } as CSSProperties}>

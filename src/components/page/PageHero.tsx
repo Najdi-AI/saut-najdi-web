@@ -33,7 +33,7 @@ export function PageHero({
       data-hero={dark ? "dark" : undefined}
     >
       <div className="container">
-        <h1 className={s.title}>{title}</h1>
+        <h1 className={`${s.title} wrap-anywhere`}>{title}</h1>
         {lead ? <p className={s.lead}>{lead}</p> : null}
         {children ? <div className={s.actions}>{children}</div> : null}
       </div>

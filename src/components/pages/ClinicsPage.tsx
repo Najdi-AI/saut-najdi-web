@@ -7,13 +7,10 @@ import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { SampleConversation } from "@/components/SampleConversation";
-import { IconChip, type IconName } from "@/components/icons";
+import { PageHero } from "@/components/page/PageHero";
+import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 import type { FaqItem } from "@/lib/schema";
-
-// Positional — keep each array the same length as the list it decorates or a
-// card renders with an undefined icon name.
-const handledIcons: IconName[] = ["calendar", "repeat", "cost", "clock", "clinic", "people"];
-const kbIcons: IconName[] = ["clinic", "cost", "badge", "doc", "clock", "chat"];
 
 /**
  * /solutions/clinics (blueprint §6.3 sector template). The clinic template
@@ -27,7 +24,18 @@ const kbIcons: IconName[] = ["clinic", "cost", "badge", "doc", "clock", "chat"];
  *
  * Short-brief copy: one idea per block, outcome first, no mechanism essays —
  * the density of the hotels and retail pages.
+ *
+ * On the inner-page kit (About is the pilot): PageHero, groups under a
+ * Section head with their label over the items, and each heading with its
+ * paragraphs as a ruled row. pageFactory imports this module for its FAQ, so
+ * imports here stay server-only or already ship everywhere.
  */
+
+// Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
+const text = "max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]";
+const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
+const label = "mb-6 text-[1.25rem] font-bold";
+const tile = "h-full bg-silver-gray p-6";
 
 const t = {
   ar: {
@@ -36,7 +44,7 @@ const t = {
       "موظف الاستقبال ما يقدر يستقبل المريض اللي قدامه ويرد على الجوال في نفس اللحظة. وكيلك يرد على كل مكالمة، ويحجز في تقويمك فعلاً، ويحوّل أي شي يحتاج إنسان.",
     cta: "احجز عرضاً",
     calls: {
-      eyebrow: "قالب جاهز للعيادات والمستشفيات",
+      label: "قالب جاهز للعيادات والمستشفيات",
       heading: "المكالمات اللي تفوتك كل يوم",
       body: "هذي شكل المكالمات اللي تجي أي عيادة. كم وحدة منها راحت عليك أمس؟",
       note: "حوارات توضيحية — مو تسجيلات حقيقية.",
@@ -81,7 +89,7 @@ const t = {
       ],
     },
     handled: {
-      eyebrow: "مربوط بالحوارات اللي فوق",
+      label: "مربوط بالحوارات اللي فوق",
       heading: "وش يتكفل فيه الوكيل بالضبط؟",
       capsule: "ينهي المكالمة بنفسه — ما يسجل رسالة ويوعد إن أحد يرجع للمريض.",
       items: [
@@ -198,7 +206,7 @@ const t = {
       "Your receptionist cannot look after the patient in front of them and answer a phone that never stops. The agent takes those calls, books the slot in your clinic's calendar, and hands anything that needs a person to your staff.",
     cta: "Book a demo",
     calls: {
-      eyebrow: "A ready-made clinic and hospital template",
+      label: "A ready-made clinic and hospital template",
       heading: "The calls you're missing every day",
       body: "This is what calls to a Saudi clinic sound like. How many went unanswered yesterday?",
       note: "Illustrative dialogues — not real recordings.",
@@ -243,7 +251,7 @@ const t = {
       ],
     },
     handled: {
-      eyebrow: "Mapped to the dialogues above",
+      label: "Mapped to the dialogues above",
       heading: "What the agent handles, precisely",
       capsule: "It finishes the call itself — it doesn't log a message and promise a call back.",
       items: [
@@ -365,24 +373,22 @@ type Dialogue = { tag: string; caller: string; agent: string };
  */
 function DialogueCard({ d, locale }: { d: Dialogue; locale: Locale }) {
   return (
-    <article className="card card-hover h-full">
-      <p className="eyebrow">{d.tag}</p>
+    <div className={tile}>
+      <p className="text-[0.9375rem] font-bold text-muted-foreground">{d.tag}</p>
       <div className="mt-4 space-y-2">
         <div className="flex justify-start">
-          <p className="max-w-[92%] rounded-2xl rounded-es-md border border-line bg-canvas px-4 py-2.5 text-body leading-relaxed text-ink">
-            {d.caller}
-          </p>
+          <p className="max-w-[92%] rounded-[14px] bg-background px-4 py-2.5 text-body leading-relaxed">{d.caller}</p>
         </div>
         <div className="flex justify-end">
-          <div className="max-w-[92%] rounded-2xl rounded-ee-md bg-ink px-4 py-2.5 text-body leading-relaxed text-canvas">
-            <span className="mb-1 block text-body-sm font-medium text-canvas/60">
+          <div className="max-w-[92%] rounded-[14px] bg-charcoal px-4 py-2.5 text-body leading-relaxed text-off-white">
+            <span className="mb-1 block text-body-sm font-medium text-[#a3abbd]">
               {locale === "ar" ? "وكيل صوت نجدي" : "Saut Najdi agent"}
             </span>
             {d.agent}
           </div>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 
@@ -390,206 +396,166 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
   const s = t[locale];
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-gradient-soft" aria-hidden />
-        <div className="container relative py-14 text-center">
-          <h1 className="mx-auto max-w-3xl text-h2 sm:text-h1">{s.h1}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-relaxed text-ink/75">{s.intro}</p>
-          <div className="mt-7">
-            <DemoLink locale={locale}>{s.cta}</DemoLink>
-          </div>
-        </div>
-      </section>
+      {/* Bottom room so the button doesn't sit on the trust strip's rule. */}
+      <PageHero title={s.h1} lead={s.intro} className="pb-12 sm:pb-16">
+        <DemoLink locale={locale}>{s.cta}</DemoLink>
+      </PageHero>
 
       <TrustStrip locale={locale} />
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{s.calls.eyebrow}</p>
-          <h2 className="mt-2 text-h2">{s.calls.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.calls.body}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <Section title={s.calls.heading} lead={s.calls.body}>
+        <p className={label}>{s.calls.label}</p>
+        <div className="grid gap-2 md:grid-cols-2">
           {s.calls.items.map((d, i) => (
-            <Reveal key={d.tag} delay={i * 0.05}>
+            <Reveal key={d.tag} delay={i * 0.05} className="h-full">
               <DialogueCard d={d} locale={locale} />
             </Reveal>
           ))}
         </div>
-        <p className="mt-6 text-center text-body-sm text-ink/60">{s.calls.note}</p>
-      </section>
+        <p className="mt-6 text-body-sm text-muted-foreground">{s.calls.note}</p>
+      </Section>
 
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl">
-            <h2 className="text-h2">{s.why.heading}</h2>
+      <Section>
+        <Rows>
+          <Row title={s.why.heading}>
             {s.why.paras.map((p) => (
-              <p key={p} className="mt-4 text-body-lg leading-relaxed text-ink/75">{p}</p>
+              <p key={p}>{p}</p>
             ))}
-          </Reveal>
-        </div>
-      </section>
+          </Row>
+        </Rows>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow">{s.handled.eyebrow}</p>
-          <h2 className="mt-2 text-h2">{s.handled.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.handled.capsule}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <Section title={s.handled.heading} lead={s.handled.capsule}>
+        <p className={label}>{s.handled.label}</p>
+        <div className="grid gap-2 md:grid-cols-2">
           {s.handled.items.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.06}>
-              <article className="card card-hover group h-full border-s-4 border-s-brand-blue">
-                <IconChip name={handledIcons[i]} delay={i * 0.08} />
-                <h3 className="mt-3 text-h4">{p.title}</h3>
-                <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{p.body}</p>
-              </article>
+            <Reveal key={p.title} delay={i * 0.06} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{p.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl">
-            <h2 className="text-h2">{s.voice.heading}</h2>
+      <Section>
+        <Rows>
+          <Row title={s.voice.heading}>
             {s.voice.paras.map((p) => (
-              <p key={p} className="mt-4 text-body-lg leading-relaxed text-ink/75">{p}</p>
+              <p key={p}>{p}</p>
             ))}
             {/* The dialect/voice mechanics live on /product/voice-agent — this
                 page only carries the clinic-specific half. */}
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/70">
+            <p>
               {s.voice.linkLead}
-              <Link
-                href={localePath(locale, "product/voice-agent")}
-                className="text-brand-blue underline-offset-4 hover:underline"
-              >
+              <Link href={localePath(locale, "product/voice-agent")} className={link}>
                 {s.voice.linkText}
               </Link>
               {"."}
             </p>
-          </Reveal>
-        </div>
-      </section>
+          </Row>
+        </Rows>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <h2 className="text-h2">{s.human.heading}</h2>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.human.capsule}</p>
-        </Reveal>
+      <Section title={s.human.heading} lead={s.human.capsule}>
         {/* The medical boundary is stated out loud — a clinic buyer is asking
             it silently anyway, and saying it first is the trust signal. */}
-        <Reveal className="mx-auto mt-6 max-w-3xl">
-          <p className="rounded-2xl border-s-4 border-s-brand-purple bg-surface p-5 text-body-lg leading-relaxed text-ink/80 shadow-card">
-            {s.human.honesty}
-          </p>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.human.honestyMore}</p>
+        <Reveal className="max-w-[60ch] space-y-4">
+          <p className="bg-silver-gray p-6 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">{s.human.honesty}</p>
+          <p className={text}>{s.human.honestyMore}</p>
         </Reveal>
         {/* One Reveal around the whole list — a <li> may not be wrapped in the
             <div> that Reveal renders. */}
-        <Reveal className="mx-auto mt-6 max-w-3xl">
-          <ul className="space-y-3">
+        <Reveal className="mt-8 max-w-[60ch]">
+          <ul className="border-t border-line">
             {s.human.items.map((x) => (
-              <li
-                key={x}
-                className="flex items-start gap-3 rounded-xl border border-line bg-surface p-4 text-body-lg leading-relaxed text-ink/80 shadow-card"
-              >
-                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue" aria-hidden />
+              <li key={x} className="border-b border-line py-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">
                 {x}
               </li>
             ))}
           </ul>
         </Reveal>
-        <Reveal className="mx-auto mt-6 max-w-3xl">
-          <p className="text-body-lg leading-relaxed text-ink/75">
+        <Reveal className="mt-8 space-y-4">
+          <p className={text}>
             {s.human.inheritLead}
-            <Link
-              href={localePath(locale, "product/human-handoff")}
-              className="text-brand-blue underline-offset-4 hover:underline"
-            >
+            <Link href={localePath(locale, "product/human-handoff")} className={link}>
               {s.human.inheritLink}
             </Link>
             {"."}
           </p>
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.human.afterHours}</p>
+          <p className={text}>{s.human.afterHours}</p>
         </Reveal>
-
-        <Reveal className="mx-auto mt-14 max-w-2xl text-center">
-          <h3 className="text-h3">{s.human.sceneHeading}</h3>
-          <p className="mt-3 text-body-lg leading-relaxed text-ink/70">{s.human.sceneBody}</p>
-        </Reveal>
-        <div className="mt-8">
-          <SampleConversation locale={locale} />
-        </div>
-      </section>
-
-      <section className="bg-surface py-16">
-        <div className="container">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <h2 className="text-h2">{s.kb.heading}</h2>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.kb.intro}</p>
+        {/* The scene beside its conversation, as the human handoff page has it. */}
+        <div className="mt-16 grid gap-8 lg:grid-cols-12 lg:gap-6">
+          <Reveal className="lg:col-span-4">
+            <h3 className="font-display text-[clamp(20px,1.8vw,26px)] leading-[1.4] font-medium text-balance">
+              {s.human.sceneHeading}
+            </h3>
+            <p className="mt-3 text-[1.0625rem] leading-[1.7] text-muted-foreground">{s.human.sceneBody}</p>
           </Reveal>
-          <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {s.kb.items.map((k, i) => (
-              <Reveal key={k.title} delay={i * 0.05}>
-                <article className="card group h-full">
-                  <IconChip name={kbIcons[i]} delay={i * 0.08} />
-                  <h3 className="mt-3 text-h5">{k.title}</h3>
-                  <p className="mt-2 text-body leading-relaxed text-ink/75">{k.body}</p>
-                </article>
-              </Reveal>
-            ))}
+          <div className="lg:col-span-8">
+            <SampleConversation locale={locale} />
           </div>
-          <Reveal className="mx-auto mt-8 max-w-3xl">
-            <p className="text-body-lg leading-relaxed text-ink/75">{s.kb.mechanics}</p>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/75">{s.kb.testing}</p>
-          </Reveal>
-          <Reveal className="mx-auto mt-10 max-w-3xl">
-            <h3 className="text-h4">{s.kb.channelsHeading}</h3>
-            <p className="mt-3 text-body-lg leading-relaxed text-ink/75">{s.kb.channels}</p>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/70">
+        </div>
+      </Section>
+
+      <Section title={s.kb.heading} lead={s.kb.intro}>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {s.kb.items.map((k, i) => (
+            <Reveal key={k.title} delay={i * 0.05} className="h-full">
+              <div className={tile}>
+                <h3 className="text-[1.25rem] leading-[1.3] font-bold">{k.title}</h3>
+                <p className="mt-2 text-body-lg leading-relaxed text-muted-foreground">{k.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal className="mt-10 space-y-4">
+          <p className={text}>{s.kb.mechanics}</p>
+          <p className={text}>{s.kb.testing}</p>
+        </Reveal>
+        <Rows className="mt-10">
+          <Row title={s.kb.channelsHeading} level={3}>
+            <p>{s.kb.channels}</p>
+            <p>
               {s.kb.kbLinkLead}
-              <Link
-                href={localePath(locale, "product/knowledge-base")}
-                className="text-brand-blue underline-offset-4 hover:underline"
-              >
+              <Link href={localePath(locale, "product/knowledge-base")} className={link}>
                 {s.kb.kbLinkText}
               </Link>
               {"."}
             </p>
-            <p className="mt-4 text-body-lg leading-relaxed text-ink/70">
+            <p>
               {s.kb.securityLead}
-              <Link href={localePath(locale, "security")} className="text-brand-blue underline-offset-4 hover:underline">
+              <Link href={localePath(locale, "security")} className={link}>
                 {s.kb.securityLink}
               </Link>
               {"."}
             </p>
-          </Reveal>
-        </div>
-      </section>
+          </Row>
+        </Rows>
+      </Section>
 
-      <section className="container py-16">
-        <Reveal className="mx-auto max-w-3xl">
-          <h2 className="text-h2">{s.setup.heading}</h2>
-          {s.setup.paras.map((p) => (
-            <p key={p} className="mt-4 text-body-lg leading-relaxed text-ink/75">{p}</p>
-          ))}
-          <p className="mt-4 text-body-lg leading-relaxed text-ink/70">
-            {s.setup.linkLead}
-            <Link
-              href={localePath(locale, "product/agent-builder")}
-              className="text-brand-blue underline-offset-4 hover:underline"
-            >
-              {s.setup.linkText}
-            </Link>
-            {"."}
-          </p>
-        </Reveal>
-        <div className="mx-auto mt-14 max-w-3xl">
-          <h2 className="mb-5 text-center text-h3">{s.faqHeading}</h2>
-          <FaqAccordion items={s.faq} />
-        </div>
-      </section>
+      <Section>
+        <Rows>
+          <Row title={s.setup.heading}>
+            {s.setup.paras.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+            <p>
+              {s.setup.linkLead}
+              <Link href={localePath(locale, "product/agent-builder")} className={link}>
+                {s.setup.linkText}
+              </Link>
+              {"."}
+            </p>
+          </Row>
+        </Rows>
+      </Section>
+
+      <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
+        <FaqAccordion items={s.faq} />
+      </Section>
 
       <DemoCta locale={locale} />
     </>

@@ -22,6 +22,10 @@ import { DemoLink } from "@/components/DemoLink";
  * H3 on purpose: at this article length a third level adds outline depth
  * without adding navigation, and a flat H2 set is what pulls clean section
  * links in search results.
+ *
+ * Styled to the inner-page kit by classes only (a post may come from the
+ * dashboard, so its rendering is unchanged): a start-aligned reading column,
+ * serif H1 and H2, square image, markers, note and closing panel.
  */
 export async function BlogPostPage({ locale, post }: { locale: Locale; post: BlogPost }) {
   const s = blogStrings[locale];
@@ -29,18 +33,18 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
   const others = (await getAllPosts()).filter((p) => p.slug !== post.slug).slice(0, 2);
 
   return (
-    <article className="container py-14">
-      <div className="mx-auto max-w-2xl">
+    <article className="container pt-[clamp(56px,7vw,112px)] pb-[clamp(96px,11.2vw,168px)]">
+      <div className="max-w-2xl">
         <Link
           href={localePath(locale, "blog")}
-          className="inline-block py-2 text-body-lg text-brand-blue hover:underline"
+          className="inline-flex min-h-12 items-center text-body-lg font-bold hover:underline"
         >
           ← {s.backToBlog}
         </Link>
 
-        <h1 className="mt-4 text-h1">{c.title}</h1>
+        <h1 className="mt-4 font-display text-[clamp(36px,4.4vw,60px)] leading-[1.25] font-medium text-balance">{c.title}</h1>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-body text-ink/55">
+        <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-body-lg text-muted-foreground">
           <span>{s.published}</span>
           <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
           <span aria-hidden>·</span>
@@ -51,7 +55,7 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
           {post.tags[locale].map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-line px-2.5 py-1 text-body-sm text-ink/60"
+              className="border border-line px-2.5 py-1 text-body text-muted-foreground"
             >
               {tag}
             </span>
@@ -70,25 +74,25 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
           height={POST_IMAGE_H}
           priority
           sizes="(max-width: 768px) 100vw, 672px"
-          className="mt-8 w-full rounded-2xl border border-line"
+          className="mt-8 w-full border border-line"
         />
 
-        <div className="mt-10 space-y-5">
+        <div className="mt-10 space-y-6">
           {c.body.map((block, i) => {
             switch (block.t) {
               case "h2":
                 return (
-                  <h2 key={i} className="pt-4 text-h3 text-ink">
+                  <h2 key={i} className="pt-6 font-display text-[clamp(26px,2.6vw,36px)] leading-[1.3] font-medium text-balance">
                     {block.text}
                   </h2>
                 );
               case "ul":
                 return (
-                  <ul key={i} className="space-y-2.5">
+                  <ul key={i} className="space-y-3">
                     {block.items.map((item) => (
-                      <li key={item} className="flex gap-3 text-body-lg leading-relaxed text-ink/80">
+                      <li key={item} className="flex gap-3 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">
                         <span
-                          className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue"
+                          className="mt-[0.7em] h-1.5 w-1.5 shrink-0 bg-charcoal"
                           aria-hidden
                         />
                         <span>{item}</span>
@@ -100,12 +104,12 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
                 return (
                   <ol key={i} className="space-y-3">
                     {block.items.map((item, n) => (
-                      <li key={item} className="flex gap-3 text-body-lg leading-relaxed text-ink/80">
+                      <li key={item} className="flex gap-3 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">
                         {/* A real counter rather than list-style, so the
                             marker sits inside the flow in both directions —
                             RTL list markers are inconsistent across browsers. */}
                         <span
-                          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-body-sm font-bold text-brand-blue"
+                          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center bg-silver-gray text-body font-bold"
                           aria-hidden
                         >
                           {n + 1}
@@ -119,14 +123,14 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
                 return (
                   <p
                     key={i}
-                    className="rounded-xl border-s-4 border-brand-purple bg-surface p-4 text-body-lg leading-relaxed text-ink/75"
+                    className="border-s-4 border-charcoal bg-silver-gray p-5 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]"
                   >
                     {block.text}
                   </p>
                 );
               default:
                 return (
-                  <p key={i} className="text-body-lg leading-relaxed text-ink/80">
+                  <p key={i} className="text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">
                     {block.text}
                   </p>
                 );
@@ -134,12 +138,12 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
           })}
         </div>
 
-        <div className="mt-12 rounded-2xl border border-line bg-surface p-6 text-center">
-          <p className="text-h4 text-ink">{s.ctaTitle}</p>
-          <p className="mx-auto mt-2 max-w-md text-body-lg leading-relaxed text-ink/70">
+        <div className="mt-14 bg-silver-gray p-6 sm:p-8">
+          <p className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium">{s.ctaTitle}</p>
+          <p className="mt-2 max-w-md text-body-lg leading-relaxed text-muted-foreground">
             {s.ctaBody}
           </p>
-          <div className="mt-5 flex justify-center">
+          <div className="mt-6 flex">
             <DemoLink locale={locale} variant="primary">
               {s.ctaButton}
             </DemoLink>
@@ -148,13 +152,13 @@ export async function BlogPostPage({ locale, post }: { locale: Locale; post: Blo
 
         {others.length > 0 && (
           <div className="mt-12">
-            <p className="text-h5 text-ink">{s.related}</p>
+            <p className="text-[1.25rem] font-bold">{s.related}</p>
             <ul className="mt-3 space-y-2">
               {others.map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={localePath(locale, `blog/${p.slug}`)}
-                    className="inline-block py-2 text-body-lg text-brand-blue hover:underline"
+                    className="inline-flex min-h-12 items-center text-body-lg font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red"
                   >
                     {p[locale].title}
                   </Link>

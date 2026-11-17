@@ -10,12 +10,16 @@ import s from "./page.module.css";
  * - `tone="dark"`: a Charcoal `.on-dark` band with room above and inside it.
  *   ui/ primitives and DemoLink read right inside; legacy utilities such as
  *   text-ink or btn-secondary don't follow the band.
+ * - `headingId`: the id an in-page link (#id) lands on, on the H2 itself. An
+ *   `id` on the section would land above its top padding, 96-168px over the
+ *   heading; html's scroll-padding-top clears the header for the H2.
  *
  * Light sections pad only their top, as on the home, so a page's last light
  * section passes its own bottom padding in `className`.
  */
 export function Section({
   id,
+  headingId,
   title,
   lead,
   layout = "stack",
@@ -24,6 +28,8 @@ export function Section({
   children,
 }: {
   id?: string;
+  /** The H2's id, for in-page links; needs a `title`. */
+  headingId?: string;
   title?: ReactNode;
   lead?: ReactNode;
   layout?: "stack" | "split";
@@ -34,7 +40,9 @@ export function Section({
   const tones = tone === "dark" ? `on-dark ${s.band}` : s.section;
   const head = title ? (
     <div className={s.head}>
-      <h2 className={s.h2}>{title}</h2>
+      <h2 id={headingId} className={s.h2}>
+        {title}
+      </h2>
       {lead ? <p>{lead}</p> : null}
     </div>
   ) : null;

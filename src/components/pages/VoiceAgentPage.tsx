@@ -10,7 +10,7 @@ import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
-import type { FaqItem } from "@/lib/schema";
+import { voiceAgentFaq } from "@/content/pageFaq";
 
 /**
  * /product/voice-agent (spec P2-22 row 3) — the capability page behind the
@@ -31,9 +31,7 @@ import type { FaqItem } from "@/lib/schema";
  *   numbers live in the dashboard (see /product/dashboard).
  *
  * On the inner-page kit (About is the pilot): PageHero, then every question
- * with its answer as a ruled row; the limits as flat tiles. pageFactory
- * imports this module for its FAQ, so imports here stay server-only or
- * already ship everywhere.
+ * with its answer as a ruled row; the limits as flat tiles. Its FAQ lives in content/pageFaq.ts.
  */
 
 /** About's ruled row: the question on the start side, its answer beside it. */
@@ -126,24 +124,6 @@ const t = {
       path: "product/human-handoff",
     },
     faqHeading: "أسئلة عن الوكيل الصوتي",
-    faq: [
-      {
-        q: "الوكيل يفهم اللهجة النجدية، ولا لازم عميلي يتكلم فصحى؟",
-        a: "يفهم اللهجة زي ما تنقال — «أبي أحجز بكره العصر» تنفهم صح. عميلك ما يحتاج يتكلم فصحى ولا يبطئ كلامه.",
-      },
-      {
-        q: "إذا قاطعت الوكيل وهو يتكلم، وش يصير؟",
-        a: "يسكت في نفس اللحظة ويسمعك. وإذا سكتّ فجأة، ما يعيد جملته من أولها — يقول «نعم؟» وينتظرك.",
-      },
-      {
-        q: "أقدر أستخدم صوتي أو صوت موظفي للوكيل؟",
-        a: "تقدر: عينة 60 ثانية على الأقل مع إقرار موافقة مسجّل باسم صاحب الصوت، وبعدها تعيّنه لوكيلك. والموافقة تنسحب بأي وقت، فيتوقف استخدام الصوت فوراً. اسأل فريقنا عن مدة الاحتفاظ بالعينة وإجراءات حذفها قبل رفعها. والاستنساخ ينسخ الصوت مو لهجة محادثة جديدة، والميزة حسب باقتك.",
-      },
-      {
-        q: "هل الوكيل يتصل على عملائي؟",
-        a: "إي. فريقك يبدأ المكالمة من اللوحة — يختار عميلاً أو يكتب رقماً — والوكيل يمسك الحوار، وتنسجّل وتتفرّغ وتتلخّص زي أي مكالمة. وما في اتصال آلي على قائمة أرقام.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "How does the voice agent understand Saudi dialect?",
@@ -220,24 +200,6 @@ const t = {
       path: "product/human-handoff",
     },
     faqHeading: "Voice agent questions",
-    faq: [
-      {
-        q: "Does the agent understand Najdi dialect, or does my customer have to speak formal Arabic?",
-        a: "It understands the dialect as spoken, with normalisation of colloquial forms and a booking vocabulary built from real mistranscription forensics. Your customer doesn't have to switch registers or slow down.",
-      },
-      {
-        q: "What happens if I interrupt the agent mid-sentence?",
-        a: "It stops instantly and listens. If you trail off, it doesn't replay its sentence — it says a short “yes?” and waits.",
-      },
-      {
-        q: "Can I use my own voice, or an employee's, for the agent?",
-        a: "Yes: a sample of at least 60 seconds plus a recorded consent attestation naming the speaker, then you assign the voice to your agent. You can withdraw consent at any time, which stops further use immediately. Ask our team about sample retention and deletion before uploading. Cloning reproduces a voice, not a new conversational dialect, and availability depends on your plan.",
-      },
-      {
-        q: "Does the agent call my customers?",
-        a: "Yes. Your team starts the call from the dashboard — pick a customer or type a number — and the agent handles the conversation, logged, transcribed and summarised like any other call. There is no automatic dialling of a list.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -293,7 +255,7 @@ export function VoiceAgentPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={voiceAgentFaq[locale]} />
       </Section>
 
       <OmniChannels locale={locale} />
@@ -302,5 +264,3 @@ export function VoiceAgentPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const voiceAgentFaq = { ar: t.ar.faq, en: t.en.faq };

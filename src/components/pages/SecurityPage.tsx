@@ -8,7 +8,7 @@ import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
-import type { FaqItem } from "@/lib/schema";
+import { securityFaq } from "@/content/pageFaq";
 
 /**
  * /security (blueprint §6.4) — PDPL-led, precise فصحى (the §3 tone
@@ -19,8 +19,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): a Charcoal PageHero (the page
  * kept its dark hero), each question with its answer as a ruled row, the FAQ
- * in the split layout. pageFactory imports this module for `securityFaq`, so
- * imports here stay server-only or already ship everywhere.
+ * in the split layout. Its FAQ lives in content/pageFaq.ts.
  */
 
 /** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
@@ -88,24 +87,6 @@ const t = {
       },
     ],
     faqHeading: "أسئلة الأمان",
-    faq: [
-      {
-        q: "أين تُخزَّن بيانات مكالماتي تحديداً؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة) عبر شبكة خاصة، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات.",
-      },
-      {
-        q: "هل تُعالَج البيانات داخل السعودية؟",
-        a: "التخزين الدائم في منطقة الخليج، والمعالجة اللحظية للصوت والذكاء الاصطناعي عبر مزوّدين عالميين — ونفصح عن ذلك لأن النظام يتطلب الإفصاح عن النقل عبر الحدود.",
-      },
-      {
-        q: "من يستطيع الاطلاع على مكالمات منشأتي؟",
-        a: "موظفوك حسب الصلاحيات التي تحددها، وفريق الدعم عند الحاجة فقط — وكل اطلاع يُسجَّل في سجل تدقيق غير قابل للتعديل.",
-      },
-      {
-        q: "هل توجد اتفاقية معالجة بيانات؟",
-        a: "نعم. الملخص منشور في صفحة مستقلة، وتُوقَّع النسخة الكاملة ضمن التعاقد.",
-      },
-    ] as FaqItem[],
     legalLinks: "اقرأ أيضاً: ",
   },
   en: {
@@ -153,24 +134,6 @@ const t = {
       },
     ],
     faqHeading: "Security questions",
-    faq: [
-      {
-        q: "Where exactly is my call data stored?",
-        a: "Permanent storage is in the Gulf region (Doha) over private networking, and recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise.",
-      },
-      {
-        q: "Is data processed inside Saudi Arabia?",
-        a: "Permanent storage is in the Gulf region, while realtime speech and AI processing transits global providers. We disclose that fully, because disclosing cross-border transfer is what the PDPL requires.",
-      },
-      {
-        q: "Who can see my organisation's calls?",
-        a: "Your employees under the permissions you define, and platform support only when needed — every support view is written to an append-only audit log.",
-      },
-      {
-        q: "Is there a data processing agreement?",
-        a: "Yes. A summary DPA is published on its own page, and the full version is signed as part of contracting.",
-      },
-    ] as FaqItem[],
     legalLinks: "Also read: ",
   },
 } as const;
@@ -203,7 +166,7 @@ export function SecurityPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={securityFaq[locale]} />
         {/* A row of links rather than a sentence, so each link is a full 48px target. */}
         <p className="mt-8 text-body-lg text-muted-foreground">
           {s.legalLinks}
@@ -225,5 +188,3 @@ export function SecurityPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const securityFaq = { ar: t.ar.faq, en: t.en.faq };

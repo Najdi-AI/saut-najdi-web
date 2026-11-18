@@ -4,14 +4,16 @@ import { meta } from "@/content/meta";
 import { chrome } from "@/content/chrome";
 import { updatedFor } from "@/content/updated";
 import { fullFaq } from "@/content/faq";
-import { handoffFaq } from "@/components/pages/HumanHandoffPage";
-import { securityFaq } from "@/components/pages/SecurityPage";
-import { journeySteps } from "@/components/pages/HowItWorksPage";
-import { demoFaq } from "@/components/pages/DemoPage";
-import { voiceAgentFaq } from "@/components/pages/VoiceAgentPage";
-import { knowledgeBaseFaq } from "@/components/pages/KnowledgeBasePage";
-import { dashboardFaq } from "@/components/pages/DashboardPage";
-import { agentBuilderFaq } from "@/components/pages/AgentBuilderPage";
+import { journeySteps } from "@/content/journey";
+import {
+  voiceAgentFaq,
+  knowledgeBaseFaq,
+  dashboardFaq,
+  agentBuilderFaq,
+  handoffFaq,
+  securityFaq,
+  demoFaq,
+} from "@/content/pageFaq";
 import { clinicsFaq } from "@/components/pages/ClinicsPage";
 import { restaurantsFaq } from "@/components/pages/RestaurantsPage";
 import { hotelsFaq } from "@/components/pages/HotelsPage";
@@ -106,8 +108,8 @@ const crumbNames = {
 /**
  * The nine Wave-2 pages (spec P2-22) differ in exactly one thing — which FAQ
  * they carry — so they share two switch branches instead of nine
- * copy-pasted ones. Adding a tenth page is: page component with an exported
- * faq, an entry here, a crumb label above, and its `kind` in the right branch.
+ * copy-pasted ones. Adding a tenth page is: page component, its FAQ in
+ * content/pageFaq.ts, an entry here, a crumb label above, and its `kind` in the right branch.
  */
 const wave2Faq = {
   "product/voice-agent": voiceAgentFaq,

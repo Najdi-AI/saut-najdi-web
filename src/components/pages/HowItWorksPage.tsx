@@ -6,6 +6,7 @@ import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { JourneySteps } from "@/components/JourneySteps";
+import { journeySteps } from "@/content/journey";
 import { IvrComparison } from "@/components/IvrComparison";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
@@ -16,12 +17,11 @@ import { Section } from "@/components/page/Section";
  *
  * Copy pass: a brief per stage, not an explanation of it. Each step is one
  * or two short sentences; the seven-step shape is fixed by JourneySteps'
- * icon list and by the HowTo graph that consumes `journeySteps` below.
+ * icon list and by the HowTo graph that consumes `journeySteps` (content/journey.ts).
  *
  * On the inner-page kit (About is the pilot): PageHero, the trust strip, the
  * journey under its question, then the IVR comparison (moved here from the
- * old home, rebrand D4). pageFactory imports this module for journeySteps,
- * so every import here stays server-only or already ships everywhere.
+ * old home, rebrand D4). The steps live in content/journey.ts.
  */
 
 const t = {
@@ -33,36 +33,6 @@ const t = {
     answerH2: "كيف يشتغل الرد الآلي بالذكاء الاصطناعي؟",
     capsule:
       "كلام عميلك يصير نص لحظياً، والوكيل يفهم قصده ويرد بصوت طبيعي بلهجته وينفذ الطلب. وإذا احتاج الموضوع إنسان، موظفك يستلم بكامل السياق. وكل شي ينتهي مسجّلاً ومكتوباً وملخّصاً في لوحتك.",
-    steps: [
-      {
-        title: "الرنة الأولى — الوكيل يرد",
-        body: "بأي وقت: بعد الدوام، يوم الجمعة، وقت الذروة. ما في انتظار.",
-      },
-      {
-        title: "الكلام يصير نص لحظياً",
-        body: "مبني على اللهجات السعودية — «أبغى أحجز بكرة» يفهمها زي ما تنقال.",
-      },
-      {
-        title: "الوكيل يفهم القصد",
-        body: "حجز؟ سعر؟ تعديل موعد؟ يرد من أسعارك وأوقاتك وتاريخ العميل معك.",
-      },
-      {
-        title: "يرد بلهجة عميلك",
-        body: "صوت طبيعي. وإذا قاطعه العميل يسكت ويسمع، ويقرأ رقم الحجز رقم رقم.",
-      },
-      {
-        title: "ينفذ — مو بس يتكلم",
-        body: "يتحقق من الفاضي ويحجز، يسجل تفاصيل الطلب، ويسجل طلب اتصال برا الدوام.",
-      },
-      {
-        title: "وإذا احتاج الموضوع إنسان؟ موظفك يستلم",
-        body: "المكالمة تروح لموظفك ومعها النص والملخص وتاريخ العميل، والعميل ما يعيد كلمة. وفريقك يتابع المكالمات الحية ويستلمها من اللوحة.",
-      },
-      {
-        title: "كل شي في لوحتك",
-        body: "التسجيل والنص وملخص عربي: ليش اتصل ووش صار. مع أرقام نشاطك محسوبة من مكالماتك.",
-      },
-    ],
     outro:
       "الرحلة كلها في مكالمة وحدة، وأنت اللي تحدد القواعد: متى يحجز الوكيل، ومتى يحوّل، ومين يستلم. ومن نفس اللوحة يبدأ فريقك مكالمة صادرة — يختار العميل والوكيل، والوكيل يمسك الحوار.",
   },
@@ -74,36 +44,6 @@ const t = {
     answerH2: "How does AI call answering actually work?",
     capsule:
       "Your customer's speech becomes text in real time, the agent works out the intent, replies in a natural voice in the same dialect, and acts on the request. If the matter needs a person, your employee takes over in full context. Everything ends up recorded, transcribed and summarised in your dashboard.",
-    steps: [
-      {
-        title: "The first ring — the agent answers",
-        body: "Any hour: after close, on a Friday, at peak. No hold queue.",
-      },
-      {
-        title: "Speech becomes text, in real time",
-        body: "Built on Saudi dialects — it understands how people actually talk, not textbook Arabic.",
-      },
-      {
-        title: "The agent works out the intent",
-        body: "A booking? A price? A reschedule? It answers from your prices, hours and the caller's history with you.",
-      },
-      {
-        title: "It replies in your customer's dialect",
-        body: "Natural speech. Interrupt it and it stops and listens, and it reads booking codes digit by digit.",
-      },
-      {
-        title: "It acts — not just talks",
-        body: "Checks availability and books, records order details, and logs a callback request when you're closed.",
-      },
-      {
-        title: "And when it needs a human? Your employee takes over",
-        body: "The call arrives with the transcript, summary and customer history, so the caller never repeats a word. Your team can also watch live calls and take one over.",
-      },
-      {
-        title: "Everything lands in your dashboard",
-        body: "Recording, transcript and a clear summary of what happened — plus your own activity numbers, worked out from your calls.",
-      },
-    ],
     outro:
       "That whole journey happens inside one call, and you set the rules: when the agent books on its own, when it hands over, and who takes it. From the same dashboard your team can also place an outbound call — pick the customer and the agent, and the agent holds the conversation.",
   },
@@ -125,7 +65,7 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
       <Section title={s.answerH2} lead={s.capsule}>
         {/* JourneySteps centres a 2xl list; this box holds it to the start. */}
         <div className="max-w-2xl">
-          <JourneySteps steps={s.steps} locale={locale} />
+          <JourneySteps steps={journeySteps[locale]} locale={locale} />
         </div>
         <Reveal className="mt-12 max-w-[60ch] border-t border-border pt-10">
           <p className="text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]">{s.outro}</p>
@@ -146,7 +86,3 @@ export function HowItWorksPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-// Source of truth for the HowTo graph in pageFactory — the steps stay written
-// once, here, where the page renders them.
-export const journeySteps = { ar: t.ar.steps, en: t.en.steps };

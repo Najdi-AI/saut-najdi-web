@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { SampleConversation } from "@/components/SampleConversation";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
-import type { FaqItem } from "@/lib/schema";
+import { handoffFaq } from "@/content/pageFaq";
 
 /**
  * /product/human-handoff — the moat page (blueprint §6.2 ★). Scene first,
@@ -20,8 +20,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, the scene beside its
  * conversation, the pillars as flat tiles, and the remaining questions as
- * ruled rows. pageFactory imports this module for its FAQ, so imports here
- * stay server-only or already ship everywhere.
+ * ruled rows. Its FAQ lives in content/pageFaq.ts.
  */
 
 /** About's ruled row: the question on the start side, its answer beside it. */
@@ -83,24 +82,6 @@ const t = {
       heading: "وش يصير بعد المكالمة؟",
       body: "كل تصعيد يتسجل: متى وليش ومين استلم. تراجع النص والتسجيل، وتعدل قواعد التصعيد على ضوئه.",
     },
-    faq: [
-      {
-        q: "مين يحدد قواعد التصعيد؟",
-        a: "أنت. تجيك قواعد افتراضية منطقية، وتعدل عليها: وش يتحول، لمين، ومتى.",
-      },
-      {
-        q: "وش يشوف موظفي لما يستلم المكالمة؟",
-        a: "سبب التصعيد، ونص المحادثة كامل، وملخص عربي، وتاريخ العميل معكم — كله قدامه لحظة الاستلام.",
-      },
-      {
-        q: "أقدر أراقب مكالمات الوكيل؟",
-        a: "تقدر. من اللوحة تتابع المكالمات الحية، تسمع، تهمس للوكيل، أو تستلم بضغطة وحدة.",
-      },
-      {
-        q: "وإذا كان الاتصال برا الدوام؟",
-        a: "يخدم العميل في اللي يقدر عليه، وإذا احتاج إنسان يسجل طلب اتصال ويوعده إن أحد من فريقك يرجع له.",
-      },
-    ] as FaqItem[],
     faqHeading: "أسئلة عن التصعيد",
   },
   en: {
@@ -145,24 +126,6 @@ const t = {
       heading: "What happens after the call?",
       body: "Every escalation is logged — when, why, and who took it. Review the transcript and recording, then tune the rules on what you see.",
     },
-    faq: [
-      {
-        q: "Who defines the escalation rules?",
-        a: "You do. Sensible defaults ship with the platform, and you tune what transfers, to whom, and when.",
-      },
-      {
-        q: "What does my employee see when they take over?",
-        a: "The escalation reason, the full transcript, a summary, and the caller's history — all on screen at the moment of takeover.",
-      },
-      {
-        q: "Can I monitor the agent's calls?",
-        a: "Yes. Watch live calls from the dashboard, listen in, whisper to the agent, or take over in one click.",
-      },
-      {
-        q: "What about calls outside working hours?",
-        a: "The agent handles what it can, then logs a callback request with the caller's preferred time for your team the next morning.",
-      },
-    ] as FaqItem[],
     faqHeading: "Handoff questions",
   },
 } as const;
@@ -211,7 +174,7 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={handoffFaq[locale]} />
       </Section>
 
       <OmniChannels locale={locale} />
@@ -220,5 +183,3 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const handoffFaq = { ar: t.ar.faq, en: t.en.faq };

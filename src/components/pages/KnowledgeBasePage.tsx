@@ -9,7 +9,7 @@ import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
-import type { FaqItem } from "@/lib/schema";
+import { knowledgeBaseFaq } from "@/content/pageFaq";
 
 /**
  * /product/knowledge-base (spec P2-22 row 7). Brief-per-feature: each section
@@ -24,9 +24,7 @@ import type { FaqItem } from "@/lib/schema";
  * disclosed here, not hidden.
  *
  * On the inner-page kit (About is the pilot): PageHero, every question with
- * its answer as a ruled row, the content types as flat tiles. pageFactory
- * imports this module for its FAQ, so imports here stay server-only or
- * already ship everywhere.
+ * its answer as a ruled row, the content types as flat tiles. Its FAQ lives in content/pageFaq.ts.
  */
 
 /** About's ruled row: the question on the start side, its answer beside it. */
@@ -117,24 +115,6 @@ const t = {
       link: { lead: "التفاصيل الكاملة في ", text: "صفحة الأمان والبيانات", path: "security" },
     },
     faqHeading: "أسئلة عن قاعدة المعرفة",
-    faq: [
-      {
-        q: "وش صيغ الملفات اللي تقبلونها؟",
-        a: "PDF وWord (.docx) وملفات نصية (.txt / .md)، مع أسئلة وأجوبة وروابط ومقتطفات وأوقات الدوام. والملفات الممسوحة ضوئياً تنقرأ بتعرّف ضوئي عربي يطلع الحروف موصولة صح.",
-      },
-      {
-        q: "هل الوكيل يجاوب من ملفاتي في الشات؟",
-        a: "إي، على قنوات المحادثة النصية: يرد من محتواك أنت، وإذا ما لقى جواباً واضحاً يصعّد أو يسجل طلب اتصال. وتقدر تجرب أي سؤال في المحادثة التجريبية قبل ما تنشر.",
-      },
-      {
-        q: "لازم أعيد كتابة ملفاتي بصيغة معينة؟",
-        a: "لا، ارفعها زي ما هي. اللي ينفع تكتبه يدوياً هو الردود الحساسة اللي تبي صياغتها بالحرف — وهذي تحطها كأسئلة وأجوبة.",
-      },
-      {
-        q: "أقدر أخلي كل فرع يقرأ من ملفاته فقط؟",
-        a: "تقدر. نطاق قاعدة المعرفة يتحدد لكل وكيل على حدة، فالوكلاء ما يتداخلون في ملفات بعض.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "Upload your documents — your agent answers from them",
@@ -209,24 +189,6 @@ const t = {
       link: { lead: "The full detail is on ", text: "the security and data page", path: "security" },
     },
     faqHeading: "Knowledge base questions",
-    faq: [
-      {
-        q: "Which file formats do you accept?",
-        a: "PDF, Word (.docx) and plain text (.txt / .md), alongside Q&A pairs, links, snippets and working hours. Scans are read with Arabic OCR that returns correctly joined letters.",
-      },
-      {
-        q: "Does the agent answer from my documents in chat?",
-        a: "Yes, on the text chat channels — from your own content, and it escalates or logs a callback when there's no clear answer. You can try any question in the test chat before publishing.",
-      },
-      {
-        q: "Do I have to rewrite my documents in a particular format?",
-        a: "No, upload them as they are. The only thing worth writing by hand is a sensitive reply you want worded exactly — and that belongs in a Q&A pair.",
-      },
-      {
-        q: "Can each branch read only its own material?",
-        a: "Yes. Knowledge-base scope is set per agent, so agents never cross into each other's files.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -286,7 +248,7 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={knowledgeBaseFaq[locale]} />
       </Section>
 
       <OmniChannels locale={locale} />
@@ -295,5 +257,3 @@ export function KnowledgeBasePage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const knowledgeBaseFaq = { ar: t.ar.faq, en: t.en.faq };

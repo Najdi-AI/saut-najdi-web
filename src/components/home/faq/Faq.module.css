@@ -76,16 +76,22 @@
   font-size: 20px;
   font-weight: 500;
   line-height: 1.5;
-  transition:
-    background-color 180ms ease,
-    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 180ms ease;
 }
 .ask summary:focus-visible .q {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
 }
-.ask summary:active .q {
-  transform: scale(0.98);
+/* The press scale is motion, so it runs only when motion is allowed; the colour change above always does. */
+@media (prefers-reduced-motion: no-preference) {
+  .q {
+    transition:
+      background-color 180ms ease,
+      transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ask summary:active .q {
+    transform: scale(0.98);
+  }
 }
 @media (hover: hover) and (pointer: fine) {
   .ask:not([open]) summary:hover .q {

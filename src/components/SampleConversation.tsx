@@ -228,7 +228,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
                   animate={landed ? { opacity: [0, 1, 0] } : { opacity: 0 }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
                 />
-                <p className="flex items-center gap-2 text-body-lg font-bold text-brand-purple">
+                <p className="flex items-center gap-2 text-body-lg font-bold text-purple">
                   <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden fill="none" className="shrink-0">
                     <path d="M10 3v8m0 0l-3-3m3 3l3-3M4 15h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -237,7 +237,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
                 <ul className="mt-2 space-y-1">
                   {turn.lines.map((l) => (
                     <li key={l} className="flex items-center gap-2 text-body text-ink/70">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue" aria-hidden />
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-blue" aria-hidden />
                       {l}
                     </li>
                   ))}
@@ -250,7 +250,7 @@ export function SampleConversation({ locale }: { locale: Locale }) {
             <motion.div key={i} {...motionProps} className={`flex ${isCaller ? "justify-start" : "justify-end"}`}>
               <div
                 className={`max-w-[85%] rounded-[14px] px-4 py-3 text-body-lg leading-relaxed transition-shadow duration-200 ${
-                  speaking ? "ring-2 ring-brand-blue/55" : "ring-0 ring-transparent"
+                  speaking ? "ring-2 ring-blue" : "ring-0 ring-transparent"
                 } ${
                   isCaller
                     ? "rounded-es-[4px] bg-silver-gray text-ink"
@@ -259,11 +259,13 @@ export function SampleConversation({ locale }: { locale: Locale }) {
                       : "rounded-ee-[4px] bg-charcoal text-off-white"
                 }`}
               >
-                {/* 14px at 85%: the critique found 12px at 55-60% too
-                    faint for Arabic (about 5.4:1 on purple, 12.6:1 on
-                    Charcoal). */}
+                {/* The speaker's name in Silver Gray, a palette ink: 5.8:1 on
+                    the Purple employee bubble and 15:1 on the Charcoal agent
+                    one (85% Off-White came to 4.57:1 on Purple). The speaking
+                    ring is full Blue, 4.45:1 on the white card, because it
+                    marks which turn is playing. */}
                 {turn.who !== "caller" && (
-                  <span className="mb-1 block text-body font-medium text-off-white/85">
+                  <span className="mb-1 block text-body font-medium text-silver-gray">
                     {turn.who === "human"
                       ? locale === "ar" ? "موظفك" : "Your employee"
                       : locale === "ar" ? "وكيل صوت نجدي" : "Saut Najdi agent"}

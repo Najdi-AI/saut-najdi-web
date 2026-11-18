@@ -165,9 +165,14 @@ export function PricingPage({ locale }: { locale: Locale }) {
       {columns.map((p) => <td key={p.key} className={`border-t border-border px-4 py-4 text-center ${prominent ? "text-[1.125rem] font-semibold" : ""}`}>{row.value(p)}</td>)}
     </tr>
   );
+  // Each group of rows is its own <tbody> headed by this row, so scope="rowgroup" names the rows under it.
   const groupRow = (title: string) => (
-    <tr><th colSpan={columns.length + 1} className="border-t border-border bg-secondary px-5 py-3 text-start font-bold">{title}</th></tr>
+    <tr><th scope="rowgroup" colSpan={columns.length + 1} className="border-t border-border bg-secondary px-5 py-3 text-start font-bold">{title}</th></tr>
   );
+  // A percent in an LTR island in Arabic (house rule), so «15%» and «85% و100%» read 15% as elsewhere on the page
+  // instead of %15. English text needs none.
+  const isolatePercents = (text: string) =>
+    locale === "ar" ? text.split(/(\d+(?:\.\d+)?%)/).map((part, i) => (i % 2 === 1 ? <bdi key={i} dir="ltr">{part}</bdi> : part)) : text;
 
   return (
     <>
@@ -185,7 +190,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
 
       {/* The anchor is the heading itself, so a jump lands it just under the header. */}
       <Section title={<span id="plan-comparison">{t.fullDetails}</span>}>
-        <p className="max-w-[75ch] bg-secondary px-5 py-4 text-[1.0625rem] leading-[1.7]">{t.vat}</p>
+        <p className="max-w-[75ch] bg-secondary px-5 py-4 text-[1.0625rem] leading-[1.7]">{isolatePercents(t.vat)}</p>
         <p className="mt-6 text-[1.0625rem] text-muted-foreground xl:hidden">{t.swipe}</p>
         <div role="region" aria-label={t.tableLabel} tabIndex={0} className="mt-4 overflow-x-auto border border-border focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring">
           <table className="w-full min-w-[1010px] border-separate border-spacing-0 text-start text-[1.0625rem]" aria-label={t.tableLabel}>
@@ -205,12 +210,16 @@ export function PricingPage({ locale }: { locale: Locale }) {
                 </th>)}
               </tr>
             </thead>
+            <tbody>{primaryRows.map((row) => renderRow(row, true))}</tbody>
             <tbody>
-              {primaryRows.map((row) => renderRow(row, true))}
               {groupRow(capacityCopy[locale].title)}
               {planCapacityRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: row.key === "recordings" ? capacityCopy[locale].draft : capacityCopy[locale].note, value: (p) => planCapacityRows(p.key, locale)[index].value }, false))}
+            </tbody>
+            <tbody>
               {groupRow(locale === "ar" ? "ميّزات المنصة" : "Platform features")}
               {planFeatureRows("essential", locale).map((row, index) => renderRow({ key: row.key, label: row.label, detail: locale === "ar" ? "يخضع استخدام المكالمات والمحادثات النصية لقواعد حصة النقاط الموضحة أعلاه. يوضح العرض المكتوب نطاق الربط ورسوم التجهيز وأي رسوم خارجية." : "Call and text usage follows the credit rules shown above. The written offer specifies integration scope, setup and any external charges.", value: (p) => planFeatureRows(p.key, locale)[index].value }, false))}
+            </tbody>
+            <tbody>
               {groupRow(t.usageDetail)}
               {detailRows.map((row) => renderRow(row, false))}
             </tbody>
@@ -238,7 +247,7 @@ export function PricingPage({ locale }: { locale: Locale }) {
             <p className="mt-3 text-muted-foreground">{locale === "ar" ? "حصة واحدة مشتركة. لا خصم إضافياً لمعالجة المكالمة." : "One shared pool. No additional call-processing credit deduction."}</p>
           </Row>
           <Row title={t.conditionTitle}>
-            <ul className="list-disc space-y-3 ps-5">{[terms.zero, terms.more, terms.packs, terms.annual, terms.expiry, terms.setup, terms.byoc].map((c) => <li key={c}>{c}</li>)}</ul>
+            <ul className="list-disc space-y-3 ps-5">{[terms.zero, terms.more, terms.packs, terms.annual, terms.expiry, terms.setup, terms.byoc].map((c) => <li key={c}>{isolatePercents(c)}</li>)}</ul>
           </Row>
         </div>
       </Section>

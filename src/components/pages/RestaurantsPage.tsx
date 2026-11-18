@@ -392,8 +392,8 @@ function DialogueCard({ d, locale }: { d: Dialogue; locale: Locale }) {
         </div>
         {d.human && (
           <div className="flex justify-end">
-            <div className="max-w-[92%] rounded-[14px] bg-brand-purple px-4 py-2.5 text-body leading-relaxed text-canvas">
-              <span className="mb-1 block text-body-sm font-medium text-canvas/75">
+            <div className="max-w-[92%] rounded-[14px] bg-purple px-4 py-2.5 text-body leading-relaxed text-canvas">
+              <span className="mb-1 block text-body-sm font-medium text-silver-gray">
                 {locale === "ar" ? "موظفك" : "Your employee"}
               </span>
               {d.human}

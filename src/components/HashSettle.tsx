@@ -2,6 +2,31 @@
 
 import { useEffect } from "react";
 
+/*
+ * The reader's own hand: a wheel turn, a touch, a scroll key, or a press (the
+ * scrollbar) ends HashSettle at once. Listened for from the moment this module
+ * runs (before hydration, so an input before the landing still counts), and
+ * only on a load with a hash. These are passive, never call preventDefault and
+ * capture no scroll events: the one named exception to the site's wheel/touch
+ * grep gate (PR 18, Kagami), for this file only.
+ */
+const SCROLL_KEYS = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
+const INPUTS = ["wheel", "touchstart", "keydown", "mousedown"];
+let readerTookOver = false;
+let onReader: (() => void) | null = null;
+function onInput(event: Event) {
+  if (event instanceof KeyboardEvent && !SCROLL_KEYS.has(event.key)) return;
+  readerTookOver = true;
+  onReader?.();
+}
+function listen(on: boolean) {
+  for (const type of INPUTS) {
+    if (on) window.addEventListener(type, onInput, { passive: true });
+    else window.removeEventListener(type, onInput);
+  }
+}
+if (typeof window !== "undefined" && window.location.hash.length > 1) listen(true);
+
 /**
  * Lands a direct load with a #fragment on its target once the page has
  * settled. The browser starts its (smooth) fragment scroll at load, toward
@@ -19,25 +44,30 @@ import { useEffect } from "react";
  * most twice. Without a hash it does nothing; without JavaScript the
  * browser's native jump is all there is.
  *
- * The reader wins. A scroll that moves the page while the target stays put
- * in the document is someone scrolling: before the landing, the browser's
- * own fragment scroll runs one way from the start (it may run past a target
- * that moved up), so only a scroll against it is surely the reader's; after
- * the landing, which ends the browser's scroll, every one is. Then it stops
- * and leaves the page where the reader took it.
+ * The reader wins. Their input (above) ends it at once, and if it came before
+ * the landing there is no landing. As a backup, a scroll that moves the page
+ * while the target stays put in the document counts too: before the landing,
+ * the browser's own fragment scroll runs one way from the start (it may run
+ * past a target that moved up), so only a scroll against it; after the
+ * landing, which ends the browser's scroll, any scroll that isn't ours (a
+ * stuck sticky head moves with the page, so the document test can't hold).
+ * Then it stops and leaves the page where the reader took it.
  */
 export function HashSettle() {
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash.length < 2) return;
     let id = "";
     try {
       id = decodeURIComponent(hash.slice(1));
     } catch {
+      id = "";
+    }
+    const target = id ? document.getElementById(id) : null;
+    if (!target || readerTookOver) {
+      listen(false);
       return;
     }
-    const target = document.getElementById(id);
-    if (!target) return;
+    listen(true); // again after a remount (the same listener is never added twice)
 
     const line = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const read = () => {
@@ -67,7 +97,10 @@ export function HashSettle() {
       done = true;
       cancelAnimationFrame(frame);
       sizes.disconnect();
+      onReader = null;
+      listen(false);
     };
+    onReader = stop;
     const land = () => {
       target.scrollIntoView({ block: "start", behavior: "instant" });
       lands += 1;
@@ -79,7 +112,7 @@ export function HashSettle() {
       const now = read();
       const dy = now.y - prev.y;
       const scrolled = Math.abs(dy) > 1 && Math.abs(now.doc - prev.doc) < 1;
-      const reader = scrolled && (landedTop !== null || (way !== 0 && Math.sign(dy) !== way));
+      const reader = landedTop !== null ? Math.abs(dy) > 1 : scrolled && way !== 0 && Math.sign(dy) !== way;
       if (reader || window.location.hash !== hash) {
         stop();
         return;

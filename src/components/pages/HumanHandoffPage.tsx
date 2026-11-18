@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import type { Locale } from "@/lib/i18n";
 import { DemoLink } from "@/components/DemoLink";
@@ -9,6 +8,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { SampleConversation } from "@/components/SampleConversation";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 import type { FaqItem } from "@/lib/schema";
 
 /**
@@ -23,20 +23,6 @@ import type { FaqItem } from "@/lib/schema";
  * ruled rows. pageFactory imports this module for its FAQ, so imports here
  * stay server-only or already ship everywhere.
  */
-
-/** About's ruled row: the question on the start side, its answer beside it. */
-function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
-  return (
-    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
-      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
-        {title}
-      </h2>
-      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
-        {children}
-      </div>
-    </Reveal>
-  );
-}
 
 const t = {
   ar: {
@@ -197,7 +183,7 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section>
-        <div className="border-t border-line">
+        <Rows>
           {/* Live listen/whisper/take-over is the page's strongest claim but it
               was buried inside pillar 2 — it gets its own question heading so
               the query «أقدر أسمع مكالمة وهي شغالة» lands on an answer. */}
@@ -207,7 +193,7 @@ export function HumanHandoffPage({ locale }: { locale: Locale }) {
           <Row title={s.after.heading}>
             <p>{s.after.body}</p>
           </Row>
-        </div>
+        </Rows>
       </Section>
 
       <Section title={s.faqHeading} layout="split">

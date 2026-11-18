@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
@@ -17,9 +17,9 @@ import {
 } from "@/lib/site";
 import { CalButton } from "@/components/CalButton";
 import { DemoCta } from "@/components/DemoCta";
-import { Reveal } from "@/components/Reveal";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 
 /**
  * /contact (blueprint §6.8) — «كلمنا». No phone number (telecom gate).
@@ -38,29 +38,15 @@ import { Section } from "@/components/page/Section";
  * form's state), so the kit pieces ship in /contact's own bundle only.
  */
 
-/** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
-function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
-  return (
-    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
-      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
-        {title}
-      </h2>
-      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
-        {children}
-      </div>
-    </Reveal>
-  );
-}
-
 /** The underlined link of the inner pages (About, PR 11). */
 const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
 
 /**
- * Section bodies are part arrays, not plain strings, so a sentence can
+ * Row bodies are part arrays, not plain strings, so a sentence can
  * carry an in-prose link without splitting the paragraph in the markup.
  */
 type Part = string | { text: string; path: string };
-type Section = { h: string; p: Part[] };
+type RowCopy = { h: string; p: Part[] };
 
 const t = {
   ar: {
@@ -111,7 +97,7 @@ const t = {
           "يعني ما فيه زر «سجّل الآن» يرميك في نظام فاضي. فريقنا يجهز لك الوكيل وقاعدة المعرفة وقواعد التصعيد قبل أول مكالمة.",
         ],
       },
-    ] as Section[],
+    ] as RowCopy[],
   },
   en: {
     h1: "Talk to us",
@@ -161,7 +147,7 @@ const t = {
           "There's no “sign up now” button that drops you into an empty system. Our team builds the agent, the knowledge base and the escalation rules with you, so the first call the agent answers is answered correctly.",
         ],
       },
-    ] as Section[],
+    ] as RowCopy[],
   },
 } as const;
 
@@ -269,7 +255,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section className="pb-[clamp(96px,11.2vw,168px)]">
-        <div className="border-t border-line">
+        <Rows>
           {s.sections.map((sec, i) => (
             <Row key={sec.h} title={sec.h} delay={i * 0.04}>
               <p>
@@ -285,7 +271,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
               </p>
             </Row>
           ))}
-        </div>
+        </Rows>
       </Section>
 
       <DemoCta locale={locale} />

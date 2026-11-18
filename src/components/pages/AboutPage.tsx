@@ -6,6 +6,7 @@ import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 
 /**
  * /about (blueprint §6.7): honest — no fabricated founding story, no
@@ -85,17 +86,10 @@ export function AboutPage({ locale }: { locale: Locale }) {
     <>
       <PageHero title={s.h1} />
       <Section className="pb-[clamp(96px,11.2vw,168px)]">
-        <div className="border-t border-line">
+        <Rows>
           {s.blocks.map((b, i) => (
-            <Reveal
-              key={b.h}
-              delay={i * 0.05}
-              className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6"
-            >
-              <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
-                {b.h}
-              </h2>
-              <p className="max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
+            <Row key={b.h} title={b.h} delay={i * 0.05}>
+              <p>
                 {b.p}
                 {b.link ? (
                   <>
@@ -109,9 +103,9 @@ export function AboutPage({ locale }: { locale: Locale }) {
                   </>
                 ) : null}
               </p>
-            </Reveal>
+            </Row>
           ))}
-        </div>
+        </Rows>
         <Reveal className="mt-16 sm:mt-24">
           <p className="font-display text-[clamp(32px,3.9vw,56px)] leading-[1.25] font-medium">{s.tagline}</p>
           {/* bdi: the other language's line keeps its own direction. */}

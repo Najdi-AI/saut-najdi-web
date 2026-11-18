@@ -1,15 +1,14 @@
-import type { ReactNode } from "react";
 import { OmniChannels } from "@/components/OmniChannels";
 import Link from "next/link";
 import { DemoLink } from "@/components/DemoLink";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
-import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { TrustStrip } from "@/components/TrustStrip";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 import type { FaqItem } from "@/lib/schema";
 
 /**
@@ -34,20 +33,6 @@ import type { FaqItem } from "@/lib/schema";
  * with its answer as a ruled row. pageFactory imports this module for its
  * FAQ, so imports here stay server-only or already ship everywhere.
  */
-
-/** About's ruled row: the question on the start side, its answer beside it. */
-function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
-  return (
-    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
-      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
-        {title}
-      </h2>
-      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
-        {children}
-      </div>
-    </Reveal>
-  );
-}
 
 const t = {
   ar: {
@@ -200,7 +185,7 @@ export function DashboardPage({ locale }: { locale: Locale }) {
       <TrustStrip locale={locale} />
 
       <Section>
-        <div className="border-t border-line">
+        <Rows>
           <Row title={s.answer.heading}>
             <p>{s.answer.capsule}</p>
           </Row>
@@ -223,7 +208,7 @@ export function DashboardPage({ locale }: { locale: Locale }) {
               )}
             </Row>
           ))}
-        </div>
+        </Rows>
       </Section>
 
       <Section title={s.faqHeading} layout="split">

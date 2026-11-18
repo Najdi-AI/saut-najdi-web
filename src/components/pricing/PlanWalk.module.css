@@ -267,3 +267,13 @@
 .tier[aria-current="step"]::before {
   opacity: 1;
 }
+
+/* On paper each plan keeps to one page, and the first plan starts on the section heading's page. */
+@media print {
+  .walk {
+    break-before: avoid;
+  }
+  .step {
+    break-inside: avoid;
+  }
+}

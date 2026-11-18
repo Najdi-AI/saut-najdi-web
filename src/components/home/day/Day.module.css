@@ -681,3 +681,148 @@ html[dir="ltr"] .bars b {
     margin-block-start: 28px;
   }
 }
+
+/* ---- print: paper doesn't scroll, so a pinned board prints as the list above, every moment in full (no clip, no
+   sideways slide, no clock, no fade). These undo only the [data-pin] rules and restate the list's own rules for a
+   pinned track; DayTrack's inline slide and lead room need !important, as do the entrance states. Moments and the
+   foot keep together on a page, and the heading stays with the first moment. */
+@media print {
+  .track[data-pin] {
+    block-size: auto;
+  }
+  .track[data-pin] .pin {
+    position: static;
+    display: block;
+    block-size: auto;
+    padding-block: 0;
+    overflow: visible;
+  }
+  .track[data-pin] .top {
+    position: static;
+    align-content: normal;
+    min-block-size: 0;
+  }
+  .track[data-pin] .head {
+    max-inline-size: none;
+  }
+  .track[data-pin] .head h2,
+  .track[data-pin] .head h2:lang(en) {
+    font-size: revert-layer; /* SectionHead's own size */
+  }
+  .track[data-pin] :is(.clock, .fill, .now, .meter) {
+    display: none;
+  }
+  .track[data-pin] .band {
+    position: static;
+    margin-block: 48px 0;
+    background: none;
+    overflow: visible;
+  }
+  .track[data-pin] .strip {
+    display: grid;
+    block-size: auto;
+    padding-inline-start: 0 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+  .track[data-pin] .mo,
+  .track[data-pin] .dusk {
+    align-content: start;
+    gap: 12px;
+    inline-size: auto;
+    margin-inline-end: 0;
+    padding-block: 30px 34px;
+    padding-inline: calc(var(--m) + 30px) var(--m);
+  }
+  .track[data-pin] .mo::before,
+  .track[data-pin] .mo::after {
+    content: "";
+  }
+  .track[data-pin] .time,
+  .track[data-pin] .dusk .time {
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: var(--s-l);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .track[data-pin] .say,
+  .track[data-pin] .say:lang(en),
+  .track[data-pin] .dusk .say {
+    max-inline-size: 24ch;
+    min-block-size: auto;
+    color: inherit;
+    font-size: var(--s-m);
+    line-height: 1.4;
+  }
+  .track[data-pin] .ui {
+    gap: 10px;
+    inline-size: min(420px, 100%);
+    padding: 16px;
+  }
+  .track[data-pin] .bubble small {
+    display: block;
+  }
+  .track[data-pin] :is(.ui, .thread > *, .ticket > *, .log li, .ring, .card, .wave i) {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  .track[data-pin] :is(.strip, .mo, .ui) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .track[data-pin] .wave {
+    min-inline-size: 0;
+    overflow-x: clip;
+  }
+  .track[data-pin] .log li {
+    grid-template-columns: 4.6em 1fr minmax(0, max-content);
+  }
+  .track[data-pin] .log b {
+    overflow-wrap: break-word;
+  }
+  .top {
+    break-after: avoid;
+  }
+  .mo,
+  .foot {
+    break-inside: avoid;
+  }
+}
+@media print and (min-width: 641px) {
+  .track[data-pin] .mo:not(.fill) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: 24px;
+  }
+  .track[data-pin] :is(.time, .say) {
+    grid-column: 1;
+  }
+  .track[data-pin] .ui {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+}
+@media print and (max-width: 640px) {
+  .track[data-pin] .band {
+    margin-block-start: 28px;
+  }
+  .track[data-pin] .mo,
+  .track[data-pin] .dusk {
+    gap: 10px;
+    padding-block: 20px 24px;
+    padding-inline: calc(var(--m) + 26px) var(--m);
+  }
+  .track[data-pin] .time,
+  .track[data-pin] .dusk .time {
+    font-size: 28px;
+  }
+  .track[data-pin] .say,
+  .track[data-pin] .say:lang(en),
+  .track[data-pin] .dusk .say {
+    font-size: 19px;
+  }
+  .track[data-pin] .ui {
+    padding: 14px;
+  }
+}

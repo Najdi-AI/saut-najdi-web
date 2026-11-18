@@ -447,3 +447,23 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* On paper the score, the board and the numbers each keep to one page, and the heading stays with them. Up to
+   900px the one-column grid prints as a flex column (same gaps, same boxes), where Chrome keeps the heading with
+   the score by moving the break back; in the grid it left the heading at the foot of a page. */
+@media print {
+  .head {
+    break-after: avoid;
+  }
+  .score,
+  .play,
+  .calc {
+    break-inside: avoid;
+  }
+}
+@media print and (max-width: 900px) {
+  .grid {
+    display: flex;
+    flex-direction: column;
+  }
+}

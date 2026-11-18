@@ -116,3 +116,10 @@
     font-size: 15px;
   }
 }
+
+/* On paper the closing line and its booking keep to one page. */
+@media print {
+  .in {
+    break-inside: avoid;
+  }
+}

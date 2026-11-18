@@ -35,8 +35,11 @@
   grid-column: 1 / span 7;
   align-content: start;
 }
+/* One column the width of the box: a long label (WCAG 1.4.12 spacing on a 320px screen) wraps instead of
+   widening the tiles, the legend and the buttons past the screen. */
 .play {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-column: 1 / span 7;
   align-content: start;
   gap: 20px;
@@ -432,8 +435,13 @@
   .tiles[data-size="l"] {
     --cols: 6;
   }
+  /* A full-width button may wrap its label; it stays 20px bold, large text on the red. */
   .ctl > :not(:last-child) {
     inline-size: 100%;
+    padding-block: 6px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
   }
   .calc {
     grid-template-columns: 1fr;

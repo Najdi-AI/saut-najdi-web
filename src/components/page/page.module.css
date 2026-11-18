@@ -30,6 +30,17 @@
   line-height: 1.25;
   text-wrap: balance;
 }
+/* Under 390px a long English word can outgrow the line at 40px ("conversations" at 320px), so English titles
+   start at 34px there: no word breaks at default settings. Under WCAG 1.4.12 spacing at 320px two still do
+   ("conversations", "appointments"); where the visitor's browser has an English hyphenation dictionary they break
+   at a hyphenation point with a hyphen, otherwise wrap-anywhere keeps them inside the line. Arabic titles and
+   every title from 390px are unchanged. */
+@media (max-width: 389.98px) {
+  .title:lang(en) {
+    font-size: 34px;
+    hyphens: auto;
+  }
+}
 .lead {
   margin-block-start: 28px;
   max-inline-size: 52ch;

@@ -594,10 +594,18 @@
   }
 }
 /* The booking button shows at every width. Under 360px it gives up padding,
-   never type size: its label has to stay large text on the red. */
+   never type size: its label has to stay large text on the red. There the bar
+   also closes up (8px gaps) and the logo may go to 60px, so the button and the
+   burger still fit at 320px under WCAG 1.4.12 letter spacing. */
 @media (max-width: 359.98px) {
   .hdr-cta {
     padding-inline: 12px;
+  }
+  .hdr-in {
+    gap: 8px;
+  }
+  .hdr-logo {
+    min-inline-size: 60px;
   }
 }
 

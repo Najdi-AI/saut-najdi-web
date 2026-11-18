@@ -1,13 +1,12 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { PDPL_LINE_AR, PDPL_LINE_EN } from "@/lib/site";
-import { Reveal } from "@/components/Reveal";
 import { DemoCta } from "@/components/DemoCta";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
+import { Row, Rows } from "@/components/page/Rows";
 import type { FaqItem } from "@/lib/schema";
 
 /**
@@ -22,20 +21,6 @@ import type { FaqItem } from "@/lib/schema";
  * in the split layout. pageFactory imports this module for `securityFaq`, so
  * imports here stay server-only or already ship everywhere.
  */
-
-/** About's ruled row (PR 11's local Row): the question on the start side, its answer beside it. */
-function Row({ title, delay = 0, children }: { title: string; delay?: number; children: ReactNode }) {
-  return (
-    <Reveal delay={delay} className="grid gap-4 border-b border-line py-10 sm:py-12 lg:grid-cols-12 lg:gap-6">
-      <h2 className="font-display text-[clamp(24px,2.4vw,34px)] leading-[1.35] font-medium text-balance lg:col-span-5">
-        {title}
-      </h2>
-      <div className="max-w-[60ch] space-y-4 text-[1.0625rem] leading-[1.7] sm:text-[1.125rem] lg:col-span-7">
-        {children}
-      </div>
-    </Reveal>
-  );
-}
 
 /** The underlined link of the inner pages (About, PR 11). */
 const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
@@ -184,7 +169,7 @@ export function SecurityPage({ locale }: { locale: Locale }) {
       </PageHero>
 
       <Section>
-        <div className="border-t border-line">
+        <Rows>
           {s.sections.map((sec, i) => (
             <Row key={sec.title} title={sec.title} delay={i * 0.04}>
               <p>{sec.body}</p>
@@ -199,7 +184,7 @@ export function SecurityPage({ locale }: { locale: Locale }) {
               )}
             </Row>
           ))}
-        </div>
+        </Rows>
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">

@@ -3,14 +3,14 @@
 import { useEffect } from "react";
 
 /*
- * The reader's own hand: a wheel turn, a touch, a scroll key, or a press (the
- * scrollbar) ends HashSettle at once. Listened for from the moment this module
+ * The reader's own hand: a wheel turn, a touch, a scroll key (Tab too: a focus
+ * move scrolls), or a press (the scrollbar) ends HashSettle at once. Listened for from the moment this module
  * runs (before hydration, so an input before the landing still counts), and
  * only on a load with a hash. These are passive, never call preventDefault and
  * capture no scroll events: the one named exception to the site's wheel/touch
  * grep gate (PR 18, Kagami), for this file only.
  */
-const SCROLL_KEYS = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
+const SCROLL_KEYS = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " ", "Tab"]);
 const INPUTS = ["wheel", "touchstart", "keydown", "mousedown"];
 let readerTookOver = false;
 let onReader: (() => void) | null = null;

@@ -8,7 +8,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { agentBuilderFaq } from "@/content/pageFaq";
 
 /**
  * /product/agent-builder (spec P2-22 row 9). Brief-per-step: a heading plus
@@ -23,8 +23,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, every question with
  * its answer as a ruled row, and the five steps as rows under their own H2.
- * pageFactory imports this module for its FAQ, so imports here stay
- * server-only or already ship everywhere.
+ * Its FAQ lives in content/pageFaq.ts.
  */
 
 const t = {
@@ -83,24 +82,6 @@ const t = {
       },
     },
     faqHeading: "أسئلة عن بناء الوكيل",
-    faq: [
-      {
-        q: "أحتاج مبرمج عشان أبني الوكيل؟",
-        a: "ما تحتاج. كلها شاشات عربية: قالب، وتحكمات شخصية، وصوت، وتجربة، ونشر. وأول وكيل نبنيه معك على أي حال.",
-      },
-      {
-        q: "عندكم قالب لقطاعي؟",
-        a: "عندنا قوالب مكتوبة فعلاً للفنادق والعيادات والمطاعم والعقار والتجزئة، وقالب عام لأي نشاط غيرها — وكل قالب يجي معه هيكل مبدئي لقاعدة المعرفة.",
-      },
-      {
-        q: "إذا عدّلت الوكيل، كيف أتأكد إني ما كسرت شيئاً شغالاً؟",
-        a: "بسيناريوهات الاختبار المحفوظة: تحفظ حالاتك المهمة مرة وحدة وتعيد تشغيلها بعد كل تعديل، وتشوف وش تغيّر في الردود قبل ما تنشر.",
-      },
-      {
-        q: "أقدر أرجع لنسخة قديمة بعد النشر؟",
-        a: "تقدر. مسودة ونسخة منشورة وسجل نسخ كامل مع مقارنة توريك وش تغيّر — والرجوع ضغطة وحدة بدون إعادة بناء.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "Build your own agent — without a line of code",
@@ -157,24 +138,6 @@ const t = {
       },
     },
     faqHeading: "Agent builder questions",
-    faq: [
-      {
-        q: "Do I need a developer to build the agent?",
-        a: "No. Every step is a screen: template, personality controls, voice, test, publish. And the first agent is built with you by our team.",
-      },
-      {
-        q: "Do you have a template for my sector?",
-        a: "Templates written for hotels, clinics, restaurants, real estate and retail, plus a generic one — each with a starter knowledge-base structure showing what to fill in.",
-      },
-      {
-        q: "If I edit the agent, how do I know I haven't broken something?",
-        a: "Saved test scenarios: capture the cases that matter once, replay them after every change, and see what moved in the replies before you publish.",
-      },
-      {
-        q: "Can I go back to an older version after publishing?",
-        a: "Yes. A draft, a published version, a full history and a comparison of what changed — rolling back takes one click and rebuilds nothing.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -230,7 +193,7 @@ export function AgentBuilderPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={agentBuilderFaq[locale]} />
       </Section>
 
       <OmniChannels locale={locale} />
@@ -239,5 +202,3 @@ export function AgentBuilderPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const agentBuilderFaq = { ar: t.ar.faq, en: t.en.faq };

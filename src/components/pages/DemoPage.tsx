@@ -6,7 +6,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { demoFaq } from "@/content/pageFaq";
 
 /**
  * /demo (blueprint §2.4): server-rendered copy on top, the booking desk
@@ -28,8 +28,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, the desk, each
  * question with its answer as a ruled row, the FAQ in the split layout.
- * pageFactory imports this module for `demoFaq`, so imports here stay
- * server-only or already ship everywhere.
+ * Its FAQ lives in content/pageFaq.ts.
  */
 
 const t = {
@@ -64,24 +63,6 @@ const t = {
       { path: "refund-policy", label: "سياسة الاسترداد والإلغاء" },
     ],
     faqHeading: "أسئلة عن العرض التعريفي",
-    faq: [
-      {
-        q: "العرض مجاني؟",
-        a: "العرض التعريفي في صوت نجدي مجاني وبدون التزام — 30 دقيقة نوريك فيها المنصة حية ونجاوب أسئلتك.",
-      },
-      {
-        q: "العرض بالعربي ولا بالإنجليزي؟",
-        a: "عرض صوت نجدي بالعربي افتراضياً، وإنجليزي إذا فريقك يفضله. وتقدر تسمع الوكيل باللغتين في نفس الجلسة.",
-      },
-      {
-        q: "ألزم أجهز شي قبل العرض؟",
-        a: "ما يلزمك تجهيز. جيب معك أكثر خمسة أسئلة يسألها عملاؤك، ونبني عليها المثال الحي في العرض.",
-      },
-      {
-        q: "إذا ما ناسبني الوقت المتاح في التقويم؟",
-        a: "راسلنا على الإيميل وبنرتب لك وقتاً ثانياً، أو احجز المكالمة السريعة 15 دقيقة.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "Book",
@@ -114,24 +95,6 @@ const t = {
       { path: "refund-policy", label: "Refund & Cancellation Policy" },
     ],
     faqHeading: "Demo questions",
-    faq: [
-      {
-        q: "Is the demo free?",
-        a: "The Saut Najdi intro demo is free and carries no obligation — 30 minutes of the platform live and your questions answered.",
-      },
-      {
-        q: "Is the demo in Arabic or English?",
-        a: "The Saut Najdi demo runs in Arabic by default and switches to English if your team prefers. You can hear the agent in both languages in the same session.",
-      },
-      {
-        q: "Do I need to prepare anything?",
-        a: "Nothing needs preparing. Bring the five questions your customers ask most and we'll build the live example around them.",
-      },
-      {
-        q: "What if none of the calendar slots work for me?",
-        a: "Email us and we'll arrange another time, or book the 15-minute quick call instead.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -184,10 +147,8 @@ export function DemoPage({ locale }: { locale: Locale }) {
       {/* No DemoCta here — the booking desk above already is the CTA, so the
           page ends on the FAQ with its own bottom room. */}
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={demoFaq[locale]} />
       </Section>
     </>
   );
 }
-
-export const demoFaq = { ar: t.ar.faq, en: t.en.faq };

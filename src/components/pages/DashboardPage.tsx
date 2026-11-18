@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { dashboardFaq } from "@/content/pageFaq";
 
 /**
  * /product/dashboard (spec P2-22 row 8). Brief-per-feature: a question
@@ -30,8 +30,7 @@ import type { FaqItem } from "@/lib/schema";
  * and this page carries a single pointer sentence instead.
  *
  * On the inner-page kit (About is the pilot): PageHero, then every question
- * with its answer as a ruled row. pageFactory imports this module for its
- * FAQ, so imports here stay server-only or already ship everywhere.
+ * with its answer as a ruled row. Its FAQ lives in content/pageFaq.ts.
  */
 
 const t = {
@@ -85,24 +84,6 @@ const t = {
       path: "product/human-handoff",
     },
     faqHeading: "أسئلة عن لوحة التحكم",
-    faq: [
-      {
-        q: "الملخص والنص بالعربي ولا بالإنجليزي؟",
-        a: "النص يطلع بلغة المكالمة، والملخص يُكتب بالعربي بلغة واضحة. واللوحة عربية من اليمين لليسار، مع تبديل للإنجليزي لأي عضو يفضّله.",
-      },
-      {
-        q: "وش الأرقام اللي أقدر أقيسها على مكالماتي؟",
-        a: "إجمالي المكالمات، ونسبة اللي أنهاها الوكيل لحاله، ومتوسط المدة، ومزاج كل مكالمة، وتقييمات فريقك ووسومه — مقسّمة حسب الوكيل والنتيجة واليوم والساعة، وتصدّرها CSV أو PDF. أرقامك أنت، ما ننشر أرقاماً عن أنفسنا.",
-      },
-      {
-        q: "كم تبقى تسجيلات المكالمات محفوظة؟",
-        a: "مدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، وتُحذف تلقائياً عند انتهاء المدة المتفق عليها. وأي تشغيل يتم عبر رابط موقّع قصير الصلاحية.",
-      },
-      {
-        q: "أقدر أطلع بياناتي من المنصة؟",
-        a: "تقدر تصدّرها CSV أو PDF من اللوحة، وكل تصدير يُسجَّل باسم اللي سواه ووقته. بياناتك بياناتك — ما نحتجزها.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "Every call in front of you: who called, what they said, what happened",
@@ -152,24 +133,6 @@ const t = {
       path: "product/human-handoff",
     },
     faqHeading: "Dashboard questions",
-    faq: [
-      {
-        q: "Are transcripts and summaries in Arabic or English?",
-        a: "The transcript follows the language of the call and the summary is written in clear Arabic. The interface is Arabic-first, with an English switch per team member.",
-      },
-      {
-        q: "What can I actually measure about my calls?",
-        a: "Total calls, the share the AI handled end to end, average call length, per-call sentiment, and your team's ratings and tags — broken down by agent, outcome, day and hour, exportable as CSV or PDF. Those are your numbers; we publish none about ourselves.",
-      },
-      {
-        q: "How long are call recordings kept?",
-        a: "Recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Recordings are automatically deleted at the end of the agreed period. Playback happens through a short-lived signed link.",
-      },
-      {
-        q: "Can I get my data out of the platform?",
-        a: "You can export to CSV or PDF, and every export is written to the audit log with who did it and when. Your data is yours — we don't hold it hostage.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -212,7 +175,7 @@ export function DashboardPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={dashboardFaq[locale]} />
       </Section>
 
       <OmniChannels locale={locale} />
@@ -221,5 +184,3 @@ export function DashboardPage({ locale }: { locale: Locale }) {
     </>
   );
 }
-
-export const dashboardFaq = { ar: t.ar.faq, en: t.en.faq };

@@ -5,8 +5,8 @@ import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 
 /**
- * /faq (blueprint §6.9) — the AI-answer surface. Twenty questions in six
- * named groups: the group names are the page's H2s and each question its
+ * /faq (blueprint §6.9) — the AI-answer surface. Twenty-nine questions in
+ * six named groups: the group names are the page's H2s and each question its
  * own H3, so a crawler has an outline to anchor an extracted answer to
  * instead of one H1 over a flat list.
  *

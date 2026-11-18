@@ -39,9 +39,6 @@
    * #6F3FA4 and #5B6CE5 disappear into a #080D1C ground. Dark mode uses
    * the same hues raised in luminance.
    *
-   * `--spectrum` and its literal-hex twins in :root are a SEPARATE set,
-   * unread since the icon rings went flat.
-   *
    * Opacity modifiers (text-ink/70) compile to color-mix() over these, so
    * the --c-* triplets no longer need the v3 <alpha-value> placeholder.
    */
@@ -76,25 +73,13 @@
    * Text-only override: `text-brand-blue` (and its hover/group variants)
    * reads the deeper --c-brand-blue-text (#4A57CC in light), so every
    * blue link and step number clears 4.5:1 on white (5.96), the canvas
-   * (5.60), the blue 10% chip (4.97) and that chip inside a
-   * bg-brand-gradient-soft card (4.60 at worst).
+   * (5.60) and the blue 10% chip (4.97).
    * bg-, border-, ring- and outline-brand-blue keep the guideline value.
    */
   --text-color-brand-blue: rgb(var(--c-brand-blue-text));
 }
 
 @theme {
-  /**
-   * Dark-theme ground. Navy-leaning rather than neutral black, so the
-   * brand gradient still reads as the warm thing in the frame.
-   * `night-surface` is deliberately the same value the Cal booker card
-   * already uses (lib/bookerTheme.ts) — the two must not drift.
-   */
-  --color-night: #080d1c; /* page ground, the recessive layer */
-  --color-night-surface: #0f1730; /* raised: cards, chips, bubbles */
-  --color-night-hi: #16203c; /* hover / second raise */
-  --color-night-line: #232c49; /* hairline on dark */
-
   --font-sans: var(--font-thmanyah), system-ui, sans-serif;
 
   /* Guideline p9 type scale — same for both scripts */
@@ -291,13 +276,10 @@
   color: rgb(var(--c-ink));
 }
 
-/* The brand-gradient strokes (step connectors, plan stripe) drawn flat in
-   the ink, and the soft wash dropped. The names stay for the call sites. */
+/* The brand-gradient stroke drawn flat in the ink. The name stays for its
+   call sites (scripts/check-cn.mjs asserts it). */
 @utility bg-brand-gradient {
   background-color: rgb(var(--c-ink));
-}
-@utility bg-brand-gradient-soft {
-  background-image: none;
 }
 
 @utility eyebrow {
@@ -359,17 +341,9 @@
      bg/border/ring keep the guideline #5B6CE5). #5B6CE5 is 4.45:1 on white,
      4.19:1 on the canvas and 3.71:1 on its own 10% chip, all short of AA for
      16px links. #4A57CC is the same hue deepened: 5.96:1 on white, 5.60:1 on
-     #F7F8FA, 4.97:1 on the 10% chip over the canvas. The worst case is the
-     step-number chip inside a bg-brand-gradient-soft card (WorkflowComparison),
-     where canvas + wash + 10% blue composites to about #D9E6F6 / #DFE2F7 /
-     #E6DFEF at the wash's 0/40/100% stops: 4.72 / 4.65 / 4.60:1. */
+     #F7F8FA, 4.97:1 on the 10% chip over the canvas. */
   --c-brand-blue-text: 74 87 204;
 
-  --cyan: #2ec4e6;
-  --indigo: #5b6ce5;
-  --purple: #6f3fa4;
-  --crimson: #e20c3a;
-  --red: #ec1b3a;
   --ink: #0d1326;
   --ink-2: #4b5468;
   --ink-3: #6c7484;
@@ -377,15 +351,6 @@
   --line: rgb(var(--line-rgb) / 0.09);
   --line-hi: rgb(var(--line-rgb) / 0.18);
   --surface: #ffffff;
-  --surface-hi: #f1f3f9;
-  --spectrum: linear-gradient(
-    90deg,
-    var(--cyan) 0%,
-    var(--indigo) 26%,
-    var(--purple) 50%,
-    var(--crimson) 82%,
-    var(--red) 100%
-  );
   --shell: 1200px;
   --gutter: clamp(20px, 4vw, 40px);
   /* The header's full height, its bottom rule included (.hdr below), for
@@ -424,20 +389,11 @@
   --c-brand-red: 255 107 127;
   --c-brand-blue-text: 139 153 245;
 
-  /* The literal-hex twins of the five hues above, which `--spectrum` is
-     composed from; unread since the icon rings went flat. */
-  --cyan: #5fd8f2;
-  --indigo: #8b99f5;
-  --purple: #b98ce0;
-  --crimson: #ff5c7a;
-  --red: #ff6b7f;
-
   --ink: #eef1f8;
   --ink-2: #aab3c7;
   --ink-3: #838da3;
   --line-rgb: 255 255 255;
   --surface: #0f1730;
-  --surface-hi: #16203c;
 }
 
 /* Applied by ThemeToggle for one frame around the swap — see the note there.
@@ -449,8 +405,9 @@
   transition: none !important;
 }
 
-/* The wordmark is live <text> with a fixed dark fill, so it cannot follow
-   currentColor — ship both cuts and swap (the header's on-dark tone). */
+/* The logo is an <img> whose wordmark paths carry a fixed dark fill, so it
+   cannot follow currentColor — ship both cuts and swap (the header's on-dark
+   tone). */
 .logo-inverse {
   display: none;
 }
@@ -998,21 +955,6 @@ a.mega-item:focus-visible {
   .mnav-utils {
     display: none;
   }
-}
-
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  80%,
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
-.animate-pulse-ring {
-  animation: pulse-ring 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

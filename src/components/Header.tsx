@@ -49,9 +49,9 @@ export function Header({ locale }: { locale: Locale }) {
           aria-label={locale === "ar" ? "صوت نجدي — الرئيسية" : "Saut Najdi — home"}
         >
           {/* Two cuts, CSS-swapped by the bar's on-dark tone. The wordmark
-              inside the SVG is live <text> with a baked dark fill, so it
-              cannot follow currentColor and a filter would wreck the gradient
-              mark. Only one is ever displayed; the second carries no alt text
+              inside the SVG is outlined paths with a baked dark fill, so the
+              <img> cannot follow currentColor, and a filter would wreck the
+              gradient mark. Only one is ever displayed; the second carries no alt text
               so screen readers hear the logo once, and loads eagerly so the
               on-dark tone never paints without a logo.
               The artboard is mostly empty canvas above and below the mark, so

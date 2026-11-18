@@ -238,3 +238,14 @@
     break-inside: avoid;
   }
 }
+/* On paper the open answer is its end frame, whenever the page is printed: no typing dots, the reply fully shown. */
+@media print {
+  .typing {
+    display: none !important;
+  }
+  .r {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}

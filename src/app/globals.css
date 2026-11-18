@@ -1114,6 +1114,13 @@ a.mega-item:focus-visible {
     break-after: avoid;
   }
 }
+/* On paper the header sits in the flow, once, at the top of page 1. Sticky, it printed wherever the page had been
+   scrolled to when printing started, in the middle of the document. */
+@media print {
+  .hdr {
+    position: static;
+  }
+}
 
 @theme inline {
   --font-heading: var(--font-sans);

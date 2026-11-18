@@ -655,6 +655,20 @@ html[dir="ltr"] .bars b {
   }
 }
 
+/* Narrow tablets: past the now line there is room for the figure but not for a 22px word, so the board kept the
+   list (or, with a desktop scrollbar, pinned with the word broken over two lines). Below 900px the word scales with
+   the width, so its widest face («بعد نص الليل», "after midnight") fits on one line beside the figure, scrollbar
+   included; it never wraps, so if it still doesn't fit DayTrack keeps the list. From 900px it keeps --s-m. */
+@media (max-width: 899px) {
+  .track[data-pin] .part {
+    font-size: min(var(--s-m), 2.6vw);
+    white-space: nowrap;
+  }
+  .track[data-pin] .part:lang(en) {
+    font-size: min(var(--s-m), 2.2vw);
+  }
+}
+
 /* ---- phone ---- */
 @media (max-width: 640px) {
   .band {

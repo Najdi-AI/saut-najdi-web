@@ -39,14 +39,18 @@ export const CAL_LINK_DEMO = "sautnajdi/demo";
 export const CAL_LINK_QUICK = "sautnajdi/quick-call";
 
 /**
- * The platform's embeddable web-chat widget key (dashboard → Integrations
- * → Web chat). Set NEXT_PUBLIC_WEBCHAT_KEY in Vercel to activate the AI
- * chat launcher; empty = launcher shows the contact fallback panel.
- * The widget's frame-ancestors CSP must allow sautnajdi.ai.
+ * The Saut Najdi web assistant, installed with the platform's official
+ * loader tag (app.sautnajdi.ai → Settings → Channels → Web). The loader
+ * renders the whole widget, launcher included, inside its own frame.
+ *
+ * The key is public by design (like a publishable key) and is committed on
+ * purpose: it used to come from a build-time env var, and a stale value
+ * silently broke the chat on the live site (18 Nov 2026). The widget stays
+ * hidden on any origin that is not on the dashboard's approved-websites list.
+ * Keep the src and key exactly as the dashboard issues them.
  */
-export const WEBCHAT_KEY = process.env.NEXT_PUBLIC_WEBCHAT_KEY ?? "";
-export const WEBCHAT_FRAME_URL = (key: string) =>
-  `${APP_URL}/widget/frame?k=${encodeURIComponent(key)}`;
+export const WEB_ASSISTANT_SRC = "https://app.sautnajdi.ai/widget/loader.js";
+export const WEB_ASSISTANT_KEY = "huqxA55BsjIcxLNmc65V_O4LLu2H3HXHWyX1K7W-OTI";
 
 /**
  * The canonical PDPL trust line (blueprint §2.5) — identical every time it

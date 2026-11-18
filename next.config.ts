@@ -99,7 +99,9 @@ const nextConfig: NextConfig = {
   async headers() {
     /**
      * Keep in sync with APP_URL in src/lib/site.ts — this file cannot import
-     * it (next.config runs before path aliases resolve).
+     * it (next.config runs before path aliases resolve). It serves the web
+     * assistant's loader script (script-src), its config and heartbeat calls
+     * (connect-src) and its chat frame (frame-src).
      *
      * Naming the widget origin explicitly is the whole point of this
      * directive rather than a plain `microphone=()`. The web-chat frame is
@@ -133,7 +135,7 @@ const nextConfig: NextConfig = {
       "https://www.googleadservices.com",
     ];
 
-    const scriptSrc = `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${GTM} ${CAL.join(" ")} https://va.vercel-scripts.com ${PIXELS.join(" ")}`;
+    const scriptSrc = `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${GTM} ${CAL.join(" ")} ${WIDGET_ORIGIN} https://va.vercel-scripts.com ${PIXELS.join(" ")}`;
     const frameSrc = `frame-src 'self' ${CAL.join(" ")} ${WIDGET_ORIGIN} ${GTM}`;
 
     /**

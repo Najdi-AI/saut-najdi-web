@@ -10,7 +10,7 @@ import { ADMIN_COOKIE, isValidSession } from "@/lib/adminAuth";
  * Admin root layout — a console, not a marketing page.
  *
  * Its own ROOT route group so the admin stops inheriting the public site's
- * chrome: no marketing header or footer, no chat launcher, and deliberately
+ * chrome: no marketing header or footer, no web assistant, and deliberately
  * no GTM — analytics pixels have no business firing on an internal tool.
  * URLs are unchanged (route groups never appear in the path).
  *

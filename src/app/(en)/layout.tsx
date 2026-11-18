@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { thmanyah, thmanyahSerifDisplay } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ChatLauncher } from "@/components/ChatLauncher";
+import { WebAssistant } from "@/components/WebAssistant";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { HashSettle } from "@/components/HashSettle";
@@ -50,7 +50,7 @@ export default function EnglishRootLayout({
         <Header locale="en" />
         <main id="main">{children}</main>
         <Footer locale="en" />
-        <ChatLauncher locale="en" />
+        <WebAssistant />
         <HashSettle />
         {/* Vercel-only, as in (ar)/layout.tsx: see ON_VERCEL. */}
         {ON_VERCEL && <Analytics />}

@@ -10,7 +10,7 @@ import { SampleConversation } from "@/components/SampleConversation";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { clinicsFaq } from "@/content/pageFaq";
 
 /**
  * /solutions/clinics (blueprint §6.3 sector template). The clinic template
@@ -27,8 +27,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, groups under a
  * Section head with their label over the items, and each heading with its
- * paragraphs as a ruled row. pageFactory imports this module for its FAQ, so
- * imports here stay server-only or already ship everywhere.
+ * paragraphs as a ruled row. Its FAQ lives in content/pageFaq.ts.
  */
 
 // Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
@@ -181,24 +180,6 @@ const t = {
       linkText: "صفحة بناء الوكيل",
     },
     faqHeading: "أسئلة أصحاب العيادات",
-    faq: [
-      {
-        q: "الوكيل يحجز فعلاً ولا بس يسجل الطلب؟",
-        a: "يحجز فعلاً في تقويمك وهو على الخط، ويقرأ رقم الحجز رقم رقم — ويظهر لفريقك في نفس اللحظة.",
-      },
-      {
-        q: "وش يسوي إذا سأل المريض سؤال طبي؟",
-        a: "يحوّل على طول — ما يعطي استشارة ولا يشخّص ولا يفسر تقرير. وموظفك يستلم ومعه النص والملخص.",
-      },
-      {
-        q: "عندنا فروع وأطباء كثير — يفرق؟",
-        a: "ما يفرق. جدول الأطباء وفروعهم في إعداد وكيلك، ويحجز في تقويم الفرع الصح.",
-      },
-      {
-        q: "وين تنحفظ بيانات مرضانا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات، وكل اطلاع يتسجل في سجل تدقيق. والمعالجة في صفحة الأمان.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "AI call answering for clinics — appointments booked while your front desk is busy",
@@ -343,24 +324,6 @@ const t = {
       linkText: "the agent builder page",
     },
     faqHeading: "Questions clinic owners ask",
-    faq: [
-      {
-        q: "Does the agent actually book, or just take a request?",
-        a: "It actually books, checking your calendar on the line and reading the reference back digit by digit — and it appears in your team's calendar in the same moment.",
-      },
-      {
-        q: "What happens if a patient asks a medical question?",
-        a: "It transfers immediately — no advice, no diagnosis, no interpreting a report. Your employee takes over with the transcript and the summary.",
-      },
-      {
-        q: "We have several branches and doctors — is that a problem?",
-        a: "No. The rota and branches are configured into your agent, and it books into the right branch's calendar.",
-      },
-      {
-        q: "Where is our patients' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha), recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Every access is written to an audit log. Processing is set out on the security page.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -554,12 +517,10 @@ export function ClinicsPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={clinicsFaq[locale]} />
       </Section>
 
       <DemoCta locale={locale} />
     </>
   );
 }
-
-export const clinicsFaq = { ar: t.ar.faq, en: t.en.faq };

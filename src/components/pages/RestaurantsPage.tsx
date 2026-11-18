@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { restaurantsFaq } from "@/content/pageFaq";
 
 /**
  * /solutions/restaurants (blueprint §6.3 sector template). The restaurant
@@ -25,8 +25,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, groups under a
  * Section head with their label over the items, and each heading with its
- * paragraphs as a ruled row. pageFactory imports this module for its FAQ, so
- * imports here stay server-only or already ship everywhere.
+ * paragraphs as a ruled row. Its FAQ lives in content/pageFaq.ts.
  */
 
 // Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
@@ -181,24 +180,6 @@ const t = {
       linkText: "صفحة بناء الوكيل",
     },
     faqHeading: "أسئلة أصحاب المطاعم",
-    faq: [
-      {
-        q: "الوكيل يحجز الطاولة فعلاً ولا بس ياخذ الاسم؟",
-        a: "يحجز فعلاً — العدد والوقت والقسم — ويثبته قبل ما تنتهي المكالمة ويقرأ رقمه رقم رقم. ويظهر لفريقك في نفس اللحظة.",
-      },
-      {
-        q: "وقت الذروة إذا اتصل أكثر من زبون؟",
-        a: "يرد على أكثر من مكالمة في نفس الوقت، فما فيه خط مشغول ولا نغمة انتظار. وحجم مكالماتك نقيسه معك في العرض التعريفي.",
-      },
-      {
-        q: "ياخذ طلبات الأكل والتوصيل؟",
-        a: "يجاوب على أسئلة التوصيل ويسجل تفاصيل الطلب لفريقك. لكن ما فيه دفع داخل المكالمة ولا ربط مع تطبيقات التوصيل.",
-      },
-      {
-        q: "وإذا كان الزبون معصب؟",
-        a: "يروح لموظفك على طول — الشكاوى وأي استرجاع مو من صلاحياته أصلاً. وموظفك يستلم ومعه النص والملخص.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "Your restaurant answers every call — even at peak service",
@@ -345,24 +326,6 @@ const t = {
       linkText: "the agent builder page",
     },
     faqHeading: "Questions restaurant owners ask",
-    faq: [
-      {
-        q: "Does the agent actually book the table, or just take a name?",
-        a: "It actually books — covers, time and area — confirming before the call ends and reading the reference back digit by digit. It appears in your team's calendar in the same moment.",
-      },
-      {
-        q: "What happens at peak time when several guests ring at once?",
-        a: "The agent answers more than one call at the same time, so there's no engaged tone and no hold music. Your call volume is sized with you in the intro demo.",
-      },
-      {
-        q: "Can it take food orders and delivery?",
-        a: "It answers delivery questions and records order details for your team. But there is no payment inside the call and no integration with delivery apps.",
-      },
-      {
-        q: "What if the guest is upset?",
-        a: "It goes to your employee immediately — complaints and refunds are outside its remit by design. Your employee takes over with the transcript and the summary.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -552,12 +515,10 @@ export function RestaurantsPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={restaurantsFaq[locale]} />
       </Section>
 
       <DemoCta locale={locale} />
     </>
   );
 }
-
-export const restaurantsFaq = { ar: t.ar.faq, en: t.en.faq };

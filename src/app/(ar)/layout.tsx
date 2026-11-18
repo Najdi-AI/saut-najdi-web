@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { thmanyah, thmanyahSerifDisplay } from "../fonts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ChatLauncher } from "@/components/ChatLauncher";
+import { WebAssistant } from "@/components/WebAssistant";
 import { Gtm, GtmNoScript } from "@/components/Gtm";
 import { NoScriptReveal } from "@/components/NoScriptReveal";
 import { HashSettle } from "@/components/HashSettle";
@@ -72,7 +72,7 @@ export default function ArabicRootLayout({
         <Header locale="ar" />
         <main id="main">{children}</main>
         <Footer locale="ar" />
-        <ChatLauncher locale="ar" />
+        <WebAssistant />
         <HashSettle />
         {/* Web Analytics was already provisioned and recording; Speed Insights
             was provisioned too but sat at hasData:false because nothing ever

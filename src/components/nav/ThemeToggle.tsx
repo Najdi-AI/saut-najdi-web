@@ -49,7 +49,7 @@ export function ThemeToggle({ locale }: { locale: Locale }) {
 
     if (next) root.setAttribute("data-theme", "dark");
     else root.removeAttribute("data-theme");
-    // Keeps form controls, scrollbars and the ChatLauncher frame in step.
+    // Keeps form controls and scrollbars in step.
     root.style.colorScheme = next ? "dark" : "light";
     try {
       localStorage.setItem("theme", next ? "dark" : "light");

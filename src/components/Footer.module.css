@@ -183,6 +183,10 @@
   justify-content: space-between;
   gap: 8px 32px;
   padding-block: 20px 22px;
+  /* The web assistant's bubble is fixed 20px from the bottom inline-end corner,
+     56px wide, and cannot move itself; at the scroll bottom it sits on this band.
+     Keep the legal lines out of its column: 20px + 56px + 8px. */
+  padding-inline-end: 84px;
   font-size: 14px;
 }
 .seller,

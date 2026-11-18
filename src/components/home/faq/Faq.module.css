@@ -227,3 +227,14 @@
     font-size: 16px;
   }
 }
+
+/* On paper each question keeps to one page with its answer, and the first question starts on the heading's page. */
+@media print {
+  .head {
+    break-inside: avoid;
+    break-after: avoid;
+  }
+  .ask {
+    break-inside: avoid;
+  }
+}

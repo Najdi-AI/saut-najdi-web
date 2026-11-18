@@ -490,6 +490,27 @@
     animation: none !important;
   }
 }
+/* On any paper: each statement and each state keeps to one page, a statement goes with its state, and the first
+   statement starts on the heading's page. Below 900px the one-column stack prints as a flex column (same gaps,
+   same boxes): Chrome splits a grid row's card before it moves an "avoid" break back a row, a flex column it doesn't. */
+@media print {
+  .flow {
+    break-before: avoid;
+  }
+  .step {
+    break-inside: avoid;
+    break-after: avoid;
+  }
+  .slot {
+    break-inside: avoid;
+  }
+}
+@media print and (max-width: 899px) {
+  .flow {
+    display: flex;
+    flex-direction: column;
+  }
+}
 @keyframes bar {
   from {
     transform: scaleY(0.55);

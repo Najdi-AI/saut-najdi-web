@@ -684,7 +684,8 @@ html[dir="ltr"] .bars b {
 
 /* ---- print: paper doesn't scroll, so a pinned board prints as the list above, every moment in full (no clip, no
    sideways slide, no clock, no fade). These undo only the [data-pin] rules and restate the list's own rules for a
-   pinned track; DayTrack's inline slide and lead room need !important, as do the entrance states. */
+   pinned track; DayTrack's inline slide and lead room need !important, as do the entrance states. Moments and the
+   foot keep together on a page, and the heading stays with the first moment. */
 @media print {
   .track[data-pin] {
     block-size: auto;
@@ -780,6 +781,13 @@ html[dir="ltr"] .bars b {
   }
   .track[data-pin] .log b {
     overflow-wrap: break-word;
+  }
+  .top {
+    break-after: avoid;
+  }
+  .mo,
+  .foot {
+    break-inside: avoid;
   }
 }
 @media print and (min-width: 641px) {

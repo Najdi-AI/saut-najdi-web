@@ -355,11 +355,19 @@
   }
 }
 
-/* On paper the inbox is its final frame, whether or not the board was ever scrolled into view (clip D). */
+/* On paper the inbox is its final frame, whether or not the board was ever scrolled into view (clip D). Each column
+   of channels and the inbox keep to one page, and the board starts on the heading's page. */
 @media print {
   .board .row {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
+  }
+  .board {
+    break-before: avoid;
+  }
+  .side,
+  .inbox {
+    break-inside: avoid;
   }
 }

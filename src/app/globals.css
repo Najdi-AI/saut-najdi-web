@@ -1104,6 +1104,17 @@ a.mega-item:focus-visible {
   }
 }
 
+/* ---------- print ---------- */
+/* On paper a home section's heading block (SectionHead: the h2 with id "<section>-title" and the lead under it)
+   stays whole and never ends a page: it goes with what follows. The closing #book block is its own unit (Flip).
+   Each section's module keeps its own cards whole. */
+@media print {
+  main :not(#book) > div:has(> h2[id$="-title"]) {
+    break-inside: avoid;
+    break-after: avoid;
+  }
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);

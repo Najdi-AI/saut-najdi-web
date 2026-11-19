@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { retailFaq } from "@/content/pageFaq";
 
 /**
  * /solutions/retail — sector page (blueprint §6.3, spec P2-22 row 6).
@@ -28,8 +28,7 @@ import type { FaqItem } from "@/lib/schema";
  */
 
 // On the inner-page kit (About is the pilot): PageHero, groups under a Section head with their label
-// over the items, the boundary on a Charcoal band, the template note as a ruled row. pageFactory imports
-// this module for its FAQ, so imports here stay server-only or already ship everywhere.
+// over the items, the boundary on a Charcoal band, the template note as a ruled row. Its FAQ lives in content/pageFaq.ts.
 // Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
 const text = "max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]";
 const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
@@ -217,32 +216,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "أسئلة أصحاب المتاجر",
-    faq: [
-      {
-        q: "الوكيل يقدر يشوف حالة طلب العميل في نظامنا؟",
-        a: "لا. يرد فوراً بالمدة المعتادة، وياخذ رقم الطلب والتفاصيل ويوصلها لفريقك مع نص المكالمة.",
-      },
-      {
-        q: "يرد على واتساب وتيليجرام بعد؟",
-        a: "واتساب وتيليجرام ومحادثة الموقع تجي في صندوق فريقك الموحد، والرد الآلي يجاوب من قاعدة معرفتك حسب إعداد حسابك.",
-      },
-      {
-        q: "عندنا كذا فرع — الوكيل يفرق بينها؟",
-        a: "إي. كل فرع بأوقاته وخدماته في قاعدة معرفتك، ويسأل العميل عن الفرع اللي يقصده قبل ما يجاوب.",
-      },
-      {
-        q: "وش يسوي مع العميل المعصب؟",
-        a: "يعتذر ويصعّد لموظفك على طول ومعه النص والملخص وتاريخ العميل. وطلب الإنسان تحويل فوري.",
-      },
-      {
-        q: "نقدر نسمع المكالمات ونتأكد من الردود؟",
-        a: "إي. كل مكالمة بتسجيلها ونصها وملخصها، وفريقك يقيّمها ويحط عليها وسوم، ويقدر يستلمها وهي شغالة.",
-      },
-      {
-        q: "كيف نبدأ؟",
-        a: "احجز عرضاً تعريفياً — ونجهز لك القالب وقاعدة المعرفة وقواعد التصعيد بأنفسنا. ما في تسجيل ذاتي.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "“Has my order arrived?” — answer every customer without a call centre",
@@ -422,32 +395,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "Questions from store owners",
-    faq: [
-      {
-        q: "Can the agent see a customer's order status in our system?",
-        a: "No — it doesn't log into your store platform or your courier's. It answers instantly with the normal timeframe, and captures the order number and full enquiry for your team with the transcript.",
-      },
-      {
-        q: "Does it answer WhatsApp and Telegram too?",
-        a: "The text channels — WhatsApp, Telegram and website chat — land in one shared team inbox, and automatic replies answer from your knowledge base depending on your account's configuration.",
-      },
-      {
-        q: "We have several branches — does the agent distinguish between them?",
-        a: "Yes. Each branch has its location, hours and services in your knowledge base, and the agent asks which branch the customer means before answering.",
-      },
-      {
-        q: "What does it do with an angry customer?",
-        a: "It apologises and escalates immediately, carrying the transcript, the summary and the customer's history. An explicit request for a person is never negotiated.",
-      },
-      {
-        q: "Can we listen to calls and check the answers?",
-        a: "Yes. Every call has its recording, transcript and summary, your team can rate and tag it, and they can follow a live call and take it over when it needs them.",
-      },
-      {
-        q: "How do we start?",
-        a: "Book an intro demo — we look at your call volume and your most common questions, and we build the template, knowledge base and escalation rules for you. There's no self-signup.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -595,12 +542,10 @@ export function RetailPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={retailFaq[locale]} />
       </Section>
 
       <DemoCta locale={locale} />
     </>
   );
 }
-
-export const retailFaq = { ar: t.ar.faq, en: t.en.faq };

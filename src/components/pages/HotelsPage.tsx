@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { hotelsFaq } from "@/content/pageFaq";
 
 /**
  * /solutions/hotels — sector page (blueprint §6.3, spec P2-22 row 5).
@@ -29,8 +29,7 @@ import type { FaqItem } from "@/lib/schema";
  *
  * On the inner-page kit (About is the pilot): PageHero, groups under a
  * Section head with their label over the items, and the template note as a
- * ruled row. pageFactory imports this module for its FAQ, so imports here
- * stay server-only or already ship everywhere.
+ * ruled row. Its FAQ lives in content/pageFaq.ts.
  */
 
 // Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
@@ -213,32 +212,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "أسئلة أصحاب الفنادق",
-    faq: [
-      {
-        q: "الوكيل يحجز الغرفة داخل المكالمة؟",
-        a: "إي. يتأكد من المتاح، يثبت الحجز باسم النزيل، ويقرأ رقمه رقم رقم — ويظهر في تقويم لوحتك مع نص المكالمة.",
-      },
-      {
-        q: "وش يصير إذا اتصل نزيل يتكلم إنجليزي؟",
-        a: "يرد عليه بالإنجليزية. الوكيل يشتغل بالعربية — نجدي وحجازي وشامي — وبالإنجليزية، وينتقل حسب لغة المتصل.",
-      },
-      {
-        q: "يقدر ياخذ بيانات البطاقة أو يستوفي مبلغ الحجز؟",
-        a: "لا. أي شي يخص الدفع أو الاسترجاع يتحول لموظفك، وبرا الدوام يتسجل طلب اتصال.",
-      },
-      {
-        q: "وش تحتاجون منا عشان نبدأ؟",
-        a: "معلومات فندقك: الغرف والأسعار وسياسة الإلغاء وأوقات الدخول والخروج. وفريقنا يجهز الوكيل معك — ما في تسجيل ذاتي.",
-      },
-      {
-        q: "وين تنحفظ تسجيلات مكالمات نزلائنا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
-      },
-      {
-        q: "إذا انزعج النزيل، وش يسوي الوكيل؟",
-        a: "يعتذر ويحوّل على طول لموظفك ومعه النص والملخص وتاريخ النزيل. وطلب الإنسان تحويل فوري.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "“Do you have a room tonight?” — a front desk that answers 24/7",
@@ -411,32 +384,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "Questions from hotel operators",
-    faq: [
-      {
-        q: "Does the agent actually book the room during the call?",
-        a: "Yes. It checks availability, confirms in the guest's name, and reads the reference back digit by digit — and the booking appears in your calendar with the transcript.",
-      },
-      {
-        q: "What happens when an English-speaking guest calls?",
-        a: "It answers in English. The agent works in Arabic — Najdi, Hijazi and Levantine — and in English, switching to the caller's language.",
-      },
-      {
-        q: "Can it take card details or collect a deposit?",
-        a: "No. Anything to do with payment or refunds is transferred to your employee, or logged as a callback when you're closed.",
-      },
-      {
-        q: "What do you need from us to start?",
-        a: "Your room types, rates, cancellation policy, check-in and check-out times, and facilities. Our team builds the agent with you — there's no self-signup.",
-      },
-      {
-        q: "Where are recordings of our guests' calls stored?",
-        a: "Permanent storage is in the Gulf region (Doha), and recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Realtime speech processing transits global providers — detailed on our security page.",
-      },
-      {
-        q: "What does the agent do with an upset guest?",
-        a: "It apologises and transfers immediately, carrying the transcript, the summary and the guest's history. A request for a human is never negotiated.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -569,12 +516,10 @@ export function HotelsPage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={hotelsFaq[locale]} />
       </Section>
 
       <DemoCta locale={locale} />
     </>
   );
 }
-
-export const hotelsFaq = { ar: t.ar.faq, en: t.en.faq };

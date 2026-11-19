@@ -9,7 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { PageHero } from "@/components/page/PageHero";
 import { Section } from "@/components/page/Section";
 import { Row, Rows } from "@/components/page/Rows";
-import type { FaqItem } from "@/lib/schema";
+import { realEstateFaq } from "@/content/pageFaq";
 
 /**
  * /solutions/real-estate — sector page (blueprint §6.3, spec P2-22 row 4).
@@ -30,8 +30,7 @@ import type { FaqItem } from "@/lib/schema";
  */
 
 // On the inner-page kit (About is the pilot): PageHero, groups under a Section head with their label
-// over the items, the boundary on a Charcoal band, the template note as a ruled row. pageFactory imports
-// this module for its FAQ, so imports here stay server-only or already ship everywhere.
+// over the items, the boundary on a Charcoal band, the template note as a ruled row. Its FAQ lives in content/pageFaq.ts.
 // Shared class lists: running text, an in-sentence link, a group's label, a flat tile.
 const text = "max-w-[60ch] text-[1.0625rem] leading-[1.7] sm:text-[1.125rem]";
 const link = "font-bold underline decoration-2 underline-offset-[0.35em] hover:decoration-najdi-red";
@@ -219,32 +218,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "أسئلة المكاتب العقارية",
-    faq: [
-      {
-        q: "الوكيل يقدر يتصل على العميل؟",
-        a: "إي، بس بيد فريقك: من اللوحة تختار العميل أو تكتب رقمه وتطلق المكالمة، والوكيل يمسك الحوار. ما فيه اتصال آلي على قوائم أرقام.",
-      },
-      {
-        q: "كيف يعرف الوكيل إن الوحدة انحجزت؟",
-        a: "من سجل الوحدات في قاعدة معرفتك: تغيّر حالتها إلى «محجوزة» وتنشر، وبعدها ما يعرضها ويطرح البدائل.",
-      },
-      {
-        q: "يقدر يحجز معاينة في تقويمنا؟",
-        a: "إي. يثبت الموعد باسم المستفسر ورقمه والوحدة، ويظهر في تقويم الحجوزات مع نص المكالمة.",
-      },
-      {
-        q: "وش يصير إذا سأل عن التمويل أو الإفراغ؟",
-        a: "يحوّل لموظفك على طول، وياخذ سؤال العميل بنصه لمختص عندك مع سياق المكالمة.",
-      },
-      {
-        q: "نقدر نغيّر كلام الوكيل وردوده؟",
-        a: "إي — من بناء الوكيل تعدل شخصيته وحدوده وتجرب قبل النشر. وفريقنا يجهز القالب أول شي.",
-      },
-      {
-        q: "وين تنحفظ بيانات مستفسرينا؟",
-        a: "التخزين الدائم في منطقة الخليج (الدوحة)، ومدة حفظ التسجيلات حسب شروط الباقة المؤكدة عند التفعيل: 90 يوماً لأساسي، و180 لنمو، و365 لتوسّع، وبحسب العقد للمؤسسات. والمعالجة اللحظية للصوت تمر عبر مزودين عالميين — مفصّلة في صفحة الأمان.",
-      },
-    ] as FaqItem[],
   },
   en: {
     h1: "“Is the apartment still available?” — an agent that answers every enquiry",
@@ -424,32 +397,6 @@ const t = {
       linkPath: "product/agent-builder",
     },
     faqHeading: "Questions from property offices",
-    faq: [
-      {
-        q: "Can the agent call a customer?",
-        a: "Yes, when your team starts the call: from the dashboard you pick a customer or type a number and place it, and the agent holds the conversation — recorded, transcribed and summarised. There is no automatic dialling of a list.",
-      },
-      {
-        q: "How does the agent know a unit has been reserved?",
-        a: "From the unit register in your knowledge base. Set the status to reserved and publish, and it stops offering the unit and suggests alternatives you hold in the same district.",
-      },
-      {
-        q: "Can it book a viewing in our calendar?",
-        a: "Yes. It checks the open slots and books with the enquirer's name and number and the unit, and the appointment appears in your reservations calendar with the transcript.",
-      },
-      {
-        q: "What happens if someone asks about mortgages or title transfer?",
-        a: "It transfers to your employee immediately, passing the question verbatim to your specialist with the full context of the call.",
-      },
-      {
-        q: "Can we change how the agent speaks?",
-        a: "Yes — in the agent builder you edit its persona and its boundaries, and try the change in the test chat before publishing. Our team builds the template with you first.",
-      },
-      {
-        q: "Where is our enquirers' data stored?",
-        a: "Permanent storage is in the Gulf region (Doha), and recording retention follows the plan terms confirmed at activation: 90 days for Essential, 180 for Growth, 365 for Expansion, and by contract for Enterprise. Realtime speech processing transits global providers — detailed on our security page.",
-      },
-    ] as FaqItem[],
   },
 } as const;
 
@@ -597,12 +544,10 @@ export function RealEstatePage({ locale }: { locale: Locale }) {
       </Section>
 
       <Section title={s.faqHeading} layout="split" className="pb-[clamp(96px,11.2vw,168px)]">
-        <FaqAccordion items={s.faq} />
+        <FaqAccordion items={realEstateFaq[locale]} />
       </Section>
 
       <DemoCta locale={locale} />
     </>
   );
 }
-
-export const realEstateFaq = { ar: t.ar.faq, en: t.en.faq };

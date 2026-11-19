@@ -13,12 +13,12 @@ import {
   handoffFaq,
   securityFaq,
   demoFaq,
+  clinicsFaq,
+  restaurantsFaq,
+  hotelsFaq,
+  realEstateFaq,
+  retailFaq,
 } from "@/content/pageFaq";
-import { clinicsFaq } from "@/components/pages/ClinicsPage";
-import { restaurantsFaq } from "@/components/pages/RestaurantsPage";
-import { hotelsFaq } from "@/components/pages/HotelsPage";
-import { realEstateFaq } from "@/components/pages/RealEstatePage";
-import { retailFaq } from "@/components/pages/RetailPage";
 import {
   graph,
   organization,

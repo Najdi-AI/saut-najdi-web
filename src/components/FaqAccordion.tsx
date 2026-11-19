@@ -8,12 +8,15 @@ import type { FaqItem } from "@/lib/schema";
  * Accordion. Feeds FAQPage schema via the page's JSON-LD (built from the
  * same items).
  *
- * Lazy on purpose. lib/pageFactory imports the FAQ arrays from the page
- * modules, so every route that uses it pulls in every page module's client
- * components, whether the route renders them or not. A static import here
- * put the Base UI accordion (~10 kB) in the First Load JS of 50 routes;
- * through next/dynamic it is still server-rendered (every answer in the
- * prerendered HTML) but its chunk loads only where a FAQ actually renders.
+ * Lazy on purpose: through next/dynamic the accordion is still
+ * server-rendered (every answer in the prerendered HTML), but its chunk
+ * loads only where a FAQ actually renders. It went lazy while lib/pageFactory
+ * imported the FAQ arrays from the page modules, which put every page
+ * module's client components on every route (a static import here put the
+ * Base UI accordion, ~10 kB, in the First Load JS of 50 routes). pageFactory
+ * now reads them from content/pageFaq.ts, so a static import would reach
+ * only the pages that render a FAQ; switching back is a separate, measured
+ * change.
  */
 const FaqRows = dynamic(() => import("./page/FaqRows"));
 

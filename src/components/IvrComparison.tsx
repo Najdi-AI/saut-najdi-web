@@ -5,8 +5,8 @@ import { Section } from "@/components/page/Section";
  * The voice agent against a traditional IVR, moved from the old home to
  * /how-it-works (rebrand D4). The copy is the home's vsIvr, verbatim.
  *
- * Server markup only: HowItWorksPage is imported by pageFactory for its
- * journeySteps, so anything client-side here would ship to every route.
+ * Server markup only. It renders on /how-it-works alone: pageFactory reads
+ * the journey steps from content/journey.ts, not from HowItWorksPage.
  *
  * A real <table> from 640px up, not a div grid: row and column structure is
  * what answer engines extract. Below 640px the same rows stack, because a
